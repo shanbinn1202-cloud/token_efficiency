@@ -1,0 +1,33 @@
+{
+  "root_goal": "Fix NDDataRef mask propagation when one operand has no mask.",
+  "current_goal": {
+    "description": "Retrieve evidence about NDData mask arithmetic.",
+    "phase_hint": "hypothesis",
+    "files": ["astropy/nddata/mixins/ndarithmetic.py"],
+    "symbols": ["_arithmetic_mask"],
+    "tests": [],
+    "errors": ["TypeError"],
+    "evidence_needed": ["mask propagation implementation and regression tests"],
+    "status": "active",
+    "constraints": []
+  },
+  "latest_action": "rg _arithmetic_mask astropy/nddata",
+  "latest_observation": "astropy/nddata/mixins/ndarithmetic.py defines _arithmetic_mask",
+  "features": {
+    "files": ["astropy/nddata/mixins/ndarithmetic.py"],
+    "symbols": ["_arithmetic_mask"],
+    "tests": [],
+    "errors": ["TypeError"],
+    "top_frame": null,
+    "return_code": 0,
+    "test_verdict": "not_run",
+    "has_diff": false,
+    "action_kind": "inspect"
+  },
+  "trigger": "hypothesis_invalidated",
+  "stats": {
+    "consecutive_failures": 1,
+    "drift_streak": 0
+  },
+  "allow_constraint_updates": false
+}

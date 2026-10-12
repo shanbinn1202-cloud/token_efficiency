@@ -1,0 +1,12 @@
+[submodule "engine"]
+	path = engine
+	url = git@github.com:LiuTaowen-Tony/kv-management-minisgl.git
+	branch = agentkv
+[submodule "gorilla"]
+	path = gorilla
+	url = git@github.com:LiuTaowen-Tony/kv-management-bfcl.git
+	branch = agentkv
+[submodule "tau2-bench"]
+	path = tau2-bench
+	url = git@github.com:LiuTaowen-Tony/kv-management-tau2.git
+	branch = agentkv

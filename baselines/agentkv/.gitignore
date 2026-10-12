@@ -1,0 +1,34 @@
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+*.dist-info/
+
+# Build outputs
+build/
+dist/
+*.so
+*.o
+*.a
+
+# Runtime and experiment outputs
+*.log
+*.pid
+experiment/runs/
+experiment/saved_runs/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

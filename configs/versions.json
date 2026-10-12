@@ -1,0 +1,15 @@
+{
+  "python": "3.12.14 | packaged by Anaconda, Inc. | (main, Aug 27 2026, 14:37:13) [GCC 14.3.0]",
+  "executable": "/u/ssun4/miniconda3/envs/agent/bin/python",
+  "architecture": "aarch64",
+  "packages": {
+    "mini-swe-agent": "2.4.6",
+    "swebench": "4.1.0",
+    "vllm": "0.28.0",
+    "torch": "2.13.0",
+    "litellm": "1.100.0",
+    "datasets": "5.0.1"
+  },
+  "mini_swe_agent_commit": "04d809ceab9df28f9adaed044884180159172930",
+  "swebench_commit": "fa79f3af3e0f212d4d14b1c858c77fcaae5308ce"
+}

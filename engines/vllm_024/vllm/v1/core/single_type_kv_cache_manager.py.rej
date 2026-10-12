@@ -1,0 +1,35 @@
+diff a/vllm/v1/core/single_type_kv_cache_manager.py b/vllm/v1/core/single_type_kv_cache_manager.py	(rejected hunks)
+@@ -341,6 +349,11 @@ class SingleTypeKVCacheManager(ABC):
+         Returns:
+             The new allocated blocks.
+         """
++        from vllm.tebench.kv_session import allocation_offset
++
++        offset = allocation_offset(self, request_id)
++        num_tokens -= offset
++        num_tokens_main_model -= offset
+         cow_blocks: list[KVCacheBlock] = []
+         if request_id in self._partial_hit_reqs:
+             # Partial hit: redirect the shared tail to a private CoW block.
+@@ -1927,12 +1940,20 @@ def register_all_kvcache_specs(vllm_config):
+         uniform_type_base_spec=CrossAttentionSpec,
+     )
+ 
++    from vllm.tebench.native_window import ENABLED as native_window
++
++    window_manager = RSWAManager
++    if native_window:
++        from vllm.tebench.window_manager import NativeWindowManager
++
++        window_manager = NativeWindowManager
++
+     # FullAttentionSpec subclasses — grouped with FullAttentionSpec
+     KVCacheSpecRegistry.register(
+         MLAAttentionSpec, FullAttentionManager, uniform_type_base_spec=FullAttentionSpec
+     )
+     KVCacheSpecRegistry.register(
+-        RSWASpec, RSWAManager, uniform_type_base_spec=FullAttentionSpec
++        RSWASpec, window_manager, uniform_type_base_spec=FullAttentionSpec
+     )
+     # NOTE(Mengqing): HiddenStateCacheSpec won't take part in
+     # grouping, thus the uniform_type_base_spec is just a

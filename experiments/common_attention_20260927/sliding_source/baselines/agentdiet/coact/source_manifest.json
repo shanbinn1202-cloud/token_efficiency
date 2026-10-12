@@ -1,0 +1,12 @@
+{
+  "origin": "CoACT/src",
+  "source_sha256": {
+    "eval/baselines/agentdiet.py": "8025ffa4146d12aa25c103375980e9e20961c7ebfa5c5aad1e5105c7e2a3e7a7",
+    "agent/trajectory_parser.py": "72b2df853e755da5dc10b4f97f4be93117e244dc2167edc041ad721932032ae6",
+    "config/prompts.py": "ce823c6a52ebe363bb2239f91ae2fd1e778a8f9ba6be9588f247e1e64500b9c8",
+    "eval/baselines/base.py": "b41288e8cdea8ed2fe6b9cafd2736396109bd94d95be3de63febcbc056370eab",
+    "eval/baselines/model_compression.py": "f5e35f80d49e521d1812c1f49be5c15ad87b9b152f4c64fecfd32268142b6282",
+    "eval/compressing_agent.py": "288161e6d43ca5700cd91bc45c47ffdcb467c135b29a06d6988e36404280dc0d"
+  },
+  "notes": "trajectory_parser copied byte-for-byte; prompt and application methods copied verbatim; agentdiet.py changes import paths and completion dispatch only; shared init copied verbatim; pricing replaced with local zero monetary cost."
+}

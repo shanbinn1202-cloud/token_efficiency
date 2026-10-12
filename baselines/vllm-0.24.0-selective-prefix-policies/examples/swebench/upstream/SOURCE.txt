@@ -1,0 +1,4 @@
+swebench_runner.py and swebench_prompt_override.yaml: dram-backed-kv PoC repository, commit a70701e, scripts/
+(LF Git blob bytes); the prompt override equals the copy on the cohort-2 branch (0ab0078). Copied unchanged from
+the pinned copies that the multi-session SWE-bench pilots ran (Slurm jobs 3299922 and 3300434); SHA256SUMS lists
+their pins. They keep the dram-backed-kv repository's terms.

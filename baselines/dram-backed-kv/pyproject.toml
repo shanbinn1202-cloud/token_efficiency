@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dram-backed-kv"
+version = "0.1.0"
+description = "Goal-conditioned DRAM-backed KV working-set experiment framework"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "SnapKV experiments"}]
+dependencies = []
+
+[project.scripts]
+dram-kv-shadow = "dram_kv.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

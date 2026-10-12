@@ -1,0 +1,96 @@
+# Python caches
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local virtual environment
+.venv/
+venv/
+.env
+
+# Local model weights and caches
+models/
+data/
+*.bin
+*.safetensors
+
+# Local screenshots and review captures
+Screenshot*.png
+
+# Vendored benchmark checkout and transient Python output
+ruler/
+
+# Generated phase outputs
+results/
+phases/*/__pycache__/
+phases/*/artifacts/
+phases/*/logs/
+phases/*/results/
+
+# LaTeX build artifacts
+aux/
+/*.aux
+/*.fdb_latexmk
+/*.fls
+/*.log
+/*.out
+/*.synctex.gz
+paper/aux/
+paper/**/aux/
+paper/*.aux
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.bbl
+paper/*.blg
+paper/algorithm.sty
+paper/algorithmic.sty
+
+# OS / editor / packaging artifacts
+.DS_Store
+**/.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+.ipynb_checkpoints/
+notebooks/*.ipynb
+idlekv.egg-info/
+*.egg-info/
+dist/
+build/
+.eggs/
+*.exe
+*.o
+*.a
+*.ptx
+*.cubin
+
+# Internal scratch docs (Tier 1)
+/openreview-form.png
+/openreview-form-answers.txt
+/style_references.md
+/edit_plan.md
+/edit_plan_format.md
+/instructions.md
+/plan.md
+/CLAUDE_REPO_HANDOFF.txt
+/paper_guide.md
+/texput.log
+
+# Superseded paper drafts and figure iterations (Tier 2)
+paper/abstract_draft.txt
+paper/outline.md
+paper/main_inject.tex
+paper/main_inject.pdf
+paper/initial_draft/
+paper/figure_references/

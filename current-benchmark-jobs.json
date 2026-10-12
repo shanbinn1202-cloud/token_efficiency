@@ -1,0 +1,25 @@
+{
+  "time": "2026-10-11T21:54:20.040935-05:00",
+  "status": "ten_new_jobs_submitted_and_owners_verified",
+  "repository": "/projects/bcjw/ssun4/token_efficiency",
+  "engine": "/projects/bcjw/ssun4/token_efficiency/engines/vllm_024",
+  "controller": "/projects/bcjw/ssun4/benchmark_resubmit_20261011",
+  "validation_job": "3363523",
+  "validation_slurm_state": "COMPLETED",
+  "validation_exit_code": "0:0",
+  "new_formal_jobs": {
+    "swe500-vanilla": "3363635",
+    "swe500-sliding_window": "3363636",
+    "swe500-random_attention": "3363637",
+    "swe500-intentkv": "3363638",
+    "swe500-agentkv": "3363639",
+    "mem32-vanilla": "3363640",
+    "mem32-sliding_window": "3363641",
+    "mem32-random_attention": "3363642",
+    "mem32-intentkv": "3363643",
+    "mem32-agentkv": "3363644"
+  },
+  "formal_state_at_check": "PENDING",
+  "full_experiments_finished": false,
+  "algorithms_or_configs_changed": false
+}

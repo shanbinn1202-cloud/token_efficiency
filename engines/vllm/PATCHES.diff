@@ -1,0 +1,866 @@
+--- a/vllm/agentkv.py
++++ b/vllm/agentkv.py
+@@ -0,0 +1,222 @@
++"""Original AgentKV policy on vLLM full-attention pages (TP=1, synchronous MRV1).
++
++The original StageQ/SnapKV, phase classifier, ring metadata and decode trigger
++are imported, not reimplemented. Only storage strides, Q capture and allocator
++ownership are engine-specific. Linear-attention recurrent state is untouched.
++"""
++import os
++import torch
++from types import SimpleNamespace as NS
++
++ENABLED = os.environ.get("VLLM_AGENTKV") == "1"
++STATE = None
++
++
++def initialize(vllm_config, device):
++    global STATE
++    if not ENABLED or STATE is not None:
++        return
++    import json
++    import torch
++    from transformers import AutoTokenizer
++    from adapters.agentkv.vllm_policy import plan_for
++    from adapters.agentkv.upstream import QueryRingBufferPool
++    c = vllm_config.model_config.hf_text_config
++    options = json.loads(os.environ["VLLM_AGENTKV_OPTIONS"])
++    plan = plan_for(int(os.environ["VLLM_AGENTKV_BUDGET"]), options)
++    layers = [i for i, t in enumerate(c.layer_types) if t == "full_attention"]
++    from adapters.agentkv.vllm_audit import initialize as initialize_audit
++    initialize_audit(vllm_config, device, layers)
++    slots = vllm_config.scheduler_config.max_num_seqs
++    # CPU bookkeeping executes the original metadata algorithm without GPU
++    # .item() synchronization per phase; Q itself resides on the GPU.
++    ring = QueryRingBufferPool(max_table_slots=slots, num_layers=len(layers),
++        capacity=plan.query_ring_capacity, num_stages=plan.query_ring_num_stages,
++        num_q_heads=c.num_attention_heads, head_dim=c.head_dim,
++        dtype=vllm_config.model_config.dtype, device=torch.device("cpu"))
++    ring.q = ring.q.to(device)
++    entries = slots * plan.anchor_budget
++    STATE = NS(plan=plan, interval=options.get("eviction_interval", 128), ring=ring,
++        layer_map={i: j for j, i in enumerate(layers)}, sessions={}, free_slots=list(range(slots)),
++        sources=torch.zeros(entries, dtype=torch.int64, device=device),
++        destinations=torch.zeros(entries, dtype=torch.int64, device=device),
++        count=torch.zeros(1, dtype=torch.int32, device=device),
++        tokenizer=AutoTokenizer.from_pretrained(vllm_config.model_config.model, local_files_only=True))
++
++
++def capture_q(q, layer_id):
++    # Called inside the compiled model. Fixed addresses and a masked custom op
++    # make graph replay independent of session IDs, ring occupancy and batch size.
++    s = STATE
++    if s is not None:
++        import torch
++        torch.ops.vllm.agentkv_capture_q(q, s.ring.q, s.sources, s.destinations,
++            s.count, s.layer_map[layer_id], s.plan.anchor_budget)
++
++
++def _capture_impl(q: torch.Tensor, ring: torch.Tensor, sources: torch.Tensor,
++                  destinations: torch.Tensor, count: torch.Tensor, layer: int, anchors: int) -> None:
++    from vllm.agentkv_kernels import write_queries
++    write_queries(q, ring, sources, destinations, count, layer, anchors)
++
++
++def _capture_fake(q, ring, sources, destinations, count, layer: int, anchors: int):
++    return None
++
++
++if ENABLED:
++    from vllm.utils.torch_utils import direct_register_custom_op
++    direct_register_custom_op(op_name="agentkv_capture_q", op_func=_capture_impl,
++        mutates_args=["ring"], fake_impl=_capture_fake)
++
++
++def worker_update(runner, output):
++    if not ENABLED:
++        return
++    from vllm.kv_session import OFFSETS
++    s = STATE
++    for rid in output.finished_req_ids:
++        old = s.sessions.pop(rid, None)
++        if old is not None:
++            s.ring.reset(old.slot)
++            s.free_slots.append(old.slot)
++    for req in output.scheduled_new_reqs:
++        meta = (req.sampling_params.extra_args or {}).get("agentkv") if req.sampling_params else None
++        if meta is None:
++            continue
++        old = s.sessions.get(req.req_id)
++        if old is None:
++            if not s.free_slots:
++                raise RuntimeError("AgentKV session capacity exhausted; close parked sessions")
++            old = s.sessions[req.req_id] = NS(slot=s.free_slots.pop(), phases=[], tail="",
++                external_id=meta["session_id"],
++                generated=0, compactions=0, logical=0, physical=0, last_kept=None)
++            s.ring.reset(old.slot)
++            OFFSETS[req.req_id] = 0
++        start = req.num_computed_tokens
++        phases = list(meta["phase_ids"])
++        if meta.get("restored_tokens", 0):
++            from adapters.agentkv.upstream import advance_phase
++            assert meta["restored_tokens"] == 1 and start > 0 and len(old.phases) == start
++            token_text = s.tokenizer.decode([req.prompt_token_ids[start]],
++                skip_special_tokens=False, clean_up_tokenization_spaces=False)
++            phases[0] = advance_phase((old.tail + token_text)[-128:], old.phases[-1])
++        old.phases = old.phases[:start] + phases
++        assert len(old.phases) == len(req.prompt_token_ids)
++        old.tail = meta["phase_tail"]
++        old.generated = 0
++        old.prompt_physical = len(req.prompt_token_ids) - OFFSETS.get(req.req_id, 0)
++        old.prefill = len(req.prompt_token_ids) - start
++
++
++def prepare_queries(runner, n, counts):
++    if not ENABLED:
++        return
++    import torch
++    from adapters.agentkv.upstream import advance_phase
++    s = STATE
++    reqs, positions, phases = [], [], []
++    for rid in runner.input_batch.req_ids[:n]:
++        state = s.sessions.get(rid)
++        if state is None:
++            raise RuntimeError("AgentKV engine only accepts stateful AgentKV requests")
++        req = runner.requests[rid]
++        start = req.num_computed_tokens
++        count = counts[rid]
++        # Generated token phase is assigned by the upstream rolling-tail rule.
++        all_ids = req.prompt_token_ids + req.output_token_ids
++        for token in all_ids[len(state.phases):start + count]:
++            state.tail = (state.tail + s.tokenizer.decode([token], skip_special_tokens=False,
++                clean_up_tokenization_spaces=False))[-128:]
++            state.phases.append(advance_phase(state.tail, state.phases[-1] if state.phases else 0))
++        assert len(state.phases) >= start + count
++        reqs.append(NS(table_idx=state.slot, extend_len=count))
++        positions.extend(range(start, start + count))
++        phases.extend(state.phases[start:start + count])
++    metadata = s.ring.prepare_write_metadata_from_reqs(reqs,
++        torch.tensor(positions, dtype=torch.int32), torch.tensor(phases, dtype=torch.int32))
++    size = metadata.source_token_indices.numel()
++    assert size <= s.sources.numel()
++    s.sources[:size].copy_(metadata.source_token_indices)
++    # All-layer ring flattened into [row, q_head, dim]. Layer offset is added in op.
++    dest = ((metadata.table_indices_by_token * s.ring.q.shape[1] * s.plan.num_stages
++             + metadata.stage_ids_by_token) * s.plan.query_ring_capacity
++             + metadata.ring_locations_by_token)
++    s.destinations[:size].copy_(dest)
++    s.count.fill_(size)
++
++
++def after_sample(runner, scheduled, output):
++    if not ENABLED:
++        return None
++    import torch
++    from adapters.agentkv.upstream import LayerEvictionView
++    from adapters.agentkv.vllm_policy import should_compact
++    from vllm.kv_session import OFFSETS, gather_kv, compact_heads, trim_worker_blocks
++    from vllm.v1.kv_cache_interface import FullAttentionSpec
++    s = STATE
++    updates = {}
++    from adapters.agentkv.vllm_audit import STATE as audit
++    if audit is not None:
++        audit.observe(runner, scheduled, s)
++    for rid, ids in zip(output.req_ids, output.sampled_token_ids):
++        if not ids:
++            continue  # A partial prefill does not advance the decode interval.
++        assert len(ids) == 1
++        state = s.sessions[rid]
++        req = runner.requests[rid]
++        state.generated += 1
++        logical = req.num_computed_tokens + scheduled.num_scheduled_tokens[rid]
++        physical = logical - OFFSETS.get(rid, 0)
++        state.logical, state.physical = logical, physical
++        if not should_compact(state.generated, s.interval) or physical <= s.plan.budget:
++            continue
++        lengths = set()
++        for gid, group in enumerate(runner.kv_cache_config.kv_cache_groups):
++            if type(group.kv_cache_spec) is not FullAttentionSpec:
++                continue
++            blocks = req.block_ids[gid]
++            block_size = group.kv_cache_spec.block_size
++            for name in group.layer_names:
++                from vllm.model_executor.models.utils import extract_layer_index
++                lid = s.layer_map[extract_layer_index(name)]
++                cache = runner.compilation_config.static_forward_context[name].kv_cache
++                dense = gather_kv(cache, blocks, block_size, physical)
++                q, pos = s.ring.get_unordered(table_idx=state.slot, layer_id=lid,
++                    stages=s.plan.query_ring_read_stages)
++                view = LayerEvictionView(layer_id=lid, physical_cached_len=physical,
++                    num_kv_heads=cache.shape[1], device=cache.device, num_layers=len(s.layer_map),
++                    logical_current_position=logical, k=dense[..., :cache.shape[-1] // 2],
++                    v=dense[..., cache.shape[-1] // 2:], q_observation=q, q_observation_positions=pos)
++                keep = s.plan.select_layer(view)  # Original BF16/GQA/softmax/topk/sort.
++                if audit is not None:
++                    audit.compact(rid, extract_layer_index(name), keep, s)
++                lengths.add(keep.shape[1])
++                compact_heads(cache, blocks, block_size, keep, dense=dense)
++                if os.environ.get("VLLM_AGENTKV_AUDIT") == "1":
++                    state.last_kept = keep.cpu().tolist()
++            assert len(lengths) == 1, "Per-layer compacted lengths differ"
++            kept = next(iter(lengths))
++            trim_worker_blocks(runner, rid, gid, (kept + block_size - 1) // block_size)
++        kept = next(iter(lengths))
++        OFFSETS[rid] = logical - kept
++        state.physical = kept
++        state.compactions += 1
++        updates[rid] = {"removed": logical - kept, "physical": kept}
++    return updates or None
++
++
++def get_stats(worker, rid):
++    from adapters.agentkv.vllm_audit import STATE as audit
++    if audit is not None:
++        audit.report()
++    # vLLM randomizes internal request IDs; match explicit session identity.
++    matches = [(key, state) for key, state in STATE.sessions.items() if state.external_id == rid]
++    if len(matches) != 1:
++        raise RuntimeError(f"Expected one active AgentKV session for {rid}, found {len(matches)}")
++    rid, state = matches[0]
++    from vllm.kv_session import OFFSETS
++    return dict(compactions=state.compactions, retained_kv_tokens=state.physical,
++        logical_computed_tokens=state.logical, total_evicted_tokens=OFFSETS.get(rid, 0),
++        prompt_tokens=state.prompt_physical, prefill_tokens=state.prefill,
++        cached_tokens=state.prompt_physical-state.prefill, last_kept=state.last_kept)
+--- a/vllm/agentkv_kernels.py
++++ b/vllm/agentkv_kernels.py
+@@ -0,0 +1,22 @@
++"""Layout-only Q-ring writer; selection and ring locations come from upstream."""
++import triton as tr
++import triton.language as tl
++
++
++@tr.jit
++def _write(Q, R, S, D, N, q_stride: tl.constexpr, width: tl.constexpr,
++           layer_offset: tl.constexpr, BLOCK: tl.constexpr):
++    row = tl.program_id(0)
++    cols = tl.program_id(1) * BLOCK + tl.arange(0, BLOCK)
++    active = row < tl.load(N)
++    src = tl.load(S + row, active, other=0)
++    dst = tl.load(D + row, active, other=0) + layer_offset
++    val = tl.load(Q + src * q_stride + cols, active & (cols < width), other=0)
++    tl.store(R + dst * width + cols, val, active & (cols < width))
++
++
++def write_queries(q, ring, sources, destinations, count, layer, anchors):
++    assert q.ndim == 2 and q.stride(1) == 1
++    width = q.shape[1]
++    _write[(sources.numel(), tr.cdiv(width, 256))](q, ring, sources, destinations, count,
++        q.stride(0), width, layer * anchors, 256)
+--- a/vllm/kv_session.py
++++ b/vllm/kv_session.py
+@@ -0,0 +1,164 @@
++"""Shared physical KV coordinates, ownership, and compaction for MRV1 policies.
++
++Logical token positions (RoPE and recurrent state) never change. Only full
++attention storage coordinates are compacted. Generation can exceed the input
++budget. No model projection or prefill is performed by compaction.
++"""
++
++import os
++ENABLED = os.environ.get("VLLM_KV_WINDOW") == "1" or os.environ.get("VLLM_AGENTKV") == "1"
++OFFSETS: dict[str, int] = {}
++PENDING: list[dict] = []
++
++
++def allocation_offset(manager, request_id):
++    return OFFSETS.get(request_id, 0) if type(manager).__name__ == "FullAttentionManager" else 0
++
++
++def drain_compactions(requests):
++    operations = [op for op in PENDING if op["request_id"] in requests]
++    PENDING.clear()
++    for rid in set(OFFSETS) - requests.keys():
++        OFFSETS.pop(rid)
++    return operations or None
++
++
++def compact_tensor(cache, blocks, block_size, prefix, start, end):
++    """FA3 packed [block, head, token, 2*dim]. Gather before overlapping write."""
++    import torch
++    indices = torch.cat((torch.arange(prefix, device=cache.device),
++                         torch.arange(start, end, device=cache.device)))
++    compact_heads(cache, blocks, block_size,
++                  indices.unsqueeze(0).expand(cache.shape[1], -1),
++                  dense=gather_kv(cache, blocks, block_size, end))
++
++
++def worker_update(runner, output):
++    if not ENABLED:
++        return
++    from vllm.agentkv import worker_update as agent_update
++    agent_update(runner, output)
++    for rid in output.finished_req_ids:
++        OFFSETS.pop(rid, None)
++    for req in output.scheduled_new_reqs:
++        params = req.sampling_params
++        meta = (params.extra_args or {}).get("kv_window") if params else None
++        if meta:
++            OFFSETS[req.req_id] = meta.get("removed", 0)
++    # Must precede zeroing: freed source pages may already be allocated to a
++    # different request in this scheduling step. Sync scheduling is required.
++    for op in output.kv_window_compactions or ():
++        OFFSETS[op["request_id"]] = op["removed"]
++        group = runner.kv_cache_config.kv_cache_groups[op["group"]]
++        for layer in group.layer_names:
++            cache = runner.compilation_config.static_forward_context[layer].kv_cache
++            compact_tensor(cache, op["blocks"], op["block_size"], op["prefix"], op["start"], op["end"])
++
++
++def ensure_buffers(runner):
++    if not hasattr(runner, "_window_seq_lens"):
++        import torch
++        runner._window_seq_lens = torch.zeros_like(runner.seq_lens)
++        runner._window_positions = torch.zeros_like(runner.positions)
++        runner._window_offsets = torch.zeros_like(runner.seq_lens)
++
++
++def offsets_cpu(runner, n, padded):
++    import torch
++    values = [OFFSETS.get(rid, 0) for rid in runner.input_batch.req_ids[:n]]
++    # Profiling/capture can request dummy rows with no real input_batch IDs.
++    return torch.tensor(values + [0] * (padded - len(values)), dtype=torch.int32)
++
++
++def prepare_physical_slots(runner, n, tokens, req_indices):
++    if not ENABLED:
++        return
++    from vllm.v1.kv_cache_interface import FullAttentionSpec
++    ensure_buffers(runner)
++    offsets = offsets_cpu(runner, n, len(runner.seq_lens))
++    runner._window_offsets.copy_(offsets)
++    runner._window_seq_lens.copy_(runner.seq_lens - runner._window_offsets)
++    runner._window_positions[:tokens] = runner.positions[:tokens] - runner._window_offsets[req_indices]
++    for gid, group in enumerate(runner.kv_cache_config.kv_cache_groups):
++        if type(group.kv_cache_spec) is FullAttentionSpec:
++            runner.input_batch.block_table[gid].compute_slot_mapping(
++                n, runner.query_start_loc.gpu[:n + 1], runner._window_positions[:tokens])
++
++
++def physical_metadata(runner, cm, group, n, padded, capture):
++    if not ENABLED:
++        return
++    from vllm.v1.kv_cache_interface import FullAttentionSpec
++    if type(group.kv_cache_spec) is not FullAttentionSpec:
++        return
++    ensure_buffers(runner)
++    if capture:
++        runner._window_seq_lens[:padded].copy_(cm.seq_lens)
++        offsets = None
++    else:
++        offsets = offsets_cpu(runner, n, padded)
++        runner._window_offsets[:padded].copy_(offsets)
++        runner._window_seq_lens[:padded].copy_(cm.seq_lens - runner._window_offsets[:padded])
++    cm.seq_lens = runner._window_seq_lens[:padded]
++    if offsets is not None:
++        if cm._seq_lens_cpu is not None:
++            cm._seq_lens_cpu = cm._seq_lens_cpu - offsets
++        if cm._num_computed_tokens_cpu is not None:
++            cm._num_computed_tokens_cpu = cm._num_computed_tokens_cpu - offsets
++        if cm.seq_lens_cpu_upper_bound is not None:
++            cm.seq_lens_cpu_upper_bound = cm.seq_lens_cpu_upper_bound - offsets
++    # Cached properties must derive from the physical counts.
++    cm._num_computed_tokens_cache = None
++
++
++def gather_kv(cache, blocks, block_size, count):
++    """Dense token-major snapshot from FA3 packed pages, without recomputation."""
++    import torch
++    assert cache.ndim == 4 and cache.shape[2] == block_size, cache.shape
++    positions = torch.arange(count, device=cache.device)
++    pages = torch.tensor(blocks, dtype=torch.long, device=cache.device)
++    return cache[pages[positions // block_size], :, positions % block_size, :]
++
++
++def compact_heads(cache, blocks, block_size, keep, *, dense=None):
++    """Per-head exact token gather, then overlapping-safe copy into owned pages.
++
++    Shared by policies; native vLLM pages can hold multiple token slots. No
++    rounding of selected tokens, no averaging and no QKV recomputation.
++    """
++    import torch
++    assert keep.ndim == 2 and keep.shape[0] == cache.shape[1]
++    if dense is None:
++        dense = gather_kv(cache, blocks, block_size, int(keep.max()) + 1)
++    heads = torch.arange(cache.shape[1], device=cache.device)[:, None]
++    values = dense[keep, heads].transpose(0, 1).contiguous()
++    positions = torch.arange(keep.shape[1], device=cache.device)
++    pages = torch.tensor(blocks, dtype=torch.long, device=cache.device)
++    cache[pages[positions // block_size], :, positions % block_size, :] = values
++
++
++def trim_worker_blocks(runner, rid, gid, count):
++    del runner.requests[rid].block_ids[gid][count:]
++    row = runner.input_batch.req_id_to_index.get(rid)
++    if row is not None:
++        table = runner.input_batch.block_table[gid]
++        table.num_blocks_per_row[row] = count * table.blocks_per_kv_block
++
++
++def apply_worker_updates(scheduler, updates):
++    """Release full-attention tail pages only after the worker has copied KV."""
++    for rid, update in (updates or {}).items():
++        req = scheduler.requests.get(rid)
++        if req is None:
++            continue
++        OFFSETS[rid] = update["removed"]
++        assert req.num_computed_tokens - update["removed"] == update["physical"]
++        for manager in scheduler.kv_cache_manager.coordinator.single_type_managers:
++            if type(manager).__name__ != "FullAttentionManager":
++                continue
++            blocks = manager.req_to_blocks[rid]
++            assert all(b.ref_cnt == 1 and not b.is_null for b in blocks)
++            count = (update["physical"] + manager.block_size - 1) // manager.block_size
++            released = blocks[count:]
++            del blocks[count:]
++            manager.block_pool.free_blocks(reversed(released))
+--- a/vllm/kv_session_server.py
++++ b/vllm/kv_session_server.py
+@@ -0,0 +1,204 @@
++"""Local-only HTTP bridge to vLLM's native resumable streaming requests."""
++import asyncio
++from pathlib import Path
++import uuid
++
++from starlette.responses import JSONResponse
++from vllm import SamplingParams
++from vllm.engine.protocol import StreamingInput
++from vllm.sampling_params import RequestOutputKind
++from vllm.kv_window import select_window
++
++
++class Session:
++    def __init__(self, engine, method="sliding_window"):
++        self.method = method
++        self.prompt_text = ""
++        self.pending_token = None
++        self.engine = engine
++        self.rid = "kv-window-" + uuid.uuid4().hex
++        self.queue = asyncio.Queue()
++        self.lock = asyncio.Lock()
++        self.task = None
++        self.future = None
++        self.logical = self.computed = self.removed = 0
++        self.starts = []
++        self.prefix = None
++        self.error = None
++
++    async def inputs(self):
++        while (item := await self.queue.get()) is not None:
++            yield item
++
++    async def consume(self, params):
++        ids = []
++        text = ""
++        try:
++            async for output in self.engine.generate(self.inputs(), params, self.rid):
++                for part in output.outputs:
++                    ids.extend(part.token_ids)
++                    text += part.text
++                    if part.finish_reason is not None and self.future and not self.future.done():
++                        self.future.set_result((ids, text, part.finish_reason))
++                        ids, text = [], ""
++        except Exception as error:
++            self.error = error
++            if self.future and not self.future.done():
++                self.future.set_exception(error)
++
++    async def close(self):
++        if self.task:
++            self.task.cancel()
++            await asyncio.gather(self.task, return_exceptions=True)
++
++    async def complete(self, body):
++        if self.method == "agentkv":
++            return await self.complete_agentkv(body)
++        async with self.lock:
++            if self.error:
++                raise RuntimeError(f"Session failed: {self.error}")
++            ids = body["input_ids"]
++            available_input = self.computed + len(ids)
++            original_incoming = len(ids)
++            header = body["header_tokens"]
++            budget = body["budget"]
++            if not ids or not 0 < header <= len(ids):
++                raise ValueError("Invalid input/header")
++            if self.prefix is None:
++                self.prefix = body["prefix_tokens"]
++                if self.prefix != len(ids) - header or len(ids) > budget:
++                    raise ValueError("Initial prefix/header exceeds budget or is inconsistent")
++                kept, start, incoming = 0, 0, len(ids)
++                retained = 0
++                meta = dict(removed=0)
++                next_starts = [self.prefix]
++            else:
++                start, kept, incoming = select_window(self.prefix, self.starts, self.computed,
++                                                     len(ids), header, budget)
++                ids = ids[-incoming:]
++                retained = self.prefix + self.computed - start
++                meta = dict(prefix=self.prefix, suffix_start=start, computed=self.computed,
++                            logical_computed=self.logical, budget=budget,
++                            removed=self.removed + start - self.prefix)
++                next_starts = [self.prefix + s - start for s in self.starts if s >= start]
++                next_starts.append(retained + len(ids) - header)
++            if self.logical + len(ids) + body["max_tokens"] > self.engine.model_config.max_model_len:
++                raise ValueError("Logical RoPE context limit reached")
++            params = SamplingParams(max_tokens=body["max_tokens"], temperature=body["temperature"],
++                top_p=body.get("top_p", 1.0), top_k=body.get("top_k", -1),
++                repetition_penalty=body.get("repetition_penalty", 1.0), seed=body.get("seed", 0),
++                skip_special_tokens=False, output_kind=RequestOutputKind.DELTA,
++                extra_args={"kv_window": meta})
++            self.future = asyncio.get_running_loop().create_future()
++            await self.queue.put(StreamingInput(prompt={"prompt_token_ids": ids}, sampling_params=params))
++            if self.task is None:
++                self.task = asyncio.create_task(self.consume(params))
++            outputs, text, reason = await self.future
++            # Native streaming retains all but the final sampled (uncomputed) token.
++            old_removed = self.removed
++            previous_logical = self.logical
++            self.logical += len(ids) + len(outputs) - 1
++            self.computed = retained + len(ids) + len(outputs) - 1
++            self.removed = self.logical - self.computed
++            self.starts = next_starts
++            return dict(text=text, output_ids=outputs, finish_reason=reason,
++                        prompt_tokens=retained + len(ids), completion_tokens=len(outputs),
++                        cached_tokens=retained, prefill_tokens=len(ids), retained_turns=kept,
++                        evicted_tokens=meta.get("removed", 0) - old_removed,
++                        logical_computed_tokens=self.logical, retained_kv_tokens=self.computed,
++                        total_evicted_tokens=self.removed, selection="recent_tokens",
++                        available_input_tokens=available_input,
++                        dropped_input_tokens=original_incoming - len(ids))
++
++
++    async def complete_agentkv(self, body):
++        async with self.lock:
++            import torch
++            from adapters.agentkv.vllm_policy import phase_ids
++            if self.error:
++                raise RuntimeError(f"Session failed: {self.error}")
++            ids = body["input_ids"]
++            if not ids or body["max_tokens"] < 1:
++                raise ValueError("Empty input or invalid output limit")
++            if self.logical + len(ids) + body["max_tokens"] > self.engine.model_config.max_model_len:
++                raise ValueError("Logical RoPE context limit reached")
++            tokenizer = self.engine.get_tokenizer()
++            # A non-EOS final sample has no KV yet. The client restores its raw
++            # ID; it belongs to the previous generation, not the encoded suffix.
++            # Byte tokens need not survive decode/encode in isolation.
++            restored = int(self.pending_token is not None)
++            if restored and ids[0] != self.pending_token:
++                raise ValueError("Restored token differs from the parked final sample")
++            suffix_ids = ids[restored:]
++            fresh = tokenizer.decode(suffix_ids, skip_special_tokens=False, clean_up_tokenization_spaces=False)
++            encoded = tokenizer(fresh, add_special_tokens=False, return_offsets_mapping=True)
++            if encoded["input_ids"] != suffix_ids:
++                raise ValueError("Non-canonical suffix tokenization; cannot assign exact upstream phases")
++            prompt = self.prompt_text + fresh
++            offsets = torch.tensor(encoded["offset_mapping"]) + len(self.prompt_text)
++            stages = phase_ids(prompt, offsets).tolist() if suffix_ids else []
++            # The worker restores the sampled token's rolling generation phase
++            # from its parked state, before adopting the new prompt tail.
++            meta = dict(phase_ids=[-1] * restored + stages, restored_tokens=restored,
++                        phase_tail=prompt[-128:], session_id=self.rid)
++            params = SamplingParams(max_tokens=body["max_tokens"], temperature=body["temperature"],
++                top_p=body.get("top_p", 1.0), top_k=body.get("top_k", -1),
++                repetition_penalty=body.get("repetition_penalty", 1.0), seed=body.get("seed", 0),
++                skip_special_tokens=False, output_kind=RequestOutputKind.DELTA,
++                extra_args={"agentkv": meta})
++            self.future = asyncio.get_running_loop().create_future()
++            await self.queue.put(StreamingInput(prompt={"prompt_token_ids": ids}, sampling_params=params))
++            if self.task is None:
++                self.task = asyncio.create_task(self.consume(params))
++            outputs, text, reason = await self.future
++            self.logical += len(ids) + len(outputs) - 1
++            eos = {tokenizer.eos_token_id, tokenizer.convert_tokens_to_ids("<|im_end|>")}
++            self.pending_token = outputs[-1] if outputs and outputs[-1] not in eos else None
++            # Match upstream _session_full_text: drop only EOS, not a length-
++            # limited final sample. Decode the whole generated span together.
++            kept_outputs = outputs if self.pending_token is not None else outputs[:-1]
++            self.prompt_text = prompt + tokenizer.decode(kept_outputs, skip_special_tokens=False,
++                clean_up_tokenization_spaces=False)
++            stats, = await self.engine.collective_rpc("kv_session_stats", args=(self.rid,))
++            assert stats["logical_computed_tokens"] == self.logical
++            return dict(text=text, output_ids=outputs, finish_reason=reason,
++                completion_tokens=len(outputs), **stats)
++
++
++async def middleware(request, call_next):
++    if not any(request.url.path.startswith(p) for p in ("/v1/kv-window/", "/v1/kv-session/")):
++        return await call_next(request)
++    import os
++    import json
++    method = "agentkv" if os.environ.get("VLLM_AGENTKV") == "1" else "sliding_window"
++    state = request.app.state
++    engine = state.engine_client
++    if not hasattr(state, "kv_window_sessions"):
++        state.kv_window_sessions = {}
++    sessions = state.kv_window_sessions
++    if request.url.path.endswith("/info"):
++        return JSONResponse(dict(engine_path=str(Path(__file__).resolve().parent),
++                                 implementation="persistent-kv-session-v2", method=method, sessions=len(sessions),
++                                 budget=int(os.environ.get("VLLM_AGENTKV_BUDGET", "0")),
++                                 options=json.loads(os.environ.get("VLLM_AGENTKV_OPTIONS", "{}"))))
++    try:
++        config = engine.vllm_config
++        if config.cache_config.enable_prefix_caching or config.scheduler_config.async_scheduling:
++            raise ValueError("KV window requires --no-enable-prefix-caching --no-async-scheduling")
++        if config.parallel_config.tensor_parallel_size != 1 or config.speculative_config is not None:
++            raise ValueError("KV window supports TP=1 without speculative decoding")
++        body = await request.json()
++        sid = body["session_id"]
++        if request.url.path.endswith("/close"):
++            session = sessions.pop(sid, None)
++            if session:
++                await session.close()
++            return JSONResponse({"closed": True})
++        if body.get("method", "sliding_window") != method:
++            raise ValueError("Client policy differs from running server")
++        if method == "agentkv" and body["budget"] != int(os.environ["VLLM_AGENTKV_BUDGET"]):
++            raise ValueError("Client budget differs from running AgentKV server")
++        session = sessions.setdefault(sid, Session(engine, method))
++        return JSONResponse(await session.complete(body))
++    except Exception as error:
++        return JSONResponse({"error": str(error), "type": type(error).__name__}, status_code=400)
+--- a/vllm/kv_window.py
++++ b/vllm/kv_window.py
+@@ -0,0 +1,55 @@
++"""Token-suffix selection policy over shared persistent KV sessions."""
++from vllm.kv_session import *  # compatibility for existing window integrations
++
++def select_window(prefix, starts, computed, incoming, header, budget):
++    """Keep fixed prefix plus the newest token slots, cutting inside turns.
++
++    Returns cached suffix start, fully retained turn count (diagnostic only),
++    and retained incoming token count. Oversized incoming feedback loses its
++    oldest tokens; the generation header and fixed prefix always survive.
++    """
++    if not 0 <= prefix <= computed or not 0 < header <= incoming or prefix + header > budget:
++        raise ValueError("Fixed prefix plus generation header exceeds KV input budget")
++    if starts != sorted(set(starts)) or any(s < prefix or s > computed for s in starts):
++        raise ValueError("Invalid turn boundaries")
++    removed = max(0, computed + incoming - budget)
++    start = min(computed, prefix + removed)
++    incoming_kept = min(incoming, budget - prefix)
++    return start, sum(s >= start for s in starts), incoming_kept
++
++
++def resume_window(scheduler, session, update):
++    meta = (update.sampling_params.extra_args or {}).get("kv_window")
++    if meta is None:
++        return
++    session.max_tokens = update.max_tokens
++    if scheduler.kv_cache_manager.enable_caching:
++        raise ValueError("KV window sessions require prefix caching disabled")
++    old_offset = OFFSETS.get(session.request_id, 0)
++    computed = session.num_computed_tokens - old_offset
++    assert computed == meta["computed"], (computed, meta)
++    assert session.num_computed_tokens == meta["logical_computed"]
++    prefix, start = meta["prefix"], meta["suffix_start"]
++    assert 0 <= prefix <= start <= computed
++    new_count = prefix + computed - start
++    assert new_count + len(update.prompt_token_ids) <= meta["budget"]
++    removed = start - prefix
++    # Store authoritative offset in the update sent to model runner.
++    OFFSETS[session.request_id] = old_offset + removed
++    meta["removed"] = old_offset + removed
++    if not removed:
++        return
++    for gid, manager in enumerate(scheduler.kv_cache_manager.coordinator.single_type_managers):
++        if type(manager).__name__ != "FullAttentionManager":
++            continue
++        blocks = manager.req_to_blocks[session.request_id]
++        assert all(b.ref_cnt == 1 and not b.is_null for b in blocks)
++        keep_blocks = (new_count + manager.block_size - 1) // manager.block_size
++        PENDING.append(dict(request_id=session.request_id, group=gid,
++                            blocks=[b.block_id for b in blocks], block_size=manager.block_size,
++                            prefix=prefix, start=start, end=computed, removed=old_offset + removed))
++        freed = blocks[keep_blocks:]
++        del blocks[keep_blocks:]
++        manager.block_pool.free_blocks(reversed(freed))
++
++
+--- a/vllm/kv_window_server.py
++++ b/vllm/kv_window_server.py
+@@ -0,0 +1,2 @@
++"""Compatibility endpoint for the shared persistent KV session transport."""
++from vllm.kv_session_server import Session, middleware
+--- a/vllm/model_executor/models/qwen3_next.py
++++ b/vllm/model_executor/models/qwen3_next.py
+@@ -319,6 +319,16 @@
+         # TODO: support MRoPE
+         mm_config = model_config.multimodal_config if model_config else None
+         text_only = mm_config is None or mm_config.language_model_only
++        from vllm.agentkv import ENABLED as agentkv_enabled, initialize
++        self.agentkv_enabled = agentkv_enabled
++        self.agentkv_audit_enabled = False
++        if agentkv_enabled:
++            from adapters.agentkv.vllm_audit import ENABLED as audit_enabled
++            self.agentkv_audit_enabled = audit_enabled
++            from vllm.config import get_current_vllm_config
++            initialize(get_current_vllm_config(), self.q_norm.weight.device)
++            self.agentkv_layer_id = extract_layer_index(prefix)
++
+         self.use_fused_qk_norm_rope_gate = (
+             self.attn_output_gate
+             and getattr(self.rotary_emb, "is_neox_style", False)
+@@ -389,7 +399,17 @@
+     ) -> torch.Tensor:
+         qkv, _ = self.qkv_proj(hidden_states)
+         q, k, v, gate = self._project_qkv_gate(qkv, positions)
++        if self.agentkv_enabled:
++            from vllm.agentkv import capture_q
++            capture_q(q, self.agentkv_layer_id)
++        if self.agentkv_audit_enabled:
++            from adapters.agentkv.vllm_audit import capture
++            capture("q", q, self.agentkv_layer_id)
++            capture("k", k, self.agentkv_layer_id)
++            capture("v", v, self.agentkv_layer_id)
+         attn_output = self.attn(q, k, v)
++        if self.agentkv_audit_enabled:
++            capture("o", attn_output, self.agentkv_layer_id)
+         if gate is not None:
+             attn_output = attn_output * torch.sigmoid(gate)
+         output, _ = self.o_proj(attn_output)
+--- a/vllm/v1/core/sched/output.py
++++ b/vllm/v1/core/sched/output.py
+@@ -226,6 +226,8 @@
+     # freed from the encoder cache.
+     free_encoder_mm_hashes: list[str]
+ 
++    kv_window_compactions: list[dict] | None = None
++
+     scheduled_encoder_input_stats: ScheduledEncoderInputStats | None = None
+ 
+     # Request IDs that are preempted in this step.
+--- a/vllm/v1/core/sched/scheduler.py
++++ b/vllm/v1/core/sched/scheduler.py
+@@ -1267,7 +1267,9 @@
+                 scheduled_encoder_inputs
+             )
+ 
++        from vllm.kv_session import drain_compactions
+         scheduler_output = SchedulerOutput(
++            kv_window_compactions=drain_compactions(self.requests),
+             scheduled_new_reqs=new_reqs_data,
+             scheduled_cached_reqs=cached_reqs_data,
+             num_scheduled_tokens=num_scheduled_tokens,
+@@ -1346,6 +1348,8 @@
+         tokens out of order, and for connectors with a pending KV hand-off,
+         which the preemption's block free would leave without valid KV.
+         """
++        if request.sampling_params and any(k in (request.sampling_params.extra_args or {}) for k in ("kv_window", "agentkv")):
++            raise RuntimeError("KV window sessions cannot be recomputed after preemption; increase KV pool or reduce concurrency")
+         assert request.status == RequestStatus.RUNNING, (
+             "Only running requests can be preempted"
+         )
+@@ -1434,6 +1438,11 @@
+ 
+         Discards the last sampled output token from the prior input chunk.
+         """
++
++        from vllm.kv_window import resume_window
++        resume_window(self, session, update)
++        if (update.sampling_params.extra_args or {}).get("agentkv"):
++            session.max_tokens = update.max_tokens
+ 
+         # Current streaming input behaviour: Keep only computed output tokens
+         # (discard final sampled output token).
+@@ -1735,6 +1744,8 @@
+         scheduler_output: SchedulerOutput,
+         model_runner_output: ModelRunnerOutput,
+     ) -> dict[int, EngineCoreOutputs]:
++        from vllm.kv_session import apply_worker_updates
++        apply_worker_updates(self, model_runner_output.kv_session_updates)
+         sampled_token_ids = model_runner_output.sampled_token_ids
+         logprobs = model_runner_output.logprobs
+         prompt_logprobs_dict = model_runner_output.prompt_logprobs_dict
+--- a/vllm/v1/core/single_type_kv_cache_manager.py
++++ b/vllm/v1/core/single_type_kv_cache_manager.py
+@@ -172,6 +172,8 @@
+             The number of blocks to allocate.
+         """
+ 
++        from vllm.kv_session import allocation_offset
++        num_tokens -= allocation_offset(self, request_id)
+         num_required_blocks = cdiv(num_tokens, self.block_size)
+         if apply_admission_cap and self._max_admission_blocks_per_request is not None:
+             # Recycling-aware specs (SWA, chunked-local) cap the per-request
+@@ -341,6 +343,10 @@
+         Returns:
+             The new allocated blocks.
+         """
++        from vllm.kv_session import allocation_offset
++        offset = allocation_offset(self, request_id)
++        num_tokens -= offset
++        num_tokens_main_model -= offset
+         cow_blocks: list[KVCacheBlock] = []
+         if request_id in self._partial_hit_reqs:
+             # Partial hit: redirect the shared tail to a private CoW block.
+--- a/vllm/v1/outputs.py
++++ b/vllm/v1/outputs.py
+@@ -332,6 +332,8 @@
+         default_factory=dict
+     )
+ 
++    kv_session_updates: dict[str, dict] | None = None
++
+     # [num_reqs, hidden_size]
+     pooler_output: list[torch.Tensor | None] | None = None
+ 
+--- a/vllm/v1/worker/gpu_model_runner.py
++++ b/vllm/v1/worker/gpu_model_runner.py
+@@ -1265,6 +1265,9 @@
+         for req_id in scheduler_output.finished_req_ids:
+             self.input_batch.remove_request(req_id)
+ 
++        from vllm.kv_session import worker_update
++        worker_update(self, scheduler_output)
++
+         # Zero GPU memory for freshly allocated cache blocks to prevent
+         # stale NaN/data from corrupting attention or SSM computation.
+         if scheduler_output.new_block_ids_to_zero:
+@@ -2255,6 +2258,11 @@
+             self.positions[:total_num_scheduled_tokens],
+         )
+ 
++        from vllm.kv_session import prepare_physical_slots
++        prepare_physical_slots(self, num_reqs, total_num_scheduled_tokens, req_indices_gpu)
++        from vllm.agentkv import prepare_queries
++        prepare_queries(self, num_reqs, scheduler_output.num_scheduled_tokens)
++
+         # Copy the tensors to the GPU.
+         self._prepare_input_ids(
+             scheduler_output,
+@@ -2627,6 +2635,8 @@
+         spec_decode_common_attn_metadata = None
+         for kv_cache_gid, kv_cache_group in enumerate(kv_cache_groups):
+             cm = copy(cm_base)  # shallow copy
++            from vllm.kv_session import physical_metadata
++            physical_metadata(self, cm, kv_cache_group, num_reqs, num_reqs_padded, for_cudagraph_capture)
+ 
+             # Basically only the encoder seq_lens, block_table and slot_mapping change
+             # for each kv_cache_group.
+@@ -4894,6 +4904,9 @@
+                 cudagraph_stats=cudagraph_stats,
+                 routed_experts=None,
+             )
++
++        from vllm.agentkv import after_sample
++        output.kv_session_updates = after_sample(self, scheduler_output, output)
+ 
+         if not self.use_async_scheduling:
+             if self.routed_experts_initialized:
+--- a/vllm/v1/worker/gpu_worker.py
++++ b/vllm/v1/worker/gpu_worker.py
+@@ -140,6 +140,10 @@
+ 
+ 
+ class Worker(WorkerBase):
++    def kv_session_stats(self, rid):
++        from vllm.agentkv import get_stats
++        return get_stats(self, rid)
++
+     def __init__(
+         self,
+         vllm_config: VllmConfig,

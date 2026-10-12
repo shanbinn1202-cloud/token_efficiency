@@ -1,0 +1,24 @@
+{
+  "session_id": "demo-session",
+  "segments": [
+    {"turn_id": 0, "role": "system", "token_start": 0, "token_end": 64, "mandatory": true},
+    {"turn_id": 1, "role": "assistant", "token_start": 64, "token_end": 128, "files": ["src/cache.py"]},
+    {"turn_id": 2, "role": "assistant", "token_start": 128, "token_end": 192, "tests": ["tests/test_cache.py::test_restore"]}
+  ],
+  "turns": [
+    {
+      "session_id": "demo-session",
+      "instance_id": "demo-instance",
+      "turn_id": 3,
+      "task_objective": "Fix KV Page restoration",
+      "previous_goal_text": null,
+      "previous_action": "pytest tests/test_cache.py::test_restore",
+      "current_observation": "AssertionError in src/cache.py",
+      "structured_state": {"phase": "test"},
+      "historical_turn_ids": [0, 1, 2],
+      "historical_page_ids": ["p00000000:0-64", "p00000000:64-128", "p00000001:128-192"],
+      "hbm_resident_page_ids": []
+    }
+  ]
+}
+

@@ -1,0 +1,15 @@
+{
+  "authorization": "User explicitly requested preserving the algorithm and budget, counting this case as budget-infeasible and failed, and running the other 31 cases.",
+  "cases": [
+    {
+      "instance_id": "pylint-dev__pylint-7080",
+      "methods": ["random_attention", "sliding_window"],
+      "budget": 8192,
+      "prefix_tokens": 9234,
+      "prompt_tokens": 9239,
+      "reserve_tokens": {"random_attention": 64, "sliding_window": 0},
+      "action": "count_as_failure",
+      "evidence": "/projects/bcjw/ssun4/benchmark32_restart_20261004/harness-revisions/budget-infeasible-20261004/initial-prefix-audit.json"
+    }
+  ]
+}

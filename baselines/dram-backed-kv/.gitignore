@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+build/
+dist/
+artifacts/
+/*.tar.gz
+results/raw/**
+scripts/env.local.sh
+
+# Reproducible but bulky experiment intermediates. Keep compact summaries,
+# manifests, configs, and their generation scripts in Git.

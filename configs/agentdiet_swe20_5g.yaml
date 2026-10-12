@@ -1,0 +1,47 @@
+# Aligned to kvpool5g_budget16k_20260914_finalaligned/vanilla/run.json.
+# AgentDiet has no KV-budget cap; cache.kv_budget is an unused shared label.
+model:
+  name: Qwen/Qwen3.6-27B
+  path: Qwen/Qwen3.6-27B
+  dtype: bfloat16
+  local_files_only: true
+  enable_thinking: true
+generation:
+  max_tokens: 4096
+  max_turns: 120
+  max_window_size: 65536
+  temperature: 0
+  top_p: 1.0
+  top_k: -1
+  repetition_penalty: 1.0
+  seed: 42
+  request_timeout: 1200
+  max_consecutive_format_errors: 2
+dataset:
+  name: princeton-nlp/SWE-bench_Verified
+  split: test
+  start: 0
+  count: 20
+evaluation:
+  workers: 8
+  grading_workers: 4
+  timeout: 1800
+  apptainer: apptainer
+  image_manifest: data/apptainer/native/manifest.json
+  output_root: results
+backend:
+  name: vllm
+  endpoint: http://127.0.0.1:42180/v1
+  api_key: EMPTY
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.9
+  kv_cache_memory_bytes: 5368709120
+  prefix_caching: true
+  cuda_graph: true
+  torch_compile: true
+  full_attention: sdpa
+  sdpa_kernel: auto
+  linear_attention: native
+  prefill_chunk_size: null
+cache:
+  kv_budget: 16384

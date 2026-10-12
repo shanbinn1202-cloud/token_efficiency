@@ -1,0 +1,235 @@
+{
+  "schema_name": "dram_kv_goal_shadow_replay",
+  "schema_version": "1.0.0",
+  "session_id": "goal-shadow-demo",
+  "page_size": 8,
+  "bytes_per_token": 0,
+  "selector": {
+    "page_budget": 2,
+    "recent_turns": 1,
+    "recent_quota": 0
+  },
+  "segments": [
+    {
+      "turn_id": 0,
+      "role": "system",
+      "token_start": 0,
+      "token_end": 8,
+      "mandatory": true,
+      "summary": "Repository and task contract"
+    },
+    {
+      "turn_id": 1,
+      "role": "assistant",
+      "token_start": 8,
+      "token_end": 16,
+      "files": ["src/cache.py"],
+      "symbols": ["restore_page"],
+      "errors": ["AssertionError"],
+      "summary": "Cache restoration failure and restore_page implementation"
+    },
+    {
+      "turn_id": 2,
+      "role": "tool",
+      "token_start": 16,
+      "token_end": 24,
+      "files": ["tests/test_cache.py"],
+      "tests": ["tests/test_cache.py::test_restore_page"],
+      "summary": "Regression test for cache page restoration"
+    },
+    {
+      "turn_id": 3,
+      "role": "tool",
+      "token_start": 24,
+      "token_end": 32,
+      "files": ["src/parser.py"],
+      "symbols": ["parse_page_header"],
+      "errors": ["TypeError"],
+      "summary": "Changed TypeError top frame in parse_page_header"
+    },
+    {
+      "turn_id": 4,
+      "role": "assistant",
+      "token_start": 32,
+      "token_end": 40,
+      "files": ["src/api.py"],
+      "symbols": ["restore_page"],
+      "summary": "Public restore_page API compatibility contract"
+    }
+  ],
+  "turns": [
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 6,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "rg restore_page src/cache.py",
+      "current_observation": "src/cache.py defines restore_page",
+      "structured_state": {"return_code": 0, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 7,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "rg restore_page src/cache.py",
+      "current_observation": "src/cache.py defines restore_page",
+      "structured_state": {"return_code": 0, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 8,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "pytest tests/test_cache.py::test_restore_page",
+      "current_observation": "AssertionError in src/cache.py; 1 failed",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 9,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "pytest tests/test_cache.py::test_restore_page",
+      "current_observation": "File \"src/parser.py\", line 7, in parse_page_header\nTypeError: stale header\n1 failed",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 10,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "apply_patch src/parser.py parse_page_header",
+      "current_observation": "Done! src/parser.py parse_page_header",
+      "structured_state": {"return_code": 0, "tool_name": "apply_patch"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 11,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "rg parse_page_header src/parser.py",
+      "current_observation": "src/parser.py parse_page_header",
+      "structured_state": {"return_code": 0, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 12,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "rg parse_page_header src/parser.py",
+      "current_observation": "src/parser.py parse_page_header",
+      "structured_state": {"return_code": 0, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 13,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "python diagnose.py src/parser.py",
+      "current_observation": "TypeError: stale header in src/parser.py\nreturn code: 1",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 14,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "python diagnose.py src/parser.py",
+      "current_observation": "TypeError: stale header in src/parser.py\nreturn code: 1",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 15,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "python diagnose.py src/parser.py",
+      "current_observation": "TypeError: stale header in src/parser.py\nreturn code: 1",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 16,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "python diagnose.py src/parser.py",
+      "current_observation": "TypeError: stale header in src/parser.py\nreturn code: 1",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 17,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "python diagnose.py src/parser.py",
+      "current_observation": "TypeError: stale header in src/parser.py\nreturn code: 1",
+      "structured_state": {"return_code": 1, "tool_name": "shell"},
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    },
+    {
+      "session_id": "goal-shadow-demo",
+      "instance_id": "synthetic-cache-001",
+      "turn_id": 18,
+      "task_objective": "Fix cache restoration in src/cache.py",
+      "previous_goal_text": null,
+      "previous_action": "",
+      "current_observation": "",
+      "structured_state": {},
+      "message_source": "user",
+      "explicit_requirement": "Preserve the public restore_page API",
+      "historical_turn_ids": [0, 1, 2, 3, 4],
+      "historical_page_ids": ["p00000000:0-8", "p00000001:8-16", "p00000002:16-24", "p00000003:24-32", "p00000004:32-40"]
+    }
+  ],
+  "evidence_page_ids": {
+    "6": ["p00000001:8-16"],
+    "7": ["p00000001:8-16"],
+    "8": ["p00000002:16-24"],
+    "9": ["p00000003:24-32"],
+    "10": ["p00000003:24-32"],
+    "11": ["p00000003:24-32"],
+    "12": ["p00000003:24-32"],
+    "13": ["p00000003:24-32"],
+    "14": ["p00000003:24-32"],
+    "15": ["p00000003:24-32"],
+    "16": ["p00000003:24-32"],
+    "17": ["p00000003:24-32"],
+    "18": ["p00000004:32-40"]
+  }
+}
