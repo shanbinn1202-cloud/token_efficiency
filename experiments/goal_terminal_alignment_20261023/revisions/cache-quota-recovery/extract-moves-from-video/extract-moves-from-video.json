@@ -1,0 +1,31 @@
+{
+  "task": "extract-moves-from-video",
+  "dockerfile_sha256": "aa271a9df218d1ddc646ad3b1c5a5e55a75d758c094ba5e08a88226f5c5dc970",
+  "architecture": "arm64",
+  "source_unchanged": true,
+  "oracle_required": true,
+  "started": 1792754274.3378296,
+  "build_only_overrides": [
+    "APT Sandbox User=root",
+    "fakeroot1.31 Debian ARM64, DONTTRYCHOWN=1",
+    "vfs.ignore_chown_errors=true"
+  ],
+  "ownership": "rootless image ownership flattened; per-task oracle qualification required",
+  "image_id": "0a7d12a4b542fec8d901ef8a03eb2d3daa550ff06c406d8797cdded072287ea8",
+  "image_config": {
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/bash"
+    ],
+    "WorkingDir": "/app",
+    "Labels": {
+      "io.buildah.version": "1.33.12",
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "status": "review_required",
+  "traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 55, in <module>\n    tmp=OUT/(name+'.building.sif');run(['apptainer','build',str(tmp),'docker-archive://'+str(archive)],log)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 26, in run\n    if rc:raise RuntimeError('Build subprocess exit '+str(rc))\nRuntimeError: Build subprocess exit 255\n",
+  "finished": 1792754278.186921
+}

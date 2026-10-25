@@ -1,0 +1,413 @@
+--- base/vllm/tebench/geometry.py
++++ gemma/vllm/tebench/geometry.py
+@@ -0,0 +1,38 @@
++"""Resolve the real full-attention geometry of a hybrid model."""
++
++from types import SimpleNamespace
++
++
++def full_attention(config):
++    c = config.model_config.hf_text_config
++    layers = [i for i, kind in enumerate(c.layer_types) if kind == "full_attention"]
++    if not layers:
++        raise ValueError("KV policies require full-attention layers")
++    if c.model_type in {"gemma4_text", "gemma4_unified_text"}:
++        # Match v0.24 Gemma4DecoderLayer's full-attention construction.
++        full = SimpleNamespace(
++            num_attention_heads=c.num_attention_heads,
++            num_key_value_heads=(getattr(c, "num_global_key_value_heads", c.num_key_value_heads)
++                if getattr(c, "attention_k_eq_v", False) else c.num_key_value_heads),
++            head_dim=getattr(c, "global_head_dim", c.head_dim),
++        )
++        getter = lambda index: full
++    else:
++        getter = getattr(c, "get_layer_config", lambda index: c)
++    geometries = {
++        (
++            getter(i).num_attention_heads,
++            getter(i).num_key_value_heads,
++            getter(i).head_dim,
++        )
++        for i in layers
++    }
++    if len(geometries) != 1:
++        raise ValueError("KV policies require uniform full-attention head geometry")
++    heads, kv_heads, dim = geometries.pop()
++    tp = config.parallel_config.tensor_parallel_size
++    if heads % tp or kv_heads % tp:
++        raise ValueError("KV policies require unreplicated tensor-parallel heads")
++    return SimpleNamespace(
++        layers=layers, heads=heads // tp, kv_heads=kv_heads // tp, dim=dim
++    )
+--- base/vllm/tebench/random_attention.py
++++ gemma/vllm/tebench/random_attention.py
+@@ -63,9 +63,14 @@
+ 
+ def snapshot(runner, state, req):
+     from vllm.tebench.kv_session import gather_kv
+-    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec
++    from vllm.v1.kv_cache_interface import (
++        FullAttentionSpec,
++        MambaSpec,
++        SlidingWindowSpec,
++    )
+ 
+     layers = {}
++    state.window_offsets = {}
+     for gid, group in enumerate(runner.kv_cache_config.kv_cache_groups):
+         for name in group.layer_names:
+             cache = runner.compilation_config.static_forward_context[name].kv_cache
+@@ -75,6 +80,16 @@
+                     req.block_ids[gid],
+                     group.kv_cache_spec.block_size,
+                     state.physical,
++                ).cpu()
++            elif isinstance(group.kv_cache_spec, SlidingWindowSpec):
++                start = max(0, state.logical - group.kv_cache_spec.sliding_window + 1)
++                state.window_offsets[name] = start
++                layers[name] = gather_kv(
++                    cache,
++                    req.block_ids[gid],
++                    group.kv_cache_spec.block_size,
++                    state.logical - start,
++                    start=start,
+                 ).cpu()
+             elif isinstance(group.kv_cache_spec, MambaSpec):
+                 assert len(req.block_ids[gid]) == 1
+@@ -93,7 +108,11 @@
+     if not ENABLED:
+         return
+     from vllm.tebench.kv_session import gather_kv, write_dense
+-    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec
++    from vllm.v1.kv_cache_interface import (
++        FullAttentionSpec,
++        MambaSpec,
++        SlidingWindowSpec,
++    )
+ 
+     verify = os.environ.get(ENV_PREFIX + "_VERIFY") == "1"
+     for req in output.scheduled_new_reqs:
+@@ -119,6 +138,25 @@
+                         assert torch.equal(actual, value), (
+                             "Random KV restore changed values"
+                         )
++                elif isinstance(group.kv_cache_spec, SlidingWindowSpec):
++                    start = state.window_offsets[name]
++                    value = saved.to(cache.device)
++                    write_dense(
++                        cache,
++                        req.block_ids[gid],
++                        group.kv_cache_spec.block_size,
++                        value,
++                        start=start,
++                    )
++                    if verify:
++                        actual = gather_kv(
++                            cache,
++                            req.block_ids[gid],
++                            group.kv_cache_spec.block_size,
++                            len(value),
++                            start=start,
++                        )
++                        assert torch.equal(actual, value), "Local window KV changed"
+                 elif isinstance(group.kv_cache_spec, MambaSpec):
+                     for tensor, value in zip(cache, saved):
+                         tensor[req.block_ids[gid][0]].copy_(value)
+--- base/vllm/tebench/agentkv_connector.py
++++ gemma/vllm/tebench/agentkv_connector.py
+@@ -27,9 +27,14 @@
+ def snapshot(runner, state, req):
+     from vllm.tebench.agentkv import STATE
+     from vllm.tebench.kv_session import gather_kv
+-    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec
++    from vllm.v1.kv_cache_interface import (
++        FullAttentionSpec,
++        MambaSpec,
++        SlidingWindowSpec,
++    )
+ 
+     layers = {}
++    state.window_offsets = {}
+     for gid, group in enumerate(runner.kv_cache_config.kv_cache_groups):
+         for name in group.layer_names:
+             cache = runner.compilation_config.static_forward_context[name].kv_cache
+@@ -39,6 +44,16 @@
+                     req.block_ids[gid],
+                     group.kv_cache_spec.block_size,
+                     state.physical,
++                ).cpu()
++            elif isinstance(group.kv_cache_spec, SlidingWindowSpec):
++                start = max(0, state.logical - group.kv_cache_spec.sliding_window + 1)
++                state.window_offsets[name] = start
++                layers[name] = gather_kv(
++                    cache,
++                    req.block_ids[gid],
++                    group.kv_cache_spec.block_size,
++                    state.logical - start,
++                    start=start,
+                 ).cpu()
+             elif isinstance(group.kv_cache_spec, MambaSpec):
+                 assert len(req.block_ids[gid]) == 1
+@@ -83,7 +98,11 @@
+     import torch
+ 
+     from vllm.tebench.kv_session import gather_kv, write_dense
+-    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec
++    from vllm.v1.kv_cache_interface import (
++        FullAttentionSpec,
++        MambaSpec,
++        SlidingWindowSpec,
++    )
+ 
+     for req in output.scheduled_new_reqs:
+         state = STATE.sessions[req.req_id]
+@@ -108,6 +127,25 @@
+                         assert torch.equal(actual, value), (
+                             "AgentKV checkpoint changed KV"
+                         )
++                elif isinstance(group.kv_cache_spec, SlidingWindowSpec):
++                    start = state.window_offsets[name]
++                    value = saved.to(cache.device)
++                    write_dense(
++                        cache,
++                        req.block_ids[gid],
++                        group.kv_cache_spec.block_size,
++                        value,
++                        start=start,
++                    )
++                    if os.environ.get("VLLM_AGENTKV_VERIFY") == "1":
++                        actual = gather_kv(
++                            cache,
++                            req.block_ids[gid],
++                            group.kv_cache_spec.block_size,
++                            len(value),
++                            start=start,
++                        )
++                        assert torch.equal(actual, value), "Local window KV changed"
+                 elif isinstance(group.kv_cache_spec, MambaSpec):
+                     for tensor, value in zip(cache, saved):
+                         tensor[req.block_ids[gid][0]].copy_(value)
+--- base/vllm/tebench/kv_session.py
++++ gemma/vllm/tebench/kv_session.py
+@@ -96,12 +96,12 @@
+     cm._num_computed_tokens_cache = None
+ 
+ 
+-def gather_kv(cache, blocks, block_size, count):
++def gather_kv(cache, blocks, block_size, count, start=0):
+     """Token-major K/V snapshot from native pages, without recomputation."""
+     import torch
+ 
+     assert cache.ndim in (4, 5) and cache.shape[2] == block_size, cache.shape
+-    positions = torch.arange(count, device=cache.device)
++    positions = torch.arange(start, start + count, device=cache.device)
+     pages = torch.tensor(blocks, dtype=torch.long, device=cache.device)
+     if cache.ndim == 5:
+         # v0.24 Triton: [blocks, 2, tokens, heads, dim], either NHD or HND strides.
+--- base/vllm/tebench/intentkv.py
++++ gemma/vllm/tebench/intentkv.py
+@@ -32,20 +32,23 @@
+     global STATE
+     if not ENABLED or STATE is not None:
+         return
++    from vllm.tebench.geometry import full_attention
++
+     c = config.model_config.hf_text_config
++    geometry = full_attention(config)
+     options = json.loads(os.environ["VLLM_INTENTKV_OPTIONS"])
+     window = options["init_q_window"]
+     slots = config.scheduler_config.max_num_seqs
+-    layers = [i for i, kind in enumerate(c.layer_types) if kind == "full_attention"]
++    layers = geometry.layers
+     pages = (config.model_config.max_model_len + 15) // 16
+     identity = torch.arange(pages, dtype=torch.int32, device=device)
+     STATE = NS(
+         window=window,
+         block=options["block_size"],
+         budget=int(os.environ["VLLM_INTENTKV_BUDGET"]),
+-        heads=c.num_attention_heads,
+-        kv_heads=c.num_key_value_heads,
+-        dim=c.head_dim,
++        heads=geometry.heads,
++        kv_heads=geometry.kv_heads,
++        dim=geometry.dim,
+         pages=pages,
+         layer_map={lid: i for i, lid in enumerate(layers)},
+         sessions={},
+@@ -55,15 +58,15 @@
+             slots,
+             len(layers),
+             window,
+-            c.num_attention_heads,
+-            c.head_dim,
++            geometry.heads,
++            geometry.dim,
+             dtype=config.model_config.dtype,
+             device=device,
+         ),
+         maps=(
+             None
+             if GQA
+-            else identity.expand(len(layers), slots, c.num_attention_heads, -1).clone()
++            else identity.expand(len(layers), slots, geometry.heads, -1).clone()
+         ),
+         slots=torch.full((slots,), -1, dtype=torch.int32, device=device),
+         offsets=torch.zeros(slots, dtype=torch.int32, device=device),
+@@ -414,7 +417,7 @@
+     if not ENABLED:
+         return
+     from vllm.tebench.kv_session import gather_kv, write_dense
+-    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec
++    from vllm.v1.kv_cache_interface import FullAttentionSpec, MambaSpec, SlidingWindowSpec
+ 
+     for new in output.scheduled_new_reqs:
+         state = STATE.sessions[new.req_id]
+@@ -441,6 +444,15 @@
+                             atol=0,
+                             rtol=0,
+                         )
++                elif isinstance(group.kv_cache_spec, SlidingWindowSpec):
++                    size = group.kv_cache_spec.block_size
++                    start = state.window_offsets[name]
++                    write_dense(cache, req.block_ids[gid], size, values.to(cache.device), start=start)
++                    if os.environ.get("VLLM_INTENTKV_VERIFY") == "1":
++                        torch.testing.assert_close(
++                            gather_kv(cache, req.block_ids[gid], size, len(values), start=start).cpu(),
++                            values, atol=0, rtol=0,
++                        )
+                 elif isinstance(group.kv_cache_spec, MambaSpec):
+                     assert len(req.block_ids[gid]) == 1
+                     for dst, value in zip(cache, values):
+--- base/vllm/tebench/agentkv.py
++++ gemma/vllm/tebench/agentkv.py
+@@ -25,10 +25,13 @@
+     from adapters.agentkv.vllm_policy import plan_for
+     from transformers import AutoTokenizer
+ 
++    from vllm.tebench.geometry import full_attention
++
+     c = vllm_config.model_config.hf_text_config
++    geometry = full_attention(vllm_config)
+     options = json.loads(os.environ["VLLM_AGENTKV_OPTIONS"])
+     plan = plan_for(int(os.environ["VLLM_AGENTKV_BUDGET"]), options)
+-    layers = [i for i, t in enumerate(c.layer_types) if t == "full_attention"]
++    layers = geometry.layers
+     from vllm.tebench.audit import initialize as initialize_audit
+ 
+     initialize_audit(vllm_config, device, layers)
+@@ -40,8 +43,8 @@
+         num_layers=len(layers),
+         capacity=plan.query_ring_capacity,
+         num_stages=plan.query_ring_num_stages,
+-        num_q_heads=c.num_attention_heads,
+-        head_dim=c.head_dim,
++        num_q_heads=geometry.heads,
++        head_dim=geometry.dim,
+         dtype=vllm_config.model_config.dtype,
+         device=torch.device("cpu"),
+     )
+--- base/vllm/model_executor/models/gemma4.py
++++ gemma/vllm/model_executor/models/gemma4.py
+@@ -502,6 +502,19 @@
+             prefix=f"{prefix}.attn",
+         )
+ 
++        self.agentkv_enabled = False
++        self.intentkv_enabled = False
++        self.tebench_layer_id = layer_idx
++        if not self.is_sliding:
++            from vllm.config import get_current_vllm_config
++            from vllm.tebench import agentkv, intentkv
++            self.agentkv_enabled = agentkv.ENABLED
++            self.intentkv_enabled = intentkv.ENABLED
++            if self.agentkv_enabled:
++                agentkv.initialize(get_current_vllm_config(), self.q_norm.weight.device)
++            if self.intentkv_enabled:
++                intentkv.initialize(get_current_vllm_config(), self.q_norm.weight.device)
++
+     def forward(
+         self,
+         positions: torch.Tensor,
+@@ -533,6 +546,12 @@
+             # Shared: only apply RoPE to Q
+             q = self.rotary_emb(positions, q, k)[0]
+ 
++        if self.agentkv_enabled:
++            from vllm.tebench.agentkv import capture_q
++            capture_q(q, self.tebench_layer_id)
++        if self.intentkv_enabled:
++            from vllm.tebench.intentkv import capture_q as capture_intent
++            capture_intent(q, self.tebench_layer_id)
+         attn_output = self.attn(q, k, v)
+         output, _ = self.o_proj(attn_output)
+ 
+--- base/vllm/tebench/server.py
++++ gemma/vllm/tebench/server.py
+@@ -7,6 +7,7 @@
+ from pathlib import Path
+ 
+ from starlette.responses import JSONResponse
++from tebench.backends.model_chat import eos_ids
+ 
+ import vllm
+ from vllm import SamplingParams
+@@ -125,6 +126,7 @@
+                 max_tokens=max_tokens,
+                 temperature=body["temperature"],
+                 ignore_eos=bool(body.get("ignore_eos", False)),
++                stop_token_ids=([] if body.get("ignore_eos") else eos_ids(self.engine.get_tokenizer())),
+                 top_p=body.get("top_p", 1.0),
+                 top_k=body.get("top_k", -1),
+                 repetition_penalty=body.get("repetition_penalty", 1.0),
+@@ -145,10 +147,7 @@
+             self.logical += len(ids) + len(outputs) - 1
+             self.agent_history.extend(ids + outputs[:-1])
+             assert len(self.agent_history) == self.logical
+-            eos = {
+-                tokenizer.eos_token_id,
+-                tokenizer.convert_tokens_to_ids("<|im_end|>"),
+-            }
++            eos = eos_ids(tokenizer)
+             self.pending_token = (
+                 outputs[-1] if outputs and outputs[-1] not in eos else None
+             )
+@@ -189,6 +188,7 @@
+                 max_tokens=min(body["max_tokens"], remaining),
+                 temperature=body["temperature"],
+                 ignore_eos=bool(body.get("ignore_eos", False)),
++                stop_token_ids=([] if body.get("ignore_eos") else eos_ids(self.engine.get_tokenizer())),
+                 top_p=body.get("top_p", 1.0),
+                 top_k=body.get("top_k", -1),
+                 repetition_penalty=body.get("repetition_penalty", 1.0),
+@@ -215,10 +215,7 @@
+             self.agent_history.extend(ids + outputs[:-1])
+             self.logical = len(self.agent_history)
+             tokenizer = self.engine.get_tokenizer()
+-            eos = {
+-                tokenizer.eos_token_id,
+-                tokenizer.convert_tokens_to_ids("<|im_end|>"),
+-            }
++            eos = eos_ids(tokenizer)
+             self.pending_token = outputs[-1] if outputs[-1] not in eos else None
+             (stats,) = await self.engine.collective_rpc(
+                 "kv_session_stats", args=(self.rid,)
+@@ -252,6 +249,7 @@
+                 max_tokens=min(body["max_tokens"], remaining),
+                 temperature=body["temperature"],
+                 ignore_eos=bool(body.get("ignore_eos", False)),
++                stop_token_ids=([] if body.get("ignore_eos") else eos_ids(self.engine.get_tokenizer())),
+                 top_p=body.get("top_p", 1.0),
+                 top_k=body.get("top_k", -1),
+                 repetition_penalty=body.get("repetition_penalty", 1.0),
+@@ -282,10 +280,7 @@
+             self.agent_history.extend(ids + outputs[:-1])
+             self.logical = len(self.agent_history)
+             tokenizer = self.engine.get_tokenizer()
+-            eos = {
+-                tokenizer.eos_token_id,
+-                tokenizer.convert_tokens_to_ids("<|im_end|>"),
+-            }
++            eos = eos_ids(tokenizer)
+             self.pending_token = outputs[-1] if outputs[-1] not in eos else None
+             (stats,) = await self.engine.collective_rpc(
+                 "kv_session_stats", args=(self.rid,)

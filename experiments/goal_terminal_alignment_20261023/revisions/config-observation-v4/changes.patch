@@ -1,0 +1,29 @@
+--- v3/config.py
++++ v4/config.py
+@@ -309,7 +309,7 @@
+ def effective_server_config(args):
+     names=('model','revision','host','distributed_executor_backend','tensor_parallel_size',
+         'pipeline_parallel_size','max_num_seqs','max_model_len','max_num_batched_tokens',
+-        'kv_cache_memory_bytes','seed','enable_prefix_caching','enforce_eager','mamba_cache_mode',
++        'kv_cache_memory_bytes','seed','enable_prefix_caching','enforce_eager','async_scheduling','attention_backend','mamba_cache_mode',
+         'gdn_prefill_backend','enable_auto_tool_choice','tool_call_parser','chat_template_content_format')
+     config=load();expected=config['effective_server_config']
+     gemma4=config.get('model_profile') is not None
+@@ -319,7 +319,7 @@
+         require(getattr(args,'mamba_cache_mode',None) in (None,'none') and
+                 getattr(args,'mamba_block_size',None) is None,'the Gemma 4 profile pins no Mamba cache arguments')
+         names=tuple(n for n in names if n not in ('mamba_cache_mode','gdn_prefill_backend'))
+-        names+=('attention_backend','block_size','additional_config')
++        names+=('block_size','additional_config')
+     elif 'kv_layout' in config:names+=LAYOUT_ARGS
+     graphs='cuda_graphs' in config
+     if graphs:names+=('compilation_config',)
+@@ -329,7 +329,7 @@
+     else:require(getattr(args,'language_model_only',None) is not True,
+                  'vLLM parsed --language-model-only but the startup config pins it off')
+     actual={name:getattr(args,name,None) for name in names}
+-    if gemma4:
++    if 'attention_backend' in actual:
+         # vLLM may parse --attention-backend into its backend enum: compare by name.
+         backend=actual['attention_backend']
+         actual['attention_backend']=getattr(backend,'name',backend)

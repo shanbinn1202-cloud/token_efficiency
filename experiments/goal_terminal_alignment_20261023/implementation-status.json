@@ -1,0 +1,21 @@
+{
+  "time": 1792753844.7540343,
+  "goal_runs": 4,
+  "terminal_runs": 12,
+  "goal_cpu_tests_passed": 15,
+  "terminal_transport_test_passed": true,
+  "gpu_validated": false,
+  "formal_jobs_submitted": 0,
+  "arm64_images_built": 17,
+  "arm64_images_expected": 89,
+  "published_reference_controls_passed": 1,
+  "published_reference_controls_checked": 1,
+  "terminal_release": "69671fbaac6d67a7ef0dfec016cc38a64ef7a77c",
+  "allocation": {
+    "time": 1792753789.782672,
+    "phase": "waiting_for_interactive_submit_slot",
+    "attempt": 44,
+    "existing_jobs_untouched": true
+  },
+  "old_jobs_untouched": true
+}

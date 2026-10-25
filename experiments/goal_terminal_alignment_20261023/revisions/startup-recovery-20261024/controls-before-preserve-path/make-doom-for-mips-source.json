@@ -1,0 +1,16 @@
+{
+  "files": {
+    "instruction.md": "1903b660e4c64966ff257f828c932adff2b289de589bd6aee22b933bb4fef429",
+    "solution/solve.sh": "a9cd034a5e76fa2b22481717a9669869214f43fec5b4fedc957d83dd2ef6a84a",
+    "environment/Dockerfile": "1da0fdafc36e59fcf685a8dbed9717b291195e251fe0e1247267bc5a0a9980ed",
+    "tests/test.sh": "25809a2ebcb714b1c4e55563b0db16add23e2fd9b68d03e51b1734f8dbb392e1",
+    "tests/reference.jpg": "d1909be8f3266a72686c3945029a553b82e5b46acd624eda65f3fdd5eb339574",
+    "tests/test_outputs.py": "f1748ff20bfd670af1e1cb935647503eb176a4a14dd15f20935264ad7e4a98f6",
+    "environment/task-deps/vm.js": "ea8238f11af2368b108fbb392a57ee04fb7efc40c44222aa0d8bfe1175bcc747",
+    "environment/task-deps/doomgeneric_img.c": "97bd88089d3f1cbe182b9929538190ee59f31d496f0cbcc6300213d09f195a26"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "c9f3a979796e64c64f38606ac1168b2e31993e835c232c24840ad9b88bb24e16"
+}

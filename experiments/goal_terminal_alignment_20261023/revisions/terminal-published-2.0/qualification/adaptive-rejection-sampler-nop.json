@@ -1,0 +1,126 @@
+{
+  "id": "9784812d-4276-44f0-bad1-5071e3aeaaa2",
+  "task_name": "terminal-bench/adaptive-rejection-sampler",
+  "trial_name": "adaptive-rejection-sampler-nop-1792752175",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/adaptive-rejection-sampler-nop-1792752175",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/adaptive-rejection-sampler"
+  },
+  "source": null,
+  "task_checksum": "653a0dde034419e928cd1f720c40b10c5610adb8fd1b85cd9451d9ad8ce146c8",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/adaptive-rejection-sampler",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "adaptive-rejection-sampler-nop-1792752175",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "nop",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "nop",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 0.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-23T10:42:55.960950Z",
+  "finished_at": "2026-10-23T10:44:00.247551Z",
+  "environment_setup": {
+    "started_at": "2026-10-23T10:42:55.972406Z",
+    "finished_at": "2026-10-23T10:43:47.430266Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-23T10:43:47.430309Z",
+    "finished_at": "2026-10-23T10:43:47.430380Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-23T10:43:47.430477Z",
+    "finished_at": "2026-10-23T10:43:47.430658Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-23T10:43:47.457427Z",
+    "finished_at": "2026-10-23T10:43:54.772820Z"
+  },
+  "step_results": null,
+  "passed": true,
+  "expected_reward": 0.0,
+  "image_sha256": "3b26f4b457193afb2317033a851fbcbf589816ad8632f5642499368ed6e8d218",
+  "backend_sha256": "cd715c6a66562088027ee65d7db07f26f35e0fa154ffa5d79803d100a9a9f3c7"
+}

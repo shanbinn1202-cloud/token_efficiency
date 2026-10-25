@@ -1,0 +1,9 @@
+{
+  "time": 1792849259.3648317,
+  "status": "unqualified_candidate",
+  "parent": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30",
+  "scope": "caffe-cifar-10 bootstrap only",
+  "change": "set existing APT DIRECT rule before first apt update, rather than after server startup",
+  "input_cache_bytes_unchanged": true,
+  "original_solutions_tests_resources_unchanged": true
+}

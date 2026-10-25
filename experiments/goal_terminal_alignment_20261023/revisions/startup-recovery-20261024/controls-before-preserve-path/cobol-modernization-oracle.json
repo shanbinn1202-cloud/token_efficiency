@@ -1,0 +1,126 @@
+{
+  "id": "130dcf26-fde4-45b3-992f-05af6c73f0b0",
+  "task_name": "cobol-modernization",
+  "trial_name": "cobol-modernization-oracle-1792828726",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/cobol-modernization-oracle-1792828726",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/cobol-modernization"
+  },
+  "source": null,
+  "task_checksum": "223c212216703487f7a94908fe58259cb44d2370421d995fe7631e68cb45af3e",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/cobol-modernization",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "cobol-modernization-oracle-1792828726",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T07:58:46.534650Z",
+  "finished_at": "2026-10-24T07:59:06.046050Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T07:58:46.549212Z",
+    "finished_at": "2026-10-24T07:59:00.349657Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T07:59:00.349701Z",
+    "finished_at": "2026-10-24T07:59:00.359192Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T07:59:00.359865Z",
+    "finished_at": "2026-10-24T07:59:02.232790Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T07:59:02.276319Z",
+    "finished_at": "2026-10-24T07:59:05.535452Z"
+  },
+  "step_results": null,
+  "passed": true,
+  "expected_reward": 1.0,
+  "image_sha256": "99b4a53b907ce4485b13a7f50ca773bde549818c19517492137b759041626c3b",
+  "backend_sha256": "4e653a0ba41485bf83ba3581555d4adf9491b63f1f8fc3de9c6d5aae0af1ce3b"
+}

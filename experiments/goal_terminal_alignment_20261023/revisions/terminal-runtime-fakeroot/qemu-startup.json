@@ -1,0 +1,17 @@
+{
+  "task": "qemu-startup",
+  "dockerfile_sha256": "d60a2eca5ead7182f3b5d243ee0f8f52d3ff235589703c22c2e97147216dc850",
+  "architecture": "arm64",
+  "source_unchanged": true,
+  "oracle_required": true,
+  "started": 1792756784.7473166,
+  "build_only_overrides": [
+    "APT Sandbox User=root",
+    "fakeroot1.31 Debian ARM64, DONTTRYCHOWN=1",
+    "vfs.ignore_chown_errors=true"
+  ],
+  "ownership": "rootless image ownership flattened; per-task oracle qualification required",
+  "status": "review_required",
+  "traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 47, in <module>\n    run(wrapped,log)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 26, in run\n    if rc:raise RuntimeError('Build subprocess exit '+str(rc))\nRuntimeError: Build subprocess exit 1\n",
+  "finished": 1792756786.3694644
+}

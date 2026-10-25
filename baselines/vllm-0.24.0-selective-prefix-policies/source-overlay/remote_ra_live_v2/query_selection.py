@@ -14,11 +14,21 @@ projects a Page and the catalog holds only the compact vectors.
 (deterministic, evidence only) and Selector V2 safety partition as
 observation_query, but takes no query vector: the fill step walks a seeded
 random permutation of the remaining candidates (``random_fill_selector``).
+
+Long histories (compact_int8_v1, P = 16): ``plan`` and ``plan_random_fill``
+take a vectorized path (``fast_selection``) that computes the same partition,
+the same cosine floats, the same tie-break and the same random fill with numpy
+instead of Page records, the upstream index and per-Page Python loops; the
+receipt and evidence are identical. It is enabled at startup only if numpy is
+present and its self-check reproduces the reference floats and permutations;
+otherwise, for the legacy float representation, and in any state the fast path
+does not model, the reference path (the upstream selector) runs.
 """
 from __future__ import annotations
 from dataclasses import replace
 from hashlib import sha256
 import importlib
+from itertools import repeat
 import json
 import math
 from pathlib import Path
@@ -28,6 +38,8 @@ import time
 import types
 
 from .contract import require
+from . import fast_selection
+from . import goal_text
 from . import selection_contract
 
 
@@ -79,11 +91,14 @@ def upstream():
             importlib.import_module('dram_kv.selectors.prefill_v2'))
 
 
-def goal_rewriter(pin):
+def goal_rewriter(pin, batch=None):
     """Start the upstream persistent Qwen Goal rewriter; fail closed if it cannot start.
 
     Individual rewrite failures still fall back to deterministic Goal fields
-    inside the upstream constructor and are recorded per turn.
+    inside the upstream constructor and are recorded per turn. ``batch``
+    (--goal-rewriter-batch N, goal_rewriter_batch): the batched child, the calls
+    that queue sent together up to N at a time; None: the upstream child, one
+    call at a time.
     """
     if pin is None:
         return None
@@ -91,26 +106,35 @@ def goal_rewriter(pin):
     rewriter = importlib.import_module('dram_kv.goals.rewriter')
     source = Path(__file__).resolve().parents[1]
     manifest = json.loads((source.parent/'runtime-manifest.json').read_bytes())
-    process = rewriter.PersistentCommandGoalRewriter(rewriter_argv(pin, source, manifest['site']),
-        timeout_seconds=pin['timeout_seconds'],
-        startup_timeout_seconds=pin['startup_timeout_seconds'])
-    process.__enter__()
+    if batch is None:
+        process = rewriter.PersistentCommandGoalRewriter(rewriter_argv(pin, source, manifest['site']),
+            timeout_seconds=pin['timeout_seconds'],
+            startup_timeout_seconds=pin['startup_timeout_seconds'])
+        process.__enter__()
+    else:
+        from .goal_rewriter_batch import start
+        process = start(rewriter, rewriter_argv(pin, source, manifest['site'], batch=batch), pin, batch)
     import atexit
     atexit.register(process.close)
     return process
 
 
-def rewriter_argv(pin, source, site, executable=None):
-    """Upstream rewriter command, isolated to the sealed source and site paths."""
+def rewriter_argv(pin, source, site, executable=None, batch=None):
+    """Upstream rewriter command, isolated to the sealed source and site paths; with
+    ``batch`` (--goal-rewriter-batch N) the batched child (goal_rewriter_child) with the
+    same arguments and ``--batch N``."""
     model = Path(pin['model'])
     require((model/'config.json').is_file() and sha256((model/'config.json').read_bytes()).hexdigest()
             == pin['config_sha256'], 'Goal rewriter checkpoint differs from its startup pin')
     program = ("import sys,runpy;sys.path[:0]=[sys.argv[1],sys.argv[2]];script=sys.argv[3];"
                "sys.argv=[script]+sys.argv[4:];runpy.run_path(script,run_name='__main__')")
-    return (executable or sys.executable, '-I', '-S', '-B', '-u', '-c', program, str(source), str(site),
-            str(Path(source)/'dram_kv_scripts'/'qwen_goal_rewriter.py'), '--model', str(model),
+    script = (Path(source)/'dram_kv_scripts'/'qwen_goal_rewriter.py' if batch is None else
+              Path(source)/'remote_ra_live_v2'/'goal_rewriter_child.py')
+    argv = (executable or sys.executable, '-I', '-S', '-B', '-u', '-c', program, str(source), str(site),
+            str(script), '--model', str(model),
             '--device', 'cuda', '--dtype', 'bfloat16',
             '--max-new-tokens', str(pin['max_new_tokens']), '--local-files-only', '--serve')
+    return argv if batch is None else argv + ('--batch', str(batch))
 
 
 def normalized(values):
@@ -263,6 +287,16 @@ def random_fill_selector(selectors):
 
 
 
+_PAGE_KEYS = []
+
+
+def page_keys(n):
+    """``[str(0), ..., str(n - 1)]`` (the evidence keys), from one growing list."""
+    if len(_PAGE_KEYS) < n:
+        _PAGE_KEYS.extend(map(str, range(len(_PAGE_KEYS), n)))
+    return _PAGE_KEYS[:n]
+
+
 def _issue(task):
     require(type(task) is dict and set(task) == {'instance_id', 'problem_statement'}
             and all(type(v) is str and v.strip() for v in task.values()),
@@ -271,11 +305,16 @@ def _issue(task):
 
 
 class QuerySelectionAuthority:
+    # The reference selection path unless __init__ enabled the vectorized one.
+    fast = None
+
     def __init__(self, adapter, worker=None, *, task, policy=None, contract=None, transcript=None,
-                 sessions=None):
+                 sessions=None, rewriter_batch=None):
         """``sessions`` (multi-session stage 1) binds each session id to its own
         (trusted task, engine transcript); session 0's pair is ``task`` and
-        ``transcript``. Without it every session reads ``task`` and ``transcript``."""
+        ``transcript``. Without it every session reads ``task`` and ``transcript``.
+        ``rewriter_batch`` (--goal-rewriter-batch N, goal_query with a pinned
+        rewriter): the Goal rewriter's calls run batched (goal_rewriter_batch)."""
         # The server's policy decides the Goal rewriter. private_endpoint passes
         # the engine owner's policy (the startup config's); without it, the one
         # policy of the sessions the server opened.
@@ -335,11 +374,26 @@ class QuerySelectionAuthority:
         # sealed Page's vector never changes), like the upstream server's own
         # index; the per-turn plan publishes only new Pages and the query.
         self.page_index = {}
+        # Vectorized selection (numpy module, or None for the reference path),
+        # decided once here by fast_selection's self-check; per session the
+        # Page unit vectors as one growing column matrix (a sealed Page's
+        # vector never changes).
+        self.fast = fast_selection.available(vectors)
+        self.page_columns = {}
+        self._config_index = None
         # Only goal_query starts the Goal rewriter. observation_query ranks Pages
         # by the observation vector alone: its Goal is the deterministic one of
         # --no-goal-rewriter (for_policy above already refused a pinned rewriter).
-        self.rewriter = (goal_rewriter(self.contract['goal_rewriter'])
+        pin = self.contract['goal_rewriter']
+        require(rewriter_batch is None or (policy == 'goal_query' and pin is not None),
+                '--goal-rewriter-batch needs goal_query with a pinned Goal rewriter')
+        self.rewriter = ((goal_rewriter(pin) if rewriter_batch is None else goal_rewriter(pin, batch=rewriter_batch))
                          if selection_contract.uses_goal_rewriter(policy) else None)
+        if rewriter_batch is not None:
+            # Startup only: the rewriter runs batched with the pinned N.
+            from .goal_rewriter_batch import check
+            check(self.rewriter, rewriter_batch)
+        self.rewriter_batch = rewriter_batch
         self.constructor = goals.MaintainedGoalConstructor(self.rewriter,
             entity_drift_steps=self.contract['entity_drift_steps'],
             initialize_with_rewriter=self.rewriter is not None)
@@ -349,6 +403,15 @@ class QuerySelectionAuthority:
             # keeps the upstream extractor and parses <returncode> like upstream.
             from goal_adapter import CapturedTextFeatureExtractor
             self.constructor.feature_extractor = CapturedTextFeatureExtractor()
+        # goal_query evidence (goal_text, recording only): the texts behind each
+        # turn's Goal hashes and its rewriter exchanges, kept from plan_turn to the
+        # native terminal, which appends them to goals.jsonl. Startup only: the
+        # tap leaves the control hash as it is, and the stored Goal text hashes
+        # to the GoalRecord version hash.
+        self.goal_texts = goal_text.GoalTexts()
+        self.tap = goal_text.tap(self.constructor, selection_contract.constructor_control_hash)
+        if policy == 'goal_query':
+            goal_text.self_check(sha256, goals.MaintainedGoalConstructor, schema)
         self.goal_control_hash = selection_contract.constructor_control_hash(self.constructor)
 
     def close(self):
@@ -411,7 +474,7 @@ class QuerySelectionAuthority:
 
     def plan(self, binding, goal, context, entries, query, n, vector_space=None, local_turn=None):
         """Upstream ``_plan`` on native Pages: (ranking, selected count, evidence)."""
-        contract, width = self.contract, self.adapter.page_tokens
+        contract = self.contract
         turn = binding.turn if local_turn is None else local_turn
         ends = self.turn_ends[binding.session]
         transcript = self.bound(binding.session)[1]
@@ -433,6 +496,18 @@ class QuerySelectionAuthority:
         if self.adapter.sessions[binding.session].policy == selection_contract.RANDOM_FILL:
             return self.plan_random_fill(binding, goal, context, n, turn, mandatory, capacity,
                                          boundaries, evidence)
+        if self.fast is not None and self.compact_vectors:
+            planned = self.plan_fast(binding, entries, query, n, turn, mandatory, capacity,
+                                     boundaries, evidence, vector_space)
+            if planned is not None:
+                return planned
+        return self.plan_reference(binding, goal, context, entries, query, n, turn, mandatory,
+                                   capacity, boundaries, evidence, vector_space)
+
+    def plan_reference(self, binding, goal, context, entries, query, n, turn, mandatory, capacity,
+                       boundaries, evidence, vector_space):
+        """``plan`` once selection is active, through the upstream index and Selector V2."""
+        contract, width = self.contract, self.adapter.page_tokens
         records, vectors, turns = [], {}, {}
         if self.compact_vectors:
             # The worker compacted every Page; only a float query is projected here.
@@ -518,8 +593,170 @@ class QuerySelectionAuthority:
                                               query_vector.content_hash)).encode()).hexdigest())
         return ranking, len(chosen), evidence
 
+    # ---- vectorized selection (fast_selection) ------------------------------
+    # The reference path above builds one upstream PageRecord per Page, publishes
+    # the Pages to the upstream index, and the upstream selector scores every
+    # Page in Python (and this module scores them again). Its outcome is fixed by
+    # a few facts that hold for native Pages, which the fast path relies on and
+    # checks (it returns None, i.e. the reference path runs, when one fails):
+    # * every candidate Page belongs to an upstream turn <= t, so the selector's
+    #   history (turn < t + 1) is the whole catalog [0, n), in Page order;
+    # * a Page's logical position (p + 1) * P - 16 grows with p, so the
+    #   tie-breaks (-cosine, position, page id) and (-turn, -position, page id)
+    #   are (-cosine, p) and (-turn, -p);
+    # * the selector's budget is in Pages (page_budget = capacity), so every
+    #   Page costs 1 and the greedy loops take prefixes of their orders.
+    # The cosine floats are the upstream ones (fast_selection.cosines); only the
+    # evidence fields are produced, with the same values, types and key order.
+
+    def _partition(self, np, n, turn, mandatory, capacity, boundaries):
+        """(Page turns, recent Pages ascending) of the upstream ``_safety_partition``, or None."""
+        width, contract = self.adapter.page_tokens, self.contract
+        ends = np.asarray(boundaries, dtype=np.int64)
+        if n <= 0 or not 0 <= mandatory <= min(n, capacity) or (ends.size > 1 and not (np.diff(ends) > 0).all()):
+            return None
+        pages = np.arange(n, dtype=np.int64)
+        # selection_contract.page_turn: 1 + bisect_right(boundaries, last token)
+        turns = np.searchsorted(ends, (pages + 1) * width - 1, side='right') + 1
+        if int(turns.max()) > turn:
+            return None
+        cutoff = max(0, turn + 1 - contract['recent_turns'])
+        eligible = pages[mandatory:][turns[mandatory:] >= cutoff]
+        eligible = eligible[np.lexsort((-eligible, -turns[eligible]))]
+        take = min(contract['recent_quota_pages'], max(0, capacity - mandatory), len(eligible))
+        return turns, np.sort(eligible[:take])
+
+    def _delta(self, np, binding, n, chosen):
+        """(added, retained, removed) of upstream ``active_set_delta`` against the
+        resident set after the prior turn (its selected Pages plus every Page
+        sealed while serving it), as ints in Page order; None if that set
+        reaches past n (the reference path then decides)."""
+        selected, sealed = self.previous_active.get(binding.session, (frozenset(), n))
+        previous = np.zeros(n, dtype=np.bool_)
+        if selected:
+            old = np.fromiter(selected, dtype=np.int64, count=len(selected))
+            if int(old.min()) < 0 or int(old.max()) >= n:
+                return None
+            previous[old] = True
+        if sealed < n:
+            previous[max(0, sealed):] = True
+        current = np.flatnonzero(chosen)
+        before = np.flatnonzero(previous)
+        return (current[~previous[current]].tolist(), current[previous[current]].tolist(),
+                before[~chosen[before]].tolist())
+
+    def _selector_config_hash(self, selector, extra):
+        return selector._complete_config(extra)['selector_config_hash']
+
+    def plan_fast(self, binding, entries, query, n, turn, mandatory, capacity, boundaries, evidence,
+                  vector_space):
+        """``plan_reference``'s ranking, count and evidence, vectorized (compact_int8_v1)."""
+        np, contract = self.fast, self.contract
+        if type(query) is self.compact_type:
+            hidden = (vector_space or {}).get('hidden_size')
+            require(type(hidden) is int and hidden > 0, 'compact query needs the hidden size of its vector space')
+            query_vector, projection_hash = query, self.projection_sha256(hidden)
+        else:
+            matrix, projection_hash = self.projection(len(query))
+            query_vector = selection_contract.compact(query, matrix, self.compact_type)
+        layer = (vector_space or {}).get('decoder_layers', 1) - 1
+        provenance = self.provenance_type(binding.model, binding.renderer, max(0, layer),
+            'last_token', projection_hash, contract['projection_dimension'], 'int8',
+            vector_source='vllm_pre_final_norm_hidden_states')
+        partition = self._partition(np, n, turn, mandatory, capacity, boundaries)
+        if partition is None:
+            return None
+        turns, recent = partition
+        columns = self.page_columns.get(binding.session)
+        if columns is None or columns.key != provenance:
+            columns = self.page_columns[binding.session] = fast_selection.PageColumns(
+                np, provenance, contract['projection_dimension'], self.vectors.CompactVector.unit_values)
+        scores = fast_selection.cosines(np, columns.view(entries, n), query_vector.unit_values())
+        chosen = np.zeros(n, dtype=np.bool_)
+        chosen[:mandatory] = True
+        chosen[recent] = True
+        candidates = np.flatnonzero(~chosen)
+        # sorted by (-cosine, Page): upstream (-score, logical position, page id)
+        order = candidates[np.lexsort((candidates, -scores[candidates]))]
+        retrieved = order[:min(len(order), max(0, capacity - mandatory - len(recent)))]
+        chosen[retrieved] = True
+        count = int(chosen.sum())
+        require(0 < count <= capacity, 'Selector V2 plan exceeds its Page budget')
+        delta = self._delta(np, binding, n, chosen)
+        if delta is None:
+            return None
+        policy = self.adapter.sessions[binding.session].policy
+        if self._config_index is None:
+            self._config_index = self.vectors.PageVectorIndex()
+        selector = self.selector.PrefillPageEmbeddingSelectorV2(self._config_index, provenance,
+            frozen_goal_trace_hash=self.goal_control_hash, page_budget=capacity,
+            recent_turns=contract['recent_turns'], recent_quota=contract['recent_quota_pages'],
+            query_source='goal_hidden' if policy == 'goal_query' else 'observation_hidden')
+        recent_ids, retrieved_ids, rest = recent.tolist(), retrieved.tolist(), order.tolist()
+        keys = page_keys(n)
+        evidence.update(reason=None, capacity_pages=capacity, selected_pages=np.flatnonzero(chosen).tolist(),
+            mandatory_pages=list(range(mandatory)), recent_pages=recent_ids, retrieved_pages=retrieved_ids,
+            page_turns=dict(zip(keys, turns.tolist())), projection_sha256=projection_hash,
+            selector_config_hash=self._selector_config_hash(selector, {
+                'effective_mode': 'prefill_page_cosine',
+                'stable_tie_break': 'semantic_rank,logical_position,page_id'}),
+            added_pages=delta[0], retained_pages=delta[1], removed_pages=delta[2],
+            scores=dict(zip(keys, map(round, scores.tolist(), repeat(8, n)))),
+            query_hash=sha256(('%s:%s:%s' % (policy, provenance.provenance_hash,
+                                              query_vector.content_hash)).encode()).hexdigest())
+        return tuple(range(mandatory)) + tuple(recent_ids) + tuple(rest), count, evidence
+
+    def plan_random_fill_fast(self, binding, n, turn, mandatory, capacity, boundaries, evidence):
+        """``plan_random_fill_reference``'s ranking, count and evidence, vectorized."""
+        np, contract = self.fast, self.contract
+        partition = self._partition(np, n, turn, mandatory, capacity, boundaries)
+        if partition is None:
+            return None
+        turns, recent = partition
+        fill = contract[selection_contract.RANDOM_FILL]
+        session_index = self.session_index[binding.session]
+        chosen = np.zeros(n, dtype=np.bool_)
+        chosen[:mandatory] = True
+        chosen[recent] = True
+        order = fast_selection.fill_order(np, np.flatnonzero(~chosen).tolist(), fill['seed'],
+                                          session_index, binding.turn, selection_contract.fill_order)
+        retrieved_ids = order[:min(len(order), max(0, capacity - mandatory - len(recent)))]
+        chosen[retrieved_ids] = True
+        count = int(chosen.sum())
+        require(0 < count <= capacity, 'random fill plan exceeds its Page budget')
+        recent_ids = recent.tolist()
+        ranking = tuple(range(mandatory)) + tuple(recent_ids) + tuple(order)
+        require(len(ranking) == n, 'random fill ranking must be a Page permutation')
+        delta = self._delta(np, binding, n, chosen)
+        if delta is None:
+            return None
+        selector = random_fill_selector(self.selector)(frozen_goal_trace_hash=self.goal_control_hash,
+            page_budget=capacity, recent_turns=contract['recent_turns'],
+            recent_quota=contract['recent_quota_pages'], seed=fill['seed'],
+            session_index=session_index, turn=binding.turn)
+        evidence.update(reason=None, capacity_pages=capacity, selected_pages=np.flatnonzero(chosen).tolist(),
+            mandatory_pages=list(range(mandatory)), recent_pages=recent_ids, retrieved_pages=retrieved_ids,
+            page_turns=dict(zip(page_keys(n), turns.tolist())), projection_sha256=None,
+            selector_config_hash=self._selector_config_hash(selector, {
+                'effective_mode': 'random_fill', 'stable_tie_break': 'none'}),
+            added_pages=delta[0], retained_pages=delta[1], removed_pages=delta[2],
+            fill=dict(rng=fill['rng'], seed=fill['seed'], session_index=session_index,
+                      turn=binding.turn, eligible_pages=len(order), drawn_pages=len(retrieved_ids)),
+            query_hash=None)
+        return ranking, count, evidence
+
     def plan_random_fill(self, binding, goal, context, n, turn, mandatory, capacity, boundaries,
                          evidence):
+        if self.fast is not None:
+            planned = self.plan_random_fill_fast(binding, n, turn, mandatory, capacity, boundaries,
+                                                 evidence)
+            if planned is not None:
+                return planned
+        return self.plan_random_fill_reference(binding, goal, context, n, turn, mandatory, capacity,
+                                               boundaries, evidence)
+
+    def plan_random_fill_reference(self, binding, goal, context, n, turn, mandatory, capacity,
+                                   boundaries, evidence):
         """``plan`` of random_fill once selection is active: the Page records, the
         upstream safety partition and budget loop of Selector V2, the fill drawn at
         random. No query, projection, score or Page vector index: the records
@@ -578,13 +815,27 @@ class QuerySelectionAuthority:
     # Multi-session stage 2: a goal_query Goal may be built off the engine
     # thread between begin_turn's context and its remainder (goal_async).
 
-    def reset_session(self, session_id):
-        """Upstream rebuild: a fresh session with new Goal, index and selector state."""
+    def _drop_tables(self, session_id):
         for table in (self.vector_catalog, self.turn_ends, self.previous_active,
                       self.ever_selected, self.goal_cache, self.compact_cache, self.catalog_version,
-                      self.page_index):
+                      self.page_index, self.__dict__.get('page_columns', {})):
             table.pop(session_id, None)
+
+    def reset_session(self, session_id):
+        """Upstream rebuild: a fresh session with new Goal, index and selector state."""
+        self._drop_tables(session_id)
         self.constructor.release_session(session_id)
+
+    def close_session(self, session_id, goals=None):
+        """Session pool: the session closed for good. Its tables go as on a
+        rebuild; its Goal state is released on the Goal thread when one exists
+        (it may still be building a discarded Goal of this session, and the
+        engine thread must not wait for the rewriter), else here. Returns where."""
+        self._drop_tables(session_id)
+        if goals is not None and goals.after_goals(self.constructor.release_session, session_id):
+            return 'goal_thread'
+        self.constructor.release_session(session_id)
+        return 'inline'
 
     def active(self, geometry):
         return selection_contract.selection_active(geometry.n, geometry.local_turn, self.contract)
@@ -600,6 +851,7 @@ class QuerySelectionAuthority:
         built here; the driver returns the GoalRecord, built in place or, on a
         server that parks goal_query admissions, on its Goal thread."""
         from . import mswea_protocol
+        from . import kv_session_protocol
         session = self.adapter.sessions[binding.session]
         task, transcript = self.bound(binding.session)
         require(session.policy in ('goal_query', 'observation_query', 'random_fill') and transcript is not None,
@@ -615,6 +867,39 @@ class QuerySelectionAuthority:
         ends = self.turn_ends.setdefault(binding.session, [])
         require(len(ends) == geometry.local_turn and all(e < binding.stable_end for e in ends),
                 'stable turn boundaries must grow once per local turn')
+        from . import chat_text_protocol
+        if kv_session_protocol.kv(transcript):
+            context = self.kv_context(binding, geometry, conversation, task, transcript)
+        elif chat_text_protocol.chat(transcript):
+            context = self.chat_context(binding, geometry, conversation, task, transcript)
+        else:
+            context = self.xml_context(binding, geometry, conversation, task, transcript)
+        rewrites = ()
+        if self.rewriter is None:
+            goal = self.constructor.construct(context)
+        else:
+            from .goal_async import GoalWork
+            work = GoalWork(binding.request, self.constructor, context, tap=self.tap)
+            goal = yield work
+            rewrites = work.rewrites
+        variant = self.contract['goal_query_variant']
+        text = selection_contract.goal_query_text(goal, variant)
+        text_sha256 = sha256(text.encode()).hexdigest()
+        cached = None
+        if session.policy == 'goal_query' and self.active(geometry):
+            # Upstream _goal_query_cache: keyed by retrieval_goal_hash; a hash
+            # hit with a different rendered payload is a collision.
+            cached = self.goal_cache.get(binding.session, {}).get(goal.retrieval_goal_hash)
+            require(cached is None or cached[2] == text_sha256, 'Goal hash collision changed the query payload')
+        need = session.policy == 'goal_query' and self.active(geometry) and cached is None
+        query = dict(goal=goal, context=context, variant=variant, text=text, text_sha256=text_sha256,
+                     goal_payload=text if need else None, cache_hit=cached is not None, geometry=geometry)
+        self.pending[binding.request] = dict(query, rewrites=rewrites)
+        return types.SimpleNamespace(**query)
+
+    def xml_context(self, binding, geometry, conversation, task, transcript):
+        """Mini-SWE-Agent XML TurnContext (upstream _context)."""
+        from . import mswea_protocol
         require(type(conversation) is list and conversation
                 and all(type(m) is dict and type(m.get('content')) is str for m in conversation)
                 and conversation[-1].get('role') == 'user', 'server-rendered XML conversation required')
@@ -631,29 +916,49 @@ class QuerySelectionAuthority:
         objective = mswea_protocol.root_objective(conversation)
         require(objective and task['problem_statement'].strip() in conversation[1]['content'],
                 'task message must carry the frozen issue')
-        context = self.schema.TurnContext(binding.session, task['instance_id'],
+        return self.schema.TurnContext(binding.session, task['instance_id'],
             geometry.local_turn + 1, objective, None, transcript.previous_action(), observation,
             message_source='user' if geometry.local_turn == 0 else 'tool',
             structured_state={'tool_name': 'bash', 'return_code': mswea_protocol.return_code(observation)})
-        if self.rewriter is None:
-            goal = self.constructor.construct(context)
-        else:
-            from .goal_async import GoalWork
-            goal = yield GoalWork(binding.request, self.constructor, context)
-        variant = self.contract['goal_query_variant']
-        text = selection_contract.goal_query_text(goal, variant)
-        text_sha256 = sha256(text.encode()).hexdigest()
-        cached = None
-        if session.policy == 'goal_query' and self.active(geometry):
-            # Upstream _goal_query_cache: keyed by retrieval_goal_hash; a hash
-            # hit with a different rendered payload is a collision.
-            cached = self.goal_cache.get(binding.session, {}).get(goal.retrieval_goal_hash)
-            require(cached is None or cached[2] == text_sha256, 'Goal hash collision changed the query payload')
-        need = session.policy == 'goal_query' and self.active(geometry) and cached is None
-        query = dict(goal=goal, context=context, variant=variant, text=text, text_sha256=text_sha256,
-                     goal_payload=text if need else None, cache_hit=cached is not None, geometry=geometry)
-        self.pending[binding.request] = query
-        return types.SimpleNamespace(**query)
+
+    def chat_context(self, binding, geometry, conversation, task, transcript):
+        """chat-text TurnContext (the deterministic Goal is evidence only: chat-text serves
+        observation_query and random_fill, which rank without it): the first user message
+        as the root objective, the previous decoded reply, the newest user message as the
+        observation, no tool name or return code."""
+        from . import chat_text_protocol as chat
+        require(type(conversation) is list and conversation
+                and all(type(m) is dict and type(m.get('content')) is str for m in conversation)
+                and conversation[-1].get('role') == 'user', 'server-rendered chat-text conversation required')
+        require(transcript.pending is not None and transcript.turn == geometry.local_turn,
+                'engine transcript is not at this turn')
+        first = geometry.local_turn == 0
+        if not first:
+            require(binding.observation_span is not None, 'latest observation span required')
+        fields = chat.goal_inputs(conversation, first)
+        return self.schema.TurnContext(binding.session, task['instance_id'], geometry.local_turn + 1,
+            fields['objective'], None, transcript.previous_action(), fields['observation'],
+            message_source=fields['message_source'], structured_state=fields['structured_state'])
+
+    def kv_context(self, binding, geometry, source, task, transcript):
+        """kv-session TurnContext: the root objective (the first user message), this
+        session's previous decoded reply, and the new messages: their tool/user text as
+        the observation, a real user message (the MemAgent question, a format-error
+        nudge) as the explicit requirement, the reply's tool name and <returncode>."""
+        from . import kv_session_protocol as kv
+        require(type(source) is dict and source.get('schema') == kv.SOURCE_SCHEMA,
+                'kv-session source required')
+        require(transcript.pending is not None and transcript.turn == geometry.local_turn,
+                'engine transcript is not at this turn')
+        first = geometry.local_turn == 0
+        if not first:
+            require(binding.observation_span is not None, 'latest observation span required')
+        objective = source['objective'] if first else transcript.objective
+        require(type(objective) is str, 'kv-session root objective missing')
+        fields = kv.goal_inputs(source['messages'], first)
+        return self.schema.TurnContext(binding.session, task['instance_id'], geometry.local_turn + 1, objective,
+            None, transcript.previous_action(), fields['observation'], message_source=fields['message_source'],
+            structured_state=fields['structured_state'], explicit_requirement=fields['explicit_requirement'])
 
     def plan_turn(self, binding, geometry, allocation_generation, query, phase1):
         """Selector V2 over candidates [0, n); returns (ranking, count, signed receipt)."""
@@ -719,6 +1024,11 @@ class QuerySelectionAuthority:
                 tail_capture_digest=phase1.tail_capture_digest),
             nonce=secrets.token_hex(16))
         receipt = dict(body=body, mac=self.adapter.authority.sign(body))
+        if policy == 'goal_query':
+            # Evidence only (goal_text): the texts of the two hashes above, until
+            # the native terminal appends them to goals.jsonl.
+            self.goal_texts.pending[binding.request] = goal_text.record(query.goal, query.variant,
+                query.text, body['goal_hash'], query.text_sha256, pending.get('rewrites', ()))
         self.authorized[binding.request] = receipt
         self.turn_ends[binding.session].append(binding.stable_end)
         self.previous_active[binding.session] = (frozenset(ranking[:count]), n)

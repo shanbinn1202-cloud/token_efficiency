@@ -1,0 +1,17 @@
+{
+  "id": "batch4k-vanilla-validation-20261017",
+  "time": 1792243793.9772868,
+  "authorization": "4096 for all new experiments; only SWE Vanilla and MemAgentBench Vanilla interactive validation gate all ten formal Gemma jobs",
+  "old_max_num_batched_tokens": 16384,
+  "max_num_batched_tokens": 4096,
+  "validation_scope": [
+    "swebench/vanilla",
+    "memagent/vanilla"
+  ],
+  "formal_group_count": 10,
+  "engine_algorithm_changed": false,
+  "historical_runs_unchanged": true,
+  "details": "/projects/bcjw/ssun4/benchmark_batch4k_20261017/revision.json",
+  "static_checks": "/projects/bcjw/ssun4/benchmark_batch4k_20261017/config-checks.json",
+  "archived_failure": "/projects/bcjw/ssun4/benchmark_batch4k_20261017/failed-3397857"
+}

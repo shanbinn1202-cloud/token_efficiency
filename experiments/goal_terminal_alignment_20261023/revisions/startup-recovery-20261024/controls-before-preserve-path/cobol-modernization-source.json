@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "a87074f1141b7345394cd88053d0debb0dc8f7de95308882c6538ee9a3b359da",
+    "solution/solve.sh": "7d4a0504e1686c1790bfbc074d4e598f4c631f54c2bc5f3d5fd786574b4810b9",
+    "environment/Dockerfile": "8b175c83fc03ec7d16d6101516bc5100230b592f480e435279f4fe051c9280b2",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "009180a7092583fc8143bb3ffc3957923aa0d61d0aac3a471f76eeb4aae54a88",
+    "environment/src/INPUT.DAT": "52fc984f0cf14af1495285d7efe02b9bae13159eea59255560ee938c4f78afee",
+    "environment/src/program.cbl": "27cb0e56f65f52fa75f346720b37a180b8e034ebe7d7622b979f195087bd6ebb",
+    "environment/data/ACCOUNTS.DAT": "46f63eb29442ebc6716bcd8a0c36f4367910f2783f6b84a307ed9a61ccd1046e",
+    "environment/data/BOOKS.DAT": "db04da646207cd87f8e9c5b6f0b57d95953899f3eef22de1a81423f06ef4a9fd",
+    "environment/data/TRANSACTIONS.DAT": "1fa4cc5420ded94d585c563e8196b85166ebbae2bb8924b20014717fb2fb9ee3"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "a08e001d2547fe84f64452bb075d27603aed7abfc01799f80924f81e6f2af410"
+}

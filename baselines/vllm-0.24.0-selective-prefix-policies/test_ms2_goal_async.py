@@ -16,8 +16,11 @@ together with the Goal parked on its thread. Per session and turn it compares
 the GoalRecord (selector payload, version and retrieval-Goal hashes, gate and
 applied decisions, SLM attempt and success, fallback, triggers, token counts),
 the Goal payload and Goal forward, the Selector V2 ranking, selected count and
-every selection field of the signed receipt, the prompt and output tokens, and
-the turn's comparable evidence (row, plan, worker operations, native record).
+every selection field of the signed receipt, the prompt and output tokens, the
+turn's comparable evidence (row, plan, worker operations, native record) and its
+goals.jsonl row without the request's identity (Goal and query texts, decision,
+rewriter exchanges without their measured times). A parked Goal that called the
+rewriter adds its calls' totals next to goal_construct_ms.
 
 Other cases: other sessions decode and complete while a Goal is parked;
 admissions queue behind a parked Goal in FIFO order and the engine refuses an
@@ -55,7 +58,7 @@ import test_ms_engine as ME
 import test_selection_stageb as SEL
 import test_stageb_e2e as S
 
-from remote_ra_live_v2 import capacity, goal_async, query_selection
+from remote_ra_live_v2 import capacity, goal_async, goal_text, query_selection
 from remote_ra_live_v2.capacity import CapacityWait
 
 A, B, C = ME.A, ME.B, ME.C
@@ -154,6 +157,15 @@ async def play(srv, k, i):
     return await srv.turn(k, observation, **plan)
 
 
+def goals_row(srv, rid):
+    """The request's goals.jsonl row without its identity (goal_text.KEYS) and its
+    rewriter calls' measured times (goal_text.TIMING); a module function, as goal_view
+    is borrowed by other test classes."""
+    (row,) = [r for r in srv.rows(goal_text.FILE) if r['request_id'] == rid]
+    row = dict(row, rewrites=[{k: v for k, v in x.items() if k not in goal_text.TIMING} for x in row['rewrites']])
+    return {k: v for k, v in row.items() if k not in goal_text.KEYS}
+
+
 def committed(h, lane):
     return {key: h.state(lane)[key] for key in ('namespace', 'turn', 'resident', 'tail', 'catalog',
                                                 'boundary', 'pins', 'carry')}
@@ -211,7 +223,7 @@ class GoalAsyncTests(unittest.IsolatedAsyncioTestCase):
             receipt_goal=body['goal'], goal_hash=body['goal_hash'], query_hash=body['query_hash'],
             ranking=body['ranking'], count=body['selected_count'], selection=body['selection'],
             prompt=list(info['binding'].tokens), output=list(info['request'].output_token_ids),
-            evidence=self.comparable(info))
+            evidence=self.comparable(info), goal_text=goals_row(srv, info['rid']))
 
     async def alone(self, tasks, turns):
         """Each session's turns alone, one request at a time, on the stage-1 server
@@ -268,6 +280,13 @@ class GoalAsyncTests(unittest.IsolatedAsyncioTestCase):
                     self.assertGreater(native['admission_engine_ms'], 0)
                 for native in slow:
                     self.assertGreaterEqual(native['goal_construct_ms'], DELAY * 1000)
+                    # Its rewriter call's totals (goal_text.totals): the line-less stand-in
+                    # has no lock hook, so no wait is measured; the call is.
+                    self.assertGreaterEqual(native['goal_construct_ms'], native['goal_rewrite_call_ms'])
+                    self.assertGreaterEqual(native['goal_rewrite_call_ms'], DELAY * 1000)
+                    self.assertIsNone(native['goal_rewrite_wait_ms'])
+                self.assertTrue(all('goal_rewrite_call_ms' not in n and 'goal_rewrite_wait_ms' not in n
+                                    for n in natives if n not in slow))
                 # Steps of other sessions ran while a Goal was parked.
                 parks = {rid: steps for event, rid, steps in log if event == 'park'}
                 during = [x for event, rid, steps in log if event == 'resume'
@@ -278,7 +297,8 @@ class GoalAsyncTests(unittest.IsolatedAsyncioTestCase):
             else:
                 # The old path: the Goal on the engine thread, inside the admission's stall.
                 self.assertTrue(all(t == threading.current_thread().name for t in rewriter.threads))
-                self.assertTrue(all('goal_async_ms' not in n and 'goal_construct_ms' not in n for n in natives))
+                self.assertTrue(all('goal_async_ms' not in n and 'goal_construct_ms' not in n and
+                                    'goal_rewrite_call_ms' not in n for n in natives))
                 for native in slow:
                     self.assertGreaterEqual(native['admission_engine_ms'], DELAY * 1000)
             self.assertFalse(srv.rows('failures.jsonl'))

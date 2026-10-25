@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "rstan-to-pystan"
+  ],
+  "cause": "QEMU native root init did not mount /dev/shm; PyStan ProcessPoolExecutor fails SemLock with FileNotFoundError after successful original ARM64 source build.",
+  "change": "Mount 64MiB1777 tmpfs /dev/shm (Docker default); preserve task RAM and CPU limits. Retain exact original curl snapshot pin. No solution/tests edits.",
+  "status": "candidate unpromoted"
+}

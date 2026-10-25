@@ -1,0 +1,30 @@
+{
+  "simulated_slurm_only": true,
+  "no_real_submission": true,
+  "cases": [
+    {
+      "case": "new",
+      "passed": true
+    },
+    {
+      "case": "continuation",
+      "passed": true
+    },
+    {
+      "case": "qos_retry",
+      "passed": true
+    },
+    {
+      "case": "review_block",
+      "passed": true
+    },
+    {
+      "case": "review_approved",
+      "passed": true
+    },
+    {
+      "case": "existing_job",
+      "passed": true
+    }
+  ]
+}

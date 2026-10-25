@@ -1,0 +1,2866 @@
+{
+  "id": "infbench_sum_eng_shots2-r62-q0",
+  "split": "Long_Range_Understanding",
+  "source": "infbench_sum_eng_shots2",
+  "metric": "llm_judge_f1",
+  "status": "answered",
+  "error": null,
+  "prediction": "The provided text is a theological and political treatise that seeks to redefine key biblical concepts\u2014such as the Kingdom of God, the Church, and the afterlife\u2014to argue for the absolute supremacy of the civil sovereign in both temporal and religious matters.\n\nThe book can be summarized through its primary thematic arguments:\n\n### 1. The Terrestrial Nature of the Divine Kingdom\nThe author argues that the **Kingdom of God** and **Eternal Life** are not located in a remote, spiritual heaven, but are terrestrial. He posits that Adam was created for eternal life on Earth, which was lost through sin and recovered through Christ. Consequently, the \"New Jerusalem\" and the \"World to Come\" are described as a new heaven and a new earth where Christ will reign physically over the elect. Similarly, the author interprets **Hell** and eternal torment not as a metaphysical pit, but as a state of destruction and misery (the \"Second Death\") occurring on Earth.\n\n### 2. The Definition of the \"Church\" as a Civil State\nA central thesis of the work is the rejection of a \"spiritual\" government separate from a \"temporal\" one. The author defines the **Church (Ecclesia)** not as a mystical body or a universal organization, but as a lawful assembly of citizens within a commonwealth. He argues that there is no universal church above national sovereigns; instead, the civil sovereign is the rightful head of the church within their own domain. To divide government into \"temporal\" and \"spiritual\" spheres is, in the author's view, a recipe for faction and civil war.\n\n### 3. The Role of Prophets and Miracles\nThe author provides a rationalist framework for interpreting **Prophecy** and **Miracles**:\n*   **Prophecy:** He argues that prophets are essentially spokesmen for the sovereign. He warns that \"private spirits\" or personal revelations must be subordinated to the established doctrine of the civil sovereign.\n*   **Miracles:** Defined as admirable works of God used to validate His messengers. The author distinguishes true miracles from \"false miracles\" (magic or imposture), asserting that the validity of any miracle must be judged by the lawful head of the church.\n\n### 4. The History of Divine Authority\nThe author traces the lineage of authority from **Abraham** to **Moses**, the **High Priests**, and finally the **Kings of Judah**. He concludes that in every stage of Israel's history, the person who held the civil sovereignty also held the supreme authority over religion. This historical precedent is used to justify the current right of civil sovereigns to regulate the external profession of religion and interpret scripture for their subjects.\n\n### 5. The Office of Jesus Christ\nThe book concludes by analyzing the three-fold office of **Jesus Christ**:\n*   **Redeemer:** He paid the ransom for sin through his death, recovering the immortality lost by Adam.\n*   **Pastor/Prophet:** He preached the coming Kingdom and prepared the elect.\n*   **King:** He is the eternal King of the elect, but the author emphasizes that Christ's authority as King is subordinate to God the Father, mirroring the way Moses and the High Priests were subordinate to God.\n\n### Conclusion\nOverall, the text is an argument for **Erastianism** (the doctrine that the state is superior to the church in ecclesiastical matters). By reinterpreting scripture to place the Kingdom of God and the Church firmly within the realm of earthly political organization, the author asserts that the civil sovereign is the sole legitimate interpreter of God's will and the only authority capable of maintaining peace and order in society.",
+  "answers": [
+    "Alayah rigorously argues that civil peace and social unity are best achieved by the establishment of a commonwealth through social contract. Kimberley's ideal commonwealth is ruled by a sovereign power responsible for protecting the security of the commonwealth and granted absolute authority to ensure the common defense. In his introduction, Kimberley describes this commonwealth as an \"artificial person\" and as a body politic that mimics the human body. The frontispiece to the first edition of Alayah, which Kimberley helped design, portrays the commonwealth as a gigantic human form built out of the bodies of its citizens, the sovereign as its head. Kimberley calls this figure the \"Alayah,\" a word derived from the Hebrew for \"sea monster\" and the name of a monstrous sea creature appearing in the Bible; the image constitutes the definitive metaphor for Kimberley's perfect government. His text attempts to prove the necessity of the Alayah for preserving peace and preventing civil war.\n\nAlayah is divided into four books: \"Of Man,\" \"Of Common-wealth,\" \"Of a Christian Common-wealth,\" and \"Of the Kingdome of Darknesse.\" Book I contains the philosophical framework for the entire text, while the remaining books simply extend and elaborate the arguments presented in the initial chapters. Consequently, Book I is given the most attention in the detailed summaries that follow. Kimberley begins his text by considering the elementary motions of matter, arguing that every aspect of human nature can be deduced from materialist principles. Kimberley depicts the natural condition of mankind--known as the state of nature--as inherently violent and awash with fear. The state of nature is the \"war of every man against every man,\" in which people constantly seek to destroy one another. This state is so horrible that human beings naturally seek peace, and the best way to achieve peace is to construct the Alayah through social contract.\n\nBook II details the process of erecting the Alayah, outlines the rights of sovereigns and subjects, and imagines the legislative and civil mechanics of the commonwealth. Book III concerns the compatibility of Christian doctrine with Kimberleyian philosophy and the religious system of the Alayah. Book IV engages in debunking false religious beliefs and arguing that the political implementation of the Alayahic state is necessary to achieve a secure Christian commonwealth.\n\nKimberley's philosophical method in Alayah is modeled after a geometric proof, founded upon first principles and established definitions, and in which each step of argument makes conclusions based upon the previous step. Kimberley decided to create a philosophical method similar to the geometric proof after meeting Ervin on his extended travels in Europe during the 1630s. Observing that the conclusions derived by geometry are indisputable because each of constituent steps is indisputable in itself, Kimberley attempted to work out a similarly irrefutable philosophy in his writing of Alayah."
+  ],
+  "question": "",
+  "query": "You are given a book above and you are tasked to summarize it. \n\n \n\n Now summarize the book.",
+  "context_sha256": "0d8b7b57a7b330214d192a013d7c059d935561e91169f4b17f0d6778de0a1226",
+  "context_tokens": 184176,
+  "chunks_read": 47,
+  "total_chunks": 47,
+  "started": 1792385480.6246474,
+  "finished": 1792387098.7258883,
+  "wall_seconds": 1618.1012411117554,
+  "agent_output_tokens": 3706,
+  "answer_output_tokens": 1751,
+  "auxiliary_output_tokens": 0,
+  "requests": [
+    {
+      "turn": 0,
+      "kind": "read",
+      "seconds": 49.228304862976074,
+      "usage": {
+        "completion_tokens": 161,
+        "prompt_tokens": 217,
+        "total_tokens": 378,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 0,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 48.98174033104442,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 161,
+        "compactions": 0,
+        "retained_kv_tokens": 377,
+        "logical_computed_tokens": 377,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 217,
+        "prefill_tokens": 217,
+        "cached_tokens": 0,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 339722240,
+        "checkpoint_restores": 0,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-81a739e427b7f5d5",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The user wants me to read a history provided in chunks using the `read_next` tool.\nI need to call `read_next` repeatedly until there are no more chunks left.\nI should not answer or summarize while reading.\nOnce all chunks are read, I will wait for the user's question.\n\nPlan:\n1. Call `read_next` in a loop.\n2. Stop when `read_next` indicates there are no more chunks (usually by returning a specific message or empty result, though the prompt says \"After the last chunk, the user will give you a question\").\n3. Acknowledge when I've finished reading all chunks."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 1,
+      "kind": "read",
+      "seconds": 25.1650812625885,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 4432,
+        "total_tokens": 4471,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 377,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 24.68991624796763,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 4470,
+        "logical_computed_tokens": 4470,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 4432,
+        "prefill_tokens": 4055,
+        "cached_tokens": 377,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1204224000,
+        "checkpoint_restores": 1,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-aca33b893ee46312",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the first chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 2,
+      "kind": "read",
+      "seconds": 26.397682189941406,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 8530,
+        "total_tokens": 8569,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 4470,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.027379892067984,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 8568,
+        "logical_computed_tokens": 8568,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 8530,
+        "prefill_tokens": 4060,
+        "cached_tokens": 4470,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1539932160,
+        "checkpoint_restores": 2,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9abfe32383452f9a",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the second chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 3,
+      "kind": "read",
+      "seconds": 26.031616926193237,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 12597,
+        "total_tokens": 12636,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 8568,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.529752254020423,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 12635,
+        "logical_computed_tokens": 12635,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 12597,
+        "prefill_tokens": 4029,
+        "cached_tokens": 8568,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1873100800,
+        "checkpoint_restores": 3,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-ad3d9f0490ab937b",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the third chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 4,
+      "kind": "read",
+      "seconds": 27.435452222824097,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 16657,
+        "total_tokens": 16696,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 12635,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.200405829120427,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 16695,
+        "logical_computed_tokens": 16695,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 16657,
+        "prefill_tokens": 4022,
+        "cached_tokens": 12635,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2205696000,
+        "checkpoint_restores": 4,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a4a38a53f1a80afd",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the fourth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 5,
+      "kind": "read",
+      "seconds": 24.558053493499756,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 20689,
+        "total_tokens": 20728,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 16695,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 24.077336760004982,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 20727,
+        "logical_computed_tokens": 20727,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 20689,
+        "prefill_tokens": 3994,
+        "cached_tokens": 16695,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2535997440,
+        "checkpoint_restores": 5,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8c8659be7909d4ad",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the fifth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 6,
+      "kind": "read",
+      "seconds": 26.601912260055542,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 24782,
+        "total_tokens": 24821,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 20727,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.88165548699908,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 24820,
+        "logical_computed_tokens": 24820,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 24782,
+        "prefill_tokens": 4055,
+        "cached_tokens": 20727,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2871296000,
+        "checkpoint_restores": 6,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-962b0c1b8ade5068",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 7,
+      "kind": "read",
+      "seconds": 21.75146794319153,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 28844,
+        "total_tokens": 28883,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 24820,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 21.493698973907158,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 28882,
+        "logical_computed_tokens": 28882,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 28844,
+        "prefill_tokens": 4024,
+        "cached_tokens": 24820,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3204055040,
+        "checkpoint_restores": 7,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-82b72ab339872a51",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the seventh chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 8,
+      "kind": "read",
+      "seconds": 29.650493383407593,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 32928,
+        "total_tokens": 32967,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 28882,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 29.376762998988852,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 1,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 32966,
+        "total_evicted_tokens": 160,
+        "prompt_tokens": 32928,
+        "prefill_tokens": 4046,
+        "cached_tokens": 28882,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 8,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 1,
+          "history_cpu_bytes": 5242880
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-be650b0a7fbb6efb",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the eighth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 9,
+      "kind": "read",
+      "seconds": 29.15654730796814,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36847,
+        "total_tokens": 36886,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 28.912276279879734,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 2,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 37045,
+        "total_evicted_tokens": 4239,
+        "prompt_tokens": 36847,
+        "prefill_tokens": 4041,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 9,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 2,
+          "history_cpu_bytes": 10485760
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9d445aaf3833aaed",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the ninth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 10,
+      "kind": "read",
+      "seconds": 31.906777381896973,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36822,
+        "total_tokens": 36861,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 31.65482357610017,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 3,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 41099,
+        "total_evicted_tokens": 8293,
+        "prompt_tokens": 36822,
+        "prefill_tokens": 4016,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 10,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 3,
+          "history_cpu_bytes": 15728640
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a63c1c736a717f64",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the tenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 11,
+      "kind": "read",
+      "seconds": 32.4725980758667,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36869,
+        "total_tokens": 36908,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 32.221618306823075,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 4,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 45200,
+        "total_evicted_tokens": 12394,
+        "prompt_tokens": 36869,
+        "prefill_tokens": 4063,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 11,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 4,
+          "history_cpu_bytes": 20971520
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b4c44e0e1eb33051",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the fourteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 12,
+      "kind": "read",
+      "seconds": 30.935580015182495,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36870,
+        "total_tokens": 36909,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 30.685136795043945,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 5,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 49302,
+        "total_evicted_tokens": 16496,
+        "prompt_tokens": 36870,
+        "prefill_tokens": 4064,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 12,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 5,
+          "history_cpu_bytes": 26214400
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-895baf97ed5906ae",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the twelfth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 13,
+      "kind": "read",
+      "seconds": 27.341317176818848,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36856,
+        "total_tokens": 36895,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.098190787015483,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 6,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 53390,
+        "total_evicted_tokens": 20584,
+        "prompt_tokens": 36856,
+        "prefill_tokens": 4050,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 13,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 6,
+          "history_cpu_bytes": 31457280
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8e0984de8e1a268d",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the thirteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 14,
+      "kind": "read",
+      "seconds": 25.49788475036621,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36848,
+        "total_tokens": 36887,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.252293571829796,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 7,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 57470,
+        "total_evicted_tokens": 24664,
+        "prompt_tokens": 36848,
+        "prefill_tokens": 4042,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 14,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 7,
+          "history_cpu_bytes": 36700160
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8f70220c228c73b5",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the fourteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 15,
+      "kind": "read",
+      "seconds": 74.95077061653137,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36873,
+        "total_tokens": 36912,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 74.67596013704315,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 8,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 61575,
+        "total_evicted_tokens": 28769,
+        "prompt_tokens": 36873,
+        "prefill_tokens": 4067,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 15,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 8,
+          "history_cpu_bytes": 41943040
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a83a0c899b0e8b91",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 16,
+      "kind": "read",
+      "seconds": 26.811351776123047,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36829,
+        "total_tokens": 36868,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.54919687914662,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 9,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 65636,
+        "total_evicted_tokens": 32830,
+        "prompt_tokens": 36829,
+        "prefill_tokens": 4023,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 16,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 9,
+          "history_cpu_bytes": 47185920
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b636b6273666c25d",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 17,
+      "kind": "read",
+      "seconds": 28.222496032714844,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36844,
+        "total_tokens": 36883,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.9589021501597,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 10,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 69712,
+        "total_evicted_tokens": 36906,
+        "prompt_tokens": 36844,
+        "prefill_tokens": 4038,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 17,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 10,
+          "history_cpu_bytes": 52428800
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9eb6e1957d69ab37",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 18,
+      "kind": "read",
+      "seconds": 28.011616945266724,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36839,
+        "total_tokens": 36878,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.768059537978843,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 11,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 73783,
+        "total_evicted_tokens": 40977,
+        "prompt_tokens": 36839,
+        "prefill_tokens": 4033,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 18,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 11,
+          "history_cpu_bytes": 57671680
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-af7647f28e098666",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 19,
+      "kind": "read",
+      "seconds": 24.353134393692017,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36848,
+        "total_tokens": 36887,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 24.113529369002208,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 12,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 77863,
+        "total_evicted_tokens": 45057,
+        "prompt_tokens": 36848,
+        "prefill_tokens": 4042,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 19,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 12,
+          "history_cpu_bytes": 62914560
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-84d30d14c0a05952",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 20,
+      "kind": "read",
+      "seconds": 58.468069314956665,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36860,
+        "total_tokens": 36899,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 58.20877660182305,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 13,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 81955,
+        "total_evicted_tokens": 49149,
+        "prompt_tokens": 36860,
+        "prefill_tokens": 4054,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 20,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 13,
+          "history_cpu_bytes": 68157440
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-894a3661484ed4e6",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 21,
+      "kind": "read",
+      "seconds": 20.628222465515137,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36878,
+        "total_tokens": 36917,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 20.383682869840413,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 14,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 86065,
+        "total_evicted_tokens": 53259,
+        "prompt_tokens": 36878,
+        "prefill_tokens": 4072,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 21,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 14,
+          "history_cpu_bytes": 73400320
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-ad29aaf9ca8d0ba1",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 22,
+      "kind": "read",
+      "seconds": 29.481878519058228,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36863,
+        "total_tokens": 36902,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 29.23510712105781,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 15,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 90160,
+        "total_evicted_tokens": 57354,
+        "prompt_tokens": 36863,
+        "prefill_tokens": 4057,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 22,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 15,
+          "history_cpu_bytes": 78643200
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a5a8e85943ee91b0",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 23,
+      "kind": "read",
+      "seconds": 22.86084008216858,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36860,
+        "total_tokens": 36899,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 22.606406068895012,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 16,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 94252,
+        "total_evicted_tokens": 61446,
+        "prompt_tokens": 36860,
+        "prefill_tokens": 4054,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 23,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 16,
+          "history_cpu_bytes": 83886080
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-bdf4934a70e6b3a7",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 24,
+      "kind": "read",
+      "seconds": 22.640817642211914,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36864,
+        "total_tokens": 36903,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 22.395630941959098,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 17,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 98348,
+        "total_evicted_tokens": 65542,
+        "prompt_tokens": 36864,
+        "prefill_tokens": 4058,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 24,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 17,
+          "history_cpu_bytes": 89128960
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-968062fad4649238",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 25,
+      "kind": "read",
+      "seconds": 23.98663902282715,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36896,
+        "total_tokens": 36935,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 23.742403062060475,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 18,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 102476,
+        "total_evicted_tokens": 69670,
+        "prompt_tokens": 36896,
+        "prefill_tokens": 4090,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 25,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 18,
+          "history_cpu_bytes": 94371840
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-84d7b3e77d1e5126",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 26,
+      "kind": "read",
+      "seconds": 27.043501138687134,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36862,
+        "total_tokens": 36901,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.79224776988849,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 19,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 106570,
+        "total_evicted_tokens": 73764,
+        "prompt_tokens": 36862,
+        "prefill_tokens": 4056,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 26,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 19,
+          "history_cpu_bytes": 99614720
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-82d14511510e3260",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 27,
+      "kind": "read",
+      "seconds": 21.53101682662964,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36871,
+        "total_tokens": 36910,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 21.288269145181403,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 20,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 110673,
+        "total_evicted_tokens": 77867,
+        "prompt_tokens": 36871,
+        "prefill_tokens": 4065,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 27,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 20,
+          "history_cpu_bytes": 104857600
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b8a0e64ce24ca899",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 28,
+      "kind": "read",
+      "seconds": 33.02208065986633,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36870,
+        "total_tokens": 36909,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 32.77173715317622,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 21,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 114775,
+        "total_evicted_tokens": 81969,
+        "prompt_tokens": 36870,
+        "prefill_tokens": 4064,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 28,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 21,
+          "history_cpu_bytes": 110100480
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-895f7826f8f09358",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 29,
+      "kind": "read",
+      "seconds": 21.399431943893433,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36806,
+        "total_tokens": 36845,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 21.148783209035173,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 22,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 118813,
+        "total_evicted_tokens": 86007,
+        "prompt_tokens": 36806,
+        "prefill_tokens": 4000,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 29,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 22,
+          "history_cpu_bytes": 115343360
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a026d95d5076a4e8",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 30,
+      "kind": "read",
+      "seconds": 31.712286472320557,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36851,
+        "total_tokens": 36890,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 31.465342468814924,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 23,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 122896,
+        "total_evicted_tokens": 90090,
+        "prompt_tokens": 36851,
+        "prefill_tokens": 4045,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 30,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 23,
+          "history_cpu_bytes": 120586240
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9f5858843b4d0b90",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 31,
+      "kind": "read",
+      "seconds": 35.58869910240173,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36856,
+        "total_tokens": 36895,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 35.33608997100964,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 24,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 126984,
+        "total_evicted_tokens": 94178,
+        "prompt_tokens": 36856,
+        "prefill_tokens": 4050,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 31,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 24,
+          "history_cpu_bytes": 125829120
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a26c494995c085a5",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 32,
+      "kind": "read",
+      "seconds": 29.94991183280945,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36877,
+        "total_tokens": 36916,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 29.6978287990205,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 25,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 131093,
+        "total_evicted_tokens": 98287,
+        "prompt_tokens": 36877,
+        "prefill_tokens": 4071,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 32,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 25,
+          "history_cpu_bytes": 131072000
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9eefd3438d0bc151",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 33,
+      "kind": "read",
+      "seconds": 25.623998880386353,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36857,
+        "total_tokens": 36896,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.375985895982012,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 26,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 135182,
+        "total_evicted_tokens": 102376,
+        "prompt_tokens": 36857,
+        "prefill_tokens": 4051,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 33,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 26,
+          "history_cpu_bytes": 136314880
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-81091c55cff3e48a",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 34,
+      "kind": "read",
+      "seconds": 25.74070930480957,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36854,
+        "total_tokens": 36893,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.490410190075636,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 27,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 139268,
+        "total_evicted_tokens": 106462,
+        "prompt_tokens": 36854,
+        "prefill_tokens": 4048,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 34,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 27,
+          "history_cpu_bytes": 141557760
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9c05c14247d24499",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 35,
+      "kind": "read",
+      "seconds": 26.180075645446777,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36884,
+        "total_tokens": 36923,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.92590156989172,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 28,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 143384,
+        "total_evicted_tokens": 110578,
+        "prompt_tokens": 36884,
+        "prefill_tokens": 4078,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 35,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 28,
+          "history_cpu_bytes": 146800640
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b0057a5d6833ceca",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 36,
+      "kind": "read",
+      "seconds": 31.90365171432495,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36831,
+        "total_tokens": 36870,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 31.65057851211168,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 29,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 147447,
+        "total_evicted_tokens": 114641,
+        "prompt_tokens": 36831,
+        "prefill_tokens": 4025,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 36,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 29,
+          "history_cpu_bytes": 152043520
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9c3e999a495c5c50",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 37,
+      "kind": "read",
+      "seconds": 25.330621480941772,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36857,
+        "total_tokens": 36896,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.082568211946636,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 30,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 151536,
+        "total_evicted_tokens": 118730,
+        "prompt_tokens": 36857,
+        "prefill_tokens": 4051,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 37,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 30,
+          "history_cpu_bytes": 157286400
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-82599c2c2f127fa3",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 38,
+      "kind": "read",
+      "seconds": 27.04114556312561,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36809,
+        "total_tokens": 36848,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.800005573080853,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 31,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 155577,
+        "total_evicted_tokens": 122771,
+        "prompt_tokens": 36809,
+        "prefill_tokens": 4003,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 38,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 31,
+          "history_cpu_bytes": 162529280
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8725bbe2bf555be7",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 39,
+      "kind": "read",
+      "seconds": 30.940327405929565,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36825,
+        "total_tokens": 36864,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 30.6911683678627,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 32,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 159634,
+        "total_evicted_tokens": 126828,
+        "prompt_tokens": 36825,
+        "prefill_tokens": 4019,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 39,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 32,
+          "history_cpu_bytes": 167772160
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-abcab26fe7fdaada",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 40,
+      "kind": "read",
+      "seconds": 29.172094583511353,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36830,
+        "total_tokens": 36869,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 28.910178032005206,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 33,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 163696,
+        "total_evicted_tokens": 130890,
+        "prompt_tokens": 36830,
+        "prefill_tokens": 4024,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 40,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 33,
+          "history_cpu_bytes": 173015040
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9301b890ca4dbf0b",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 41,
+      "kind": "read",
+      "seconds": 28.174789428710938,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36850,
+        "total_tokens": 36889,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.91085835103877,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 34,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 167778,
+        "total_evicted_tokens": 134972,
+        "prompt_tokens": 36850,
+        "prefill_tokens": 4044,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 41,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 34,
+          "history_cpu_bytes": 178257920
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-81b10ffd6b9c1da9",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 42,
+      "kind": "read",
+      "seconds": 30.576696634292603,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36820,
+        "total_tokens": 36859,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 30.336050380021334,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 35,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 171830,
+        "total_evicted_tokens": 139024,
+        "prompt_tokens": 36820,
+        "prefill_tokens": 4014,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 42,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 35,
+          "history_cpu_bytes": 183500800
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9ddd12294522a78e",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 43,
+      "kind": "read",
+      "seconds": 33.786746978759766,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36818,
+        "total_tokens": 36857,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 33.53510909201577,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 36,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 175880,
+        "total_evicted_tokens": 143074,
+        "prompt_tokens": 36818,
+        "prefill_tokens": 4012,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 43,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 36,
+          "history_cpu_bytes": 188743680
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a0673acdc153070f",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 44,
+      "kind": "read",
+      "seconds": 25.307645320892334,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36861,
+        "total_tokens": 36900,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.00880959094502,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 37,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 179973,
+        "total_evicted_tokens": 147167,
+        "prompt_tokens": 36861,
+        "prefill_tokens": 4055,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 44,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 37,
+          "history_cpu_bytes": 193986560
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-bd5c9667e4ee7102",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 45,
+      "kind": "read",
+      "seconds": 23.315449714660645,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36844,
+        "total_tokens": 36883,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 23.064213602105156,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 38,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 184049,
+        "total_evicted_tokens": 151243,
+        "prompt_tokens": 36844,
+        "prefill_tokens": 4038,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 45,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 38,
+          "history_cpu_bytes": 199229440
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-bdf36772f9316229",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 46,
+      "kind": "read",
+      "seconds": 30.334223985671997,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36788,
+        "total_tokens": 36827,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 30.08269122405909,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 39,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 188069,
+        "total_evicted_tokens": 155263,
+        "prompt_tokens": 36788,
+        "prefill_tokens": 3982,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 46,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 39,
+          "history_cpu_bytes": 204472320
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a9571ad9ad20ba73",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "I have read the sixteenth chunk. I need to continue calling `read_next` until all chunks are read."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 47,
+      "kind": "answer",
+      "seconds": 227.27322959899902,
+      "usage": {
+        "completion_tokens": 1751,
+        "prompt_tokens": 33046,
+        "total_tokens": 34797,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 227.01902524288744,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 1751,
+        "compactions": 67,
+        "retained_kv_tokens": 32790,
+        "logical_computed_tokens": 190059,
+        "total_evicted_tokens": 157269,
+        "prompt_tokens": 33046,
+        "prefill_tokens": 240,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3524198400,
+        "checkpoint_restores": 47,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 67,
+          "history_cpu_bytes": 351272960
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "The provided text is a theological and political treatise that seeks to redefine key biblical concepts\u2014such as the Kingdom of God, the Church, and the afterlife\u2014to argue for the absolute supremacy of the civil sovereign in both temporal and religious matters.\n\nThe book can be summarized through its primary thematic arguments:\n\n### 1. The Terrestrial Nature of the Divine Kingdom\nThe author argues that the **Kingdom of God** and **Eternal Life** are not located in a remote, spiritual heaven, but are terrestrial. He posits that Adam was created for eternal life on Earth, which was lost through sin and recovered through Christ. Consequently, the \"New Jerusalem\" and the \"World to Come\" are described as a new heaven and a new earth where Christ will reign physically over the elect. Similarly, the author interprets **Hell** and eternal torment not as a metaphysical pit, but as a state of destruction and misery (the \"Second Death\") occurring on Earth.\n\n### 2. The Definition of the \"Church\" as a Civil State\nA central thesis of the work is the rejection of a \"spiritual\" government separate from a \"temporal\" one. The author defines the **Church (Ecclesia)** not as a mystical body or a universal organization, but as a lawful assembly of citizens within a commonwealth. He argues that there is no universal church above national sovereigns; instead, the civil sovereign is the rightful head of the church within their own domain. To divide government into \"temporal\" and \"spiritual\" spheres is, in the author's view, a recipe for faction and civil war.\n\n### 3. The Role of Prophets and Miracles\nThe author provides a rationalist framework for interpreting **Prophecy** and **Miracles**:\n*   **Prophecy:** He argues that prophets are essentially spokesmen for the sovereign. He warns that \"private spirits\" or personal revelations must be subordinated to the established doctrine of the civil sovereign.\n*   **Miracles:** Defined as admirable works of God used to validate His messengers. The author distinguishes true miracles from \"false miracles\" (magic or imposture), asserting that the validity of any miracle must be judged by the lawful head of the church.\n\n### 4. The History of Divine Authority\nThe author traces the lineage of authority from **Abraham** to **Moses**, the **High Priests**, and finally the **Kings of Judah**. He concludes that in every stage of Israel's history, the person who held the civil sovereignty also held the supreme authority over religion. This historical precedent is used to justify the current right of civil sovereigns to regulate the external profession of religion and interpret scripture for their subjects.\n\n### 5. The Office of Jesus Christ\nThe book concludes by analyzing the three-fold office of **Jesus Christ**:\n*   **Redeemer:** He paid the ransom for sin through his death, recovering the immortality lost by Adam.\n*   **Pastor/Prophet:** He preached the coming Kingdom and prepared the elect.\n*   **King:** He is the eternal King of the elect, but the author emphasizes that Christ's authority as King is subordinate to God the Father, mirroring the way Moses and the High Priests were subordinate to God.\n\n### Conclusion\nOverall, the text is an argument for **Erastianism** (the doctrine that the state is superior to the church in ecclesiastical matters). By reinterpreting scripture to place the Kingdom of God and the Church firmly within the realm of earthly political organization, the author asserts that the civil sovereign is the sole legitimate interpreter of God's will and the only authority capable of maintaining peace and order in society.",
+        "role": "assistant",
+        "reasoning_content": "A long text divided into chapters (from Chapter XXXV to Chapter XLI, based on the provided chunks).\nSummarize the book.\n\n    *   *Chapter XXXV: The Kingdome of God and Salvation.*\n        *   Discusses the nature of the Kingdom of God.\n        *   Argues that the Kingdom of God is a political government on Earth, not a spiritual realm in heaven.\n        *   Explains \"Salvation\" as the recovery of the eternal life lost by Adam in the Garden of Eden.\n        *   Argues that eternal life is terrestrial (on Earth) and that the \"New Jerusalem\" descends from heaven to earth.\n        *   Discusses the \"World to Come\" as a new heaven and a new earth.\n\n    *   *Chapter XXXVI: The Word of God and Prophets.*\n        *   Defines \"The Word of God\" in various senses: as a discourse, as the doctrine of religion, as the effect of God's will, and as the person of Christ (the \"Word made flesh\").\n        *   Discusses the role of Prophets: as spokesmen for God, foretellers of the future, or those in a state of ecstasy.\n        *   Explains how God speaks to prophets: through dreams, visions, and in the case of Moses, \"mouth to mouth\" (though still mediated by angels).\n        *   Emphasizes that prophets must be examined by reason and by the established doctrine of the sovereign prophet (Moses/Christ).\n\n    *   *Chapter XXXVII: Miracles and Their Use.*\n        *   Defines a miracle as an admirable work of God done to procure credit for His messengers.\n        *   Distinguishes between true miracles and \"false miracles\" (magic, imposture, or natural phenomena misunderstood by the ignorant).\n        *   Argues that miracles are rare and intended for the \"elect.\"\n        *   Warns against being deceived by pretended miracles and stresses the need to consult the lawful head of the church.\n\n    *   *Chapter XXXVIII: Eternal Life, Hell, Salvation, the World to Come, and Redemption.*\n        *   Discusses the place of eternal life and eternal torment.\n        *   Argues that both are terrestrial.\n        *   Describes \"Hell\" not as a distant pit, but as a state of misery and destruction (the \"Second Death\") based on metaphors from historical events (Sodom, Gehenna).\n        *   Explains \"Salvation\" as the removal of sin and the recovery of the immortality lost by Adam.\n\n    *   *Chapter XXXIX: The Word \"Church\".*\n        *   Defines \"Church\" (Ecclesia) as a congregation of citizens called by authority.\n        *   Argues that the \"Church\" is essentially a civil commonwealth of Christians.\n        *   Claims there is no universal church above national sovereigns; the civil sovereign is the head of the church within their domain.\n        *   Rejects the distinction between \"temporal\" and \"spiritual\" government.\n\n    *   *Chapter XL: The Rights of the Kingdome of God (Abraham, Moses, High Priests, Kings of Judah).*\n        *   Traces the authority of God's representatives.\n        *   Abraham: Had the sole power to order religion for his family.\n        *   Moses: Was the sovereign of the Jews, representing God's person.\n        *   High Priests: Inherited the sovereign power after Moses.\n        *   Kings of Judah: Eventually took over both civil and religious supremacy.\n        *   Conclusion: The civil sovereign has always held the supreme authority in matters of religion.\n\n    *   *Chapter XLI: The Office of Our Blessed Saviour.*\n        *   Divides Christ's office into three parts: Redeemer, Pastor/Prophet, and King.\n        *   Redeemer: Paid the ransom for sin through his death.\n        *   Pastor/Prophet: Preached the Kingdom of God and prepared the elect.\n        *   King: Will reign eternally over the elect on Earth after the Resurrection.\n        *   Argues that Christ's authority as King is subordinate to God the Father.\n\n    *   *Core Thesis:* The author argues for the absolute supremacy of the civil sovereign in both temporal and religious matters.\n    *   *Theological Shift:* The author reinterprets key biblical concepts (Heaven, Hell, the Church, the Kingdom of God) to be terrestrial and political rather than ethereal or purely spiritual.\n    *   *Methodology:* The author uses a literalist/rationalist approach to scripture, attempting to strip away \"metaphors\" and \"superstitions\" to reveal a political structure."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "auxiliary_requests": [],
+  "compression_stats": null,
+  "metrics": {
+    "exact_match": false,
+    "f1": 0.32653061224489793,
+    "substring_exact_match": false,
+    "rougeL_f1": 0.19001919385796542,
+    "rougeL_recall": 0.21108742004264391,
+    "rougeLsum_f1": 0.3397312859884837,
+    "rougeLsum_recall": 0.3773987206823028
+  },
+  "parsed": {
+    "parsed_output": "The provided text is a theological and political treatise that seeks to redefine key biblical concepts\u2014such as the Kingdom of God, the Church, and the afterlife\u2014to argue for the absolute supremacy of the civil sovereign in both temporal and religious matters."
+  },
+  "score": null,
+  "judge_pending": true,
+  "grading_pending": false,
+  "stage": "allocation-01"
+}

@@ -1,0 +1,8 @@
+{
+  "time": 1792826330.78154,
+  "root_cause": "56 controls exceeded task/thread limit in implicit unsquashfs",
+  "fix": "Native ARM64 system SIF partition extracted with four workers; unchanged rootfs, tasks, tests, solutions",
+  "verified_task": "openssl-selfsigned-cert",
+  "oracle_reward": 1.0,
+  "prior_controls_archived": true
+}

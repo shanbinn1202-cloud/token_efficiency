@@ -47,6 +47,7 @@ from collections import defaultdict
 from copy import deepcopy
 import functools
 import json
+import os
 from pathlib import Path
 import queue
 import sys
@@ -715,13 +716,17 @@ class BatchedEndToEndTests(unittest.IsolatedAsyncioTestCase):
         self.settled(srv)
         return srv
 
+    # The slow pass (README section 2.3): full, and goal_query's two-session run; the
+    # default suite keeps goal_query's three sessions decoding together.
+    @unittest.skipUnless(os.environ.get('REMOTE_RA_SLOW_TESTS') == '1',
+                         'about 20 s of CPU fakes: set REMOTE_RA_SLOW_TESTS=1 (not in the archive suite)')
     async def test_two_and_three_sessions_decode_together_full(self):
         for tasks in ([A, B], [A, B, C]):
             with self.subTest(sessions=len(tasks)):
                 await self.together('full', tasks)
 
     async def test_two_and_three_sessions_decode_together_goal_query(self):
-        for tasks in ([A, B], [A, B, C]):
+        for tasks in ([A, B], [A, B, C]) if os.environ.get('REMOTE_RA_SLOW_TESTS') == '1' else ([A, B, C],):
             with self.subTest(sessions=len(tasks)):
                 srv = await self.together('goal_query', tasks)
                 bodies = [srv.engine.selection.authorized[r]['body'] for r in srv.engine.infos]
@@ -1005,8 +1010,9 @@ class BatchedEndToEndTests(unittest.IsolatedAsyncioTestCase):
         # sessions on a small pool wait often and run several at a time, and no
         # running request ever finds no block. Below about 170 blocks the idle
         # sessions' pins leave too little for one turn even alone; nothing then
-        # runs, so the gate admits as a one-task server would and the turn
-        # preempts (fatal): that pool is too small for five sessions.
+        # runs, and the gate refuses it while they pin (every turn waits): that
+        # pool is too small for five sessions. Before tb16 job 3398129's fix the
+        # gate admitted it as a one-task server would and the turn preempted (fatal).
         self.enterContext(patch.object(capacity, 'BACKOFF_SECONDS', 0.005))
         exact = {}
         self.enterContext(patch.object(capacity, 'max_tokens', lambda params: exact[id(params)]))

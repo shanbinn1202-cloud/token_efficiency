@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "qemu-startup",
+    "qemu-alpine-ssh"
+  ],
+  "change": "Candidate Python3.9 bootstrap plus discard stale APT indexes and refresh original repositories with no-cache headers. Reference boot succeeded but verifier curl install used removed security package versions (404). No task/solution/test changes.",
+  "status": "candidate unpromoted"
+}

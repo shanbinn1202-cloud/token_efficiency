@@ -1,0 +1,13 @@
+{
+  "time": 1792855614.344946,
+  "accepted_only_completed_prior_trial": true,
+  "rejected_unreviewed_proxy_change": true,
+  "rejected_incomplete_trial": true,
+  "changed_files": [
+    "terminal_qualification_policy.py",
+    "terminal-runtime/kvm_environment.py",
+    "terminal_stage.py"
+  ],
+  "evidence_files": 9,
+  "formal_release_authorized": false
+}

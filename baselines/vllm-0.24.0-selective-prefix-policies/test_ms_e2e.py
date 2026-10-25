@@ -1,7 +1,7 @@
 """Multi-session stage 1 end to end on CPU: HTTP route, frontend and engine together.
 
 CPU only; nothing here is CUDA evidence or READY. One API server holds one to
-eight startup tasks, one session each, over one engine and one worker
+MAX_SESSIONS (16) startup tasks, one session each, over one engine and one worker
 (test_ms_engine.MultiHarness: the real engine and worker of test_stageb_e2e).
 Every request takes the shipped path between them:
 
@@ -358,7 +358,7 @@ class Server:
                          messages=[dict(role='system', content=S.SYSTEM),
                                    dict(role='user', content=task['problem_statement'])])
                       for k, (sid, task, transcript) in enumerate(zip(
-                          stage1.session_ids(server, len(tasks)), tasks, self.transcripts))]
+                          stage1.session_ids(server, len(tasks), stage1.MAX_TASKS), tasks, self.transcripts))]
         self.plans, self.replies, self.holds, self.ack_holds, self.receive = {}, {}, {}, {}, {}
         self.results, self.committed, self.admitted = {}, {}, {}
 
@@ -535,6 +535,9 @@ class MultiSessionEndToEndTests(unittest.IsolatedAsyncioTestCase):
         drop = ('request_id', 'response_id', 'request_index', 'queue_wait_s', 'request_latency_ns',
                 'server_run_id', 'native_evidence_sha256')
         row = {k: v for k, v in info['row'].items() if k not in drop}
+        if row.get('query') and 'goal_text' in row['query']:
+            # goal_query: the SHA-256 of a goals.jsonl row that names its request (goal_text)
+            row['query'] = {k: v for k, v in row['query'].items() if k != 'goal_text'}
         if row['stage_b']['phase1']:
             row['stage_b'] = dict(row['stage_b'], phase1=dict(row['stage_b']['phase1'], phase1_ns=None))
         native = info['native']
@@ -872,13 +875,17 @@ class MultiSessionEndToEndTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(cleanup['sessions'], [dict(session_id=l.sid, session_index=l.index,
                                                     namespace=names[l.sid]) for l in srv.lanes])
 
-    async def test_eight_sessions_through_every_layer(self):
-        # MAX_SESSIONS tasks: every per-process cap on the path admits all of them.
+    async def test_max_sessions_through_every_layer(self):
+        # MAX_SESSIONS (16) tasks: every per-process cap on the path admits all of them.
         tasks = [A, B, C] + [dict(instance_id='e2e-%d' % k, problem_statement='Task %d: fix module m%d.' % (k, k))
                              for k in range(3, stage1.MAX_SESSIONS)]
         srv = self.server('random50', tasks)
         h = srv.engine
         self.assertEqual(h.sessions.ids, tuple(stage1.session_ids(SERVER, stage1.MAX_SESSIONS)))
+        # Lifetime request bounds sized from the task list (256 per session, at least 1,024).
+        limit = stage1.request_limit(stage1.MAX_SESSIONS)
+        self.assertEqual((h.lifecycle.max_requests, h.dispatcher._max_records, h.authority.max_attempts),
+                         (limit,) * 3)
         order = list(range(stage1.MAX_SESSIONS))
         for i in range(2):
             for k in (order if i == 0 else order[::-1]):

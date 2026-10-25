@@ -1,0 +1,4 @@
+{
+  "time": 1792857852.2412536,
+  "change": "Precheck all image SHA256 before user decision; final qualification reuses hashes only if path/device/inode/size/mtime/ctime remain identical. Any changed metadata forces full hashing. This is an integrity-check optimization, not authorization or an evaluation change."
+}

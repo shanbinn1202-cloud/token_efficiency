@@ -1,0 +1,12 @@
+{
+  "task_ids": [
+    "raman-fitting",
+    "sanitize-git-repo",
+    "sparql-university",
+    "torch-pipeline-parallelism",
+    "torch-tensor-parallelism",
+    "query-optimize"
+  ],
+  "change": "Candidate native ARM64 KVM root semantics, original resource limits, no task/solution/test edits. Same helper as v17 positive/negative tests.",
+  "status": "candidate unpromoted"
+}

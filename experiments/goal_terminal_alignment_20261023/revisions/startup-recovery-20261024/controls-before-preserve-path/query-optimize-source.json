@@ -1,0 +1,15 @@
+{
+  "files": {
+    "instruction.md": "d25a6de62832a1732c2d3aee10fb0308df1bef5f9aba5234f7a04ceb7442a91d",
+    "solution/solve.sh": "0d95f3cedb287ff9d47c796cbaf812c300d1222c10fa80c49e8acb0e81eb6978",
+    "environment/Dockerfile": "064818771f200e0517d22068f87229a7a95d0a82b0778c84ca7203bf1926a0b8",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/golden.sql": "4da1885d56b3ffa7b7b22b422996d018795611f6963499d551582881b74b84fd",
+    "tests/test_outputs.py": "2068ae80c57af8d52a7ae510f0666732c057806e556b480970f36f14bae683f6",
+    "environment/task-deps/my-sql-query.sql": "43382792f0f438625d643e34abe144febd5669518f4ab1ab550a15c6d9314a21"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "f596916d1fc10769e1cc82e2df0957952ff82736f935c742b15f4daee7258f19"
+}

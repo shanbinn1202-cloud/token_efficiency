@@ -1,0 +1,7 @@
+{
+  "task_ids": [
+    "mteb-retrieve"
+  ],
+  "change": "Evaluate same compatible package pins in original ARM64 Apptainer backend after leaderboards Oracle1/NOP0; no KVM standalone disk constraint. All task inputs/model revision/CPU/memory unchanged.",
+  "status": "candidate unpromoted"
+}

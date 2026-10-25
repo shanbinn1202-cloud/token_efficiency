@@ -1,0 +1,13 @@
+{
+  "status": "APPLIED_CPU_TESTS_PASSED_GPU_REQUIRED",
+  "reason": "GPU3447727 rejected async consumer connector with decoupled pools",
+  "algorithm_changes": false,
+  "scheduler_fence_unchanged": true,
+  "changes": "Preserve pool identity when detaching and releasing deferred KV pages; selector, ranking, turn ownership and early-free fence unchanged",
+  "applied": 1792832499.0345213,
+  "affected_validation_attempts": [
+    "3447727/qwen",
+    "3447727/gemma"
+  ],
+  "original_attempts_retained": true
+}

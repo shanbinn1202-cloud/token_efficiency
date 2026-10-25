@@ -1,0 +1,15 @@
+{
+  "files": {
+    "instruction.md": "1606850579342a8b8f2189de0e499fae6be21198150d8dd1e4d18c2efbcf3b82",
+    "solution/solve.sh": "105292ca0e8bc399831550fc54c451002bd300644eb9beef1760dbfa7f8b7543",
+    "environment/Dockerfile": "ff0a9f766151b6304a33b8fe8787dc27d75f6ea679eec4e9a4f2c8876fe08b25",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "d9d2796ddc19cf8159670567e174ea377e2bce675bf3451d5951c045b01f4e85",
+    "environment/warriors/rave.red": "b4c8acf763957da9de0ec8568d765214ef9e8271aac9b51bb1ab09753e3afb66",
+    "environment/warriors/flashpaper.red": "ad965bf840c3f3849abc18adc89d58f3fe51209e43ae3f7b9a9cb48452374fe9"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "02de864f98eaba9d3b9fe2b65e36ec32a824a1cd85b9b5246caf70de222d48ac"
+}

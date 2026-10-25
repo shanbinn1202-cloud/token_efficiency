@@ -297,6 +297,12 @@ class ServingController:
         if errors:
             raise BaseExceptionGroup("serving cleanup failed", errors)
 
+    async def close_session(self, session_id):
+        """Session pool: close one session on the engine (authenticated private
+        frame); returns the engine's close receipt."""
+        self.check()
+        return await self.registry.bridge.close_session(self.registry.llm.engine_core, session_id)
+
     async def shutdown_close(self, timeout=None):
         """Must be awaited by app lifespan BEFORE native synchronous shutdown."""
         require(threading.get_ident() == self._thread, "shutdown requires frontend thread")

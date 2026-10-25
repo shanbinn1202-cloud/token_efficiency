@@ -22,16 +22,28 @@ EXPIRABLE = ACTIVE - {"accepted"}
 # stays "reserving" until its Goal is built, so this lease is its engine-side
 # deadline. 360 s outlives the frontend's 300-s wait for the ACK plus its
 # compensation Cancel's 60 s (registered_add_protocol.LEASE_SECONDS).
+# --admission-overlap K: the lease pinned from K (admission_flags.timeouts).
 LEASE_SECONDS = 360
 
 
 class EngineLifecycle:
     """Turn, busy and poison are tracked per session; ``turn`` is the session's
-    request ordinal. Requests are bounded per process."""
+    request ordinal. Requests are bounded per process.
+
+    ``sessions`` is a lifetime table, one entry per session that ever admitted;
+    a session-pool server sizes ``max_sessions`` by its registered tasks and a
+    closed session keeps its entry as ``(turn, "closed")`` (``retire_session``)."""
+
+    # --admission-overlap (admission_overlap.attach_engine): request id -> the
+    # capacity reservation its gate recorded (capacity.ledger_gate); None: off.
+    reservations = None
 
     def __init__(self, endpoint, *, clock=time.monotonic, lease_seconds=LEASE_SECONDS,
                  max_requests=1024, max_sessions=MAX_SESSIONS):
-        require(0 < lease_seconds <= LEASE_SECONDS and max_requests > 0 and
+        # --admission-overlap K: the lease pinned from K (admission_flags.timeouts).
+        from .admission_flags import allowed_timeouts
+        require((0 < lease_seconds <= LEASE_SECONDS or
+                 lease_seconds in {lease for _, lease in allowed_timeouts()}) and max_requests > 0 and
                 max_sessions > 0, "bounded engine lifecycle required")
         self.endpoint, self.clock, self.lease = endpoint, clock, lease_seconds
         self.max_requests, self.max_sessions = max_requests, max_sessions
@@ -154,6 +166,14 @@ class EngineLifecycle:
             self.sessions[session] = (turn, "poisoned")
             raise
         return self._view(entry)
+
+    def retire_session(self, session):
+        """Session pool: the closed session admits nothing more; its entries stay
+        (request ids are never reused). Only an idle or poisoned session closes."""
+        current = self.sessions.get(session)
+        require(current is None or current[1] in (None, "poisoned"),
+                "SESSION_BUSY: session %s still owns a request" % session)
+        self.sessions[session] = (0 if current is None else current[0], "closed")
 
     def completed(self, request_id):
         entry = self.entries[request_id]

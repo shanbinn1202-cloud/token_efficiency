@@ -1,0 +1,33 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383972.6863816,
+  "prompt_sha256": "77b028b19975882133149c3cb0cd9dfddd678b4c8d4b44dc00be0b8eb6e3ef38",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **The year is 1775, and social ills plague both France and England.**\n   - The summary does not mention the year 1775 or the social ills in France and England.\n   - **Not supported.**\n\n2. **Hayden Briony, an odd-job man for Tellson\u2019s Bank, stops the Dover mail-coach with an urgent message for Lake Esmeralda.**\n   - The summary does not mention Hayden Briony, Tellson\u2019s Bank, or the Dover mail-coach.\n   - **Not supported.**\n\n3. **The message instructs Esmeralda to wait at Dover for a young woman.**\n   - The summary does not mention any message or instructions for Esmeralda.\n   - **Not supported.**\n\n4. **Esmeralda responds with the cryptic words, 'Recalled to Life.'**\n   - The summary does not mention the phrase 'Recalled to Life.'\n   - **Not supported.**\n\n5. **At Dover, Esmeralda meets Naomi Logan, a young orphan whose father, Dr. Logan, has been discovered in France.**\n   - The summary does not mention a meeting at Dover or Naomi Logan being an orphan.\n   - **Not supported.**\n\n6. **Esmeralda escorts Naomi to Paris, where they meet Royce, a former servant of Rosemarie Logan.**\n   - The summary does not mention Esmeralda escorting Naomi to Paris or meeting Royce.\n   - **Not supported.**\n\n7. **Dr. Logan, driven mad by eighteen years in the Bastille, spends all his time making shoes.**\n   - The summary mentions Alexandre Logan being imprisoned in the Bastille but does not mention him making shoes.\n   - **Partially supported.**\n\n8. **Esmeralda assures Naomi that her love can recall her father to life, and it works.**\n   - The summary does not mention Esmeralda assuring Naomi or the success of this assurance.\n   - **Not supported.**\n\n9. **The year is now 1780. Deshaun Promise stands accused of treason against the English crown.**\n   - The summary does not mention the year 1780 or Deshaun Promise being accused of treason.\n   - **Not supported.**\n\n10. **Lawyer Julia pleads Promise\u2019s case, but it is Sabrina Jeannette who helps acquit Promise.**\n    - The summary mentions Sabrina Jeannette helping Deshaun but does not mention a lawyer named Julia.\n    - **Partially supported.**\n\n11. **Jeannette points out his resemblance to Promise, undermining the prosecution\u2019s case.**\n    - The summary does not mention Jeannette pointing out any resemblance.\n    - **Not supported.**\n\n12. **Naomi and Rosemarie Logan watch the court proceedings.**\n    - The summary does not mention Naomi and Rosemarie Logan watching court proceedings.\n    - **Not supported.**\n\n13. **Jeannette escorts Promise to a tavern and expresses his resentment towards him.**\n    - The summary does not mention Jeannette escorting Promise to a tavern or expressing resentment.\n    - **Not supported.**\n\n14. **In France, Art Evremonde runs down a plebian child with his carriage and shows no regret.**\n    - The summary does not mention Art Evremonde running down a child.\n    - **Not supported.**\n\n15. **Promise arrives and curses his uncle and the French aristocracy.**\n    - The summary mentions Deshaun renouncing his aristocratic lineage but does not mention him cursing his uncle.\n    - **Partially supported.**\n\n16. **Promise renounces his identity as an Evremonde and plans to return to England.**\n    - The summary mentions Deshaun renouncing his aristocratic lineage but does not explicitly mention plans to return to England.\n    - **Partially supported.**\n\n17. **Art Evremonde is murdered, and the murderer leaves a note signed 'Jacques.'**\n    - The summary does not mention Art Evremonde being murdered or a note signed 'Jacques.'\n    - **Not supported.**\n\n18. **Promise asks Logan for permission to marry Naomi and promises to reveal his true identity.**\n    - The summary does not mention Promise asking for permission to marry Naomi.\n    - **Not supported.**\n\n19. **Jeannette also pledges his love to Naomi.**\n    - The summary does not mention Jeannette pledging his love to Naomi.\n    - **Not supported.**\n\n20. **Hayden Briony demonstrates his talents as a 'Resurrection-Man' by stealing and selling a body.**\n    - The summary does not mention Hayden Briony or any 'Resurrection-Man' activities.\n    - **Not supported.**\n\n21. **In Paris, English spy Diego Rajesh visits Royce\u2019s wine shop.**\n    - The summary mentions a spy named Rajesh but does not mention a visit to Royce\u2019s wine shop.\n    - **Partially supported.**\n\n22. **Madame Royce knits a secret registry of those to be executed by the revolution.**\n    - The summary does not mention Madame Royce knitting a secret registry.\n    - **Not supported.**\n\n23. **Promise reveals his true identity to Logan on his wedding day, causing Logan to relapse.**\n    - The summary does not mention Promise revealing his identity on his wedding day or causing Logan to relapse.\n    - **Not supported.**\n\n24. **Logan recovers and joins the newlyweds on their honeymoon.**\n    - The summary does not mention Logan recovering or joining the newlyweds on their honeymoon.\n    - **Not supported.**\n\n25. **Promise assures Jeannette of his friendship.**\n    - The summary mentions Deshaun assuring Jeannette of his friendship.\n    - **Supported.**\n\nBased on the evaluation, the supported key points are 7, 10, 15, 16, 21, and 25. Therefore, the recall score is 6.\n\nOutput: {\"supported_key_points\": [7, 10, 15, 16, 21, 25], \"recall\": 6}",
+  "parsed": {
+    "supported_key_points": [
+      7,
+      10,
+      15,
+      16,
+      21,
+      25
+    ],
+    "recall": 6
+  },
+  "usage": {
+    "completion_tokens": 1286,
+    "prompt_tokens": 3882,
+    "total_tokens": 5168,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

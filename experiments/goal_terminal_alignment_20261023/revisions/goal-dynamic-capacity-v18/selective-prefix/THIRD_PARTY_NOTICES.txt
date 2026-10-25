@@ -1,0 +1,28 @@
+Third-party source and model assets
+
+vLLM source under source-overlay/vllm/ derives from vllm-project/vllm
+v0.24.0: https://github.com/vllm-project/vllm/tree/v0.24.0
+Its Apache-2.0 license and per-file copyright/SPDX notices are retained.
+Local changes implement selective-prefix runtime integration; the review diff
+is patches/v0.24.0.diff. The repository LICENSE does not replace upstream notices.
+
+The model configuration and tokenizer assets under
+source-overlay/remote_ra_linux/model-evidence/ are third-party assets from the
+Qwen3.6-27B snapshot recorded in INSTALL_RELEASE.json:
+revision 6a9e13bd6fc8f0983b9b99948120bc37f49c13e9.
+Upstream model repository: https://huggingface.co/Qwen/Qwen3.6-27B
+model-config.json corresponds to config.json; tokenizer-config.json corresponds
+to tokenizer_config.json; tokenizer.json retains its upstream name.
+The installer checks these assets by SHA256. Model weights are not distributed.
+Consult the upstream model repository's license and model-card conditions for
+the snapshot before redistribution or use. This project's Apache-2.0 LICENSE
+does not grant or replace rights in third-party model/tokenizer assets.
+
+The dram_kv source and xuanxue_vllm_policy_adapter retain their upstream names
+and notices. The captured dram-backed-kv LICENSE identifies Apache License 2.0
+and "Copyright 2026 SnapKV experiments". Their algorithm integration is recorded in the source manifests;
+the maintained Goal constructor uses its deterministic mode (rewriter=None).
+Structured tool-call action normalization is a local integration change.
+
+Historical qualification references document a predecessor runtime. They do
+not certify a newly built package or change the licenses of any bundled asset.

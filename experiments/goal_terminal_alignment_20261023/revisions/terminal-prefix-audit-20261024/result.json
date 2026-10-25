@@ -1,0 +1,738 @@
+{
+  "time": 1792856338.109628,
+  "scope": "Exact official instruction and Terminus JSON template with empty initial terminal screen. Startup terminal output is task-dependent and excluded; this is not a substitute for runtime prefix checks.",
+  "models": {
+    "qwen": {
+      "budget": 8192,
+      "maximum": {
+        "task": "llm-inference-batching-scheduler",
+        "instruction_prefix_tokens": 1928
+      },
+      "minimum": 722,
+      "rows": [
+        {
+          "task": "adaptive-rejection-sampler",
+          "instruction_prefix_tokens": 1266
+        },
+        {
+          "task": "bn-fit-modify",
+          "instruction_prefix_tokens": 1011
+        },
+        {
+          "task": "break-filter-js-from-html",
+          "instruction_prefix_tokens": 810
+        },
+        {
+          "task": "build-cython-ext",
+          "instruction_prefix_tokens": 1095
+        },
+        {
+          "task": "build-pmars",
+          "instruction_prefix_tokens": 829
+        },
+        {
+          "task": "build-pov-ray",
+          "instruction_prefix_tokens": 833
+        },
+        {
+          "task": "caffe-cifar-10",
+          "instruction_prefix_tokens": 828
+        },
+        {
+          "task": "cancel-async-tasks",
+          "instruction_prefix_tokens": 811
+        },
+        {
+          "task": "chess-best-move",
+          "instruction_prefix_tokens": 758
+        },
+        {
+          "task": "circuit-fibsqrt",
+          "instruction_prefix_tokens": 983
+        },
+        {
+          "task": "cobol-modernization",
+          "instruction_prefix_tokens": 1010
+        },
+        {
+          "task": "code-from-image",
+          "instruction_prefix_tokens": 761
+        },
+        {
+          "task": "compile-compcert",
+          "instruction_prefix_tokens": 762
+        },
+        {
+          "task": "configure-git-webserver",
+          "instruction_prefix_tokens": 811
+        },
+        {
+          "task": "constraints-scheduling",
+          "instruction_prefix_tokens": 1302
+        },
+        {
+          "task": "count-dataset-tokens",
+          "instruction_prefix_tokens": 798
+        },
+        {
+          "task": "crack-7z-hash",
+          "instruction_prefix_tokens": 722
+        },
+        {
+          "task": "custom-memory-heap-crash",
+          "instruction_prefix_tokens": 961
+        },
+        {
+          "task": "db-wal-recovery",
+          "instruction_prefix_tokens": 873
+        },
+        {
+          "task": "distribution-search",
+          "instruction_prefix_tokens": 993
+        },
+        {
+          "task": "dna-assembly",
+          "instruction_prefix_tokens": 1158
+        },
+        {
+          "task": "dna-insert",
+          "instruction_prefix_tokens": 957
+        },
+        {
+          "task": "extract-elf",
+          "instruction_prefix_tokens": 869
+        },
+        {
+          "task": "extract-moves-from-video",
+          "instruction_prefix_tokens": 758
+        },
+        {
+          "task": "feal-differential-cryptanalysis",
+          "instruction_prefix_tokens": 820
+        },
+        {
+          "task": "feal-linear-cryptanalysis",
+          "instruction_prefix_tokens": 841
+        },
+        {
+          "task": "filter-js-from-html",
+          "instruction_prefix_tokens": 815
+        },
+        {
+          "task": "financial-document-processor",
+          "instruction_prefix_tokens": 946
+        },
+        {
+          "task": "fix-code-vulnerability",
+          "instruction_prefix_tokens": 1637
+        },
+        {
+          "task": "fix-git",
+          "instruction_prefix_tokens": 722
+        },
+        {
+          "task": "fix-ocaml-gc",
+          "instruction_prefix_tokens": 787
+        },
+        {
+          "task": "gcode-to-text",
+          "instruction_prefix_tokens": 744
+        },
+        {
+          "task": "git-leak-recovery",
+          "instruction_prefix_tokens": 805
+        },
+        {
+          "task": "git-multibranch",
+          "instruction_prefix_tokens": 945
+        },
+        {
+          "task": "gpt2-codegolf",
+          "instruction_prefix_tokens": 815
+        },
+        {
+          "task": "headless-terminal",
+          "instruction_prefix_tokens": 845
+        },
+        {
+          "task": "hf-model-inference",
+          "instruction_prefix_tokens": 1019
+        },
+        {
+          "task": "install-windows-3.11",
+          "instruction_prefix_tokens": 907
+        },
+        {
+          "task": "kv-store-grpc",
+          "instruction_prefix_tokens": 972
+        },
+        {
+          "task": "large-scale-text-editing",
+          "instruction_prefix_tokens": 1006
+        },
+        {
+          "task": "largest-eigenval",
+          "instruction_prefix_tokens": 864
+        },
+        {
+          "task": "llm-inference-batching-scheduler",
+          "instruction_prefix_tokens": 1928
+        },
+        {
+          "task": "log-summary-date-ranges",
+          "instruction_prefix_tokens": 1068
+        },
+        {
+          "task": "mailman",
+          "instruction_prefix_tokens": 918
+        },
+        {
+          "task": "make-doom-for-mips",
+          "instruction_prefix_tokens": 804
+        },
+        {
+          "task": "make-mips-interpreter",
+          "instruction_prefix_tokens": 793
+        },
+        {
+          "task": "mcmc-sampling-stan",
+          "instruction_prefix_tokens": 1052
+        },
+        {
+          "task": "merge-diff-arc-agi-task",
+          "instruction_prefix_tokens": 1035
+        },
+        {
+          "task": "model-extraction-relu-logits",
+          "instruction_prefix_tokens": 831
+        },
+        {
+          "task": "modernize-scientific-stack",
+          "instruction_prefix_tokens": 988
+        },
+        {
+          "task": "mteb-leaderboard",
+          "instruction_prefix_tokens": 770
+        },
+        {
+          "task": "mteb-retrieve",
+          "instruction_prefix_tokens": 808
+        },
+        {
+          "task": "multi-source-data-merger",
+          "instruction_prefix_tokens": 1171
+        },
+        {
+          "task": "nginx-request-logging",
+          "instruction_prefix_tokens": 1135
+        },
+        {
+          "task": "openssl-selfsigned-cert",
+          "instruction_prefix_tokens": 1012
+        },
+        {
+          "task": "overfull-hbox",
+          "instruction_prefix_tokens": 761
+        },
+        {
+          "task": "password-recovery",
+          "instruction_prefix_tokens": 826
+        },
+        {
+          "task": "path-tracing",
+          "instruction_prefix_tokens": 884
+        },
+        {
+          "task": "path-tracing-reverse",
+          "instruction_prefix_tokens": 809
+        },
+        {
+          "task": "polyglot-c-py",
+          "instruction_prefix_tokens": 821
+        },
+        {
+          "task": "polyglot-rust-c",
+          "instruction_prefix_tokens": 840
+        },
+        {
+          "task": "portfolio-optimization",
+          "instruction_prefix_tokens": 897
+        },
+        {
+          "task": "protein-assembly",
+          "instruction_prefix_tokens": 1339
+        },
+        {
+          "task": "prove-plus-comm",
+          "instruction_prefix_tokens": 819
+        },
+        {
+          "task": "pypi-server",
+          "instruction_prefix_tokens": 892
+        },
+        {
+          "task": "pytorch-model-cli",
+          "instruction_prefix_tokens": 805
+        },
+        {
+          "task": "pytorch-model-recovery",
+          "instruction_prefix_tokens": 1010
+        },
+        {
+          "task": "qemu-alpine-ssh",
+          "instruction_prefix_tokens": 769
+        },
+        {
+          "task": "qemu-startup",
+          "instruction_prefix_tokens": 773
+        },
+        {
+          "task": "query-optimize",
+          "instruction_prefix_tokens": 811
+        },
+        {
+          "task": "raman-fitting",
+          "instruction_prefix_tokens": 859
+        },
+        {
+          "task": "regex-chess",
+          "instruction_prefix_tokens": 1222
+        },
+        {
+          "task": "regex-log",
+          "instruction_prefix_tokens": 933
+        },
+        {
+          "task": "reshard-c4-data",
+          "instruction_prefix_tokens": 986
+        },
+        {
+          "task": "rstan-to-pystan",
+          "instruction_prefix_tokens": 1134
+        },
+        {
+          "task": "sam-cell-seg",
+          "instruction_prefix_tokens": 1296
+        },
+        {
+          "task": "sanitize-git-repo",
+          "instruction_prefix_tokens": 869
+        },
+        {
+          "task": "schemelike-metacircular-eval",
+          "instruction_prefix_tokens": 979
+        },
+        {
+          "task": "sparql-university",
+          "instruction_prefix_tokens": 992
+        },
+        {
+          "task": "sqlite-db-truncate",
+          "instruction_prefix_tokens": 761
+        },
+        {
+          "task": "sqlite-with-gcov",
+          "instruction_prefix_tokens": 739
+        },
+        {
+          "task": "torch-pipeline-parallelism",
+          "instruction_prefix_tokens": 1106
+        },
+        {
+          "task": "torch-tensor-parallelism",
+          "instruction_prefix_tokens": 974
+        },
+        {
+          "task": "train-fasttext",
+          "instruction_prefix_tokens": 756
+        },
+        {
+          "task": "tune-mjcf",
+          "instruction_prefix_tokens": 839
+        },
+        {
+          "task": "video-processing",
+          "instruction_prefix_tokens": 1006
+        },
+        {
+          "task": "vulnerable-secret",
+          "instruction_prefix_tokens": 779
+        },
+        {
+          "task": "winning-avg-corewars",
+          "instruction_prefix_tokens": 983
+        },
+        {
+          "task": "write-compressor",
+          "instruction_prefix_tokens": 779
+        }
+      ]
+    },
+    "gemma": {
+      "budget": 8192,
+      "maximum": {
+        "task": "llm-inference-batching-scheduler",
+        "instruction_prefix_tokens": 2077
+      },
+      "minimum": 751,
+      "rows": [
+        {
+          "task": "adaptive-rejection-sampler",
+          "instruction_prefix_tokens": 1313
+        },
+        {
+          "task": "bn-fit-modify",
+          "instruction_prefix_tokens": 1059
+        },
+        {
+          "task": "break-filter-js-from-html",
+          "instruction_prefix_tokens": 857
+        },
+        {
+          "task": "build-cython-ext",
+          "instruction_prefix_tokens": 1125
+        },
+        {
+          "task": "build-pmars",
+          "instruction_prefix_tokens": 868
+        },
+        {
+          "task": "build-pov-ray",
+          "instruction_prefix_tokens": 872
+        },
+        {
+          "task": "caffe-cifar-10",
+          "instruction_prefix_tokens": 873
+        },
+        {
+          "task": "cancel-async-tasks",
+          "instruction_prefix_tokens": 845
+        },
+        {
+          "task": "chess-best-move",
+          "instruction_prefix_tokens": 789
+        },
+        {
+          "task": "circuit-fibsqrt",
+          "instruction_prefix_tokens": 1018
+        },
+        {
+          "task": "cobol-modernization",
+          "instruction_prefix_tokens": 1052
+        },
+        {
+          "task": "code-from-image",
+          "instruction_prefix_tokens": 794
+        },
+        {
+          "task": "compile-compcert",
+          "instruction_prefix_tokens": 790
+        },
+        {
+          "task": "configure-git-webserver",
+          "instruction_prefix_tokens": 846
+        },
+        {
+          "task": "constraints-scheduling",
+          "instruction_prefix_tokens": 1344
+        },
+        {
+          "task": "count-dataset-tokens",
+          "instruction_prefix_tokens": 828
+        },
+        {
+          "task": "crack-7z-hash",
+          "instruction_prefix_tokens": 752
+        },
+        {
+          "task": "custom-memory-heap-crash",
+          "instruction_prefix_tokens": 1023
+        },
+        {
+          "task": "db-wal-recovery",
+          "instruction_prefix_tokens": 906
+        },
+        {
+          "task": "distribution-search",
+          "instruction_prefix_tokens": 1029
+        },
+        {
+          "task": "dna-assembly",
+          "instruction_prefix_tokens": 1180
+        },
+        {
+          "task": "dna-insert",
+          "instruction_prefix_tokens": 970
+        },
+        {
+          "task": "extract-elf",
+          "instruction_prefix_tokens": 904
+        },
+        {
+          "task": "extract-moves-from-video",
+          "instruction_prefix_tokens": 789
+        },
+        {
+          "task": "feal-differential-cryptanalysis",
+          "instruction_prefix_tokens": 851
+        },
+        {
+          "task": "feal-linear-cryptanalysis",
+          "instruction_prefix_tokens": 874
+        },
+        {
+          "task": "filter-js-from-html",
+          "instruction_prefix_tokens": 849
+        },
+        {
+          "task": "financial-document-processor",
+          "instruction_prefix_tokens": 985
+        },
+        {
+          "task": "fix-code-vulnerability",
+          "instruction_prefix_tokens": 1667
+        },
+        {
+          "task": "fix-git",
+          "instruction_prefix_tokens": 751
+        },
+        {
+          "task": "fix-ocaml-gc",
+          "instruction_prefix_tokens": 817
+        },
+        {
+          "task": "gcode-to-text",
+          "instruction_prefix_tokens": 776
+        },
+        {
+          "task": "git-leak-recovery",
+          "instruction_prefix_tokens": 836
+        },
+        {
+          "task": "git-multibranch",
+          "instruction_prefix_tokens": 987
+        },
+        {
+          "task": "gpt2-codegolf",
+          "instruction_prefix_tokens": 848
+        },
+        {
+          "task": "headless-terminal",
+          "instruction_prefix_tokens": 877
+        },
+        {
+          "task": "hf-model-inference",
+          "instruction_prefix_tokens": 1050
+        },
+        {
+          "task": "install-windows-3.11",
+          "instruction_prefix_tokens": 946
+        },
+        {
+          "task": "kv-store-grpc",
+          "instruction_prefix_tokens": 1009
+        },
+        {
+          "task": "large-scale-text-editing",
+          "instruction_prefix_tokens": 1059
+        },
+        {
+          "task": "largest-eigenval",
+          "instruction_prefix_tokens": 896
+        },
+        {
+          "task": "llm-inference-batching-scheduler",
+          "instruction_prefix_tokens": 2077
+        },
+        {
+          "task": "log-summary-date-ranges",
+          "instruction_prefix_tokens": 1122
+        },
+        {
+          "task": "mailman",
+          "instruction_prefix_tokens": 963
+        },
+        {
+          "task": "make-doom-for-mips",
+          "instruction_prefix_tokens": 843
+        },
+        {
+          "task": "make-mips-interpreter",
+          "instruction_prefix_tokens": 827
+        },
+        {
+          "task": "mcmc-sampling-stan",
+          "instruction_prefix_tokens": 1096
+        },
+        {
+          "task": "merge-diff-arc-agi-task",
+          "instruction_prefix_tokens": 1087
+        },
+        {
+          "task": "model-extraction-relu-logits",
+          "instruction_prefix_tokens": 866
+        },
+        {
+          "task": "modernize-scientific-stack",
+          "instruction_prefix_tokens": 1028
+        },
+        {
+          "task": "mteb-leaderboard",
+          "instruction_prefix_tokens": 808
+        },
+        {
+          "task": "mteb-retrieve",
+          "instruction_prefix_tokens": 842
+        },
+        {
+          "task": "multi-source-data-merger",
+          "instruction_prefix_tokens": 1244
+        },
+        {
+          "task": "nginx-request-logging",
+          "instruction_prefix_tokens": 1204
+        },
+        {
+          "task": "openssl-selfsigned-cert",
+          "instruction_prefix_tokens": 1070
+        },
+        {
+          "task": "overfull-hbox",
+          "instruction_prefix_tokens": 794
+        },
+        {
+          "task": "password-recovery",
+          "instruction_prefix_tokens": 858
+        },
+        {
+          "task": "path-tracing",
+          "instruction_prefix_tokens": 917
+        },
+        {
+          "task": "path-tracing-reverse",
+          "instruction_prefix_tokens": 837
+        },
+        {
+          "task": "polyglot-c-py",
+          "instruction_prefix_tokens": 860
+        },
+        {
+          "task": "polyglot-rust-c",
+          "instruction_prefix_tokens": 877
+        },
+        {
+          "task": "portfolio-optimization",
+          "instruction_prefix_tokens": 932
+        },
+        {
+          "task": "protein-assembly",
+          "instruction_prefix_tokens": 1354
+        },
+        {
+          "task": "prove-plus-comm",
+          "instruction_prefix_tokens": 850
+        },
+        {
+          "task": "pypi-server",
+          "instruction_prefix_tokens": 924
+        },
+        {
+          "task": "pytorch-model-cli",
+          "instruction_prefix_tokens": 839
+        },
+        {
+          "task": "pytorch-model-recovery",
+          "instruction_prefix_tokens": 1057
+        },
+        {
+          "task": "qemu-alpine-ssh",
+          "instruction_prefix_tokens": 800
+        },
+        {
+          "task": "qemu-startup",
+          "instruction_prefix_tokens": 805
+        },
+        {
+          "task": "query-optimize",
+          "instruction_prefix_tokens": 844
+        },
+        {
+          "task": "raman-fitting",
+          "instruction_prefix_tokens": 892
+        },
+        {
+          "task": "regex-chess",
+          "instruction_prefix_tokens": 1267
+        },
+        {
+          "task": "regex-log",
+          "instruction_prefix_tokens": 978
+        },
+        {
+          "task": "reshard-c4-data",
+          "instruction_prefix_tokens": 1023
+        },
+        {
+          "task": "rstan-to-pystan",
+          "instruction_prefix_tokens": 1200
+        },
+        {
+          "task": "sam-cell-seg",
+          "instruction_prefix_tokens": 1361
+        },
+        {
+          "task": "sanitize-git-repo",
+          "instruction_prefix_tokens": 913
+        },
+        {
+          "task": "schemelike-metacircular-eval",
+          "instruction_prefix_tokens": 1014
+        },
+        {
+          "task": "sparql-university",
+          "instruction_prefix_tokens": 1020
+        },
+        {
+          "task": "sqlite-db-truncate",
+          "instruction_prefix_tokens": 789
+        },
+        {
+          "task": "sqlite-with-gcov",
+          "instruction_prefix_tokens": 772
+        },
+        {
+          "task": "torch-pipeline-parallelism",
+          "instruction_prefix_tokens": 1147
+        },
+        {
+          "task": "torch-tensor-parallelism",
+          "instruction_prefix_tokens": 1023
+        },
+        {
+          "task": "train-fasttext",
+          "instruction_prefix_tokens": 786
+        },
+        {
+          "task": "tune-mjcf",
+          "instruction_prefix_tokens": 875
+        },
+        {
+          "task": "video-processing",
+          "instruction_prefix_tokens": 1050
+        },
+        {
+          "task": "vulnerable-secret",
+          "instruction_prefix_tokens": 810
+        },
+        {
+          "task": "winning-avg-corewars",
+          "instruction_prefix_tokens": 1030
+        },
+        {
+          "task": "write-compressor",
+          "instruction_prefix_tokens": 817
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "files": {
+    "instruction.md": "ce36ee1f6c589f81ee6a6be4967e25c76a2ed697006928023f42dfb9f28a6750",
+    "solution/solve.sh": "3b34e561c9ef0a53c9948655847846eb4811aaac67b990480aa6aac1b04bfe66",
+    "environment/Dockerfile": "8fd5c0f21a6914cd440d10c84c9db06fec606f20dc3e0363b17a3b8c220dc4d9",
+    "tests/test.sh": "43fb67e537c7adc2df11c2367f47c876cb5d16a7c1ae16d0339c3a3364bb2b06",
+    "tests/test_outputs.py": "370702c57a4e0c85f70ee37a5c357ae3a5df8480a275bb6263b0376f2f6c093b",
+    "environment/task-deps/model.py": "e4d3a5c728449656d0efde7871ee227619348352769795ed1be1a8b7f835fddc",
+    "environment/task-deps/lodepng.h": "b735b7e0357319973e9488d520d7f270d734a6e9e1bf924fb1d5b8d26d7e97ce",
+    "environment/task-deps/lodepng.cpp": "67873c5f6272f779a143a9c81070e8783327c5552d0b9de2aaee2cb779308917",
+    "environment/task-deps/cJSON.c": "0e7995261640c96db16ed2c91a5d981efa917cf5e72d0f97ec45a1179ae3ad73",
+    "environment/task-deps/image.png": "f4d5dfefe463939996541404340e7099d5957b56e1df3760d13b5d2de754db53",
+    "environment/task-deps/model.pth": "a32103eef09936e586b1a7dc7e64d279500a38ff30fdd6df2167e28eb954eee6",
+    "environment/task-deps/cJSON.h": "0909160541bcc510e0b2d8c7a9cc051fa1459a0f13be4d8e56346a15491f2f2f"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "e4b97209362932ff621a40ec33fc82e9bbb1b4bb40b635fe1e476a6cb83354bd"
+}

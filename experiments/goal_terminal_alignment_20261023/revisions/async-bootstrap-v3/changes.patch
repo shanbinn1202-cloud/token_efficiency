@@ -1,0 +1,37 @@
+--- v2/source-overlay/bootstrap_contract.py
++++ v3/source-overlay/bootstrap_contract.py
+@@ -18,18 +18,18 @@
+     require(getattr(parallel, "distributed_executor_backend", None) in ("uni", "uniproc"),
+             "explicit uniprocess worker required")
+     scheduler, model = getattr(config, "scheduler_config", None), getattr(config, "model_config", None)
+-    require(getattr(scheduler, "async_scheduling", None) is False,
+-            "synchronous scheduler config required")
++    asynchronous = getattr(scheduler, "async_scheduling", None)
++    require(type(asynchronous) is bool, "explicit scheduler mode required")
+     require(getattr(model, "runner_type", None) == "generate"
+             and getattr(model, "is_encoder_decoder", None) is False
+             and getattr(model, "enable_prompt_embeds", None) is False,
+             "plain decoder generation config required")
+     require(hasattr(config, "speculative_config") and config.speculative_config is None,
+             "speculation must be explicitly disabled")
+-    require(getattr(config, "max_concurrent_batches", None) == 1
++    require(getattr(config, "max_concurrent_batches", None) == (2 if asynchronous else 1)
+             and type(config.max_concurrent_batches) is int
+             and getattr(config, "use_v2_model_runner", None) is False,
+-            "explicit synchronous single-batch MRV1 required")
++            "MRV1 needs one sync batch or two native async batches")
+ 
+ 
+ class EngineReadiness:
+--- v2/source-overlay/native_worker_registration.py
++++ v3/source-overlay/native_worker_registration.py
+@@ -59,7 +59,8 @@
+                 and self.parallel.tensor_parallel_size == self.parallel.pipeline_parallel_size == 1
+                 and getattr(self.parallel, "data_parallel_size", 1) == 1
+                 and getattr(self.parallel, "worker_extension_cls", None) in (None, "")
+-                and not self.scheduling.async_scheduling,
++                and (not self.scheduling.async_scheduling or
++                     getattr(self.runner, "_remote_ra_async_ready", False)),
+                 "TP=PP=1 required")
+ 
+     def register(self, request):

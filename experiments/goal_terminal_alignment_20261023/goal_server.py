@@ -1,0 +1,63 @@
+"""Allocation-owned server lifecycle. Main/rewriter use the same sealed vLLM."""
+import hashlib,json,os,signal,subprocess,sys,time
+from pathlib import Path
+R=Path(__file__).resolve().parent
+HARNESS=R.parent/'gemma_full_20261017/harness'
+class GoalServer:
+    def __init__(self,release,output,model,budget,port=19840):
+        self.release=Path(release);self.output=Path(output);self.model=model
+        self.budget=budget;self.port=port;self.server=None;self.auxiliary=None
+    def start(self):
+        sys.path.insert(0,str(R/'selective-prefix'))
+        import serve
+        from rewriter_service import RewriterService
+        self.output.mkdir(parents=True,exist_ok=False)
+        root=self.output/'main'
+        extra={'host_memory_shares':2} if self.model=='gemma' else {}
+        manifest,config,command,env=serve.prepare(self.release,None,'goal_query',root,self.port,
+            {'active_token_budget':self.budget,'goal_rewriter_model':str(R/'rewriter-model')},
+            'kv-session',25,16,'decoupled',max_running=16,cuda_graphs='full',max_tokens=4096,
+            max_model_len=262144,dram_arena_gib=96,connector_pool_gib=1,
+            language_model_only=True,kv_session_thinking='on',kv_session_slots=1024,release_idle_pages=True,admission_overlap=16,**extra)
+        self.auxiliary=RewriterService(self.release,R/'rewriter-model',self.output/'rewriter',self.port+1)
+        self.auxiliary.bind(config,env)
+        root.mkdir()
+        (root/'startup.json').write_bytes(serve.wire(config))
+        model=Path(manifest['model_root'])
+        template=(model/'chat_template.jinja').read_text() if self.model=='gemma' else json.loads((model/'tokenizer_config.json').read_text())['chat_template']
+        (root/'chat_template.jinja').write_text(template)
+        # Only frontend telemetry is added; worker source and native kernels are sealed.
+        c=command.index('-c')+1
+        command[c]=command[c].replace("sys.path[:0]=[sys.argv[1],sys.argv[2]];", "sys.path[:0]=[sys.argv[1],sys.argv[2],"+repr(str(HARNESS))+"];")
+        if str(HARNESS) not in command[c]:
+            raise RuntimeError('Unexpected launcher program; cannot install timing middleware')
+        command += ['--middleware','experiments.benchmarks32_20261004.telemetry.middleware']
+        env.update(BENCHMARK_LEDGER_PATH=str(self.output/'engine-ledger.json'),TOKENIZERS_PARALLELISM='false')
+        (root/'launch.json').write_text(json.dumps({'command':command,'runtime_manifest':hashlib.sha256((self.release/'runtime-manifest.json').read_bytes()).hexdigest()},indent=2))
+        self.log=(self.output/'server.log').open('w')
+        self.server=subprocess.Popen(command,env=env,stdout=self.log,stderr=subprocess.STDOUT,start_new_session=True)
+        deadline=time.monotonic()+2400
+        while not (root/'ready.json').exists():
+            if self.server.poll() is not None:raise RuntimeError(f'Main server exited {self.server.returncode}; {self.output}/server.log')
+            if time.monotonic()>deadline:raise TimeoutError('Main server did not become ready in 2400 seconds')
+            time.sleep(3)
+        subprocess.run([sys.executable,str(R/'selective-prefix/examples/slurm/server_checks.py'),'ready',str(root),'goal_query',str(self.release)],check=True)
+        self.auxiliary.start()
+        return self
+    def stop(self):
+        if self.server is not None and self.server.poll() is None:
+            os.killpg(self.server.pid,signal.SIGTERM)
+            try:self.server.wait(timeout=100)
+            except subprocess.TimeoutExpired:
+                os.killpg(self.server.pid,signal.SIGKILL);self.server.wait()
+        if self.auxiliary:self.auxiliary.stop()
+        if hasattr(self,'log'):self.log.close()
+    def client_config(self):
+        from tebench.config import load
+        c=load(HARNESS.parent/'formal/swebench/vanilla/8k.yaml')
+        m=json.loads((self.release/'runtime-manifest.json').read_text())
+        c['model'].update(path=m['model_root'],name='google/gemma-4-31B-it' if self.model=='gemma' else 'Qwen/Qwen3.6-27B')
+        c['backend'].update(endpoint=f'http://127.0.0.1:{self.port}/v1',max_num_batched_tokens=4096 if self.model=='gemma' else 16384)
+        c['cache']['kv_budget']=self.budget
+        c['goal_runtime']={'release':str(self.release),'manifest_sha256':hashlib.sha256((self.release/'runtime-manifest.json').read_bytes()).hexdigest()}
+        return c

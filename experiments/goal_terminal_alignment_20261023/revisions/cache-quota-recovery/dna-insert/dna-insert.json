@@ -1,0 +1,31 @@
+{
+  "task": "dna-insert",
+  "dockerfile_sha256": "26e9e43a98f0b1d132bb638f44b7dc882b0d0ca32d56fa33048adeee00ab600d",
+  "architecture": "arm64",
+  "source_unchanged": true,
+  "oracle_required": true,
+  "started": 1792754176.2910779,
+  "build_only_overrides": [
+    "APT Sandbox User=root",
+    "fakeroot1.31 Debian ARM64, DONTTRYCHOWN=1",
+    "vfs.ignore_chown_errors=true"
+  ],
+  "ownership": "rootless image ownership flattened; per-task oracle qualification required",
+  "image_id": "e75e18a636f9033d50bdcaab64e1d14167460c2b77def1d1acab98b532a4b636",
+  "image_config": {
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/bash"
+    ],
+    "WorkingDir": "/app",
+    "Labels": {
+      "io.buildah.version": "1.33.12",
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "status": "review_required",
+  "traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 55, in <module>\n    tmp=OUT/(name+'.building.sif');run(['apptainer','build',str(tmp),'docker-archive://'+str(archive)],log)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 26, in run\n    if rc:raise RuntimeError('Build subprocess exit '+str(rc))\nRuntimeError: Build subprocess exit 255\n",
+  "finished": 1792754181.1921644
+}

@@ -8,14 +8,27 @@ Multi-session stage 1: one session per startup task, all opened here, never
 lazily. Session 0 keeps the server id (``sessions.session_ids``). Turn,
 busy/poison and generation replay are checked per session; shutdown closes
 every session once its native requests are freed.
+
+Session pool (``core._remote_ra_session_pool`` = K, from the startup config's
+``max_running_sessions``): every startup task is registered here (its session
+id, generations, routing), but a session opens only at its first command
+(turn 0) while fewer than K are open, and ``session_pool.close_session`` closes
+it for good. ``ids`` is every registered session, ``namespaces`` the open ones.
 """
 from .contract import require
-from .sessions import session_ids
+from .sessions import MAX_SESSIONS, request_limit, running_limit, session_ids, task_limit
 
 MAX_GENERATIONS = 256   # per session
 
 
 class LiveSessionAuthority:
+    # Session pool state; the class defaults keep authorities built without
+    # __init__ (tests) one-session views.
+    registered = None   # every registered session id, session 0 first
+    limit = None        # K on a session-pool server, else None (every session open)
+    ended = None        # session pool: closed session id -> its close receipt
+    events = None       # session pool: the open/close evidence file (HTTP runtime)
+
     def __init__(self, core, assembly, worker):
         self.core, self.assembly, self.worker = core, assembly, worker
         self.owner = core._remote_ra_growing_owner
@@ -35,18 +48,37 @@ class LiveSessionAuthority:
         self.closing = self.closed = False
         # compose_engine sets the task list; without it the server has one session.
         tasks = getattr(core, "_remote_ra_trusted_issues", None)
-        ids = session_ids(self.session, 1 if tasks is None else len(tasks))
+        from .session_pool import configured
+        pool = configured(core)
+        require(pool is None or tasks is not None, "a session pool needs the startup task list")
+        from .composition import startup_protocol
+        protocol = startup_protocol() if pool is not None else None
+        limit = task_limit(pool is not None, protocol)
+        ids = session_ids(self.session, 1 if tasks is None else len(tasks), limit)
+        self.limit = running_limit(pool, list(tasks or ()), protocol)
+        if self.limit is not None and self.limit > getattr(self.adapter, 'max_open', MAX_SESSIONS):
+            # A chat-text pool opens up to sessions.MAX_CHAT_TEXT_RUNNING sessions.
+            self.adapter.max_open = self.limit
+        # Startup only: the render authority mints a binding per request, never
+        # evicted; size it like the lifecycle (256 per session, at least 1,024).
+        authority = self.adapter.authority
+        authority.max_attempts = max(authority.max_attempts, request_limit(len(ids), limit))
+        self.registered = tuple(ids)
         self.generations = {sid: set() for sid in ids}
-        # Current namespace per session, in session-index order; it follows
-        # rebuilds (SplitPrivateEndpoint.rebuild).
-        self.namespaces = {sid: self.adapter.open(sid, self.policy, self.model, self.renderer)
-                           for sid in ids}
+        self.ended = {}
+        # Current namespace per open session, in session-index order; it follows
+        # rebuilds (SplitPrivateEndpoint.rebuild). A session pool opens none here.
+        self.namespaces = ({sid: self.adapter.open(sid, self.policy, self.model, self.renderer)
+                            for sid in ids} if self.limit is None else {})
+        if self.limit is not None:
+            from .session_pool import events_path
+            self.events = events_path()     # <output>/sessions.jsonl: open and close rows
         self.adapter._live_session_authority = self
 
     @property
     def ids(self):
         """Every session id of this server, session 0 (the server id) first."""
-        return tuple(self.namespaces)
+        return self.registered if self.registered is not None else tuple(self.namespaces)
 
     @property
     def namespace(self):
@@ -59,9 +91,25 @@ class LiveSessionAuthority:
         vars(self).setdefault("namespaces", {})[self.session] = value
 
     def index(self, session_id):
-        """The task index of a session this server opened."""
-        require(session_id in self.namespaces, "session not initialized by loaded server")
-        return self.ids.index(session_id)
+        """The task index of a session this server registered."""
+        ids = self.ids
+        require(session_id in ids, "session not initialized by loaded server")
+        return ids.index(session_id)
+
+    def open_session(self, session_id, turn):
+        """Session pool: open a registered session at its first command (turn 0),
+        while fewer than K are open. A closed session never reopens."""
+        require(self.limit is not None and session_id in self.ids and
+                session_id not in self.namespaces, "session not initialized by loaded server")
+        require(session_id not in self.ended,
+                "SESSION_CLOSED: session %s was closed; a closed task never reopens" % session_id)
+        require(turn == 0, "session %s opens at its first request (turn 0)" % session_id)
+        require(len(self.namespaces) < self.limit,
+                "SESSION_LIMIT: %d of %d sessions open" % (len(self.namespaces), self.limit))
+        self.namespaces[session_id] = self.adapter.open(session_id, self.policy, self.model,
+                                                        self.renderer)
+        from .session_pool import opened
+        opened(self.core, session_id)
 
     def verify(self):
         self.owner.owner_check(); self.owner.verify_identity()
@@ -78,8 +126,10 @@ class LiveSessionAuthority:
         require(type(meta) is dict and set(meta) == {"instance_id", "turn", "generation"},
                 "client authority fields are forbidden")
         sid = command.session_id
-        require(type(sid) is str and sid in self.namespaces and meta["instance_id"] == sid,
+        require(type(sid) is str and sid in self.ids and meta["instance_id"] == sid,
                 "session not initialized by loaded server")
+        if sid not in self.namespaces:
+            self.open_session(sid, meta["turn"])
         session = self.adapter.sessions[sid]
         require(type(meta["turn"]) is int and meta["turn"] == session.turn and
                 session.pending is None and not session.poisoned,

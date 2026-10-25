@@ -7,6 +7,12 @@ pool sizes and the free blocks at readiness (the baseline); every native
 terminal file and its ``runtime.jsonl`` row the free blocks after that
 request's drain; ``engine-cleanup.json`` the free blocks after every session
 closed. Legacy servers (no ``kv_layout``) write exactly the old files.
+
+goal_query servers also keep the texts behind each turn's Goal hashes
+(remote_ra_live_v2.goal_text): the native terminal appends one row per request
+to ``goals.jsonl`` and names it (``goal_text``: file and SHA-256 of the row) in
+the native file, and the frontend copies that reference into the runtime row's
+``query``. Other policies write neither.
 """
 import asyncio
 from hashlib import sha256
@@ -86,6 +92,10 @@ def worker_attached(core,worker,bridge,lifecycle,receipt):
         from remote_ra_live_v2.selection_contract import check_layout
         check_layout(config['selection_contract'],config.get('kv_layout'),
                      core._remote_ra_growing_adapter.page_tokens)
+    # Startup only: the worker echoes the pinned reply bound/context limit record
+    # (absent at the defaults, so legacy receipts are unchanged).
+    from remote_ra_live_v2.context_limits import RECORD_KEY,record
+    require(receipt.get(RECORD_KEY)==record(config),'worker context record differs from the startup config')
     extra={}
     if decoupled(config):
         extra['kv_pools']=dict(kv_layout=config['kv_layout'],**kv_pools(core))
@@ -103,22 +113,47 @@ def counters(io,request=None):
     if request is not None:
         from remote_ra_growing_worker.tensors import request_counters
         return request_counters(io,request)
-    return dict(h2d_issued=getattr(io,'_http_h2d_issued',0),
+    out=dict(h2d_issued=getattr(io,'_http_h2d_issued',0),
         h2d_joined=getattr(io,'_http_h2d_joined',0),zero_joins=getattr(io,'_http_zero_joins',0))
+    if getattr(io,'handoff',False) is True:
+        out['d2d_bytes']=getattr(io,'_http_d2d_bytes',0)   # --gdn-device-handoff only
+    return out
 
 def measured_command(backend,operation,command,qwen,request=None):
+    # --gdn-device-handoff: copies issued since the last frame are joined at its
+    # boundaries, so every frame still ends with issued == joined.
+    handoff=getattr(backend.io,'handoff',False) is True
+    if handoff:backend.io.poll_joins()
     before=counters(backend.io,request);start=time.monotonic_ns()
+    if operation=='phase1_collect':
+        # --phase1-in-step: the probe ran inside the step after its arm, so its
+        # frame starts at the arm (prepare H2D stays the carry restore).
+        armed=backend.owner.records.get(request,{}).get('phase1_armed')
+        if armed is not None:before=dict(armed['counters'])
     # Count concrete tensor bytes owned before complete releases request claims;
     # with ``request``, only the blocks that request's generation claims.
-    blocks={}
-    for (group,block),owner in backend.owner.claims.items():
-        if request is None or owner[0]==request:blocks[group]=blocks.get(group,0)+1
-    active=sum(v.page_bytes*blocks.get(v.group,0) for v in backend.io.views)
+    claims=backend.owner.claims
+    groups_of=getattr(claims,'groups_of',None)
+    if groups_of is not None:
+        # --decode-fastpath (decode_fastpath.ClaimTable): the request's own counts,
+        # equal to the scan below, without visiting every running request's claims.
+        blocks=groups_of(request)
+    else:
+        blocks={}
+        for (group,block),owner in claims.items():
+            if request is None or owner[0]==request:blocks[group]=blocks.get(group,0)+1
+    per_group=getattr(backend.io,'group_bytes',None)
+    if per_group is not None:
+        # --decode-fastpath2 (decode_fastpath2.group_bytes): the same sum, per KV group.
+        active=sum(per_group.get(group,0)*n for group,n in blocks.items())
+    else:
+        active=sum(v.page_bytes*blocks.get(v.group,0) for v in backend.io.views)
     if request is None:
         result=command(backend,qwen)
     else:
         from remote_ra_growing_worker.tensors import attributed
         with attributed(backend.io,request):result=command(backend,qwen)
+    if handoff:backend.io.poll_joins()
     after=counters(backend.io,request)
     require(after['h2d_issued']==after['h2d_joined'],'tensor copies not joined')
     result=dict(result,http_measurement=dict(before=before,after=after,
@@ -149,9 +184,23 @@ def native_terminal(endpoint,entry,operation):
         plan=plan,query=query,worker_frames=frames,drain=copy_receipt(entry['drain_receipt']),
         admission_engine_ms=entry.get('admission_engine_ms'),  # stage 2: decode stall of this admission
         # stage 2, goal_async: a parked goal_query Goal's wait and construction time
-        **{k:entry[k] for k in ('goal_async_ms','goal_construct_ms') if k in entry})
+        # (with a rewriter call, its calls' wait for the rewriter and send-to-answer
+        # totals); --phase1-in-step: how phase 1 ran and its parked time;
+        # --admission-overlap: the time parked waiting for the one phase-1 lease
+        **{k:entry[k] for k in ('goal_async_ms','goal_construct_ms','goal_rewrite_wait_ms',
+                                'goal_rewrite_call_ms','phase1_mode','phase1_park_ms',
+                                'phase1_step_ns','phase1_step_rows','lease_wait_ms') if k in entry})
+    release=getattr(core,'_remote_ra_idle_release',None)
+    if release is not None:
+        # --release-idle-pages: the sessions released to admit it, its readmitted Pages.
+        value['idle_release']=release.record(binding.request)
     config=load()
-    p=Path(config['output_directory'])/('native-'+sha256(binding.request.encode()).hexdigest()+'.json')
+    output=Path(config['output_directory'])
+    p=output/('native-'+sha256(binding.request.encode()).hexdigest()+'.json')
+    # goal_query: the turn's Goal, query and rewriter texts, one row in goals.jsonl
+    # (written once; a retry names the same row). Other policies add nothing.
+    reference=goal_text(selection,output,value)
+    if reference is not None:value['goal_text']=reference
     if decoupled(config):
         # Both pools after this request's drain (other sessions may hold blocks).
         value['kv_pools']=dict(free_blocks_by_pool=kv_pools(core)['free_blocks_by_pool'])
@@ -164,6 +213,23 @@ def native_terminal(endpoint,entry,operation):
             return
     if p.exists():require(json.loads(p.read_bytes())==value,'terminal receipt changed on retry')
     else:save(p,value)
+
+def goal_text(selection,output,value):
+    """goal_query (remote_ra_live_v2.goal_text): append the texts plan_turn kept for
+    this request to goals.jsonl, once, with the native record's keys; returns the
+    reference ({file, sha256 of the row}) for the native file, or None."""
+    texts=getattr(selection,'goal_texts',None)
+    if texts is None:return None
+    request=value['request_id'];reference=texts.written.get(request)
+    if reference is not None:return reference
+    record=texts.pending.pop(request,None)
+    if record is None:return None
+    from remote_ra_live_v2.goal_text import SCHEMA,FILE,KEYS
+    raw=encoded(dict({k:value[k] for k in KEYS},schema=SCHEMA,**record))
+    with (output/FILE).open('ab') as stream:
+        stream.write(raw+b'\n');stream.flush();os.fsync(stream.fileno())
+    reference=texts.written[request]=dict(file=FILE,sha256=sha256(raw).hexdigest())
+    return reference
 
 def engine_closed(core):
     if os.environ.get('REMOTE_RA_HTTP_RUNTIME','0')!='1':return
@@ -178,11 +244,20 @@ def engine_closed(core):
             'engine teardown missing request drains')
     from .shutdown import save_receipt
     # session_id stays the server id (session 0); every session closed at shutdown.
-    closed=[dict(session_id=sid,session_index=k,namespace=ns)
+    # A session pool lists the sessions open at shutdown here (sessions.jsonl has
+    # the ones its harness closed) and summarises the pool.
+    pool=getattr(sessions,'limit',None)
+    closed=[dict(session_id=sid,session_index=k if pool is None else sessions.index(sid),namespace=ns)
             for k,(sid,ns) in enumerate(sessions.namespaces.items())]
     config=load()
     # Decoupled: both pools once every session closed (the baseline is in ready.json).
     extra=dict(kv_pools=kv_pools(core)) if decoupled(config) else {}
+    if pool is not None:
+        from remote_ra_live_v2.session_pool import summary
+        extra['session_pool']=summary(sessions)
+    release=getattr(core,'_remote_ra_idle_release',None)
+    if release is not None:
+        extra['idle_release']=release.summary()      # --release-idle-pages totals
     return save_receipt(Path(config['output_directory'])/'engine-cleanup.json',
         dict(schema='remote-ra-native-http-cleanup-v1',epoch=sessions.epoch,
             runtime_manifest=core._remote_ra_growing_owner.identity.manifest,
@@ -198,13 +273,16 @@ class FrontendEvidence:
     order, never a turn.
     """
     def __init__(self,authority,state,effective_config):
-        from remote_ra_live_v2.sessions import session_ids
+        from remote_ra_live_v2.sessions import session_ids,task_limit
         self.authority,self.state=authority,state
         self.config=load();self.output=Path(self.config['output_directory'])
         self.effective_config=copy_receipt(effective_config)
         # load() always lists the tasks; a hand-built one-task config may omit them.
         self.tasks=self.config.get('tasks') or [self.config['task']]
-        self.sessions=session_ids(authority.session_id,len(self.tasks))
+        # Session pool: K sessions open at most of the registered tasks (None: fixed).
+        self.pool=self.config.get('max_running_sessions')
+        self.sessions=session_ids(authority.session_id,len(self.tasks),
+                                 task_limit(self.pool is not None,self.config.get('protocol')))
         # Startup only: the issue hash that each session's query rows name.
         self.issues=[sha256(t['problem_statement'].encode()).hexdigest() for t in self.tasks]
         self.start=time.monotonic_ns();self.turns=[0]*len(self.tasks);self.pending={};self.ids=[]
@@ -249,14 +327,57 @@ class FrontendEvidence:
                          free_blocks_by_pool=pools['free_blocks_by_pool'])
         else:
             require('kv_pools' not in worker,'legacy server with KV pool evidence')
+        if self.pool is not None:
+            # Every task above is registered; at most K sessions are open at a time.
+            value.update(session_pool=dict(max_running_sessions=self.pool,registered=len(self.tasks)))
+        # The pinned reply bound and context limit when either is not the default
+        # (remote_ra_live_v2.context_limits); the worker echoed the same record.
+        from remote_ra_live_v2.context_limits import RECORD_KEY,record
+        context=record(config)
+        require(receipt.get(RECORD_KEY)==context,'worker/parent context record mismatch')
+        if context is not None:
+            value[RECORD_KEY]=context
+        # Admission flags (adm-e): the worker attached with the pinned record; all off adds nothing.
+        require(receipt.get('admission')==config.get('admission'),'worker/parent admission flags mismatch')
+        if 'admission' in config:
+            value.update(admission=config['admission'])
+        # --goal-rewriter-batch N: the pinned batch size (the engine checked its rewriter at
+        # startup); off adds nothing.
+        if 'goal_rewriter_batch' in config:
+            value.update(goal_rewriter_batch=config['goal_rewriter_batch'])
+        # --decode-fastpath: the worker attached with the pinned switch; off adds nothing.
+        require(receipt.get('decode_fastpath')==config.get('decode_fastpath'),'worker/parent decode_fastpath mismatch')
+        if 'decode_fastpath' in config:
+            value.update(decode_fastpath=True)
+        # --decode-fastpath2: the same for the second switch; off adds nothing.
+        require(receipt.get('decode_fastpath2')==config.get('decode_fastpath2'),'worker/parent decode_fastpath2 mismatch')
+        if 'decode_fastpath2' in config:
+            value.update(decode_fastpath2=True)
+        # --decode-fastpath3: the same for the third switch; off adds nothing.
+        require(receipt.get('decode_fastpath3')==config.get('decode_fastpath3'),'worker/parent decode_fastpath3 mismatch')
+        if 'decode_fastpath3' in config:
+            value.update(decode_fastpath3=True)
+        # --language-model-only: the worker checked text-only limits and no vision tower; off adds nothing.
+        from remote_ra_live_v2.language_model_only import CONFIG_KEY as TEXT_ONLY_KEY,record as text_only_record
+        text_only=text_only_record(config)
+        require(receipt.get(TEXT_ONLY_KEY)==text_only,'worker/parent language_model_only mismatch')
+        if text_only is not None:
+            value[TEXT_ONLY_KEY]=text_only
+        # --release-idle-pages: the worker attached with the pinned switch; off adds nothing.
+        require(receipt.get('release_idle_pages')==config.get('release_idle_pages'),
+                'worker/parent release_idle_pages mismatch')
+        if 'release_idle_pages' in config:
+            value.update(release_idle_pages=True)
         require(not self.ready and not self.ids and not self.pending,'fresh ready already consumed')
         save(self.output/'ready.json',value);self.ready=True
 
-    async def begin(self,raw,handler,session=0,queue_wait_s=0.0):
+    async def begin(self,raw,handler,session=0,queue_wait_s=0.0,open_wait_s=None):
         """Session index ``session`` admits one request, after routing and admission.
 
         Stage 2: ``queue_wait_s`` also accumulates the CAPACITY_WAIT retries
-        (capacity_wait), counted in ``capacity_waits``."""
+        (capacity_wait), counted in ``capacity_waits``. Session pool:
+        ``open_wait_s``, the wait for an open session before admission (rows of
+        a session-pool server only)."""
         k=session
         require(self.ready and k not in self.pending,'HTTP readiness/session busy')
         wire=await raw.body();body=json.loads(wire)
@@ -266,6 +387,8 @@ class FrontendEvidence:
         self.pending[k]=dict(wire_sha256=sha256(wire).hexdigest(),request_order_sha256=digest(body,True),
             request_sha256=digest(body),body=body,start=time.monotonic_ns(),
             request_index=self.requests,queue_wait_s=queue_wait_s,capacity_waits=0)
+        if self.pool is not None:
+            self.pending[k]['open_wait_s']=open_wait_s or 0.0
         self.requests+=1
 
     def capacity_wait(self,session,waited_s):
@@ -273,7 +396,12 @@ class FrontendEvidence:
         pending=self.pending[session]
         pending['queue_wait_s']+=waited_s;pending['capacity_waits']+=1
 
-    def complete(self,call,response,session=0):
+    def complete(self,call,response,session=0,kv=None,chat=None):
+        """One completed request's runtime.jsonl row, also returned. ``kv`` (kv-session
+        protocol): the indices of the request's new tool/user messages and the row's
+        'kv_session' record (client session, token geometry, bounds, Goal source).
+        ``chat`` (chat-text protocol): the row's 'chat_text' record (client session,
+        slot, binding, bounds, finish reason)."""
         k=session;pending=self.pending.get(k)
         require(pending is not None and call.engine_complete is True,'HTTP completion unjoined')
         rid=call.internal_id;p=self.output/('native-'+sha256(rid.encode()).hexdigest()+'.json')
@@ -312,8 +440,9 @@ class FrontendEvidence:
             if plan['local_turn']:
                 messages=pending['body']['messages'];span=native['observation_span']
                 require(span is not None,'actual rendered observation absent')
-                observation=dict(message_indices=[len(messages)-1],messages_order_sha256=digest(messages[-1:],True),
-                    start=span[0],end=span[1])
+                indices=[len(messages)-1] if kv is None else list(kv['message_indices'])
+                observation=dict(message_indices=indices,
+                    messages_order_sha256=digest([messages[i] for i in indices],True),start=span[0],end=span[1])
             selection={k:q['selection'][k] for k in ('contract_sha256','reason','candidate_pages',
                 'history_tokens','capacity_pages','selected_pages','mandatory_pages','recent_pages',
                 'retrieved_pages','projection_sha256','selector_config_hash')}
@@ -326,6 +455,9 @@ class FrontendEvidence:
                 source_request_order_sha256=pending['request_order_sha256'],
                 bootstrap=selection['reason'] is not None,selection=selection,goal=q['goal'],
                 observation=observation)
+            if 'goal_text' in native:
+                # goal_query: the goals.jsonl row with the texts of goal_hash and goal.payload_sha256
+                query['goal_text']=native['goal_text']
         result=dict(schema='remote-ra-http-turn-v1',ordinal=self.turns[k]+1,request_id=rid,response_id=response.id,
             policy=self.authority.policy,session_id=self.sessions[k],session_index=k,turn=self.turns[k],
             request_index=pending['request_index'],queue_wait_s=pending['queue_wait_s'],
@@ -341,9 +473,22 @@ class FrontendEvidence:
         if decoupled(self.config):
             require(type(native.get('kv_pools')) is dict,'decoupled native terminal without pool counts')
             result['kv_pools']=native['kv_pools']
+        if self.pool is not None:
+            result['open_wait_s']=pending['open_wait_s']
+        if kv is not None:
+            result['kv_session']=copy_receipt(kv['row'])
+        if chat is not None:
+            result['chat_text']=copy_receipt(chat['row'])
+        if 'idle_release' in native:
+            result['idle_release']=native['idle_release']       # --release-idle-pages
+        if (self.config.get('admission') or {}).get('gdn_device_handoff') is True:
+            # Device-to-device GDN bytes: the hand-off and every crossing (GDN x (1 + crossings)).
+            require('d2d_bytes' in first and 'd2d_bytes' in last,'GDN hand-off frames without d2d bytes')
+            result['restore']['d2d_bytes']=last['d2d_bytes']-first['d2d_bytes']
         with (self.output/'runtime.jsonl').open('ab') as stream:
             stream.write(encoded(result)+b'\n');stream.flush();os.fsync(stream.fileno())
         self.ids.append(rid);self.turns[k]+=1;del self.pending[k]
+        return result
 
     def failed(self,call,failure,session=0):
         """``session`` None: the request was refused before it owned a session."""

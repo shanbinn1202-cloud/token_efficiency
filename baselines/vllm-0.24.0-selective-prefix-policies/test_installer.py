@@ -144,7 +144,7 @@ class InstallerTests(unittest.TestCase):
         definition=install.verify_package(ROOT)
         self.assertEqual(len(definition['source_files']),len(install.inventory(ROOT/'source-overlay')))
         # Exact release counts (Stage B): a new or dropped overlay file must be deliberate.
-        self.assertEqual((len(definition['source_files']),len(definition['payload'])),(292,201))
+        self.assertEqual((len(definition['source_files']),len(definition['payload'])),(323,232))
         self.assertEqual(len(definition['expected_live']),120)
         self.assertEqual(sum(v is None for v in definition['expected_live'].values()),2)
         self.assertEqual(len(definition['payload']),len(definition['source_files'])-sum(1 for n,p in definition['source_files'].items() if definition['expected_live'].get(n)==p))

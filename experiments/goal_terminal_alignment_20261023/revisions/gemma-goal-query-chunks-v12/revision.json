@@ -1,0 +1,18 @@
+{
+  "time": 1792836842.0599048,
+  "reason": "Gemma shares one-forward Goal guard; long Goal needs chunked native execution within original Goal sliding transient",
+  "algorithm_changed": false,
+  "pool_changed": false,
+  "implementation": "Full attention retains complete Goal query; sliding groups reuse only slots whose tokens left the original native window. Exact original window semantics, all input, final query vector.",
+  "validation_required": "CPU window read and selection equivalence, malformed Goal leases, bothmodelsGPU",
+  "cpu_validation": {
+    "passed": true,
+    "gemma_chunked_vs_unchunked": "final-tests.log (equivalence passed; fixture-only None handling fixed in separate rerun)",
+    "gemma_goal_lease_rejections": "lease-tests.log",
+    "qwen_regression": "qwen-regression.log",
+    "skipped_optional_tests": 1,
+    "goal_reference": "chunked Goal uses1024tokentransient; unchunked reference uses4096; tested full2200tokenquery and exact window reads"
+  },
+  "goal_tokens_definition": "Existing layout.goal_tokens remains physical sliding transient capacity. Full Goal query length may exceed it; only tokens outside the native sliding window are overwritten, and FullAttention retains all Goal tokens.",
+  "source_changes_protected_by_manifest": true
+}

@@ -37,6 +37,7 @@ backend:
   kv_cache_memory_bytes: 26843545600  # Default vLLM pool: 25 GiB per GPU, independent of token budget.
   prefix_caching: true
   async_scheduling: true
+  max_num_batched_tokens: 4096
   cuda_graph: true
   torch_compile: true
   full_attention: sdpa

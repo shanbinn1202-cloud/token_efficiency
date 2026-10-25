@@ -1,0 +1,38 @@
+{
+  "task": "install-windows-3.11",
+  "dockerfile_sha256": "91aa5335320f7c7721835eb6838bb878fd22cd6a6af50ced1efbc2696dea8dbf",
+  "architecture": "arm64",
+  "source_unchanged": true,
+  "oracle_required": true,
+  "started": 1792754775.6527169,
+  "build_only_overrides": [
+    "APT Sandbox User=root",
+    "fakeroot1.31 Debian ARM64, DONTTRYCHOWN=1",
+    "vfs.ignore_chown_errors=true"
+  ],
+  "ownership": "rootless image ownership flattened; per-task oracle qualification required",
+  "image_id": "29f306c84e402e17fe72c252460bf3f0e164517bdff11b48a1abddb93a4d1227",
+  "image_config": {
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "USER=root",
+      "PASSWORD=password1",
+      "DEBIAN_FRONTEND=noninteractive",
+      "DEBCONF_NONINTERACTIVE_SEEN=true",
+      "XKB_DEFAULT_RULES=base"
+    ],
+    "Cmd": [
+      "supervisord",
+      "-c",
+      "/etc/supervisor/supervisord.conf"
+    ],
+    "WorkingDir": "/app",
+    "Labels": {
+      "io.buildah.version": "1.33.12",
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "status": "review_required",
+  "traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 55, in <module>\n    tmp=OUT/(name+'.building.sif');run(['apptainer','build',str(tmp),'docker-archive://'+str(archive)],log)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 26, in run\n    if rc:raise RuntimeError('Build subprocess exit '+str(rc))\nRuntimeError: Build subprocess exit 255\n",
+  "finished": 1792754957.424003
+}

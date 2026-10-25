@@ -1,0 +1,106 @@
+--- before/phase1_coordinator.py
++++ after/phase1_coordinator.py
+@@ -153,7 +153,8 @@
+         # Process-wide, like the worker: no lease starts while any session's
+         # lease lacks its joined drain (native_probe refuses the alias).
+         require(not self.records, 'prior phase-1 lease lacks a drain, adoption or abort')
+-        require(geo.e - geo.C <= self.max_tokens, 'PHASE1_TOO_LONG: e - C exceeds one native forward')
++        from .phase1_chunks import aligned_chunks
++        plan = aligned_chunks(geo.C, geo.e, self.max_tokens, mamba_tokens(P, self.layout))
+         require(type(allocation_generation) is int and allocation_generation > 0,
+                 'worker allocation generation required')
+         require(hex64(s.boundary) and s.boundary != ZERO_DIGEST, 'phase 1 needs a committed carry')
+@@ -178,7 +179,7 @@
+                     'PHASE1_TOO_LONG: Goal forward exceeds one native forward')
+         fresh = list(geo.fresh_pages)
+         Mt = mamba_tokens(P, self.layout)
+-        M = -(-geo.e // Mt)                      # Mamba row length (ceil(e/P) shared)
++        M = -(-plan[0][1] // Mt)                      # Mamba row length (ceil(e/P) shared)
+         width = -(-len(goal_tokens) // P) if goal_tokens else 0
+         mwidth = -(-len(goal_tokens) // Mt) if goal_tokens else 0
+         shared = self.mamba_pool is self.pool
+@@ -249,6 +250,9 @@
+                 sparse=dict(logical_matched_tokens=geo.Q,
+                             dropped_full_attention_tokens=geo.Q - len(R) * P),
+                 carry_digest=s.boundary, goal=goal)
++            if len(plan) > 1:
++                lease['chunks'] = [[start, end, [[0] * (-(-end // Mt) - 1) +
++                    [fresh_mam[g].block_id] for g in mam]] for start, end in plan[1:]]
+             lease['mac'] = adapter.authority.sign(lease)
+             # The worker parses the same shape.
+             parse_lease(lease, attention_groups=att, layout=self.layout)
+--- before/contract.py
++++ after/contract.py
+@@ -631,10 +631,12 @@
+     end0 = e
+     if chunked:
+         # The first forward is [C, end0) on ``rows``; each chunk is [start, end, rows].
+-        require(window and _seq(raw["chunks"]) and raw["chunks"] and _seq(raw["chunks"][0]) and
++        require(_seq(raw["chunks"]) and raw["chunks"] and _seq(raw["chunks"][0]) and
+                 len(raw["chunks"][0]) == 3 and _int(raw["chunks"][0][0]) and C < raw["chunks"][0][0] < e,
+-                "phase-1 chunks belong to a window-layout lease and split [C, e)")
++                "phase-1 chunks must split [C, e)")
+         end0 = raw["chunks"][0][0]
++        if not window:
++            M = -(-end0 // mamba_tokens(P, layout))
+     fresh = range(Q // P + tail, -(-e // P))
+     rows = _rows(raw["rows"])
+     decoupled = layout is not None and layout.decoupled
+@@ -694,10 +696,16 @@
+                 owned_all.extend(row[f0:])
+                 continue
+             require(len(row) == M and row[:-1] == (0,) * (M - 1) and row[-1] > 0,
+-                    "phase-1 Mamba row must be null-padded")
++                    "phase-1 Mamba row must be null-padded, not a window-layout lease")
+             owned_all.append(row[-1])
+-    chunks = _parse_chunks(raw["chunks"], rows, att, key, where, owned_all, C, end0, e,
+-                           layout.window_tokens, P) if chunked else ()
++    chunks = ()
++    if chunked:
++        if window:
++            chunks = _parse_chunks(raw["chunks"], rows, att, key, where, owned_all, C, end0, e,
++                                   layout.window_tokens, P)
++        else:
++            from .phase1_chunks import parse_mamba_chunks
++            chunks = parse_mamba_chunks(raw["chunks"], rows, att, end0, e, mamba_tokens(P, layout))
+     borrowed, owned, zero = raw["borrowed"], raw["owned"], raw["zero"]
+     if decoupled:
+         # owned: fresh FA (pool 0) then fresh Mamba (pool 1), whose ids may coincide;
+--- before/native_probe.py
++++ after/native_probe.py
+@@ -255,8 +255,10 @@
+ 
+     def _mamba_slot(self):
+         a=self.active;lease=a['lease'];idx=self.runner.mamba_state_idx[a['request']]
+-        require(idx==lease.mamba_index,'phase-1 Mamba slot is not ceil(e/P)-1')
+-        return {g:(lease.rows[g][idx],) for g in self.owner.hybrid_groups}
++        expected=-(-len(a['tokens']) // (lease.mamba_tokens or lease.page_tokens))-1
++        require(idx==expected,'phase-1 Mamba slot is not the current chunk end slot')
++        rows=a.get('chunk_rows') or lease.rows
++        return {g:(rows[g][idx],) for g in self.owner.hybrid_groups}
+ 
+     def _window_slots(self,end,indexed=False):
+         """Window layout (gemma-s1): the phase-1 rows' window after ``end`` tokens, per
+@@ -288,6 +290,12 @@
+                    self._mamba_slot())
+             self.backend.restore_carry(a['identity'],slots,lease.start,
+                                        lease.carry_digest,a['generation'])
++        elif a['phase']=='phase1' and not getattr(self.backend,'window',False):
++            # A new native prefill row can clear/move recurrent slots. Restore
++            # the exact private preceding-chunk carry after preprocessing.
++            require(a.get('chunk_carry') is not None, 'missing preceding chunk GDN carry')
++            self.backend.io.restore(self._mamba_slot(),'hybrid',a['chunk_carry'])
++            self.backend.io.drain()
+         a['restored']=True
+ 
+     def after_forward(self,hidden):
+@@ -301,6 +309,9 @@
+             # Decoupled: the closing rows (phase 1 only; Goal Pages are never
+             # published) stay on the device, the query row comes to the host.
+             rows=ProbeRows(hidden,a['start'],count,a['lease'].page_tokens,a['phase']=='phase1')
++        if a['phase']=='phase1' and a['start']+count<a['lease'].end and not getattr(self.backend,'window',False):
++            a['chunk_carry']=self.backend.io.capture(self._mamba_slot(),'hybrid')
++            self.backend.io.drain()
+         if a['phase']=='phase1' and a['start']+count==a['lease'].end:
+             # The last forward of phase 1 (of its chunks, gemma-goal) captures its state.
+             lease=a['lease']

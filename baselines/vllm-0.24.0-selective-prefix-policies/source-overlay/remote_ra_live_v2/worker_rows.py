@@ -117,6 +117,10 @@ def _extend(runner, owner, rid, row, rec, cache):
         return False
     tables=runner.input_batch.block_table.block_tables
     grown=[]
+    # --decode-fastpath2: with no id appended the list itself is compared (no prefix copy).
+    fast2=getattr(owner,'decode_fastpath2',False)
+    # --decode-fastpath3: the device row is compared by its bytes (allocation_owner._same_row).
+    fast3=fast2 and getattr(owner,'decode_fastpath3',False)
     for group in owner.attention_groups:
         cached=cache.groups[group]
         table=tables[group]
@@ -125,7 +129,7 @@ def _extend(runner, owner, rid, row, rec, cache):
             return False
         ids=request.block_ids[group]
         k=len(cached.ids)
-        if type(ids) is not list or len(ids)<k or ids[:k]!=cached.ids:
+        if type(ids) is not list or len(ids)<k or (ids!=cached.ids if fast2 and len(ids)==k else ids[:k]!=cached.ids):
             return False
         new=ids[k:]
         if new and not (all(type(b) is int and b>0 for b in new) and len(set(new))==len(new)
@@ -135,7 +139,13 @@ def _extend(runner, owner, rid, row, rec, cache):
         if count!=len(ids)*r:
             return False
         device=table.block_table.np
-        if not np.array_equal(device[row,:k*r],cached.kernel):
+        view,kernel=device[row,:k*r],cached.kernel
+        if (fast3 and type(view) is np.ndarray and type(kernel) is np.ndarray and view.dtype==kernel.dtype and
+                view.dtype.kind in 'iu' and view.ndim==1 and kernel.ndim==1):
+            # Equal bytes of one integer dtype are equal integers: np.array_equal's answer.
+            if view.shape!=kernel.shape or view.tobytes()!=kernel.tobytes():
+                return False
+        elif not np.array_equal(view,kernel):
             return False
         tail=device[row,k*r:count]
         if new and [int(v) for v in tail]!=[b*r+i for b in new for i in range(r)]:

@@ -19,13 +19,18 @@ import base64
 from dataclasses import asdict
 from hashlib import sha256
 
+from .chat_text_protocol import PROTOCOL as CHAT_TEXT
 from .contract import NativeIdentity, RenderAssignment, ZERO_DIGEST, require
+from .kv_session_protocol import PROTOCOL as KV_SESSION
 
 
 QUERY = frozenset({'goal_query', 'observation_query', 'random_fill'})
 
 
 class SplitPrivateEndpoint:
+    # The server's reply bound; __init__ sets the startup config's (context_limits).
+    max_tokens = 1536
+
     def __init__(self, core, assembly):
         self.core, self.assembly = core, assembly
         self.owner = core._remote_ra_growing_owner
@@ -38,7 +43,8 @@ class SplitPrivateEndpoint:
         if os.environ.get('REMOTE_RA_HTTP_RUNTIME','0')=='1':
             from remote_ra_http.config import load
             config=load();contract,self.protocol=config['selection_contract'],config['protocol']
-        from .mswea_protocol import PROTOCOL
+        # The XML protocol: Qwen's turn grammar or (gemma-s1) Gemma's.
+        from .mswea_protocol import GRAMMARS, xml_transcripts
         ids=self.sessions.ids
         task=getattr(core,'_remote_ra_trusted_issue',None)
         tasks=getattr(core,'_remote_ra_trusted_issues',None)
@@ -47,15 +53,34 @@ class SplitPrivateEndpoint:
         require((self.tasks is None and len(ids)==1) or
                 (self.tasks is not None and len(self.tasks)==len(ids) and self.tasks[0]==task),
                 'one trusted startup task per engine session required')
-        require(len(ids)==1 or self.protocol==PROTOCOL,'several sessions serve the XML protocol only')
+        require(len(ids)==1 or self.protocol in GRAMMARS or self.protocol in (KV_SESSION,CHAT_TEXT),
+                'several sessions serve the XML protocol only')
         # XML protocol: the engine's own record of generated token IDs is the
         # authority that re-derives and verifies every prompt; one per session.
-        self.transcripts={sid:assembly.renderer.transcript() if self.protocol==PROTOCOL else None
-                          for sid in ids}
+        if self.protocol==KV_SESSION:
+            # kv-session: the same, from the token stream (the record pins the header).
+            make=assembly.renderer.kv_transcripts(config['kv_session'])
+            self.transcripts={sid:make() for sid in ids}
+        elif self.protocol==CHAT_TEXT:
+            # chat-text: the same, one chat transcript per slot (the template checked once).
+            make=assembly.renderer.chat_transcripts(config['chat_text'])
+            self.transcripts={sid:make() for sid in ids}
+        else:
+            made=xml_transcripts(assembly.renderer,self.protocol,len(ids))
+            self.transcripts={sid:made[k] if made else None for k,sid in enumerate(ids)}
         self.transcript=self.transcripts[ids[0]]
+        # The server's pinned reply bound (startup only, any protocol): the XML
+        # protocol's check_sampling refuses any other value and the capacity gate
+        # reserves it for every reply.
+        from .context_limits import max_model_len,max_tokens
+        self.max_tokens=max_tokens(config)
+        self.max_model_len=max_model_len(config)
         boundary=core._remote_ra_live_v2_boundary
         from .phase1_coordinator import Phase1Coordinator
         # Phase 1 runs for every policy after local turn 0.
+        if getattr(self.adapter,'window',None) is not None:
+            # The window layout (gemma-s1): sliding rows instead of Mamba rows.
+            from .window_phase1 import WindowPhase1Coordinator as Phase1Coordinator
         self.phase1=Phase1Coordinator(core,boundary.proxy,assembly.renderer)
         if task is not None:
             from .query_selection import QuerySelectionAuthority
@@ -63,9 +88,13 @@ class SplitPrivateEndpoint:
             # rewriter: only goal_query starts one.
             require(config is None or config['policy']==self.sessions.policy,
                     'startup config and engine owner policies differ')
+            # --goal-rewriter-batch N (the startup config's goal_rewriter_batch): the
+            # Goal rewriter's calls run batched; without it the call is the previous one.
+            batch={} if config is None or config.get('goal_rewriter_batch') is None else dict(
+                rewriter_batch=config['goal_rewriter_batch'])
             self.selection=QuerySelectionAuthority(self.adapter,
                 task=task,policy=self.sessions.policy,contract=contract,transcript=self.transcript,
-                sessions={sid:(t,self.transcripts[sid]) for sid,t in zip(ids,self.tasks)})
+                sessions={sid:(t,self.transcripts[sid]) for sid,t in zip(ids,self.tasks)},**batch)
             boundary.selection=self.selection
 
     def verify_identity(self):
@@ -81,7 +110,7 @@ class SplitPrivateEndpoint:
                 type(body["session"]) is str and body["session"] in self.sessions.ids,
                 "exact server-owned render envelope required")
         transcript = self.transcripts[body["session"]]
-        if len(self.sessions.ids) > 1:
+        if len(self.sessions.ids) > 1 and self.protocol not in (KV_SESSION, CHAT_TEXT):
             # Several tasks: the request's task message must route to its session.
             from .sessions import route
             source = body["source"]
@@ -94,17 +123,29 @@ class SplitPrivateEndpoint:
                 native.current_wave == 0 and native.data_parallel_rank in (None, 0),
                 "native assigned request mismatch")
         from request_path import AssignedId, observe_assigned_id
-        require(observe_assigned_id(native) == AssignedId(rid, body["external_id"],
-                                                        body["prompt_hash"]),
+        # The one hash of the prompt per admission: the native request's canonical
+        # prompt hash, checked against the frontend's (from its authenticated frame).
+        assigned = observe_assigned_id(native)
+        require(assigned == AssignedId(rid, body["external_id"], body["prompt_hash"]),
                 "registered fields differ from native assignment")
         request, wave = self.core.preprocess_add_request(native)
         # Policy/session already authenticated in RegisteredRouteBridge.
         # Legacy connector metadata must not initiate competing stores.
         request.kv_transfer_params = None
         require(wave == 0 and request.request_id == rid, "preprocess identity changed")
-        if transcript is not None:
+        if self.protocol == KV_SESSION:
+            # kv-session: greedy, the client's max_tokens up to the bound, in the context.
+            from .kv_session_protocol import check_sampling as check_kv
+            check_kv(request.sampling_params, transcript.stop_ids, self.max_tokens,
+                     len(native.prompt_token_ids), self.max_model_len)
+        elif self.protocol == CHAT_TEXT:
+            # chat-text: greedy, EOS/pad stops, max_tokens up to the bound within the context.
+            from .chat_text_protocol import check_sampling as check_chat
+            check_chat(request.sampling_params, transcript.stop_ids, self.max_tokens,
+                       len(native.prompt_token_ids), self.max_model_len)
+        elif transcript is not None:
             from .mswea_protocol import check_sampling
-            check_sampling(request.sampling_params, transcript.stop_ids)
+            check_sampling(request.sampling_params, transcript.stop_ids, self.max_tokens)
         session = self.adapter.sessions[body["session"]]
         # Random50 seed: vLLM's chained hash of the last full hash block, computed
         # by the engine core anyway (no extra hashing here). Its block is the
@@ -123,11 +164,23 @@ class SplitPrivateEndpoint:
             model=session.model, renderer=session.renderer, native_prefix=native_prefix,
             transcript=transcript)
         require(binding.request not in self.claims, "private binding replay")
+        # Authority.render checked request.prompt_token_ids == binding.tokens (all
+        # ints); the native request's tokens (all ints, hashed above) are the same
+        # list in vLLM (Request keeps the EngineCoreRequest's prompt_token_ids), so
+        # the hash above is the binding's prompt digest (phase 1 sends it). Any
+        # other list is compared once; if it differs, phase 1 hashes the binding.
+        tokens = native.prompt_token_ids
+        if tokens is request.prompt_token_ids or tokens == request.prompt_token_ids:
+            from remote_ra_native_growing.contract import remember_prompt_digest
+            remember_prompt_digest(binding, assigned.prompt_hash)
         if binding.rebuild:
             self.rebuild(binding)
         source=body['source']
+        # kv-session: the selection reads the source itself (new messages, objective).
+        conversation = (source if self.protocol == KV_SESSION else
+                        source.get('conversation',source.get('messages')))
         self.claims[binding.request] = dict(request=request, binding=binding, mac=mac,
-            conversation=source.get('conversation',source.get('messages')))
+            conversation=conversation)
         return request, binding
 
     def rebuild(self, binding):
@@ -185,9 +238,23 @@ class SplitPrivateEndpoint:
                          else (yield from steps(binding, geo, claim['conversation'])))
             phase1 = None
             if geo.local_turn > 0:
+                release = getattr(self.core, '_remote_ra_idle_release', None)
+                if release is not None and session.evicted:
+                    # --release-idle-pages: the Pages released under pressure come back
+                    # before phase 1, which attends to them.
+                    release.readmit(binding, session)
+                if self.phase1.overlap:
+                    # --admission-overlap: one phase-1 lease at a time; wait for it parked.
+                    yield from self.phase1.lease_turn(binding.request)
                 ran = True
-                phase1 = self.phase1.run(binding, geo, allocation_generation=generation,
-                    goal_payload=query.goal_payload if query is not None else None)
+                goal_payload = query.goal_payload if query is not None else None
+                if self.phase1.in_step:
+                    # --phase1-in-step: the admission may park while phase 1 runs in a step.
+                    phase1 = yield from self.phase1.run_steps(binding, geo,
+                        allocation_generation=generation, goal_payload=goal_payload)
+                else:
+                    phase1 = self.phase1.run(binding, geo, allocation_generation=generation,
+                        goal_payload=goal_payload)
             if selection is not None:
                 ranking, count, receipt = selection.plan_turn(binding, geo, generation, query, phase1)
             else:

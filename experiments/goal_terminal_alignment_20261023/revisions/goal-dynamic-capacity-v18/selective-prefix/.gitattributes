@@ -1,0 +1,19 @@
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.diff text eol=lf
+*.sh text eol=lf
+*.yaml text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+LICENSE text eol=lf
+# Hash-pinned runtime sources must retain their exact qualified bytes.
+source-overlay/** -text
+# The immutable upstream dram_kv subtree is CRLF and reviewed by pinned bytes.
+# Display its LF-to-original-CRLF restoration as binary, not whitespace edits.
+source-overlay/dram_kv/** -diff
+# The pip constraints of clean-install job 3270721, byte-identical (its last line ends in CRLF).
+examples/env/constraints-3270721.txt -text
+# The PoC's SWE-bench runner and prompt, byte-identical to the pinned copies the pilots ran.
+examples/swebench/upstream/** -text

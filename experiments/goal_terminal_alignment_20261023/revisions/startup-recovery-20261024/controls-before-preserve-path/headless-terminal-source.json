@@ -1,0 +1,15 @@
+{
+  "files": {
+    "instruction.md": "004ac3efa98dd4c564f3888fe199962772d23de405c96ec9232c1eab1a2089e8",
+    "solution/headless_terminal.py": "4e9006fca4a70acefd214644aa66607bdc632e7f9cbc63e9d878fa36c6c097a2",
+    "solution/solve.sh": "fbfc2d1f9fb861422055d4b968a5089874ade0f65da04e44eb4d13bc71a93fd7",
+    "environment/base_terminal.py": "697fd6435a5df3ee8c6f6f2546340c0609a424e53cb8fe80fdb131fe1e9f050f",
+    "environment/Dockerfile": "c17679907b17671ab6e363aebaa26464dac2d3d0cfd5680cb0bbe6160af17481",
+    "tests/test.sh": "bfaa32131cbbef985f9b0bbc3cb231ac51eb90579e6e3db55a2f09b5fa0f46b7",
+    "tests/test_outputs.py": "c6998195e29efb64f41f903b6a727059c4f0ee267f730cd7ffca5c1f7d99ab78"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "4d1448e9d3d0ef2043b6b888361a55e609a9ab8b07f4aca44c0ee870b2049c7e"
+}

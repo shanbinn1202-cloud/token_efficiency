@@ -1,0 +1,8 @@
+{
+  "time": 1792847660.701418,
+  "parent": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/goal-dynamic-capacity-v17",
+  "status": "unqualified_candidate",
+  "change": "Enable existing admission_overlap=16 in isolated candidate launcher. Main async scheduling already enabled. Long-Goal capacity wait now reached; no selection algorithm/resource change.",
+  "original_v17_gpu": "failed: overlap false skipped capacity hook",
+  "protected_algorithm_unchanged": true
+}

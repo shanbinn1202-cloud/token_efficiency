@@ -1,0 +1,6 @@
+{
+  "time": 1792833566.4269543,
+  "reason": "Exact Qwen renderer class guards incorrectly reject the existing pinned Gemma renderer subclass",
+  "change": "Allow precisely EngineSourceRenderer and Gemma4SourceRenderer; retain full ownership, identity, tokenizer, geometry checks",
+  "algorithm_changes": false
+}

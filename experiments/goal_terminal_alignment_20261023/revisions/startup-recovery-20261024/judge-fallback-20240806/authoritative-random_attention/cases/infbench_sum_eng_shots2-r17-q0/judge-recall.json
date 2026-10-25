@@ -1,0 +1,41 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383853.005951,
+  "prompt_sha256": "b76dc167842de4818660bf61ce7e28ec0fd0e96b1c38eb23d59e27d0e261531b",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **The novel opens with a description of the Maison Bowen, a boarding house in Paris.**\n   - The summary mentions that the story is centered on Lydia Leanne, a law student in Paris, and his relationship with Father Mikaela, living in the modest boarding house of Mme. Bowen. This supports key point 1.\n\n2. **The boarding house is owned by the widow Madame Bowen.**\n   - The summary mentions the boarding house of Mme. Bowen, but it does not specify that she is a widow. This partially supports key point 2.\n\n3. **Residents include law student Lydia de Leanne, agitator Torin, and retired vermicelli-maker Thad Mikaela.**\n   - The summary mentions Lydia Leanne and Torin but does not mention Thad Mikaela as a retired vermicelli-maker. This partially supports key point 3.\n\n4. **Thad Mikaela is ridiculed by other boarders for bankrupting himself to support his daughters.**\n   - The summary mentions that Mikaela gave his entire fortune to his daughters and is largely abandoned and shamed by them. This supports key point 4.\n\n5. **Leanne, originally from the south of France, is attracted to the upper class.**\n   - The summary does not mention Leanne's origin from the south of France but does mention his attraction to the upper class. This partially supports key point 5.\n\n6. **Leanne struggles to fit in but is tutored by his cousin, Madame de Kaylin.**\n   - The summary mentions that Leanne is tutored by the Vicomtesse de Kaylin, who serves as a mentor. This supports key point 6.\n\n7. **Leanne endears himself to Mikaela's daughter, Albie, by extracting money from his own poor family.**\n   - The summary mentions Leanne's romance with Albie but does not mention extracting money from his own poor family. This partially supports key point 7.\n\n8. **Torin tries to convince Leanne to pursue Thea, whose family fortune is blocked by her brother.**\n   - The summary does not mention this plot point. Key point 8 is not supported.\n\n9. **Torin offers to have Thea's brother killed in a duel to clear the way for Leanne.**\n   - The summary does not mention this plot point. Key point 9 is not supported.\n\n10. **Leanne refuses to go along with the plot but learns about the harsh realities of high society.**\n    - The summary does not mention this plot point. Key point 10 is not supported.\n\n11. **The boarders learn that Torin is a master criminal nicknamed Trompe-la-Mort.**\n    - The summary mentions that Torin is revealed to be Jacques Collin (Trompe-la-Mort), a notorious escaped convict and criminal mastermind. This supports key point 11.\n\n12. **Torin arranges for a friend to kill Thea's brother and is captured by the police.**\n    - The summary mentions Torin's capture by the police but does not mention arranging for a friend to kill Thea's brother. This partially supports key point 12.\n\n13. **Mikaela supports Leanne's interest in his daughter but is unable to help due to his own issues.**\n    - The summary mentions Mikaela's support for Leanne's interest in his daughter but does not specify his inability to help due to his own issues. This partially supports key point 13.\n\n14. **Mikaela's other daughter, Bridie, sells her husband's family jewelry to pay her lover's debts.**\n    - The summary mentions Bridie being trapped in a miserable, abusive marriage but does not mention selling her husband's family jewelry to pay her lover's debts. Key point 14 is not supported.\n\n15. **Mikaela suffers a stroke from grief over his impotence and his daughters' actions.**\n    - The summary mentions Mikaela's slow, agonizing death but does not specify a stroke from grief. Key point 15 is not supported.\n\n16. **Albie does not visit Mikaela on his deathbed, and Bridie arrives too late.**\n    - The summary mentions that neither daughter visits Mikaela on his deathbed, which supports key point 16.\n\n17. **Mikaela rages about his daughters' disrespect before dying.**\n    - The summary mentions Mikaela's longing for his daughters and their absence but does not specify him raging about their disrespect. This partially supports key point 17.\n\n18. **Mikaela's funeral is attended only by Leanne, a servant named Talon, and two paid mourners.**\n    - The summary mentions that Lydia is forced to pay for a pauper's funeral but does not specify the attendees. Key point 18 is not supported.\n\n19. **Mikaela's daughters send their empty coaches with their families' coat of arms instead of attending the funeral.**\n    - The summary does not mention this plot point. Key point 19 is not supported.\n\n20. **After the funeral, Leanne faces Paris as evening lights appear.**\n    - The summary mentions Lydia looking out over the lights of Paris after Mikaela's death. This supports key point 20.\n\n21. **Leanne sets out to dine with Albie.**\n    - The summary does not mention this plot point. Key point 21 is not supported.\n\n22. **Leanne declares to the city: '\u00c0 nous deux, maintenant!' ('It's between you and me now!')**\n    - The summary mentions Lydia declaring \"war\" on society, which aligns with the sentiment of the quote. This supports key point 22.\n\nBased on the evaluation, the supported key points are 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 16, 17, 20, and 22. Therefore, the recall score is 14.\n\nOutput: {\"supported_key_points\": [1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 16, 17, 20, 22], \"recall\": 14}",
+  "parsed": {
+    "supported_key_points": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      11,
+      12,
+      13,
+      16,
+      17,
+      20,
+      22
+    ],
+    "recall": 14
+  },
+  "usage": {
+    "completion_tokens": 1302,
+    "prompt_tokens": 3893,
+    "total_tokens": 5195,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

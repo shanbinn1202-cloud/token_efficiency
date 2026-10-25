@@ -1,0 +1,120 @@
+{
+  "id": "42dde160-d994-4d15-b913-e69009a9ed04",
+  "task_name": "db-wal-recovery",
+  "trial_name": "db-wal-recovery-native-rootfs-v36-nop-1792849981",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/db-wal-recovery-native-rootfs-v36-nop-1792849981",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/db-wal-recovery"
+  },
+  "source": null,
+  "task_checksum": "a2d957bfba26a7dbbdf5643578491a579c8d60765b531a1f29b8a73ee9463057",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/db-wal-recovery",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "db-wal-recovery-native-rootfs-v36-nop-1792849981",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "nop",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {},
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "nop",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 0.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T13:53:01.141242Z",
+  "finished_at": "2026-10-24T13:53:59.948814Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T13:53:01.152711Z",
+    "finished_at": "2026-10-24T13:53:48.691048Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T13:53:48.691090Z",
+    "finished_at": "2026-10-24T13:53:48.692744Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T13:53:48.693768Z",
+    "finished_at": "2026-10-24T13:53:48.694524Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T13:53:48.727452Z",
+    "finished_at": "2026-10-24T13:53:54.428874Z"
+  },
+  "step_results": null
+}

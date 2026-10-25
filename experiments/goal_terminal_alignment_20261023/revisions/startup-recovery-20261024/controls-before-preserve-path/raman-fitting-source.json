@@ -1,0 +1,14 @@
+{
+  "files": {
+    "instruction.md": "1fa59a89d88daf6a4b2d422955f53779b461880b527f40d79c71b16e0ee52433",
+    "solution/solve.sh": "cc803d3c254063f82ab1da5b59f276951d50d1f307657606027a45dc035a53ee",
+    "environment/Dockerfile": "8fd5c0f21a6914cd440d10c84c9db06fec606f20dc3e0363b17a3b8c220dc4d9",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "171fae772ccf262aec8ddac5bd2c6c731eed842421f5d8439a330b158c9f8c13",
+    "environment/task-deps/graphene.dat": "cac96a29e73251e625cb2d17b5079250071b148e6792e0aa349632953dbfa094"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "6af8b47940032e643b9529c1d1d467e55efa1315981505cc1b0a1c1323e67e0a"
+}

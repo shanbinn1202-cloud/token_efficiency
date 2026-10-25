@@ -1,0 +1,20 @@
+{
+  "files": {
+    "instruction.md": "ffaadcbf9f576b5d5e087d2a06a4b525dd52c6b84d43eb9d85107f0a9aebcb5d",
+    "solution/solve.sh": "c9291da2bf6d504896b1259bf3d896c7ca29d71630975c49493805f758d138cc",
+    "environment/cvxopt_benchmark.py": "c49315473bef2ebaa7829ccec849b31d964f0a5a00492a515952d1db5ffebdbd",
+    "environment/portfolio_optimized.py": "e289125b4113921152117280a49a0294430bd1dca76f1515c7d79942cb41f5e5",
+    "environment/setup.py": "4712ead66edc6684c45880954e83d8b9a915bdaf0b60ebb0ee895a5b740a4c09",
+    "environment/Dockerfile": "3d0210dedc3a9c0a7956369ba7025fbf6cd4e1bf9eb556bd3a8cbd06092904e6",
+    "environment/portfolio_baseline.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+    "environment/portfolio_optimized.c": "42bd3baf5bdf3c8a8052a0d59ed0e2af72b64adbdb4d6fdf85bbaded36c3da41",
+    "environment/benchmark.py": "64b6e7a40f79ed90a550bc15249ebc09babda14efe04a85a3cf54acd7fb4819f",
+    "tests/test.sh": "25d5d5008edeab93d730b44f723687d2b08978f9f53750f62af8aeb1ecae90c6",
+    "tests/portfolio_baseline_protected.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+    "tests/test_outputs.py": "800fc762b0a107b197d17cc2c094858490f02f09f47af4e3ee84253594f97fa7"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "ec79b1c5712b30dc50c2739a7c19391014d160c270276c0fc6579d33d4d133ed"
+}

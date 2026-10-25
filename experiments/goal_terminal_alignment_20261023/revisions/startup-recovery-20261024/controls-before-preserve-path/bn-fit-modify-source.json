@@ -1,0 +1,13 @@
+{
+  "files": {
+    "instruction.md": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+    "solution/solve.sh": "813eb810cf041466468703ef14fdb06ada533b9accddf774eecc7a7191d5cb79",
+    "environment/Dockerfile": "8b0b1056e9c66c01a14a3d79332cc425498f2926b6deda13d200591ee5e5e6cc",
+    "tests/test.sh": "ea2adeb779621e9625d1f80a17f9d19b6ecec017b8ad8974b668a4a0fbdeb4c3",
+    "tests/test_outputs.py": "364069f893e336a021c907dd0ac11ff4c9e7ca7b4fa7ab506c360166960e455b"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "3a464e6dbdf1fb5f20ca2ecfd0736cb06eb2a9164665cba51af70935352eb53d"
+}

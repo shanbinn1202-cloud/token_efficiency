@@ -1,0 +1,9 @@
+{
+  "task_ids": [
+    "mteb-leaderboard",
+    "mteb-retrieve"
+  ],
+  "cause": "Unbounded transitive install selected Transformers5.20.2/SentenceTransformers6.2.0 incompatible with original MTEB AutoModelForVision2Seq API; Pillow omitted.",
+  "change": "Isolated candidate compatible dependency versions Transformers4.51.3, ST3.4.1, Pillow11.2.1. Original MTEB pins, task inputs, model revision, solution and assertions unchanged. Native ARM64 KVM avoids observed fakeroot directory metadata error.",
+  "status": "candidate unpromoted"
+}

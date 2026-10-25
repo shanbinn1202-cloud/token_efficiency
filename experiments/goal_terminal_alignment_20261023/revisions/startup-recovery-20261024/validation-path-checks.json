@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "same-job validation retries are isolated",
+    "formal continuation preserves first allocation",
+    "missing first throughput fails closed",
+    "unsafe attempt tag rejected"
+  ],
+  "no_gpu_or_slurm_actions": true
+}

@@ -1,0 +1,31 @@
+{
+  "base": "/projects/bcjw/ssun4/token_efficiency/engines/vllm_024",
+  "engine": "/projects/bcjw/ssun4/token_efficiency/engines/vllm_024_gemma_20261017",
+  "changed": [
+    "vllm/tebench/geometry.py",
+    "vllm/tebench/random_attention.py",
+    "vllm/tebench/agentkv_connector.py",
+    "vllm/tebench/kv_session.py",
+    "vllm/tebench/intentkv.py",
+    "vllm/tebench/agentkv.py",
+    "vllm/model_executor/models/gemma4.py",
+    "vllm/tebench/server.py"
+  ],
+  "policy": "Preserve current eviction selectors, Triton kernels and async scheduler. Port only full-attention geometry, Q capture, and native local-window checkpoints from previously verified Gemma integration.",
+  "model_transport": "Native Gemma parser and stop tokens; current IntentKV budget verification retained.",
+  "algorithm_function_checks": {
+    "agentkv.py:worker_update": true,
+    "agentkv.py:after_sample": true,
+    "agentkv.py:prepare_queries": true,
+    "agentkv.py:capture_q": true,
+    "intentkv.py:worker_update": true,
+    "intentkv.py:after_sample": true,
+    "intentkv.py:capture_q": true,
+    "random_attention.py:worker_update": true,
+    "random_attention.py:after_sample": true,
+    "kv_session.py:worker_update": true,
+    "kv_session.py:compact_heads": true,
+    "kv_session.py:apply_worker_updates": true
+  },
+  "parser_note": "v0.24 has no _prompt_ends_in_open_reasoning helper; identical native boundary-ID scan resides in isolated model_chat.py."
+}

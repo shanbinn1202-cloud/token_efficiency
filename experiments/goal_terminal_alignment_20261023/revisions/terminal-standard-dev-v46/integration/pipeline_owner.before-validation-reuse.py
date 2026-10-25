@@ -1,0 +1,51 @@
+"""Submit only validated new runs. Never restart or alter existing experiments."""
+import fcntl,hashlib,json,subprocess,sys,time
+from pathlib import Path
+from fingerprints import R,digest
+from qualify_goal_results import promote
+LOCK=(R/'pipeline.lock').open('a');fcntl.flock(LOCK,fcntl.LOCK_EX|fcntl.LOCK_NB)
+def write(p,d):
+ tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(d,indent=2));tmp.replace(p)
+def terminal_qualification():
+ target=R/'qualification/terminal-all.json'
+ if target.exists():return
+ imageproof=R/'terminal-images/qualification.json'
+ if not imageproof.exists():return
+ from terminal_qualification_policy import require_coverage,APPROVAL
+ coverage=json.loads(imageproof.read_text())
+ try:require_coverage(coverage)
+ except (RuntimeError,FileNotFoundError):return
+ controls=R/'terminal-images/qualification/adaptive-rejection-sampler-nop.json'
+ if not controls.exists() or not json.loads(controls.read_text()).get('passed'):return
+ passed=[]
+ for p in (R/'terminal/qwen/vanilla/allocations').glob('*/passed.json'):
+  d=json.loads(p.read_text())
+  if d.get('validation') and d['summary']['completed']==d['summary']['expected'] and not d['summary']['infrastructure_errors']:passed.append(p)
+ if not passed:return
+ from terminal_fingerprints import identity
+ sources=identity()
+ passed=[p for p in passed if (p.parent/'source-at-start.json').exists() and json.loads((p.parent/'source-at-start.json').read_text())==sources]
+ if not passed:return
+ evidence=[imageproof,controls,*passed]+list((R/'terminal-images/qualification').glob('*-oracle.json'))+list((R/'terminal-images/qualification').glob('*-nop.json'))+list((R/'terminal-images/qualification').glob('*-source.json'))
+ if coverage.get('approved_reference_exceptions'):evidence.append(APPROVAL)
+ write(target,{'passed':True,'time':time.time(),'source_sha256':sources,'evidence_sha256':{str(p):digest(p) for p in evidence},'reference_passed':len(coverage['reference_passed_tasks']),'approved_reference_exceptions':coverage.get('approved_reference_exceptions',[]),'checks':['All89originaltasks retained; reference failures explicitly distinguished from passes','NOPnegativecontrol','officialTerminus2 real QwenVanilla trial','nativeTriton runtime checked']})
+plan=[('goal',m,b) for m in ['qwen','gemma'] for b in ['swebench','memagent']]+[('terminal',m,k) for m in ['qwen','gemma'] for k in ['vanilla','random_attention','sliding_window','intentkv','agentkv','goal']]
+(R/'queue').mkdir(exist_ok=True);(R/'qualification').mkdir(exist_ok=True)
+while not (R/'STOP').exists():
+ promote();terminal_qualification()
+ states=[]
+ for kind,model,name in plan:
+  key='-'.join([kind,model,name]);root=R/'queue'/key;root.mkdir(exist_ok=True)
+  marker=root/'submitted.json';qual=R/'qualification'/((kind+'-'+model if kind=='goal' else 'terminal-all')+'.json')
+  allowed=qual.exists() and (kind!='terminal' or name!='goal' or (R/'qualification'/('goal-'+model+'.json')).exists())
+  if allowed and not marker.exists():
+   unit='aligned-'+key+'-20261023';existing=subprocess.run(['systemctl','--user','show',unit+'.service','-p','LoadState','--value'],stdout=subprocess.PIPE).stdout.decode().strip()
+   if existing=='not-found':
+    cmd=['systemd-run','--user','--unit='+unit,'--property=Type=exec','--property=WorkingDirectory='+str(R),'--property=StandardOutput=append:'+str(root/'owner.log'),'--property=StandardError=append:'+str(root/'owner.log'),sys.executable,'-B','-u',str(R/'allocation_owner.py'),kind,model,name]
+    subprocess.run(cmd,check=True)
+   write(marker,{'unit':unit,'time':time.time(),'qualification':str(qual)})
+  p=root/'state.json';states.append({'key':key,**(json.loads(p.read_text()) if p.exists() else {'phase':'awaiting_validation'})})
+ complete=sum(x['phase']=='complete' for x in states)
+ write(R/'pipeline-state.json',{'time':time.time(),'complete':complete,'expected':16,'runs':states,'old_jobs_untouched':True})
+ if complete==16:break
+ time.sleep(60)

@@ -1,0 +1,9 @@
+{
+  "time": 1792828083.533685,
+  "before_sha256": "9cf80c8b796121875817ae48e773c0fa8bf3a817569b4b0d9d831ad92ee5cfa0",
+  "after_sha256": "4e653a0ba41485bf83ba3581555d4adf9491b63f1f8fc3de9c6d5aae0af1ce3b",
+  "reason": "OCI layer hosts file empty; Selenium localhost connection failed; exact Selenium passed after restoring loopback records",
+  "scope": "private rootfs /etc/hosts only; source/task/solution/test unchanged",
+  "verification_log": "selenium-hosts.log",
+  "controls": "archive all prior backend results and rerun"
+}

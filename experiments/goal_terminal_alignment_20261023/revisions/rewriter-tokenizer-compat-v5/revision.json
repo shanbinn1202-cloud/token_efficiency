@@ -1,0 +1,6 @@
+{
+  "time": 1792833204.601881,
+  "reason": "lmformatenforcer imports removed vllm.transformers_utils.tokenizer.MistralTokenizer; add re-export of identical v0.24 implementation",
+  "algorithm_changes": false,
+  "validation": "require every rewrite to succeed; prior v4 async transport passed but overall validation invalid due auxiliary HTTP500"
+}

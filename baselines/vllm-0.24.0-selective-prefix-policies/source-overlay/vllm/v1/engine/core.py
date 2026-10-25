@@ -490,12 +490,20 @@ class EngineCore:
         was executed.
         """
 
+        # Selective prefix --phase1-in-step (remote_ra_live_v2.phase1_step): a parked
+        # admission's phase 1 may run as one more row of this step; None when off.
+        phase1 = getattr(self, "_remote_ra_phase1_steps", None)
         # Check for any requests remaining in the scheduler - unfinished,
         # or finished and not yet removed from the batch.
         if not self.scheduler.has_requests():
+            if phase1 is not None:
+                phase1.idle()
             return {}, False
         scheduler_output = self.scheduler.schedule(self._should_throttle_prefills())
-        future = self.model_executor.execute_model(scheduler_output, non_block=True)
+        # The scheduler keeps and updates from its own output; the executed copy
+        # may also carry the probe row.
+        executed = scheduler_output if phase1 is None else phase1.before(scheduler_output)
+        future = self.model_executor.execute_model(executed, non_block=True)
         grammar_output = self.scheduler.get_grammar_bitmask(scheduler_output)
         with (
             self.log_error_detail(scheduler_output),
@@ -504,6 +512,8 @@ class EngineCore:
             model_output = future.result()
             if model_output is None:
                 model_output = self.model_executor.sample_tokens(grammar_output)
+        if phase1 is not None:
+            model_output = phase1.after(executed, model_output)
 
         # Before processing the model output, process any aborts that happened
         # during the model execution.
@@ -1331,10 +1341,12 @@ class EngineCoreProc(EngineCore):
 
     def has_work(self) -> bool:
         """Returns true if the engine should be stepped."""
+        phase1 = getattr(self, "_remote_ra_phase1_steps", None)
         return (
             self.engines_running
             or self.scheduler.has_requests()
             or bool(self.batch_queue)
+            or (phase1 is not None and phase1.pending())
         )
 
     def is_running(self) -> bool:
@@ -1441,6 +1453,11 @@ class EngineCoreProc(EngineCore):
         remote_ra_live_v2.goal_async) once its Goal is built, as this pass's
         registered-add; its ack is queued when the admission ends. During
         shutdown a parked admission is not continued: teardown aborts it."""
+        phase1 = getattr(self, "_remote_ra_phase1_steps", None)
+        if phase1 is not None and self.is_running():
+            # --phase1-in-step: a phase 1 that cannot go into a step takes the
+            # separate pass here, where admissions ran before.
+            phase1.settle()
         if self.is_running() and self._remote_ra_goal_built():
             from registered_add_timing import timed
             self._remote_ra_registered = True
@@ -1589,7 +1606,10 @@ class EngineCoreProc(EngineCore):
 
     def _decode_registered_add(self, data_frames):
         # Decode only on the input thread. No provider or scheduler mutation.
-        if len(data_frames) != 1 or len(data_frames[0]) > 5 * 1024 * 1024:
+        # 5 MiB at the 65536- and 131072-token limits; compose_engine sets a
+        # 262144-token server's bound once at startup (context_limits.request_caps).
+        limit = getattr(self, "_remote_ra_registered_frame_bytes", 5 * 1024 * 1024)
+        if len(data_frames) != 1 or len(data_frames[0]) > limit:
             raise ValueError("bounded single registered-add frame required")
         from registered_add_timing import timed
         with timed("engine_decode"):

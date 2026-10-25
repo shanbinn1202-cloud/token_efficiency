@@ -1,0 +1,16 @@
+{
+  "files": {
+    "instruction.md": "342def78177f9bc41bea4d11af679bc385a9dda2ac8a1e425be384a5b7f937b6",
+    "solution/solve.sh": "802d81ec064fad3050bbade95a2f847ac24e0b7f80fa69b0bcee0347dc92fe77",
+    "environment/Dockerfile": "7d9aba072a4a907229728b9739c8cf821fc2c98450babd64452682caf3759c84",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "1422b345ba3aacdfc4184e962811b6379988435896c50d8cf62903e70990c5d1",
+    "environment/inputs/bob_calendar.ics": "c97e85dbcdd756758f8a80f4db5fd5c1dcacee79298e4d2262f46de5ff680b50",
+    "environment/inputs/alice_calendar.ics": "5a5d45804bffd339c2479d49e76fe817b38244d14d389afe1de583443808ecbc",
+    "environment/inputs/carol_calendar.ics": "32a0f8687637df0a12b8e5c56d49c4192bc3e790856943632d70f237c7c1363b"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "db3d457bcae683d1d0dab33f2a059da9ef30beaa08271d766fae09d1c0054c83"
+}

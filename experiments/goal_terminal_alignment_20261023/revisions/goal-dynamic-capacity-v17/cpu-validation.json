@@ -1,0 +1,18 @@
+{
+  "time": 1792846992.674217,
+  "passed": true,
+  "tests": [
+    "three simultaneous long-request memory pressure makes progress",
+    "exact resident page identities preserved during wait",
+    "decode headroom and pending phase1 respected",
+    "readiness does not invoke worker RPC",
+    "idle victim release and impossible pool ceiling",
+    "cancel propagates before phase1 allocation",
+    "prepared worker eviction preserves catalog and native records",
+    "active worker allocation cannot be evicted",
+    "144 original-vs-refactored phase1 allocation shapes"
+  ],
+  "algorithm_files_unchanged": 37,
+  "candidate_manifest_sha256": "88e73c8e14239d54c1a3ab87666a38180a50304e6f702710d68678aa7403939f",
+  "test_source_sha256": "3415cb415d10d64422891ea1dd6f3840eed6707085b7365fe8f2025276d13bbf"
+}

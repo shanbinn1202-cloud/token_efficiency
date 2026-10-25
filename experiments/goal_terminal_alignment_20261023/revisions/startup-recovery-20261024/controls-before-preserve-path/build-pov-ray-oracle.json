@@ -1,0 +1,126 @@
+{
+  "id": "8fc05636-8412-47e8-b867-96d5a9741e9a",
+  "task_name": "build-pov-ray",
+  "trial_name": "build-pov-ray-oracle-1792828538",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/build-pov-ray-oracle-1792828538",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/build-pov-ray"
+  },
+  "source": null,
+  "task_checksum": "743f3449a2f18d8da789d867515dccef44158a926aaa5d854ba454e4ab72899d",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/build-pov-ray",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "build-pov-ray-oracle-1792828538",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T07:55:38.349548Z",
+  "finished_at": "2026-10-24T07:57:28.650928Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T07:55:38.361208Z",
+    "finished_at": "2026-10-24T07:56:57.378609Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T07:56:57.378635Z",
+    "finished_at": "2026-10-24T07:56:57.379331Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T07:56:57.379955Z",
+    "finished_at": "2026-10-24T07:57:11.718732Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T07:57:11.776830Z",
+    "finished_at": "2026-10-24T07:57:27.778897Z"
+  },
+  "step_results": null,
+  "passed": true,
+  "expected_reward": 1.0,
+  "image_sha256": "97e71199724e9d645aed0c7699ddb260e971c675d7b069b709d7b342980e6ac7",
+  "backend_sha256": "4e653a0ba41485bf83ba3581555d4adf9491b63f1f8fc3de9c6d5aae0af1ce3b"
+}

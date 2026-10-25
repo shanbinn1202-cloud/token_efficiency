@@ -1,0 +1,8 @@
+{
+  "formal": false,
+  "task": "qemu-alpine-ssh",
+  "change": "Tar extraction retains current owner in single-ID root namespace instead of trying to chown public uv binaries to publisher UID1001. Preserves archive content/modes; no fakeroot metadata or assertion changes.",
+  "evidence": "v44 original reference successfully started inner SSH; verifier installer failed tar chown outside namespace UID map",
+  "must_verify_actual_test_execution": true,
+  "other_88_tasks_unchanged": true
+}

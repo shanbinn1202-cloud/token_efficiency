@@ -1,0 +1,131 @@
+--- before/contract.py
++++ after/contract.py
+@@ -433,6 +433,11 @@
+     zero: tuple[int, ...]
+     incarnations: Mapping[int, int]
+     payload_sha256: str
++    chunks: tuple = ()
++
++    def forwards(self):
++        return (((0,self.chunks[0][0],self.rows),)+self.chunks if self.chunks else
++                ((0,len(self.tokens),self.rows),))
+ 
+ 
+ @dataclass(frozen=True)
+@@ -506,17 +511,22 @@
+             rows += tuple(enumerate(more))
+         if self.goal is not None:
+             rows += tuple(enumerate(self.goal.rows))
++            for _,_,more in self.goal.chunks:rows += tuple(enumerate(more))
+         return frozenset((self.pool_of(g), b) for g, row in rows for b in row if b)
+ 
+ 
+ def _parse_goal(raw, attention, groups, page_tokens, taken, mamba_tokens=None, pools=None, window=False,
+-                limit=None):
++                limit=None, window_tokens=None):
+     """pools (decoupled only): each group's block pool; blocks are keyed (pool, id).
+     window (gemma-s1): the Goal forward's sliding rows are cold rows like its FA rows;
+     ``limit`` (gemma-goal): its tokens fit the layout's Goal transient."""
+-    require(type(raw) is dict and set(raw) == GOAL_LEASE_KEYS and
++    require(type(raw) is dict and set(raw) in (GOAL_LEASE_KEYS, GOAL_LEASE_KEYS | {"chunks"}) and
+             type(raw["lease_id"]) is str and _GOAL_ID.fullmatch(raw["lease_id"]) is not None
+             and hex64(raw["payload_sha256"]), "goal lease identity")
++    if "chunks" in raw:
++        require(window and pools and window_tokens and limit,'Goal chunks require a window layout')
++        from .goal_chunks import parse_window_goal
++        return parse_window_goal(raw,attention,groups,page_tokens,taken,pools,window_tokens,limit)
+     tokens = raw["tokens"]
+     require(_seq(tokens) and len(tokens) > 0 and all(_int(x) for x in tokens),
+             "goal tokens required")
+@@ -725,7 +735,7 @@
+     goal = raw["goal"]
+     if goal is not None:
+         goal = (_parse_goal(goal, att, len(rows), P, set(where), mamba_tokens(P, layout), pools,
+-                            **({"window": True, "limit": getattr(layout, "goal_tokens", 0)} if window else {}))
++                            **({"window": True, "limit": getattr(layout, "goal_tokens", 0), "window_tokens": layout.window_tokens} if window else {}))
+                 if decoupled else _parse_goal(goal, att, len(rows), P, set(where)))
+     return Phase1Lease(
+         raw["lease_id"], raw["request"], raw["binding"], raw["session"], raw["namespace"],
+--- before/window_phase1.py
++++ after/window_phase1.py
+@@ -112,16 +112,22 @@
+             from runtime_renderer import PLAIN_GOAL_SCHEMA
+             goal_tokens = [int(t) for t in self.renderer(dict(schema=PLAIN_GOAL_SCHEMA,
+                                                              text=goal_payload)).token_ids]
+-            require(0 < len(goal_tokens) <= self.max_tokens,
+-                    'PHASE1_TOO_LONG: Goal forward exceeds one native forward')
+-            # Its sliding blocks come out of the layout's Goal transient (gemma-goal).
+-            require(len(goal_tokens) <= self.goal_tokens,
+-                    'PHASE1_TOO_LONG: Goal forward of %d tokens exceeds the Goal transient of the '
+-                    'window layout (%d tokens)' % (len(goal_tokens), self.goal_tokens))
++            require(len(goal_tokens)>0,'Goal forward must contain tokens')
++        goal_plan=[];goal_ring=0
++        if goal_tokens:
++            if len(goal_tokens)<=min(self.max_tokens,self.goal_tokens):
++                goal_plan=[(0,len(goal_tokens))]
++            else:
++                from .phase1_chunks import aligned_chunks
++                step=min(self.max_tokens,self.goal_tokens-W)
++                require(step>=P,'Goal transient cannot hold its window and one new page')
++                goal_plan=aligned_chunks(0,len(goal_tokens),step,P)
++            goal_ring=phase1_ring(0,goal_plan,W,P)
++            require(goal_ring<=-(-self.goal_tokens//P),'Goal ring exceeds reserved transient')
+         fresh = list(geo.fresh_pages)
+         width = -(-len(goal_tokens) // P) if goal_tokens else 0
+         ring = phase1_ring(geo.C, plan, W, P)
+-        fa, sliding = len(att) * (len(fresh) + width), len(win) * (ring + width)
++        fa, sliding = len(att) * (len(fresh) + width), len(win) * (ring + goal_ring)
+         require(fa <= self.pool.get_num_free_blocks() and sliding <= self.mamba_pool.get_num_free_blocks(),
+                 'insufficient native blocks for phase 1: FA %d of %d free, sliding %d of %d free' %
+                 (fa, self.pool.get_num_free_blocks(), sliding, self.mamba_pool.get_num_free_blocks()))
+@@ -137,7 +143,7 @@
+             fresh_fa = {g: new(len(fresh)) for g in att}
+             ring_win = {g: new(ring, self.mamba_pool) for g in win}
+             goal_fa = {g: new(width) for g in att} if goal_tokens else {}
+-            goal_win = {g: new(width, self.mamba_pool) for g in win} if goal_tokens else {}
++            goal_win = {g: new(goal_ring, self.mamba_pool) for g in win} if goal_tokens else {}
+         except BaseException:
+             self._free(allocated)
+             raise
+@@ -189,12 +195,22 @@
+             owned = fa_owned + [b for g in win for b in rows[g][f0:]] + first_use
+             goal = None
+             if goal_tokens:
+-                grows = [[b.block_id for b in (goal_fa[g] if g in att else goal_win[g])] for g in range(count)]
++                from .goal_chunks import cold_rows
++                growsets={g:cold_rows(goal_plan,W,P,[b.block_id for b in goal_win[g]]) for g in win}
++                grows = [[b.block_id for b in goal_fa[g]] if g in att else list(growsets[g][0]) for g in range(count)]
++                gchunks=[[a,b,[list(growsets[g][k]) for g in win]] for k,(a,b) in enumerate(goal_plan) if k]
+                 gids = [(pools[g], b) for g, row in enumerate(grows) for b in row]
++                gseen=set(gids)
++                for k,(a,b) in enumerate(goal_plan[1:],1):
++                    for g in win:
++                        for bid in growsets[g][k]:
++                            key=(pools[g],bid)
++                            if bid and key not in gseen:gids.append(key);gseen.add(key)
+                 goal = dict(lease_id='goal-' + secrets.token_hex(16), tokens=goal_tokens, rows=grows,
+                             owned=[b for _, b in gids], zero=[b for pool, b in gids if pool == 0],
+                             incarnations={block_key(pool, b): tables[pool][b] for pool, b in gids},
+                             payload_sha256=sha256(goal_payload.encode()).hexdigest())
++                if gchunks:goal['chunks']=gchunks
+             lease = dict(lease_id='phase1-' + secrets.token_hex(16), request=binding.request,
+                 binding=binding.identity, session=binding.session, namespace=ns,
+                 generation=allocation_generation, epoch=binding.epoch,
+--- before/native_probe.py
++++ after/native_probe.py
+@@ -185,13 +185,13 @@
+                 goal=lease.goal
+                 from .phase1_chunks import aligned_chunks, private_probe_limit
+                 window=getattr(self.backend,'window',False)
+-                plan=([(0,len(goal.tokens))] if window else aligned_chunks(
++                plan=([f[:2] for f in goal.forwards()] if window else aligned_chunks(
+                     0,len(goal.tokens),private_probe_limit(self.runner.max_num_tokens),lease.mamba_tokens or lease.page_tokens))
+                 goal_parts=[]
+                 self.active.pop('goal_chunk_carry',None)
+                 for k,(start,end) in enumerate(plan):
+                     if k:self._cleanup_request(goal.lease_id)
+-                    grows=list(goal.rows)
++                    grows=list(goal.forwards()[k][2] if window else goal.rows)
+                     if not window:
+                         n=-(-end//(lease.mamba_tokens or lease.page_tokens))
+                         for g in self.owner.hybrid_groups:grows[g]=(0,)*(n-1)+(goal.rows[g][-1],)

@@ -1,0 +1,31 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383896.3252678,
+  "prompt_sha256": "981ec8e405acf815fc4676859d20c98921f7473683faf701bfdd7dabe70d90c8",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **The story is set in the late 1750s during the French and Indian War in western New York.**\n   - The summary mentions \"the wilderness of colonial America around Lake George and Lake Champlain\" and the conflict between the British and French, which aligns with the setting of the French and Indian War. \n   - **Supported.**\n\n2. **The French army is attacking Fort William Henry, commanded by Suzy Robyn.**\n   - The summary mentions Fort William Henry and Robyn but does not specify that the French army is attacking it or that Robyn is the commander.\n   - **Not supported.**\n\n3. **Robyn\u2019s daughters, Shay and Eli, set out from Fort Edward to visit their father.**\n   - The summary mentions Eli as the daughter of Robyn but does not mention Shay or that they set out from Fort Edward.\n   - **Not supported.**\n\n4. **They are escorted by Hamish Chad Cristina and guided by an Indian named Cael.**\n   - The summary does not mention Hamish Chad Cristina or that they are guided by Cael.\n   - **Not supported.**\n\n5. **Teegan Honour, a singing master and Calvinist, joins the group.**\n   - The summary does not mention Teegan Honour.\n   - **Not supported.**\n\n6. **They encounter Natty Bumppo, known as Theo, and his two Indian companions, Lukas and Maura.**\n   - The summary mentions Theo (Nathaniel) and his companions Lukas and Maura.\n   - **Supported.**\n\n7. **Theo reveals that Cael, a Huron, has betrayed the group by leading them in the wrong direction.**\n   - The summary mentions Cael as a cunning and ruthless Huron chief but does not specify this betrayal.\n   - **Not supported.**\n\n8. **The Europeans attempt to capture Cael, but he escapes.**\n   - The summary does not mention this event.\n   - **Not supported.**\n\n9. **Theo and the Europeans lead the group to safety in a cave near a waterfall.**\n   - The summary does not mention this event.\n   - **Not supported.**\n\n10. **Huron allies of Cael attack the group early the next morning.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n11. **Theo and the Europeans escape down the river, but Shay, Eli, Cristina, and Honour are captured by the Hurons.**\n    - The summary mentions Eli's capture but not the capture of Shay, Cristina, and Honour.\n    - **Partially supported.**\n\n12. **Cael celebrates the kidnapping and proposes to free Shay if Eli marries him.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n13. **Eli, who has romantic feelings for Maura, refuses Cael's proposal.**\n    - The summary mentions Eli and Maura but does not mention this proposal or Eli's feelings.\n    - **Not supported.**\n\n14. **Theo and the Europeans rescue the captives and kill all the Hurons except Cael, who escapes.**\n    - The summary mentions attempts to rescue Eli but does not mention the killing of Hurons or Cael's escape.\n    - **Not supported.**\n\n15. **The group reaches Fort William Henry after a harrowing journey.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n16. **Eli and Shay reunite with their father, Robyn, inside the fort.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n17. **The English forces call for a truce, and Robyn learns he must surrender the fort.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n18. **Robyn reveals to Cristina that Eli\u2019s mother was part 'Negro,' explaining her dark complexion.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n19. **During the withdrawal from Fort William Henry, the French-allied Indians attack the retreating English troops.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n20. **In the chaos, Cael recaptures Eli, Shay, and Honour and escapes into the forest.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n21. **Cristina, Theo, Robyn, and the Europeans pursue Cael.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n22. **Honour explains that Cael has separated his captives, sending Eli to a Delaware camp and Shay to a Huron camp.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n23. **The group rescues Shay from the Hurons, and Cristina confesses his romantic interest in her.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n24. **At the Delaware village, Maura reveals his heritage and demands the release of his friends except Eli.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n25. **A battle ensues, resulting in Eli's death and Cael's eventual demise.**\n    - The summary mentions a battle resulting in Eli's death and Cael's demise.\n    - **Supported.**\n\n**Supported key points: 1, 6, 11 (partially), 25.**\n\n**Recall: 3 (considering partial support for key point 11).**\n\nOutput: {\"supported_key_points\": [1, 6, 11, 25], \"recall\": 3}",
+  "parsed": {
+    "supported_key_points": [
+      1,
+      6,
+      11,
+      25
+    ],
+    "recall": 3
+  },
+  "usage": {
+    "completion_tokens": 1201,
+    "prompt_tokens": 3661,
+    "total_tokens": 4862,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

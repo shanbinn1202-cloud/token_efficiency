@@ -24,7 +24,8 @@ from vllm.entrypoints.serve.utils.orca_metrics import metrics_header
 from vllm.logger import init_logger
 
 from route_runtime import (route_cancellation, route_load_aware, invoke_chat,
-                           reject_dynamic_batch, dynamic, require_completion)
+                           reject_dynamic_batch, dynamic, require_completion,
+                           invoke_session_close, session_close_status, chat_refusal)
 
 logger = init_logger(__name__)
 
@@ -61,7 +62,14 @@ async def create_chat_completion(request: ChatCompletionRequest, raw_request: Re
     if handler is None:
         raise NotImplementedError("The model does not support Chat Completions API")
 
-    generator = await invoke_chat(handler, request, raw_request)
+    try:
+        generator = await invoke_chat(handler, request, raw_request)
+    except Exception as error:
+        # chat-text protocol: a refused request answers with its own status and body.
+        refusal = chat_refusal(error)
+        if refusal is None:
+            raise
+        return JSONResponse(content=refusal[1], status_code=refusal[0])
 
     if isinstance(generator, ErrorResponse):
         return JSONResponse(
@@ -107,6 +115,62 @@ async def create_batch_chat_completion(
         return JSONResponse(content=result.model_dump(), status_code=result.error.code)
 
     return JSONResponse(content=result.model_dump())
+
+
+@router.post("/v1/sessions/close", dependencies=[Depends(validate_json_request)])
+async def close_session(raw_request: Request):
+    """Session pool (serve.py --max-running-sessions): close one startup task's
+    session when its agent is done. Loopback only; JSON body {"instance_id"}."""
+    try:
+        receipt = await invoke_session_close(raw_request)
+    except Exception as error:
+        status = session_close_status(error)
+        return JSONResponse(content=dict(error=dict(message=str(error)[:4096],
+                                                    type=type(error).__name__, code=status)),
+                            status_code=status)
+    return JSONResponse(content=dict(receipt, object="session.close"))
+
+
+# The kv-session protocol (serve.py --protocol kv-session; remote_ra_http.kv_session_route).
+@router.get("/v1/kv-session/info")
+async def kv_session_info(raw_request: Request):
+    """The kv-session server's method, budget and options."""
+    from remote_ra_http.kv_session_route import invoke_info
+    status, content = await invoke_info(raw_request)
+    return JSONResponse(content=content, status_code=status)
+
+
+@router.post("/v1/kv-session/complete", dependencies=[Depends(validate_json_request)])
+async def kv_session_complete(raw_request: Request):
+    """One token-level turn of a kv-session session (only the new tail is sent)."""
+    from remote_ra_http.kv_session_route import invoke_complete
+    status, content = await invoke_complete(raw_request, ChatCompletionRequest)
+    return JSONResponse(content=content, status_code=status)
+
+
+@router.post("/v1/kv-session/close", dependencies=[Depends(validate_json_request)])
+async def kv_session_close(raw_request: Request):
+    """Close a kv-session session; 200 also for unknown and closed ids."""
+    from remote_ra_http.kv_session_route import invoke_close
+    status, content = await invoke_close(raw_request)
+    return JSONResponse(content=content, status_code=status)
+
+
+# The chat-text protocol (serve.py --protocol chat-text; remote_ra_http.chat_text_route).
+@router.get("/v1/chat-text/info")
+async def chat_text_info(raw_request: Request):
+    """The chat-text server's options and its client-session counts."""
+    from remote_ra_http.chat_text_route import invoke_info
+    status, content = await invoke_info(raw_request)
+    return JSONResponse(content=content, status_code=status)
+
+
+@router.post("/v1/chat-text/close", dependencies=[Depends(validate_json_request)])
+async def chat_text_close(raw_request: Request):
+    """Close a chat-text client session by its X-Session-ID (or its key_sha256)."""
+    from remote_ra_http.chat_text_route import invoke_close
+    status, content = await invoke_close(raw_request)
+    return JSONResponse(content=content, status_code=status)
 
 
 def attach_router(app: FastAPI):

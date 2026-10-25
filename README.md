@@ -14,7 +14,7 @@ SWE-bench 与 MemoryAgentBench 的 KV 策略实验代码和共享依赖。
 | 冻结 harness、Python 环境与编译缓存 | `/projects/bcjw/ssun4/vllm024_triton_six_20261008/` |
 | 十种任务组合的 GPU 启动验证 | `/projects/bcjw/ssun4/qwen_interactive_validation_20261010/` |
 
-五种方法为 Vanilla、Random、Sliding Window、AgentKV、IntentKV。当前 Qwen 配置为 262144 上下文、25 GiB KV pool、16 并发、16384 批次 token 容量、seed 42、max_tokens 4096、max_turns 120，使用异步调度和 Triton attention/GDN。SWE-bench 压缩预算为 8K，MemoryAgentBench 为 32K；Vanilla 保留完整历史。MemoryAgentBench 使用原有自定义工具框架。
+五种方法为 Vanilla、Random、Sliding Window、AgentKV、IntentKV。已有 Qwen 结果对应的配置为 262144 上下文、25 GiB KV pool、16 并发、16384 批次 token 容量、seed 42、max_tokens 4096、max_turns 120，使用异步调度和 Triton attention/GDN。SWE-bench 压缩预算为 8K，MemoryAgentBench 为 32K；Vanilla 保留完整历史。MemoryAgentBench 使用原有自定义工具框架。
 
 每个方法的配置分别在 `<SWE实验目录>/<方法>/8k.yaml` 和 `<Memory实验目录>/<方法>/memagent/32k.yaml`。已有任务由其控制器管理，请勿重复提交。
 
@@ -23,6 +23,14 @@ SWE-bench 与 MemoryAgentBench 的 KV 策略实验代码和共享依赖。
 ```bash
 python /projects/bcjw/ssun4/qwen_interactive_validation_20261010/gate.py
 ```
+
+## 新实验批次配置
+
+当前正式实验按模型设置 `max_num_batched_tokens`：Qwen 为 `16384`，Gemma 为 `4096`，同一模型在各 benchmark 上保持一致。上下文为 `262144`，KV pool 为 `25 GiB`，并发为 `16`，`seed=42`，`max_tokens=4096`。已有结果保留实际使用的配置；`configs/benchmarks_batch4k/` 是此前准备的 4K 配置，不代表已完成 Qwen 实验的实际启动参数。
+
+Gemma baseline 的正式配置位于 `experiments/gemma_full_20261017/formal/`。Goal 适配、独立重写模型服务、Terminal-Bench 2.0 的 Terminus-2/ARM64 运行环境及配置位于 `experiments/goal_terminal_alignment_20261023/`。源码、测试和配置随仓库发布；模型权重、Apptainer 镜像、安装环境、数据缓存、运行日志和评测产物保留在服务器，不纳入 Git。
+
+Terminal-Bench 的 `sanitize-git-repo/tests/test_outputs.py` 包含上游故意设置的伪凭据，因 GitHub push protection 不随本仓库发布；服务器上的原文件保持不变，完整测试需从原始 Terminal-Bench 数据集获取。
 
 ## 目录说明
 

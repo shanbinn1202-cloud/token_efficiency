@@ -1,0 +1,39 @@
+{
+  "time": 1792848263.836184,
+  "status": "upstream_reference_still_fails_on_current_RCSB_API",
+  "source": "https://raw.githubusercontent.com/harbor-framework/terminal-bench-2/56fc6147c7426e7588cc8e089c6f791da0aad0e9/protein-assembly/solution/solve.sh",
+  "upstream_sha256": "0a6622bc3d0342f95cdd838eb61a965a896c5f2cdb9b98e0410465b50fa15502",
+  "original_sha256": "3502b801f1260857a68a2ecbdc4497f8f7034e6a472990cd5fb9cd0eebc7dec9",
+  "formal_task_modified": false,
+  "diagnostic_change": "only official reference implementation; original image, instruction, tests, resources retained",
+  "unchanged_files": {
+    "instruction.md": "1bb2af1d85e9a823a8ae7273a87df8a3f67e2c93b06cddf34f0051a8b003f7c5",
+    "environment/plasmid.gb": "c9e31ad0ebb4d14b3820e46678c336d1f77af6ab1da36c53b5e9a9f10676cd74",
+    "environment/pdb_ids.txt": "ea338c4e1a776a338d7d302e80ceaee6379c1c85a031448851c07b0f764358c2",
+    "environment/pdb_ids.py": "6563926f2aa31848a3b8386d07d6810073df4521e6c1f9d11217798a2d26120f",
+    "environment/Dockerfile": "fad40752bc9fd32d60b946f076a03207fe9924cd71d7285ebd96a5e343808054",
+    "environment/antibody.fasta": "e0e13645b299470cb007f1daf13050010bf15cb7c22ff6042189ea1ca7a1c333",
+    "tests/test.sh": "9ede46648fc67c9ce61975503de3e0fcff0b0fb110adc0f9e1d240a608c267b5",
+    "tests/test_outputs.py": "44a05a2482aa7a8e70de95478de6560b6188e630336fca9d02b62dc69a096582"
+  },
+  "reference_original_failure": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/qualification/protein-assembly-oracle.json",
+  "upstream_issue": "https://github.com/harbor-framework/terminal-bench/issues/631",
+  "observed": {
+    "3ADF": {
+      "length": 226,
+      "X_positions_1_based": [
+        65
+      ],
+      "modified_monomer_features": []
+    },
+    "2H5Q": {
+      "length": 234,
+      "X_positions_1_based": [
+        71
+      ],
+      "modified_monomer_features": []
+    }
+  },
+  "original_and_supplemental_same_error": "EnforceTranslation fails at324-327 and1611-1614; no gblock produced",
+  "observed_at": 1792848630.4279387
+}

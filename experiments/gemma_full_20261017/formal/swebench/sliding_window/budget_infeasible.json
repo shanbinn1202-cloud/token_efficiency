@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "instance_id": "pylint-dev__pylint-7080",
+      "prefix_tokens": 10263,
+      "methods": [
+        "random_attention",
+        "sliding_window"
+      ],
+      "budget": 8192,
+      "reserve_tokens": {
+        "random_attention": 64,
+        "sliding_window": 0
+      },
+      "action": "count_as_failure"
+    }
+  ],
+  "authorization": "Preserve complete initial prefix and exact budget; impossible cases remain failures."
+}

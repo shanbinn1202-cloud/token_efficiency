@@ -1,0 +1,21 @@
+{
+  "time": 1792850692.3362896,
+  "authorized_by": "user",
+  "decision": "保留 89 题原样评估，单独注明该题问题（推荐）",
+  "task": "protein-assembly",
+  "reason": "Original Oracle and upstream follow-up Oracle fail with current RCSB sequence representation; original task and tests retained.",
+  "formal_task_count": 89,
+  "reference_failure_is_not_reference_pass": true,
+  "original_task_files_sha256": {
+    "instruction.md": "1bb2af1d85e9a823a8ae7273a87df8a3f67e2c93b06cddf34f0051a8b003f7c5",
+    "task.toml": "6004ee49220b9b13c974edb062b7796adc7555e28e80f39937664b0d3e6de429",
+    "solution/solve.sh": "3502b801f1260857a68a2ecbdc4497f8f7034e6a472990cd5fb9cd0eebc7dec9",
+    "environment/plasmid.gb": "c9e31ad0ebb4d14b3820e46678c336d1f77af6ab1da36c53b5e9a9f10676cd74",
+    "environment/pdb_ids.txt": "ea338c4e1a776a338d7d302e80ceaee6379c1c85a031448851c07b0f764358c2",
+    "environment/pdb_ids.py": "6563926f2aa31848a3b8386d07d6810073df4521e6c1f9d11217798a2d26120f",
+    "environment/Dockerfile": "fad40752bc9fd32d60b946f076a03207fe9924cd71d7285ebd96a5e343808054",
+    "environment/antibody.fasta": "e0e13645b299470cb007f1daf13050010bf15cb7c22ff6042189ea1ca7a1c333",
+    "tests/test.sh": "9ede46648fc67c9ce61975503de3e0fcff0b0fb110adc0f9e1d240a608c267b5",
+    "tests/test_outputs.py": "44a05a2482aa7a8e70de95478de6560b6188e630336fca9d02b62dc69a096582"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "time": 1792855688.6379495,
+  "reason": "Load reviewed validation-evidence and explicit reference-approval checks. Independent submitted Goal owner units unchanged.",
+  "before_goal_markers": {
+    "goal-qwen-swebench": {
+      "unit": "aligned-goal-qwen-swebench-20261023",
+      "time": 1792851079.4703777,
+      "qualification": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/qualification/goal-qwen.json"
+    },
+    "goal-gemma-swebench": {
+      "unit": "aligned-goal-gemma-swebench-20261023",
+      "time": 1792851079.5043368,
+      "qualification": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/qualification/goal-gemma.json"
+    },
+    "goal-qwen-memagent": {
+      "unit": "aligned-goal-qwen-memagent-20261023",
+      "time": 1792851079.488029,
+      "qualification": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/qualification/goal-qwen.json"
+    },
+    "goal-gemma-memagent": {
+      "unit": "aligned-goal-gemma-memagent-20261023",
+      "time": 1792851079.5208213,
+      "qualification": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/qualification/goal-gemma.json"
+    }
+  },
+  "terminal_submission_markers": 0
+}

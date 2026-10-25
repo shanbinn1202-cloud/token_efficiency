@@ -1,0 +1,21 @@
+{
+  "time": 1792837114.8473616,
+  "gpu_job": "3448149",
+  "gpu_state": "RUNNING",
+  "current_revision": "private-probe-memory-v11 + gemma-goal-query-chunks-v12",
+  "old_job": "3447727",
+  "old_job_ended": true,
+  "qwen8k_gpu_passed_before_latest_patches": true,
+  "qwen32k_gpu_last_failure": "CUDAOOMin16KprivateMLP; nowcap8KneedsGPUretest",
+  "cpu_all_required_tests_passed": true,
+  "formal_pipeline": "temporarilyheldforfinalsharedsourcevalidation",
+  "formal_runs_submitted": 0,
+  "last_checked": 1792841548.1426287,
+  "remaining_gate": "Fresh Qwen+Gemma 8K/32K GPU, real SWE/Mem, exact-source qualification",
+  "gpu_node": "gh151",
+  "current_stage": "Qwen 8K synthetic and real SWE passed; proceeding to 32K",
+  "qwen8k_latest_passed": true,
+  "qwen8k_requests": 48,
+  "qwen8k_actual_selections": 4,
+  "qwen8k_real_swe_completed": true
+}

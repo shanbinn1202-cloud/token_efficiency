@@ -1,0 +1,57 @@
+{
+  "expected": 200,
+  "completed": 200,
+  "inference_complete": true,
+  "scored": 165,
+  "by_skill": {
+    "Accurate_Retrieval": {
+      "expected": 50,
+      "completed": 50,
+      "scored": 50,
+      "score": 0.76,
+      "metrics": [
+        "substring_exact_match"
+      ],
+      "judge_pending": 0
+    },
+    "Conflict_Resolution": {
+      "expected": 50,
+      "completed": 50,
+      "scored": 50,
+      "score": 0.8,
+      "metrics": [
+        "substring_exact_match"
+      ],
+      "judge_pending": 0
+    },
+    "Long_Range_Understanding": {
+      "expected": 50,
+      "completed": 50,
+      "scored": 15,
+      "score": null,
+      "metrics": [
+        "llm_judge_f1"
+      ],
+      "judge_pending": 35
+    },
+    "Test_Time_Learning": {
+      "expected": 50,
+      "completed": 50,
+      "scored": 50,
+      "score": 0.42,
+      "metrics": [
+        "numeric_label_exact_match"
+      ],
+      "judge_pending": 0
+    }
+  },
+  "judge_pending": 35,
+  "infrastructure_errors": [],
+  "composite_score": null,
+  "scoring": "Official per-ability metrics with numeric-label exact match for ICL tasks; macro average of all four abilities.",
+  "label_scoring_version": "numeric_label_v1",
+  "statuses": {
+    "answered": 166,
+    "answer_length_limit": 34
+  }
+}

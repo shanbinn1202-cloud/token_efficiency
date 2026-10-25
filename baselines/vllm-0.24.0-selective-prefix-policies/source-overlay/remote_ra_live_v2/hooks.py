@@ -22,7 +22,15 @@ def before_forward(runner, scheduler_output, positions):
     require(len(runner.input_batch.req_ids)==len(scheduler_output.num_scheduled_tokens)>0 and
             set(runner.input_batch.req_ids)==set(scheduler_output.num_scheduled_tokens),
             'generation forward: batch differs from the scheduled requests')
-    return bridge.before_forward(runner, scheduler_output, positions)
+    from .native_probe import mixed_probe
+    mixed = mixed_probe(runner)
+    if mixed is None:
+        return bridge.before_forward(runner, scheduler_output, positions)
+    leases = bridge.before_forward(runner, scheduler_output, positions)
+    # --phase1-in-step: the armed probe row of this step (phase1_step).
+    from .phase1_step import probe_before_forward
+    probe_before_forward(runner, mixed, scheduler_output, positions)
+    return leases
 
 
 def after_forward(runner, scheduler_output, hidden_states):
@@ -34,7 +42,25 @@ def after_forward(runner, scheduler_output, hidden_states):
     bridge = getattr(runner, "_remote_ra_live_v2_bridge", None)
     if bridge is None:
         return None
-    return bridge.after_forward(runner, scheduler_output, pre_final_norm(runner, hidden_states))
+    from .native_probe import mixed_probe
+    mixed = mixed_probe(runner)
+    if mixed is None:
+        return bridge.after_forward(runner, scheduler_output, pre_final_norm(runner, hidden_states))
+    # --phase1-in-step: the generation rows, then the armed probe row (phase1_step).
+    hidden = pre_final_norm(runner, hidden_states)
+    receipts = bridge.after_forward(runner, scheduler_output, hidden)
+    from .phase1_step import probe_after_forward
+    probe_after_forward(runner, mixed, scheduler_output, hidden)
+    return receipts
+
+
+def force_eager(runner):
+    """Runner hook (execute_model): True dispatches this step to CUDAGraphMode.NONE.
+
+    Only with CUDA graphs on (cuda_graphs.attach) and only for a probe-only
+    pass; False otherwise, which is vLLM's default."""
+    from .cuda_graphs import force_eager as probe_pass
+    return probe_pass(runner)
 
 
 def output_stop(scheduler, request):

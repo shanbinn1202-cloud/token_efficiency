@@ -1,0 +1,15 @@
+{
+  "files": {
+    "instruction.md": "56c8ecdd0084a07f8c97986c43af5c37ed03dd5aa994da6735cf59806162d1b2",
+    "solution/solve.sh": "67c962a8b114fa1d55d1230c7d87309aa2b5ad643d9a955a2d74755fa8842e25",
+    "environment/Dockerfile": "44f2b5fc7311d8f336daaaca99dd4216b49355e67f50b494ebacf1b0f7c14e92",
+    "tests/reference_illum1.png": "bb084f430bbc9d5b623a656920670dc06cee6d9132a9d550be4a1b99e41ab9e0",
+    "tests/test.sh": "928d1497ad21aef0c456294e3784f1fddf8493410f23584da89f9e02ec6bd134",
+    "tests/test_outputs.py": "64d6ce107503714ada346e5606832ee886be9950971cf81523e73d8ba28e8d37",
+    "environment/deps/illum1.pov": "5a1f7f53ee0730c4923fcd21cd4a9c34719024d8557920441551ba7d96e75dc4"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "a753f99e0c7bcec14324bfb26919004c357d061caaaea1b480b9690a8b580760"
+}

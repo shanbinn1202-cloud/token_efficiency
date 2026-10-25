@@ -1,0 +1,14 @@
+{
+  "time": 1792826113.981544,
+  "changes": [
+    "Pinned missing harness dependencies copied separately; no existing engine packages changed",
+    "CUDA12 runtime search path restored alongside CUDA13 for compiled FlashInfer sampling",
+    "Actual scaffold imports preflight before GPU allocation",
+    "Background conversation watcher disabled at user request; current session supervises"
+  ],
+  "prior_jobs": [
+    "3443363",
+    "3444631"
+  ],
+  "algorithm_and_measurements_unchanged": true
+}

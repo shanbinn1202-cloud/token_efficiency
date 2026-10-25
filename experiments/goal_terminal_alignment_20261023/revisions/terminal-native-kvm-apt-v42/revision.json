@@ -1,0 +1,11 @@
+{
+  "formal": false,
+  "cause": "Rootless image build records flattened ownership (documented builder provenance); package tool modes can be owner-only. Actual root APT workers drop UID and cannot read/execute those files.",
+  "change": "Use APT Sandbox User=root within isolated KVM guest, as already done during original rootless image builds. Keep signature and TLS verification. No blanket chmod, no repository/test/assertion changes.",
+  "scope": "runtime privilege compatibility, all methods share it",
+  "other_fixes": [
+    "v41 sparse disk headroom",
+    "v41 cleanup race",
+    "v40 CIFAR cache native guest mapping"
+  ]
+}

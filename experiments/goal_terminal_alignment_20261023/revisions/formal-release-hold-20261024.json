@@ -1,0 +1,9 @@
+{
+  "time": 1792836617.634072,
+  "reason": "Keep formal source immutable: completing shared Goal long-query compatibility across Qwen/Gemma before formal submissions. GPU validation continues independently.",
+  "current_goal_gpu": "3447727",
+  "resume": "Restart existing goal-terminal-pipeline-20261023.service after final source GPU checks; do not duplicate owners",
+  "user_cancelled": false,
+  "resolved_at": 1792850995.6811028,
+  "resolution": "Both Qwen and Gemma passed exact v18 source 8K/32K async16 transport, real SWE tool execution, complete MemAgent history, pool cleanup and source checks. Release Goal groups only; Terminal still gated by its qualification."
+}

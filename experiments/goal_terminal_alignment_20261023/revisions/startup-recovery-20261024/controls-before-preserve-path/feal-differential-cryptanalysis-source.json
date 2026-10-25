@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "b4093780b283e5c9838997769fb7bca090e3f4cbbd2d7cb275ba60cdfd722572",
+    "solution/solve.sh": "6846dd2877aac95bc0b35a65c3b522403d21491407e02f07b7060ab4071a9620",
+    "environment/Dockerfile": "c40553e4cf830b7cd075a79dca1a29f5267c45c63b1cedb275383f58af356a30",
+    "environment/feal.py": "23cc077b9dce176a3aa3078681d1c8dff8c1b7959556c9457db57036d2885dfe",
+    "tests/feal.c": "bd4e9fb31e38073414d8a1930b2e67bc59eaee17e52f58133f781d297073e885",
+    "tests/feal.h": "d3ebd83bfbdb86f3543bda72a0693aabe478c6880ef78cb4a8e6c2e5a779759e",
+    "tests/feal_module.c": "1ae1c8a31b099b5742b35a3d6b1b70a2509d8d13d79ab74535e038e9a3379363",
+    "tests/test.sh": "106c27394c96343c03b4fbac14faac85542bce6628bccc66a5fe036d77f72daf",
+    "tests/setup.py": "d1d8f08966670ac8bfc1a9cfa8c16a6915eef2153a44ad6502daec2da83e08aa",
+    "tests/test_outputs.py": "585780e76d98094ad118d096f8c78f2281352dc9826e3687c4de152659631a3d"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "ee8a09c98c52c5598f44a1aa8908ac2d8bdae1c3ce6a5672a599cf21fc1e5fc5"
+}

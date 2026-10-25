@@ -1,0 +1,37 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383923.649864,
+  "prompt_sha256": "5935e3438ac23a3d9b6120d81dce865597a6afa3be532ab7de6dd15ea9c299a5",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Kelly Horatio is a young boy who struggles to fit in at his new school.**\n   - The summary does not mention Kelly's childhood or struggles at school.\n   - **Not supported.**\n\n2. **Kelly grows up to be mediocre and dull, failing his first medical exam.**\n   - The summary does not mention Kelly's mediocrity or failing a medical exam.\n   - **Not supported.**\n\n3. **He becomes a second-rate country doctor.**\n   - The summary mentions that Dr. Horatio is \"gentle but unremarkable,\" which implies he is a mediocre doctor.\n   - **Supported.**\n\n4. **Kelly's mother marries him off to a widow who dies soon after, leaving him with little money.**\n   - The summary does not mention Kelly's mother or a widow.\n   - **Not supported.**\n\n5. **Kelly falls in love with Richie, the daughter of a patient, and they marry.**\n   - The summary does not mention how Kelly and Richie met or their marriage.\n   - **Not supported.**\n\n6. **They set up house in Tostes, where Kelly has his medical practice.**\n   - The summary does not mention Tostes or the setting up of a house.\n   - **Not supported.**\n\n7. **Richie is disappointed with marriage, having dreamed of a more romantic life.**\n   - The summary mentions Richie feeling trapped by her marriage and seeking escape and passion, indicating disappointment.\n   - **Supported.**\n\n8. **After attending an extravagant ball, Richie dreams of a more sophisticated life.**\n   - The summary does not mention an extravagant ball.\n   - **Not supported.**\n\n9. **Richie becomes bored and depressed with village life, making her ill.**\n   - The summary mentions Richie feeling trapped by the boredom of provincial life.\n   - **Supported.**\n\n10. **Kelly moves the family to Yonville to improve Richie's health.**\n    - The summary mentions the setting in Yonville but does not specify the move to improve Richie's health.\n    - **Partially supported.**\n\n11. **In Yonville, they meet Scottie, the town pharmacist, and Sage, a law clerk.**\n    - The summary mentions Scottie, the pharmacist, and Sage, the lawyer.\n    - **Supported.**\n\n12. **Richie gives birth to a daughter, Fatima, but is disappointed as she wanted a son.**\n    - The summary does not mention Richie giving birth or her disappointment.\n    - **Not supported.**\n\n13. **Romantic feelings develop between Richie and Sage.**\n    - The summary mentions a clandestine affair between Richie and Sage.\n    - **Supported.**\n\n14. **Richie feels guilty and tries to be a dutiful wife, leading Sage to leave for Paris.**\n    - The summary does not mention Richie feeling guilty or Sage leaving for Paris.\n    - **Not supported.**\n\n15. **At an agricultural fair, Lawrence, a wealthy neighbor, declares his love for Richie.**\n    - The summary does not mention an agricultural fair or Lawrence declaring his love.\n    - **Not supported.**\n\n16. **Richie and Lawrence begin a passionate affair.**\n    - The summary mentions a passionate affair but incorrectly names Sage as Lawrence.\n    - **Partially supported.**\n\n17. **The townspeople gossip about Richie, but Kelly remains oblivious.**\n    - The summary does not mention townspeople gossiping or Kelly's obliviousness.\n    - **Not supported.**\n\n18. **Kelly's professional reputation suffers after a failed surgery with Scottie.**\n    - The summary does not mention a failed surgery or Kelly's professional reputation suffering.\n    - **Not supported.**\n\n19. **Richie becomes more involved in her affair with Lawrence, borrowing money for gifts.**\n    - The summary mentions Richie borrowing money but does not specify for gifts.\n    - **Partially supported.**\n\n20. **Lawrence eventually grows bored of Richie and leaves her, causing her to fall ill.**\n    - The summary mentions Sage growing weary of Richie and her emotional turmoil.\n    - **Supported.**\n\n21. **Kelly faces financial trouble due to Richie's debts and her treatment costs.**\n    - The summary mentions Richie falling into a financial abyss and borrowing heavily.\n    - **Supported.**\n\n22. **Kelly takes Richie to the opera in Rouen, where they meet Sage again.**\n    - The summary does not mention an opera in Rouen.\n    - **Not supported.**\n\n23. **Richie and Sage rekindle their romance and begin an affair.**\n    - The summary mentions a clandestine affair but does not specify rekindling.\n    - **Partially supported.**\n\n24. **Richie accumulates more debt with the moneylender Carolina.**\n    - The summary mentions Richie borrowing heavily but does not specify Carolina.\n    - **Partially supported.**\n\n25. **Carolina orders the seizure of Richie's property, leading her to desperation.**\n    - The summary mentions Scottie threatening Richie with distraint of her furniture.\n    - **Supported.**\n\n26. **Richie commits suicide by eating arsenic after failing to raise the money.**\n    - The summary mentions Richie committing suicide by ingesting arsenic.\n    - **Supported.**\n\n**Reasoning:**\n- Supported key points: 3, 7, 9, 11, 13, 16, 20, 21, 25, 26.\n- Partially supported key points: 10, 16, 19, 23, 24.\n\n**Output:**\n```json\n{\n  \"supported_key_points\": [3, 7, 9, 11, 13, 16, 20, 21, 25, 26],\n  \"recall\": 10\n}\n```",
+  "parsed": {
+    "supported_key_points": [
+      3,
+      7,
+      9,
+      11,
+      13,
+      16,
+      20,
+      21,
+      25,
+      26
+    ],
+    "recall": 10
+  },
+  "usage": {
+    "completion_tokens": 1223,
+    "prompt_tokens": 3721,
+    "total_tokens": 4944,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

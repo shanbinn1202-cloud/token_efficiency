@@ -164,7 +164,7 @@ async def invoke_contract(binding, handler, request, raw):
     # the existing serving controller still owns capture and cleanup.
     from remote_ra_live_v2.controller import (authorize_request, complete_request,
         fail_request, reserve_request, acquire_request, release_request,
-        checkpoint_request, capacity_wait_request)
+        checkpoint_request, capacity_wait_request, open_request)
     live = getattr(handler, '_remote_ra_live_four_policy', None)
     # Multi-session stage 1: the task message routes the request to its session,
     # whose one slot is taken without waiting. A request for a busy or closed
@@ -187,11 +187,15 @@ async def invoke_contract(binding, handler, request, raw):
             require(call.request is request, "unconsumed request authority identity differs")
             controller.registry._capabilities.pop(call.capability, None)
     try:
+        # Session pool: the task's session must be open (at most K are); the
+        # request waits FIFO for a close first, touching nothing else.
+        open_wait_s = await open_request(handler, request)
         # One server-wide FIFO admission before any capture or authorization
         # (captures have a 60 s TTL); a cancelled waiter fails its own session.
         queue_wait_s = await acquire_request(handler, request)
         if evidence is not None:
-            await evidence.begin(raw, handler, index, queue_wait_s)
+            pool = {} if open_wait_s is None else dict(open_wait_s=open_wait_s)
+            await evidence.begin(raw, handler, index, queue_wait_s, **pool)
         owner.request, owner.controller = request, controller
         while True:
             if live is None:
@@ -203,7 +207,7 @@ async def invoke_contract(binding, handler, request, raw):
                     "authorization did not issue the exact request")
             if transcript is not None:
                 from remote_ra_http.mswea_route import prepare_request
-                prepare_request(request, transcript.stop_ids)
+                prepare_request(request, transcript.stop_ids, live.max_tokens)
             saved = checkpoint_request(handler, request)
             try:
                 result = await handler.create_chat_completion(request, raw)
@@ -256,13 +260,65 @@ async def invoke_contract(binding, handler, request, raw):
             release_request(handler, request)
 
 
+LOOPBACK = frozenset({"127.0.0.1", "::1"})
+CLOSE_STATUS = (("SESSION_CLOSE_LOOPBACK", 403), ("SESSION_UNKNOWN", 404),
+                ("SESSION_BUSY", 409), ("SESSION_POOL_REQUIRED", 400), ("SESSION_CLOSE_BODY", 400))
+
+
+async def invoke_session_close(raw):
+    """POST /v1/sessions/close {"instance_id": ...}: the harness closes one
+    startup task's session when its agent is done (session pool only). Loopback
+    peers only; the frontend forwards it to the engine as an authenticated
+    private frame. Returns the engine's close receipt."""
+    require(dynamic(raw), "SESSION_POOL_REQUIRED: session close needs the selective-prefix runtime")
+    require_installable()
+    client = getattr(raw, "client", None)
+    require(getattr(client, "host", None) in LOOPBACK,
+            "SESSION_CLOSE_LOOPBACK: session close is accepted from a loopback peer only")
+    try:
+        body = await raw.json()
+    except Exception:
+        body = None
+    require(type(body) is dict and set(body) == {"instance_id"} and type(body["instance_id"]) is str
+            and body["instance_id"], 'SESSION_CLOSE_BODY: body must be {"instance_id": "<startup task id>"}')
+    from remote_ra_live_v2.controller import _live
+    live = _live(raw.app.state.openai_serving_chat)
+    require(live is not None and live.pooled,
+            "SESSION_POOL_REQUIRED: session close needs a server started with --max-running-sessions")
+    require(live.kv is None, "SESSION_CLOSE_BODY: a kv-session server closes sessions with "
+            "POST /v1/kv-session/close {\"session_id\"}")
+    require(live.chat is None, "SESSION_CLOSE_BODY: a chat-text server closes sessions with "
+            "POST /v1/chat-text/close {\"session_id\"}")
+    return await live.close_session(body["instance_id"])
+
+
+def session_close_status(error):
+    """HTTP status of a refused session close: 403 not loopback, 404 unknown
+    task, 409 busy, 400 no session pool or a bad body, else 500."""
+    text = str(error)
+    return next((status for tag, status in CLOSE_STATUS if tag in text), 500)
+
+
 async def invoke_chat(handler, request, raw):
     if not dynamic(raw):
         return await handler.create_chat_completion(request, raw)
     require_installable()
+    if getattr(getattr(handler, "_remote_ra_live_four_policy", None), "chat", None) is not None:
+        # chat-text protocol (serve.py --protocol chat-text): its own owned turn.
+        from remote_ra_http.chat_text_route import invoke
+        return await invoke(raw.app.state._remote_ra_chat_route_binding, handler, request, raw)
     # The future trusted F1 factory, not an HTTP field, must install this binding.
     return await invoke_contract(raw.app.state._remote_ra_chat_route_binding,
                                  handler, request, raw)
+
+
+def chat_refusal(error):
+    """(status, body) of a refused chat-text request (remote_ra_live_v2.chat_text_protocol.
+    ChatTextError, raised by the chat-text route only), else None."""
+    from remote_ra_live_v2.chat_text_protocol import ChatTextError
+    if isinstance(error, ChatTextError):
+        return error.status, error.body()
+    return None
 
 
 def route_disconnect_owned(controller, request, raw):

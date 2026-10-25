@@ -1,0 +1,11 @@
+{
+  "time": 1792773520.1300366,
+  "reason": "User requests maximum validation reuse and no early release; retain existing pending job3443363",
+  "changes": [
+    "Run Goal Qwen and Gemma independently then Terminal Vanilla within same allocation",
+    "Retain job for reviewed follow-up scripts until scheduler deadline",
+    "Keep original allocation deadline; no timing reset",
+    "No algorithm or model parameter changes; original payload archived"
+  ],
+  "gpu_validation_started": false
+}

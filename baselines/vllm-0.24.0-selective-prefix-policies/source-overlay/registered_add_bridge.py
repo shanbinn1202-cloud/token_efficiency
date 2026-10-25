@@ -17,7 +17,9 @@ class FrontendBridge:
     # Multi-session stage 2: a completion's Cancel can wait behind another
     # session's admission on the engine thread, so it gets 60 s, not 5 s. An
     # admission's ACK can wait for its parked goal_query Goal (goal_async), so
-    # it gets up to ADMISSION_SECONDS (300 s), not 60 s.
+    # it gets up to ADMISSION_SECONDS (300 s), not 60 s. --admission-overlap K
+    # (remote_ra_live_v2.admission_overlap.attach_frontend): the ACK wait and the
+    # frame's engine lease become the pair pinned from K, once, at startup.
     def __init__(self, *, codec, encoder, resolve_source, verify_identity, timeout=60,
                  admission_timeout=ADMISSION_SECONDS):
         require(callable(resolve_source) and callable(verify_identity), "trusted frontend callbacks required")
@@ -28,6 +30,16 @@ class FrontendBridge:
         self.resolve_source, self.verify_identity = resolve_source, verify_identity
         self.timeout = timeout
         self.admission_timeout = admission_timeout
+        self.lease_seconds = LEASE_SECONDS
+
+    def pin_admission(self, admission_timeout, lease_seconds):
+        """Frontend startup, --admission-overlap K: the ACK wait and the engine lease of
+        every registered add, exactly a pair pinned from K (admission_flags.timeouts)."""
+        from remote_ra_live_v2.admission_flags import allowed_timeouts
+        require(type(admission_timeout) is int and type(lease_seconds) is int and
+                (admission_timeout, lease_seconds) in allowed_timeouts(),
+                "admission timeout and lease must be a pair pinned from --admission-overlap")
+        self.admission_timeout, self.lease_seconds = admission_timeout, lease_seconds
 
     @staticmethod
     def handles(request):
@@ -57,6 +69,24 @@ class FrontendBridge:
         require(ack.state in states, "registered-add rejected: " + ack.error)
         return ack
 
+    async def close_session(self, client, session_id):
+        """Session pool: one authenticated CloseSession frame for ``session_id``;
+        returns the engine's close receipt. Retrying the same session sends the
+        same command, which returns the first close's receipt."""
+        from registered_add_protocol import CLOSE_PREFIX, CloseSession
+        require(self.verify_identity() is True, "frontend loaded identity is not verified")
+        require(client.client_index == 0 and client.client_count == 1, "one frontend is required")
+        command_id = "close-" + sha256(session_id.encode()).hexdigest()
+        rid = CLOSE_PREFIX + session_id
+        frame = self.codec.encode(CloseSession(command_id, rid, session_id))
+        with timed("frontend_session_close", request_sha256=command_id[6:], timeout_seconds=self.timeout):
+            reply = await client.registered_add_async(frame, self.timeout)
+        ack = self.codec.decode(reply)
+        require(type(ack) is Ack and ack.command_id == command_id and ack.request_id == rid,
+                "session close acknowledgement correlation mismatch")
+        require(ack.state == "complete", "session close rejected: " + ack.error)
+        return ack.receipt
+
     async def submit(self, request, client):
         self.validate_before_output(request, None)
         require(client.client_index == 0 and client.client_count == 1,
@@ -70,7 +100,7 @@ class FrontendBridge:
                 "exact trusted registration source required")
         preparer = RegisteredAddClient(codec=self.codec, exchange=lambda *_: None)
         frame = preparer.prepare(command_id=command_id, core_request=request,
-            serialize_core=self._serialize, lease_seconds=LEASE_SECONDS, **registration)
+            serialize_core=self._serialize, lease_seconds=self.lease_seconds, **registration)
         try:
             # Rendering and semantic verification execute on the engine owner
             # thread before ACK, and a goal_query admission's Goal is built

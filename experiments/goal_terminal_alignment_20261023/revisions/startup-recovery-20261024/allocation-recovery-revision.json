@@ -1,0 +1,12 @@
+{
+  "time": 1792829490.628092,
+  "scope": "existing formal allocation owner only; no background conversational supervisor created",
+  "changes": [
+    "Resume allocation numbering from existing logs",
+    "Append allocation logs rather than truncate",
+    "Wait for existing matching Slurm jobs instead of duplicate submission",
+    "Require review marker for abnormal recovery or missing first throughput"
+  ],
+  "initial_and_continuation_resources_unchanged": true,
+  "model_algorithms_unchanged": true
+}

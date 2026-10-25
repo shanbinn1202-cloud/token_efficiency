@@ -176,8 +176,10 @@ def manager_shutdown(manager):
             try:
                 # Multi-session stage 1: the parent receipt names every session the server held.
                 from .config import load
-                from remote_ra_live_v2.sessions import session_ids
-                sessions=session_ids(manager.session_id,len(load()['tasks']))
+                from remote_ra_live_v2.sessions import session_ids,task_limit
+                config=load()
+                sessions=session_ids(manager.session_id,len(config['tasks']),
+                                     task_limit('max_running_sessions' in config,config.get('protocol')))
                 save_receipt(Path(manager.cleanup_path).with_name('parent-cleanup.json'),
                     dict(schema='remote-ra-parent-cleanup-v1',epoch=manager.identity.epoch,
                          session_id=manager.session_id,sessions=sessions,cleanup_sha256=manager.closed_receipt,

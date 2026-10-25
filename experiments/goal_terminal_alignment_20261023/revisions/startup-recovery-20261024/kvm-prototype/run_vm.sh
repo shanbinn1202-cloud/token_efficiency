@@ -1,0 +1,3 @@
+#!/bin/bash
+set -euo pipefail
+exec apptainer exec --containall --no-mount home,tmp,bind-paths --pwd / -B /dev/kvm:/dev/kvm -B /boot/Image-6.4.0-150600.23.53-64kb:/vmlinuz:ro -B /tmp/ssun4-terminal-kvm-prototype:/work /tmp/ssun4-terminal-kvm-prototype/tools /usr/bin/qemu-system-aarch64 -machine virt,accel=kvm,gic-version=host -cpu host -smp 4 -m 4096 -nodefaults -nographic -serial stdio -kernel /vmlinuz -initrd /work/initramfs.cpio.gz -append 'console=ttyAMA0 rdinit=/init panic=-1' -netdev user,id=n1,hostfwd=tcp:127.0.0.1:19965-:19965 -device virtio-net-pci,netdev=n1,romfile= -fsdev local,id=fs,path=/work/staging,security_model=mapped-xattr -device virtio-9p-pci,fsdev=fs,mount_tag=staging

@@ -1,0 +1,11 @@
+{
+  "task_ids": [
+    "headless-terminal"
+  ],
+  "scope": "isolated candidate",
+  "cause": "runtime created .bash_profile, preventing default login shell from sourcing original .profile/.bashrc",
+  "fix": "preserve original shell startup files; use inherited TMUX_TMPDIR for socket location",
+  "task_solution_tests_changed": false,
+  "oracle_passed": true,
+  "nop_failed_as_expected": true
+}

@@ -1,0 +1,6 @@
+{
+  "time": 1792846510.6639147,
+  "status": "candidate not installed",
+  "cause": "Long Goal FA KV exceeds old one-forward capacity reservation; Gemma32K4 long histories fail before phase1 allocation.",
+  "design": "Recheck exact Goal+history transient before any phase1 write; park as LeaseWait; release only committed resident pages and restore exact pages on admission. Keep full tokens, scoring, budgets and original selection unchanged."
+}

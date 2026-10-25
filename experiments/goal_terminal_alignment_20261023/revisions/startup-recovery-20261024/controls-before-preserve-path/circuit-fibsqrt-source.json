@@ -1,0 +1,17 @@
+{
+  "files": {
+    "instruction.md": "a7f500266a878d04ac9de39fba76220cfad216d8f6b8063bba93bebb3d4ab9ea",
+    "solution/solve.sh": "a4ffab4183815a0eb7646abc1de1fc67695014c060d7ff16e8bca9ec94385d0b",
+    "environment/gates.txt": "032786f94f16605767c62bb61ce4dbba7ab7d3f1046712c975f01c9a04b6ad29",
+    "environment/Dockerfile": "780c23986778f3e5f842567868af30b1135ed095ca9449e1c90b7f0e0483d3d4",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/sim.c": "700645ac6156cdc88ec1e210f7c7d8d9969bb42aec969c410597e8efca796173",
+    "tests/test_outputs.py": "6117b8edb7d567b30e32b16a9244bec4c131ec01e9065d52f6f53f87e36f0438",
+    "environment/tests/sim.c": "700645ac6156cdc88ec1e210f7c7d8d9969bb42aec969c410597e8efca796173",
+    "environment/tests/test_outputs.py": "6117b8edb7d567b30e32b16a9244bec4c131ec01e9065d52f6f53f87e36f0438"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "8048b18763a15de16bceda741f3beca43b56c111eaaea48254e053ebb03dc851"
+}

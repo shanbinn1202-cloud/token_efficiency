@@ -1,0 +1,13 @@
+{
+  "formal": false,
+  "goal_source_unchanged": true,
+  "validation_node": "gh040",
+  "job": "3448478",
+  "changes": [
+    "Merge proven task compatibility",
+    "Native ARM64 KVM for three tasks with intermittent fake metadata failures",
+    "Check existing bash path on unmerged-/usr images",
+    "APT DIRECT before first caffe update"
+  ],
+  "tests": "Repeat all 89 original reference solutions and 29 negative controls on actual GPU allocation CPU, while Goal validation uses GPU. Keep all original failures. Protein reference exception remains pending user decision."
+}

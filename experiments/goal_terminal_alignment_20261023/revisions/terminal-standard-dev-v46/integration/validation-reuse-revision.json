@@ -1,0 +1,5 @@
+{
+  "time": 1792855541.6388946,
+  "change": "Keep complete GPU flow evidence distinct from CPU environment regressions; exact reviewed hashes allow only the four dev symlinks, validation task selector, and explicit reference-approval policy. All serving/proxy/model/harness sources must match the completed GPU run. Partial v46 GPU attempt is never accepted as complete. Separate reference gate remains fail-closed.",
+  "goal_unchanged": true
+}

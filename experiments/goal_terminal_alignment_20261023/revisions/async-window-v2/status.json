@@ -1,0 +1,8 @@
+{
+  "status": "CPU_AND_GPU_VALIDATION_REQUIRED",
+  "physical_window_lag_tokens": 2,
+  "attention_window_unchanged": true,
+  "task_slots": 1024,
+  "active_sessions": 16,
+  "thinking_transport": "kv-session; alternate Gemma tool continuation header"
+}

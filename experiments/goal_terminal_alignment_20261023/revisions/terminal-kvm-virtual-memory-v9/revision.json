@@ -1,0 +1,12 @@
+{
+  "task_ids": [
+    "gpt2-codegolf"
+  ],
+  "scope": "isolated ARM64 KVM candidate",
+  "hypothesis": "Guest commit heuristic rejects large sparse malloc despite sufficient physical task RAM; container RAM limits do not cap virtual malloc",
+  "limits_changed": false,
+  "task_solution_tests_changed": false,
+  "pending": "record before/after allocation and reference result",
+  "oracle_passed": true,
+  "nop_failed_as_expected": true
+}

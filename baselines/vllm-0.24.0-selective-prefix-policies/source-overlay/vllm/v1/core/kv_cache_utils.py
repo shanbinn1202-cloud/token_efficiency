@@ -1462,8 +1462,12 @@ def _decoupled_pool_groups(
     """remote-ra decoupled layout: (group_pool, groups of each pool).
 
     Pool 0 holds the attention groups (blocks of P tokens), pool 1 the Mamba
-    groups (align block M, one unpadded state per block).
+    groups (align block M, one unpadded state per block). The window layout
+    of a sliding-window model (gemma-s1) puts the full-attention groups in
+    pool 0 and the sliding-window groups in pool 1, both in blocks of P tokens.
     """
+    if getattr(layout, "state", None) == "sliding":
+        return _decoupled_window_groups(vllm_config, kv_cache_groups, layout)
     group_pool = tuple(
         1 if isinstance(group.kv_cache_spec, MambaSpec) else 0
         for group in kv_cache_groups
@@ -1497,6 +1501,46 @@ def _decoupled_pool_groups(
     return group_pool, pools
 
 
+def _decoupled_window_groups(
+    vllm_config: VllmConfig, kv_cache_groups: list[KVCacheGroupSpec], layout: Any
+) -> tuple[tuple[int, ...], list[list[KVCacheGroupSpec]]]:
+    """remote-ra window layout (gemma-s1): full-attention groups in pool 0,
+    sliding-window groups (window W, block P) in pool 1; nothing else."""
+    group_pool = tuple(
+        1 if isinstance(group.kv_cache_spec, SlidingWindowSpec) else 0
+        for group in kv_cache_groups
+    )
+    pools = [
+        [group for group, pool in zip(kv_cache_groups, group_pool) if pool == index]
+        for index in (0, 1)
+    ]
+    if not pools[0] or not pools[1]:
+        raise ValueError(
+            "decoupled window layout needs full-attention and sliding-window groups"
+        )
+    if _use_packed_kv_cache_config(vllm_config, kv_cache_groups):
+        raise ValueError("decoupled KV layout does not support packed KV caches")
+    for group in pools[0]:
+        spec = group.kv_cache_spec
+        if type(spec) is not FullAttentionSpec or spec.block_size != layout.page_tokens:
+            raise ValueError(
+                f"decoupled window layout: full-attention group needs block size "
+                f"{layout.page_tokens}, got {spec}"
+            )
+    for group in pools[1]:
+        spec = group.kv_cache_spec
+        if (
+            type(spec) is not SlidingWindowSpec
+            or spec.block_size != layout.page_tokens
+            or spec.sliding_window != layout.window_tokens
+        ):
+            raise ValueError(
+                f"decoupled window layout: sliding group needs block size "
+                f"{layout.page_tokens} and window {layout.window_tokens}, got {spec}"
+            )
+    return group_pool, pools
+
+
 def _decoupled_pool_shape(groups: list[KVCacheGroupSpec]) -> tuple[int, int]:
     """(tensors, page bytes) of one pool: the i-th layer of each group shares
     the i-th tensor, as in the shared-pool general case."""
@@ -1509,11 +1553,15 @@ def _decoupled_pool_shape(groups: list[KVCacheGroupSpec]) -> tuple[int, int]:
 def _decoupled_mamba_bytes(
     pool_groups: list[KVCacheGroupSpec], layout: Any
 ) -> tuple[int, int]:
-    """(blocks, bytes) of the statically reserved Mamba pool."""
-    from remote_ra_live_v2.kv_layout import mamba_pool_blocks
+    """(blocks, bytes) of the statically reserved Mamba pool (the window pool
+    of the window layout: null + groups x (slots x window + one transient))."""
+    from remote_ra_live_v2.kv_layout import mamba_pool_blocks, window_pool_blocks
 
     num_tensors, page_size = _decoupled_pool_shape(pool_groups)
-    num_blocks = mamba_pool_blocks(layout, len(pool_groups))
+    if getattr(layout, "state", None) == "sliding":
+        num_blocks = window_pool_blocks(layout, len(pool_groups))
+    else:
+        num_blocks = mamba_pool_blocks(layout, len(pool_groups))
     return num_blocks, num_tensors * page_size * num_blocks
 
 
@@ -1988,8 +2036,15 @@ def _max_memory_usage_bytes_from_groups(
         # in the general case below) plus the statically reserved Mamba pool.
         _, pools = _decoupled_pool_groups(vllm_config, kv_cache_groups, layout)
         num_tensors, page_size = _decoupled_pool_shape(pools[0])
+        # The window layout's selective rule (gemma-mab, `request_pages`): one request
+        # holds at most that many global Pages (the runtime's capacity gate refuses
+        # more), so pool 0 need not hold one request at max_model_len.
+        request_pages = getattr(layout, "request_pages", 0)
         blocks_needed = sum(
-            cdiv(group.kv_cache_spec.max_memory_usage_bytes(vllm_config), page_size)
+            min(
+                cdiv(group.kv_cache_spec.max_memory_usage_bytes(vllm_config), page_size),
+                request_pages or float("inf"),
+            )
             for group in pools[0]
         )
         _, mamba_bytes = _decoupled_mamba_bytes(pools[1], layout)
@@ -2379,10 +2434,17 @@ def _shrink_decoupled_kv_cache_configs(
         num_tokens, max_concurrency = get_kv_cache_capacity(
             vllm_config, kv_cache_config
         )
-        logger.info_once(
-            "Decoupled KV cache pools: %d attention blocks, %d Mamba blocks",
-            *min_num_blocks_by_pool,
-        )
+        if getattr(decoupled_kv_layout(vllm_config), "state", None) == "sliding":
+            logger.info_once(
+                "Decoupled KV cache pools: %d full-attention blocks, "
+                "%d sliding-window blocks",
+                *min_num_blocks_by_pool,
+            )
+        else:
+            logger.info_once(
+                "Decoupled KV cache pools: %d attention blocks, %d Mamba blocks",
+                *min_num_blocks_by_pool,
+            )
         logger.info_once("GPU KV cache size: %s tokens", f"{num_tokens:,}")
         logger.info_once(
             "Maximum concurrency for %s tokens per request: %.2fx",

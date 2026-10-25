@@ -21,6 +21,9 @@ from registered_add_timing import timed
 
 
 SCHEMA = "remote-ra-registered-add-development-v1"
+# One request's caps at the 65536- and 131072-token context limits; a 262144-token
+# server sets 8 MiB, 2 MiB and 262144 once at startup, in the frontend and the
+# engine (remote_ra_live_v2.context_limits.pin_request_caps).
 MAX_WIRE_BYTES = 4 * 1024 * 1024
 MAX_CORE_BYTES = 1024 * 1024
 MAX_TOKENS = 131072
@@ -34,6 +37,9 @@ MAX_TOKENS = 131072
 # cancels first; the lease bounds an admission whose frontend is gone.
 ADMISSION_SECONDS = 300
 LEASE_SECONDS = 360
+# --admission-overlap K (remote_ra_live_v2.admission_flags.timeouts): with K
+# admissions in flight both are pinned from K at startup, 300 + 120 (K - 1) and
+# 360 + 120 (K - 1); ProtocolCodec.lease_limit and FrontendBridge take the pins.
 
 
 def _object(pairs):
@@ -88,6 +94,20 @@ class Cancel:
 
 
 @dataclass(frozen=True)
+class CloseSession:
+    """Session pool: close one registered session for good (its agent finished).
+
+    Never a request: ``request_id`` is ``"close:" + session_id``, the Ack's
+    correlation key only; it takes no request tombstone."""
+    command_id: str
+    request_id: str
+    session_id: str
+
+
+CLOSE_PREFIX = "close:"
+
+
+@dataclass(frozen=True)
 class Ack:
     command_id: str
     request_id: str
@@ -104,6 +124,10 @@ class ProtocolCodec:
     Identity is a reviewed artifact identifier; a separate callback must verify
     loaded sources/config. Matching two self-declared strings is insufficient.
     """
+    # The largest engine lease a RegisteredAdd may carry: LEASE_SECONDS, or the
+    # lease pinned from --admission-overlap K, set once at startup.
+    lease_limit = LEASE_SECONDS
+
     def __init__(self, *, key, epoch, identity):
         require(type(key) is bytes and len(key) >= 32, "private channel key required")
         _text(epoch, 128)
@@ -111,7 +135,7 @@ class ProtocolCodec:
         self._key, self.epoch, self.identity = key, epoch, identity
 
     def encode(self, command):
-        require(type(command) in (RegisteredAdd, Cancel, Ack), "typed command required")
+        require(type(command) in (RegisteredAdd, Cancel, Ack, CloseSession), "typed command required")
         payload = dict(schema=SCHEMA, epoch=self.epoch, identity=self.identity,
                        kind=type(command).__name__, body=asdict(command))
         raw = _json(payload)
@@ -144,9 +168,10 @@ class ProtocolCodec:
         require(payload["schema"] == SCHEMA and payload["epoch"] == self.epoch and
                 payload["identity"] == self.identity, "schema/epoch/identity mismatch")
         kind, body = payload["kind"], payload["body"]
-        require(type(kind) is str and kind in {"RegisteredAdd", "Cancel", "Ack"},
+        require(type(kind) is str and kind in {"RegisteredAdd", "Cancel", "Ack", "CloseSession"},
                 "unknown command discriminator")
-        cls = {"RegisteredAdd": RegisteredAdd, "Cancel": Cancel, "Ack": Ack}[kind]
+        cls = {"RegisteredAdd": RegisteredAdd, "Cancel": Cancel, "Ack": Ack,
+               "CloseSession": CloseSession}[kind]
         require(type(body) is dict and set(body) == set(cls.__dataclass_fields__),
                 "exact typed command schema required")
         _text(body["command_id"])
@@ -159,7 +184,7 @@ class ProtocolCodec:
             require(type(body["source"]) is dict and type(body["metadata"]) is dict,
                     "source and metadata objects required")
             lease = body["lease_seconds"]
-            require(type(lease) in (int, float) and math.isfinite(lease) and 0 < lease <= LEASE_SECONDS,
+            require(type(lease) in (int, float) and math.isfinite(lease) and 0 < lease <= self.lease_limit,
                     "bounded engine lease required")
             try:
                 require(type(body["core_b64"]) is str, "encoded core request required")
@@ -167,6 +192,10 @@ class ProtocolCodec:
             except (ValueError, TypeError) as exc:
                 raise PolicyRuntimeAbort("invalid core encoding") from exc
             require(0 < len(core) <= MAX_CORE_BYTES, "core request byte limit exceeded")
+        elif cls is CloseSession:
+            _text(body["session_id"], 128)
+            require(body["request_id"] == CLOSE_PREFIX + body["session_id"],
+                    "session close correlation id required")
         elif cls is Ack:
             require(body["state"] in ("accepted", "cancelled", "complete", "rejected") and
                     type(body["receipt"]) is dict and type(body["error"]) is str and
@@ -211,12 +240,15 @@ class RegisteredAddDispatcher:
         once (remote_ra_live_v2.goal_async); everything else returns at once."""
         self._on_thread()
         command = self.codec.decode(frame)  # Authenticate before any mutation.
-        require(type(command) in (RegisteredAdd, Cancel), "engine expects commands, not acknowledgements")
+        require(type(command) in (RegisteredAdd, Cancel, CloseSession),
+                "engine expects commands, not acknowledgements")
         require(self._connected, "private engine connection is closed")
         self.sweep()
         try:
             if type(command) is Cancel:
                 return self.codec.encode(self._cancel(command))
+            if type(command) is CloseSession:
+                return self.codec.encode(self._close_session(command))
             live = getattr(self, '_remote_ra_live_v2', None)
             steps = getattr(live, 'add_steps', None)
             if steps is None:
@@ -348,6 +380,14 @@ class RegisteredAddDispatcher:
                 target_record.pop("submission", None)
         if errors:
             raise ExceptionGroup("registered-add rejected/cleanup errors", errors)
+
+    def _close_session(self, command):
+        """Session pool: the live route closes the session (``session_pool``).
+        A retry of the same command returns the first close's receipt."""
+        live = getattr(self, '_remote_ra_live_v2', None)
+        require(callable(getattr(live, 'close_session', None)), "session close requires the live runtime")
+        self._remember_command(command)
+        return live.close_session(self, command)
 
     def _cancel(self, command):
         record = self._records.get(command.request_id)

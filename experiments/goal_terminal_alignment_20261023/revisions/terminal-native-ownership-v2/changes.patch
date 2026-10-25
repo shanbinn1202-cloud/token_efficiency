@@ -1,0 +1,42 @@
+--- before/terminal-runtime/terminal_environment.py
++++ after/terminal-runtime/terminal_environment.py
+@@ -318,6 +318,9 @@
+         Uses port reservation with retry logic to handle race conditions where
+         another process might grab the port between reservation and binding.
+         """
++        if self._sif_path.name == "configure-git-webserver.sif":
++            from kvm_environment import start_kvm
++            return await start_kvm(self)
+         await self._cleanup_server_resources()
+ 
+         self._staging_dir = Path(tempfile.mkdtemp(prefix="singularity_staging_"))
+@@ -352,7 +355,7 @@
+         build = await asyncio.create_subprocess_exec(
+             "unsquashfs", "-no-progress", "-processors", "4", "-offset", offsets[0],
+             "-dest", str(sandbox), str(self._sif_path),
+-            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
++            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT, umask=0)
+         output, _ = await build.communicate()
+         if build.returncode:
+             raise RuntimeError("ARM64 sandbox extraction failed: " + output.decode(errors="replace")[-4000:])
+--- before/terminal_fingerprints.py
++++ after/terminal_fingerprints.py
+@@ -6,6 +6,7 @@
+ def identity():
+  files=[R/n for n in ['terminal_fingerprints.py','terminal_proxy.py','run_terminal.py','terminal_stage.py','terminal_formal_job.sh','terminal_validation_job.sh','job_time.py','upstream-pins.json','preflight_cuda_libraries.py']]
+  files+=list((R/'terminal-runtime').glob('*.py'))+[R/'terminal-runtime/bootstrap.sh']
++ files+=list((R/'terminal-images/kvm-runtime').glob('*'))
+  files+=list((R/'terminal').glob('*/*/config.yaml'))
+  files+=[p for tree in ['runtime-tools-bullseye','build-tools'] for p in (R/'terminal-images'/tree).rglob('*') if p.is_file()]
+  for tree in [R/'harbor/src/harbor',R.parent/'gemma_full_20261017/harness',T/'engines/vllm_024/vllm',T/'engines/vllm_024_gemma_20261017/vllm']:
+--- before/qualify_terminal_images.py
++++ after/qualify_terminal_images.py
+@@ -9,7 +9,7 @@
+ def write(p,d):
+  tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(d,indent=2,default=str));tmp.replace(p)
+ def runtime_digest():
+- files=sorted((R/'terminal-runtime').glob('*.py'))+[R/'terminal-runtime/bootstrap.sh']
++ files=sorted((R/'terminal-runtime').glob('*.py'))+[R/'terminal-runtime/bootstrap.sh']+sorted((R/'terminal-images/kvm-runtime').glob('*'))
+  return hashlib.sha256(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files},sort_keys=True).encode()).hexdigest()
+ 
+ def prepare(name):

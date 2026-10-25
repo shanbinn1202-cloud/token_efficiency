@@ -1,0 +1,9 @@
+{
+  "scope": "isolated native ARM64 KVM candidate",
+  "reason": "Apptainer fakeroot stat metadata caused dpkg package-list failure in unchanged verifier",
+  "official_task_solution_tests_limits_changed": false,
+  "controls": [
+    "original Oracle expected 1",
+    "NOP expected 0"
+  ]
+}

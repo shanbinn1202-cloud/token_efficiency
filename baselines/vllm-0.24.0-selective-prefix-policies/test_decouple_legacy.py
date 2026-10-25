@@ -32,6 +32,7 @@ import __future__
 from contextlib import ExitStack, redirect_stdout
 import base64
 from collections import Counter
+import copy
 import functools
 import importlib
 import io
@@ -105,8 +106,20 @@ def counted(function, target, calls):
     return wrapper
 
 
+# Module-level names a former source uses that its live module no longer imports
+# (adm-vec replaced copy.deepcopy there with contract.plain_copy).
+FORMER_GLOBALS = {'remote_ra_live_v2.phase1_coordinator': {'deepcopy': copy.deepcopy},
+                  'remote_ra_live_v2.native_probe': {'deepcopy': copy.deepcopy}}
+
+
 def former(stack, skip=(), calls=None):
     """Every function WP2 changed, as it was at 8586dbd (modules in ``skip`` excepted)."""
+    for module_name, names in FORMER_GLOBALS.items():
+        if module_name not in skip:
+            module = importlib.import_module(module_name)
+            for name, value in names.items():
+                if not hasattr(module, name):
+                    stack.enter_context(patch.object(module, name, value, create=True))
     for module_name, target, decorators, source in FORMER:
         if module_name in skip:
             continue
@@ -149,7 +162,11 @@ class StageBEquivalenceTests(unittest.TestCase):
     maxDiff = None
 
     def test_former_and_current_code_send_and_write_the_same(self):
+        # Default suite: full and goal_query; the slow pass (REMOTE_RA_SLOW_TESTS=1) all four.
+        slow = os.environ.get('REMOTE_RA_SLOW_TESTS') == '1'
         for policy in ('full', 'random50', 'goal_query', 'observation_query'):
+            if not (slow or policy in ('full', 'goal_query')):
+                continue
             with self.subTest(policy=policy):
                 # play() stubs the startup config itself (load); the launcher and the
                 # config checks have their own comparisons below.

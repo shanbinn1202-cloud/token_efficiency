@@ -1,0 +1,6 @@
+{
+  "time": 1792839901.2908309,
+  "finding": "qualify_terminal_images imports put production terminal-runtime first in sys.path, so candidate kvm_environment was not used",
+  "prior_controls": "Retained as production-KVM observations; not evidence for candidate helper changes",
+  "fix": "Place candidate directory first after qualification imports"
+}

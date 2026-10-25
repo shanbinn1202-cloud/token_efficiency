@@ -1,0 +1,8 @@
+{
+  "time": 1792851078.1284115,
+  "failure": "Controller launched with /usr/bin/python3 which is 3.6; subprocess text argument rejected before any Slurm submission.",
+  "fix": "Launch persistent experiment controller using existing Harbor Python3.12 environment. No algorithm, launch config or inference source change.",
+  "python": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor-env/bin/python",
+  "version": "3.12.11 (main, Jun 10 2025, 09:17:07) [GCC]",
+  "confirmed_no_formal_allocations": true
+}

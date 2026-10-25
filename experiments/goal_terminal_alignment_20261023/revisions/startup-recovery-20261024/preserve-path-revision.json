@@ -1,0 +1,7 @@
+{
+  "time": 1792830269.993404,
+  "cause": "Server prepended /usr/bin before image /usr/local/bin, mixing pip Python3.13 and system Python3.11",
+  "change": "Preserve image PATH in command execution and tmux; server still runs isolated explicit interpreter",
+  "scope": "Only isolated benchmark runtime; official tasks/tests untouched",
+  "validation": "All previous controls archived and will rerun; source guard now covers server.py and bootstrap.sh as well"
+}

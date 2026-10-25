@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "0ef90109155c26d518e800a9e21464f8ee8671c95cbd12d1dccf667552e3c73c",
+    "solution/solve.sh": "62bdd93b58b6490534f019e2a05b3e05499e9efb4b6ecf6894fee2355d5fe32e",
+    "environment/Dockerfile": "43c8f78b721c30bff9e7e0d8b7fe89196664a49df53c97384da76a2cba26c494",
+    "tests/test_metadata.csv": "4473f27e274520b0d64e69dd1f893413aee916cc1767095d511ba93fe51eb607",
+    "tests/test.sh": "7f2bc4976949fba258f1db6dedacb55377adc300d535ab849131744ce80bf8fd",
+    "tests/test_img.png": "a0136a49776ad05b3444ed21d79f01e24d78dfd826c4f5ff5223d3bfc958559d",
+    "tests/correct_output.csv": "726c8315003fe604bdfa5aca5081420d4da2a6d788f51fe83400536dc51fd36e",
+    "tests/test_outputs.py": "908c4b6aa44e12b6c429c221b92eaa6b150880b9b3d74d9d5ef6869a570f4fd4",
+    "environment/resources/demo_rgb.png": "31898746475ff0b0c68a92297262d05873cace0c74f9d4683e36dcefbb46579d",
+    "environment/resources/demo_metadata.csv": "74bd8baec69abf33f839cb612516e732badd2c28fd8fde436b9f14a11f2ffaad"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "0479c1bfb2230a6bd205b11209163a798a69bb47a6d7eb8f4ae21d4d72c3efee"
+}

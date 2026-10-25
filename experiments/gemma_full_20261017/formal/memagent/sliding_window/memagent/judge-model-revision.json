@@ -1,0 +1,8 @@
+{
+  "time": 1792830351.625097,
+  "model": "gpt-4o-2024-08-06",
+  "previous": "gpt-4o-2024-05-13",
+  "reason": "Original version returns404; user authorized fallback; new fixed snapshot verified",
+  "scope": "All 50 summaries rejudged consistently; other skills and throughput unchanged",
+  "archive": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/startup-recovery-20261024/judge-fallback-20240806/sliding_window"
+}

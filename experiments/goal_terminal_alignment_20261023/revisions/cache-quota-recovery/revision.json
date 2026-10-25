@@ -1,0 +1,6 @@
+{
+  "time": 1792762778.7659914,
+  "cause": "68 OCI->SIF builds exhausted /u/ssun4/.apptainer/cache quota",
+  "fix": "Disable OCI cache and use private /tmp build scratch; recover previously built ARM64 OCI archives",
+  "tests_or_algorithms_changed": false
+}

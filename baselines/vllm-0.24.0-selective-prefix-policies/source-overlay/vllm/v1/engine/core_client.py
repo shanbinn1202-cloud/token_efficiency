@@ -1217,8 +1217,10 @@ class AsyncMPClient(MPClient):
             raise RuntimeError("registered-add client handshake is missing")
         if self.client_count != 1 or self.client_index != 0:
             raise RuntimeError("registered-add requires one frontend")
-        # Up to the frontend's 300-s admission wait (a parked goal_query Goal).
-        if type(timeout) not in (int, float) or not 0 < timeout <= 300:
+        # Up to the frontend's 300-s admission wait (a parked goal_query Goal), or
+        # the wait pinned from --admission-overlap K at frontend startup.
+        if type(timeout) not in (int, float) or not 0 < timeout <= getattr(
+                self, "_remote_ra_admission_seconds", 300):
             raise ValueError("bounded registered-add timeout required")
         call_id = uuid.uuid4().int >> 64
         future = asyncio.get_running_loop().create_future()

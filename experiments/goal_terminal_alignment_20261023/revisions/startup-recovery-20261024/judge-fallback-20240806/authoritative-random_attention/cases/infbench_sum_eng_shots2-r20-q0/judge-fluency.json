@@ -1,0 +1,25 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383858.9439821,
+  "prompt_sha256": "a7131621db577dfc121542aea97ef1277cf50af8f3babc6c6c407cb14b4795ed",
+  "output": "{\"fluency\": 1}",
+  "parsed": {
+    "fluency": 1
+  },
+  "usage": {
+    "completion_tokens": 7,
+    "prompt_tokens": 1861,
+    "total_tokens": 1868,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

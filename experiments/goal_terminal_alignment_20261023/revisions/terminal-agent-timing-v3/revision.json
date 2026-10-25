@@ -1,0 +1,7 @@
+{
+  "time": 1792833978.6525583,
+  "reason": "Terminal capture previously included environment preparation and final grading. No formal results yet.",
+  "change": "Keep immutable raw engine capture; use official AGENT_START/END interval union as denominator, clipped to first allocation, with unfinished output tokens retained.",
+  "algorithm_changes": false,
+  "requires_fresh_gpu_validation": true
+}

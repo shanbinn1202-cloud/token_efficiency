@@ -1,0 +1,126 @@
+{
+  "id": "928b9599-70f6-42a7-a732-f727fa26ce4b",
+  "task_name": "openssl-selfsigned-cert",
+  "trial_name": "openssl-selfsigned-cert-oracle-1792826245",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/openssl-selfsigned-cert-oracle-1792826245",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/openssl-selfsigned-cert"
+  },
+  "source": null,
+  "task_checksum": "2f28f1291a2a14087657ad18dc5de7160a1dcb33d7992465816eb94a2deab531",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/openssl-selfsigned-cert",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "openssl-selfsigned-cert-oracle-1792826245",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T07:17:27.632279Z",
+  "finished_at": "2026-10-24T07:18:12.804316Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T07:17:50.667481Z",
+    "finished_at": "2026-10-24T07:18:03.565950Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T07:18:03.566054Z",
+    "finished_at": "2026-10-24T07:18:03.567763Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T07:18:03.568899Z",
+    "finished_at": "2026-10-24T07:18:03.967352Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T07:18:04.008788Z",
+    "finished_at": "2026-10-24T07:18:07.390871Z"
+  },
+  "step_results": null,
+  "passed": true,
+  "expected_reward": 1.0,
+  "image_sha256": "92a4c37fcef94bf8f3c0c66d58a5909a90b987dd34f885813ae55ff97e52b4b4",
+  "backend_sha256": "74ceb6e645de90e850c07e36928d21fb30382c07b758cf6f1c0aedb674c46ca6"
+}

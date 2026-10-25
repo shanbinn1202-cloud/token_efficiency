@@ -1,0 +1,14 @@
+{
+  "time": 1792848104.5906227,
+  "exit_code": 0,
+  "checks": [
+    "PASS: long-Goal capacity, three-way progress, exact preserved pages, decode headroom, lease fence, pure readiness, idle eviction, impossible ceiling, prepared-only guard",
+    "PASS: 144 original-vs-refactored KV allocation shapes, including long Goals and window wraps",
+    "PASS: cancellation propagates without native allocation, poisoning, or losing committed history",
+    "PASS: actual worker eviction preserves CPU catalog and prepared request; active phases refused",
+    "PASS: real 16-permit admission park/resume/cancel, capacity readiness and timing evidence"
+  ],
+  "stderr": "",
+  "test_sha256": "86f5117bed392cfc2770e511acdbc7d68a562e73b1709fb1d48cd238c19f3fc2",
+  "gpu_validated": false
+}

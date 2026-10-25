@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "native_limits": [
+    512,
+    4096,
+    8192,
+    16384
+  ],
+  "starts": [
+    0,
+    117,
+    16001,
+    78399
+  ],
+  "input_length": 40000,
+  "mamba_alignment": 784,
+  "algorithm_equivalence_prior_evidence": "qwen-goal-query-chunks-v10/tests.log"
+}

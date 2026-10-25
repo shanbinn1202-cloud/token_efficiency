@@ -1,0 +1,10 @@
+{
+  "time": 1792831110.278736,
+  "source": "/projects/bcjw/ssun4/token_efficiency/experiments/gemma_full_20261017/formal/memagent/sliding_window/memagent/sliding_window-32k",
+  "destination": "/projects/bcjw/ssun4/gemma_interactive_finish_20261020/bundles/memagent/sliding_window/memagent/sliding_window-32k",
+  "predictions_identical": true,
+  "manifest_identical": true,
+  "inference_fields_identical": true,
+  "model": "gpt-4o-2024-08-06",
+  "summary_cases": 50
+}

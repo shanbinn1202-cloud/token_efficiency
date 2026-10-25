@@ -1,0 +1,11 @@
+{
+  "time": 1792827122.7804046,
+  "native_images_built": 89,
+  "runtime_fixes": [
+    "Select newer fakeroot for glibc>=2.34, older compatible library for older images",
+    "Wait within official environment-start timeout rather than prematurely killing bootstrap at60s",
+    "Isolated container process groups and cleanup to avoid orphan server pipe hangs"
+  ],
+  "validation_pending": true,
+  "user_requests_current_session_supervision": true
+}

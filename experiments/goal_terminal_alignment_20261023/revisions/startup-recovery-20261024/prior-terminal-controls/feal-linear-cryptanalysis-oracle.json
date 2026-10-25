@@ -1,0 +1,126 @@
+{
+  "id": "2fd08315-73cb-46cc-aba6-e804f7dae0fc",
+  "task_name": "feal-linear-cryptanalysis",
+  "trial_name": "feal-linear-cryptanalysis-oracle-1792768156",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/feal-linear-cryptanalysis-oracle-1792768156",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/feal-linear-cryptanalysis"
+  },
+  "source": null,
+  "task_checksum": "92d9e1c52cb433a8495563243bf2305c5b99b5a23c263606960f51500a0bac85",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/feal-linear-cryptanalysis",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "feal-linear-cryptanalysis-oracle-1792768156",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-23T15:09:16.580167Z",
+  "finished_at": "2026-10-23T15:09:39.453363Z",
+  "environment_setup": {
+    "started_at": "2026-10-23T15:09:16.592507Z",
+    "finished_at": "2026-10-23T15:09:30.523550Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-23T15:09:30.523592Z",
+    "finished_at": "2026-10-23T15:09:30.524349Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-23T15:09:30.524924Z",
+    "finished_at": "2026-10-23T15:09:30.924578Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-23T15:09:30.965081Z",
+    "finished_at": "2026-10-23T15:09:33.892679Z"
+  },
+  "step_results": null,
+  "passed": true,
+  "expected_reward": 1.0,
+  "image_sha256": "f6dc5dd2d1f909b92a2e5b076ccc061ccb6559ae98f0b7cd1471a8f95f933581",
+  "backend_sha256": "d07c9475f57ee290f659dcf4cf0442666a41b764e084983211da1a4ebe43a94e"
+}

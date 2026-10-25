@@ -1,0 +1,8 @@
+{
+  "time": 1792832560.3874032,
+  "state": "isolated_validation",
+  "finding": "unsquashfs inherited umask0077; SIF bash0755 extracted0700; normal-user execution fails",
+  "required_change": "Set umask0 only for rootfs extraction to preserve original SIF permissions",
+  "official_image_and_test_contents_unchanged": true,
+  "qualification_paused": true
+}

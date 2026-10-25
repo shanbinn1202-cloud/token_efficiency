@@ -1,0 +1,16 @@
+{
+  "files": {
+    "instruction.md": "a2f1669d4067af6c7b8ac05ff7d5849ca5df68397c94701645c4b9a3b6f71b03",
+    "solution/solve.sh": "be50ae01a3ea850a6dc4bc99dc130d0b7ad37963c85544a02b03a4f5da29cb77",
+    "environment/Dockerfile": "ef521cded1b5e0e9a11a6aa9c758e4474f2160e641fb9a177a20cdc728bfff1d",
+    "tests/test.sh": "9431cbc2bad2b690001e096218ecd3f7f2f241b415062a2ea1ec7083d2e7c9e1",
+    "tests/test_outputs.py": "f59ebc7218a648582483cee02556c3bc1235e186301376bc3be066ed106ed9f9",
+    "environment/task-deps/feal.c": "bbd38d19f976b27e5a5aff23e21ba5f0164335397928ca05220379552dea08da",
+    "environment/task-deps/gen.py": "3a71f0b5d9095440bea31bced5ea4fc8dd4cff0ae4226ea0400a3bfa7c452c63",
+    "environment/task-deps/decrypt.c": "4c6864e0d3a76626f1a7af1383e6826a85bdd1e7e373215741ece4f50a94ebd2"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "bc0732054a35a1153ea30fd75d2ed8c4684ac10dd4716f9253f62f2fc012746f"
+}

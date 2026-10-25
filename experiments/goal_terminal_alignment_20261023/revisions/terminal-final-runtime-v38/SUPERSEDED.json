@@ -1,0 +1,6 @@
+{
+  "time": 1792851910.160602,
+  "reason": "Global fake-metadata, disk-capacity and cleanup issues now addressed in v42. Cancel only unfinished diagnostic controls; retain all completed original results, never mark interrupted trials as evaluated.",
+  "continued_candidate": "terminal-native-kvm-apt-v42",
+  "gpu_allocation_retained": "3448478"
+}

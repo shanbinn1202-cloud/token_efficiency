@@ -1,0 +1,32 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383871.1497803,
+  "prompt_sha256": "d7d92eb6bb28c4e1f6539581d7a7ec9360d183f55355d275d275e727d492182a",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Morgan Paris is an Englishman from York in the seventeenth century.**\n   - The summary does not mention Morgan Paris or his origin.\n   - **Not supported.**\n\n2. **He is the youngest son of a merchant of German origin.**\n   - The summary does not mention his family background.\n   - **Not supported.**\n\n3. **Paris wishes to go to sea, against his family's wishes.**\n   - The summary does not mention his initial desire to go to sea.\n   - **Not supported.**\n\n4. **Initially, Paris commits to obeying his father but eventually succumbs to temptation.**\n   - The summary does not mention his commitment to obeying his father or succumbing to temptation.\n   - **Not supported.**\n\n5. **Paris embarks on a ship bound for London with a friend.**\n   - The summary does not mention this initial voyage.\n   - **Not supported.**\n\n6. **A storm nearly kills Paris and his friend, dissuading the friend from sea travel.**\n   - The summary does not mention this event.\n   - **Not supported.**\n\n7. **Paris sets himself up as a merchant on a ship leaving London.**\n   - The summary does not mention this career move.\n   - **Not supported.**\n\n8. **His first trip is financially successful, and he plans another.**\n   - The summary does not mention his financial success or plans for another trip.\n   - **Not supported.**\n\n9. **The second voyage is unfortunate; the ship is seized by Moorish pirates.**\n   - The summary does not mention this event.\n   - **Not supported.**\n\n10. **Paris is enslaved in the North African town of Sallee.**\n    - The summary does not mention his enslavement.\n    - **Not supported.**\n\n11. **Paris and a slave boy escape during a fishing expedition.**\n    - The summary does not mention this escape.\n    - **Not supported.**\n\n12. **A Destiny captain picks them up and takes Paris to Brazil.**\n    - The summary does not mention this rescue or journey to Brazil.\n    - **Not supported.**\n\n13. **In Brazil, Paris becomes a successful plantation owner.**\n    - The summary mentions that the narrator's former plantation in Brazil flourished, but it does not specify that Paris became a successful plantation owner initially.\n    - **Partially supported.**\n\n14. **Paris embarks on a slave-gathering expedition to West Africa but is shipwrecked off Trinidad.**\n    - The summary does not mention this expedition or shipwreck.\n    - **Not supported.**\n\n15. **Paris is the sole survivor and salvages items from the wreck.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n16. **He finds goats for meat and builds a shelter.**\n    - The summary mentions domesticating goats and transforming the wilderness into a sustainable home.\n    - **Supported.**\n\n17. **Paris keeps track of time by making notches on a cross.**\n    - The summary does not mention this detail.\n    - **Not supported.**\n\n18. **He keeps a journal of his activities and experiences a religious illumination.**\n    - The summary does not mention keeping a journal or a religious illumination.\n    - **Not supported.**\n\n19. **Paris discovers he is on an island and builds a retreat in a valley.**\n    - The summary mentions transforming the wilderness into a sustainable home, which could imply building a retreat.\n    - **Partially supported.**\n\n20. **He trains a parrot, takes a goat as a pet, and develops various skills.**\n    - The summary mentions domesticating goats but does not mention training a parrot or developing various skills.\n    - **Partially supported.**\n\n21. **Paris builds a canoe but cannot move it to the sea.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n22. **He builds a smaller boat and rows around the island but nearly perishes.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n23. **Paris discovers a man's footprint on the beach and assumes it belongs to a cannibal.**\n    - The summary does not mention this discovery.\n    - **Not supported.**\n\n24. **Paris protects a victim from cannibals and names him Sebastianne.**\n    - The summary mentions rescuing a native man named Sebastianne.\n    - **Supported.**\n\n25. **Paris and Sebastianne build a boat to visit the cannibals' land but are interrupted by more cannibals.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n**Reasoning:**\n- The summary supports key points 13 (partially), 16, 19 (partially), 20 (partially), and 24.\n- Therefore, the supported key points are 13, 16, 19, 20, and 24.\n- The recall score is 5.\n\n**Output:**\n```json\n{\"supported_key_points\": [13, 16, 19, 20, 24], \"recall\": 5}\n```",
+  "parsed": {
+    "supported_key_points": [
+      13,
+      16,
+      19,
+      20,
+      24
+    ],
+    "recall": 5
+  },
+  "usage": {
+    "completion_tokens": 1092,
+    "prompt_tokens": 3594,
+    "total_tokens": 4686,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

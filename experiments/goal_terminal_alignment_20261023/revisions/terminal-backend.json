@@ -1,0 +1,12 @@
+{
+  "upstream": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor/src/harbor/environments/singularity",
+  "purpose": "ARM64 Apptainer writable sandbox avoids EXDEV; preserve signed distro apt sources",
+  "files": {
+    "terminal_environment.py": "cd715c6a66562088027ee65d7db07f26f35e0fa154ffa5d79803d100a9a9f3c7",
+    "server.py": "010cc2d82bb95b3737fff322f3f1d4f62ef09e0e310e1b3d82868979ebf15c3c",
+    "bootstrap.sh": "a4e53642116cadea37b6cd90056aa4eeb8d2dae5122e4258ce6ce00bdad5bd37"
+  },
+  "agent_modified": false,
+  "verifier_modified": false,
+  "validation": "pending"
+}

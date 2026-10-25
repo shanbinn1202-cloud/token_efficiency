@@ -1,0 +1,10 @@
+{
+  "status": "candidate-only",
+  "time": 1792837581.0243902,
+  "reason": "Official Caffe Oracle timed out after1200s; public CIFAR download170052171bytes dominates slow HTTP path",
+  "artifact_source": "https://cave.cs.toronto.edu/kriz/cifar-10-binary.tar.gz",
+  "sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+  "md5": "c32a1d4ab5d03f1284b67883e8d87530",
+  "changes": "Only transport caching of exact public input. Official Oracle/task/tests/time limits unchanged. No source environment or image has been promoted.",
+  "fairness_requirement": "If promoted, same cache for all models/methods and provenance recorded"
+}

@@ -96,12 +96,58 @@ def _same(minted, value):
     return minted == value
 
 
+def _token_ids(binding, tokens):
+    """Every token an int >= 0 (bool excluded), at C speed. A binding remembers the
+    tokens tuple it checked (immutable, of immutable ints), so the checks of one
+    admission (render, phase 1, reserve, worker payload) scan the prompt once; a
+    replaced tokens field is another object and is scanned again."""
+    if binding.__dict__.get("_checked_tokens") is tokens:
+        return True
+    if set(map(type, tokens)) == {int} and min(tokens) >= 0:
+        binding.__dict__["_checked_tokens"] = tokens
+        return True
+    return False
+
+
+def prompt_digest(binding):
+    """``digest(list(binding.tokens))``, once per binding: the canonical prompt hash.
+
+    The same text and value as ``contracts.canonical_prompt_hash(tokens)`` and
+    ``remote_ra_live_v2.contract.digest(list(tokens))`` (sorted keys, compact
+    separators, ASCII): about 13 ms at 256K tokens, most of it the JSON text.
+    It is kept with the tokens tuple it describes (immutable, of immutable ints)
+    and returned while the field still holds that object; a replaced tokens
+    field is another object and is hashed again. The render seam hands over the
+    hash it has just checked for these tokens (``remember_prompt_digest``), so an
+    admission hashes its prompt once. Not a field: equality, hash, repr and
+    asdict ignore it."""
+    tokens = binding.tokens
+    if type(binding) is not RenderBinding or type(tokens) is not tuple:
+        return digest(list(tokens))         # nothing immutable to keep it with
+    memo = binding.__dict__.get("_prompt_digest")
+    if memo is not None and memo[0] is tokens:
+        return memo[1]
+    value = digest(list(tokens))
+    binding.__dict__["_prompt_digest"] = (tokens, value)
+    return value
+
+
+def remember_prompt_digest(binding, value):
+    """Keep ``value`` as ``prompt_digest(binding)``. Only for the canonical prompt
+    hash the caller has just computed over a token list equal to these tokens,
+    element by element, both all ints (private_endpoint.render_claim: the native
+    request's hash, checked against the frontend's, and Authority.render's token
+    equality). Any other binding object keeps nothing (prompt_digest hashes it)."""
+    require(type(value) is str and len(value) == 64, "canonical prompt hash required")
+    if type(binding) is RenderBinding and type(binding.tokens) is tuple:
+        binding.__dict__["_prompt_digest"] = (binding.tokens, value)
+
+
 def binding_shape(binding):
     """Session-free render checks; turn_geometry adds the session geometry."""
     require(type(binding) is RenderBinding, "v2 rendered binding required")
     tokens = binding.tokens
-    require(type(tokens) is tuple and tokens and
-            all(type(x) is int and x >= 0 for x in tokens), "invalid tokens")
+    require(type(tokens) is tuple and tokens and _token_ids(binding, tokens), "invalid tokens")
     turn, local = binding.turn, binding.local_turn
     # local turns restart on rebuild while the global ordinal keeps counting.
     require(type(turn) is int and type(local) is int and 0 <= local <= turn,

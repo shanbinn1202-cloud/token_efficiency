@@ -1,0 +1,12 @@
+{
+  "time": 1792848104.594921,
+  "phase": "queued",
+  "job": "3448478",
+  "previous_job": "3448149",
+  "previous_node": "gh151",
+  "entry": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/goal-dynamic-capacity-v18/allocation.sh",
+  "candidate": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/goal-dynamic-capacity-v18",
+  "purpose": "Gemma long-Goal dynamic capacity plus 16 concurrent admissions; retain allocation for reviewed followups",
+  "mem_gib": 256,
+  "duration_seconds": 7200
+}

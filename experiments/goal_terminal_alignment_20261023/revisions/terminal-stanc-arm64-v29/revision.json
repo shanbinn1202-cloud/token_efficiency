@@ -1,0 +1,13 @@
+{
+  "time": 1792845146.928065,
+  "task_ids": [
+    "rstan-to-pystan"
+  ],
+  "cause": "httpstan4.13.0 upstream Makefile downloads linux-stanc x86_64 unconditionally on Linux; reference ARM64 build then fails Exec format error.",
+  "change": "Exact URL architecture mapping for stanc2.35.0 to official linux-arm64-stanc in isolated curl wrapper; no version, solution, test, resource changes.",
+  "artifact": "https://github.com/stan-dev/stanc3/releases/download/v2.35.0/linux-arm64-stanc",
+  "elf_machine": 183,
+  "sha256": "8b42b4467ca6128e985715dedfef935bdd161e074306749790703aab015dfe8b",
+  "bytes": 15389552,
+  "status": "candidate unpromoted"
+}

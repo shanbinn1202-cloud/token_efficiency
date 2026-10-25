@@ -559,7 +559,10 @@ class ConfigTests(unittest.TestCase):
         import re
         found = re.search(r"""['"]--kv-cache-gib['"][^\n]*?choices\s*=\s*[\(\[]([0-9, ]+)[\)\]]""",
                           (ROOT/'serve.py').read_text('utf-8'))
-        self.assertEqual(tuple(int(v) for v in found.group(1).split(',')), serve.KV_CACHE_GIB)
+        # The Qwen choices plus the Gemma 4 profile's (gemma-s1: 28 GiB; a Qwen release refuses
+        # it, test_gemma_capacity).
+        self.assertEqual(tuple(int(v) for v in found.group(1).split(',')),
+                         tuple(sorted(set(serve.KV_CACHE_GIB) | set(serve.GEMMA4_KV_CACHE_GIB))))
         argv = lambda prepared: prepared[2][prepared[2].index('--kv-cache-memory-bytes') + 1]
         effective = lambda prepared: prepared[1]['effective_server_config']
         # The default is the qualified 8 GiB profile; an explicit 8 is the same server, byte for byte.

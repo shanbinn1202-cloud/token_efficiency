@@ -1,0 +1,126 @@
+{
+  "id": "73900bf3-db5b-4b84-9396-c2f1b0c8b800",
+  "task_name": "build-pmars",
+  "trial_name": "build-pmars-oracle-1792826611",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/build-pmars-oracle-1792826611",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/build-pmars"
+  },
+  "source": null,
+  "task_checksum": "349181e4311b593afeb65ec89f0cb85fb4468d2a51a74a66f2d24eadbd5557eb",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/build-pmars",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "build-pmars-oracle-1792826611",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {
+        "singularity_image_cache_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cache"
+      },
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 0.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T07:23:31.613658Z",
+  "finished_at": "2026-10-24T07:23:47.948866Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T07:23:31.667211Z",
+    "finished_at": "2026-10-24T07:23:37.376330Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T07:23:37.376362Z",
+    "finished_at": "2026-10-24T07:23:37.377848Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T07:23:37.379051Z",
+    "finished_at": "2026-10-24T07:23:39.110004Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T07:23:39.144553Z",
+    "finished_at": "2026-10-24T07:23:42.628203Z"
+  },
+  "step_results": null,
+  "passed": false,
+  "expected_reward": 1.0,
+  "image_sha256": "8387b63a7077972438c2cfafced7eac3fad71504dab61c266216a286643da4c5",
+  "backend_sha256": "74ceb6e645de90e850c07e36928d21fb30382c07b758cf6f1c0aedb674c46ca6"
+}

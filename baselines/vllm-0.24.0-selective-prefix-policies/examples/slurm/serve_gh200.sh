@@ -9,14 +9,20 @@
 #
 # Settings come from the submitting shell (--export=ALL):
 #   REPO        this repository (absolute)                  VENV        the base vLLM environment (venv prefix)
-#   RELEASE     the release made by install.py --apply      TASKS       task JSON, or a list of 1-8 tasks
+#   RELEASE     the release made by install.py --apply      TASKS       task JSON, or a list of 1-16 tasks
 #   POLICY      full | random50 | goal_query | observation_query | random_fill
 #   RUN_ROOT    short existing directory for this job's files (TMPDIR lives under it: keep it short)
 #   KV_GIB      8 (default), 16, 24 or 32                   PORT        server port (default 8000)
 #   REWRITER    Qwen3-0.6B directory (goal_query; or set NO_GOAL_REWRITER=1)
+#   MAX_RUNNING session pool (serve.py --max-running-sessions): TASKS lists 1-64 tasks, at most MAX_RUNNING (1-16)
+#               sessions run at once; MODE=swebench passes it to run_agents.sh, whose K agents refill from the list
 #   PAGE_TOKENS 16, 32, 64 or 784 (serve.py --page-tokens)  KV_LAYOUT   decoupled (serve.py --kv-layout)
 #               both unset: the default 784-token layout; recommended for goal_query, observation_query and
 #               random_fill: PAGE_TOKENS=16 KV_LAYOUT=decoupled (README section 4.6)
+#   MAX_TOKENS  1536 or 4096 (serve.py --max-tokens; MODE=swebench also passes it to run_agents.sh)
+#   MAX_MODEL_LEN 65536, 131072 or 262144 (serve.py --max-model-len)   DRAM_ARENA_GIB  serve.py --dram-arena-gib
+#   STEP_LIMIT  MODE=swebench: the agents' step limit (run_agents.sh; default 90)
+#               all unset: the server and the agents run exactly as before (not GPU-validated otherwise)
 #   MODE        smoke (default: one examples/http_client.py request; TASKS must be examples/task.json)
 #               swebench (reverse tunnel to the agent host, then run_agents.sh there over SSH; see below)
 # MODE=swebench also needs: AGENT_HOST (user@host), TUNNEL_KEY (private key path), KNOWN_HOSTS (file pinning the
@@ -60,10 +66,17 @@ fi
 LAYOUT=()
 if [[ -n ${PAGE_TOKENS:-} ]]; then LAYOUT+=(--page-tokens "$PAGE_TOKENS"); fi
 if [[ -n ${KV_LAYOUT:-} ]]; then LAYOUT+=(--kv-layout "$KV_LAYOUT"); fi
+POOL=()
+if [[ -n ${MAX_RUNNING:-} ]]; then POOL=(--max-running-sessions "$MAX_RUNNING"); fi
+# Optional context settings; unset, serve.py gets none of these flags.
+CONTEXT=()
+if [[ -n ${MAX_TOKENS:-} ]]; then CONTEXT+=(--max-tokens "$MAX_TOKENS"); fi
+if [[ -n ${MAX_MODEL_LEN:-} ]]; then CONTEXT+=(--max-model-len "$MAX_MODEL_LEN"); fi
+if [[ -n ${DRAM_ARENA_GIB:-} ]]; then CONTEXT+=(--dram-arena-gib "$DRAM_ARENA_GIB"); fi
 OUTPUT="$STAGE/$POLICY"
 SERVE=("$PY" -B "$REPO/serve.py" --release-dir "$RELEASE" --task "$TASKS" --policy "$POLICY"
        --output "$OUTPUT" --port "$PORT" --kv-cache-gib "$KV_GIB" ${SELECTOR[@]+"${SELECTOR[@]}"}
-       ${LAYOUT[@]+"${LAYOUT[@]}"})
+       ${LAYOUT[@]+"${LAYOUT[@]}"} ${POOL[@]+"${POOL[@]}"} ${CONTEXT[@]+"${CONTEXT[@]}"})
 "${SERVE[@]}" > "$STAGE/dry-run.json"            # dry run: checks the release, prints the command
 "${SERVE[@]}" --start > "$STAGE/server.log" 2>&1 &
 SERVER=$!                                         # serve.py execs the APIServer: this is the server PID
@@ -104,7 +117,9 @@ elif [[ $MODE == swebench ]]; then
   if (( up == 1 )); then
     INSTANCES=$("$PY" -B -c 'import json,sys; t=json.load(open(sys.argv[1])); print(" ".join(x["instance_id"] for x in (t if isinstance(t, list) else [t])))' "$TASKS")
     # An SSH drop or timeout does not stop the remote runner: stop it and its containers on the agent host then.
-    timeout "$AGENT_SECONDS" ssh -T "${SSH_OPTS[@]}" "$AGENT_HOST" env ${AGENT_ENV:-} "$AGENT_RUN" \
+    timeout "$AGENT_SECONDS" ssh -T "${SSH_OPTS[@]}" "$AGENT_HOST" env ${AGENT_ENV:-} \
+      ${MAX_RUNNING:+MAX_RUNNING=$MAX_RUNNING} ${MAX_TOKENS:+MAX_TOKENS=$MAX_TOKENS} \
+      ${STEP_LIMIT:+STEP_LIMIT=$STEP_LIMIT} "$AGENT_RUN" \
       "$AGENT_SOCKET" "$AGENT_PORT" "$AGENT_OUT" $INSTANCES > "$STAGE/agents.log" 2>&1 || harness_rc=$?
   else
     echo "tunnel not up (see $STAGE/tunnel.log)" >&2; harness_rc=1

@@ -1,0 +1,38 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383963.5448678,
+  "prompt_sha256": "f8f0dce0c9cae99bb375e9e374a972ea681ba1bb03b26acd02d15b5e01d5c5e4",
+  "output": "### Reasoning and Assessment\n\n1. **Lorelei is a 46-year-old real estate broker living in the modern Midwestern city of Zenith.**\n   - The summary mentions that Loki Precious Lorelei is a successful real estate broker in the city of Zenith. However, it does not specify his age. \n   - **Partially supported.**\n\n2. **Lorelei is dissatisfied with his life despite his prosperous middle-class status.**\n   - The summary indicates that Loki becomes disillusioned with the emptiness of his conventional life, which implies dissatisfaction despite his prosperous status.\n   - **Supported.**\n\n3. **Lorelei fantasizes about a fairy girl who makes him feel youthful.**\n   - The summary does not mention any fantasies about a fairy girl.\n   - **Not supported.**\n\n4. **Lorelei's family includes his wife Cal and their three children: Lacie, Colleen, and Bram.**\n   - The summary mentions that Loki lives with his wife, Cal, and their children, Lacie, Colleen, and Bram.\n   - **Supported.**\n\n5. **Lorelei's closest friend, Anabel Liza, is also dissatisfied with his life.**\n   - The summary does not mention Anabel Liza or his dissatisfaction.\n   - **Not supported.**\n\n6. **Liza dreamed of becoming a professional violinist but ended up as a middle-class businessman.**\n   - The summary does not mention Liza's dreams or his current profession.\n   - **Not supported.**\n\n7. **Liza's wife, Debbie, is unhappy and constantly nags him.**\n   - The summary does not mention Liza's wife, Debbie, or her behavior.\n   - **Not supported.**\n\n8. **Liza often talks about divorcing Debbie but never follows through.**\n   - The summary does not mention Liza's thoughts about divorcing Debbie.\n   - **Not supported.**\n\n9. **Liza and Lorelei take a vacation in Maine to escape their dissatisfaction.**\n   - The summary does not mention a vacation in Maine.\n   - **Not supported.**\n\n10. **Their enjoyment of freedom is short-lived, and they return to their lives as married men.**\n    - The summary does not mention the short-lived enjoyment of freedom or their return to married life.\n    - **Not supported.**\n\n11. **Both men feel a growing impulse to rebel against social conventions.**\n    - The summary mentions Loki's growing disillusionment and rebellion against social conventions but does not mention Liza's similar feelings.\n    - **Partially supported.**\n\n12. **Lorelei discovers Liza is having an affair and preaches the value of social standing.**\n    - The summary does not mention Lorelei discovering Liza's affair or preaching about social standing.\n    - **Not supported.**\n\n13. **Liza argues that his miserable life justifies seeking comfort in another woman.**\n    - The summary does not mention Liza's justification for an affair.\n    - **Not supported.**\n\n14. **Liza snaps during an argument with Debbie, shoots her, and is sentenced to three years in prison.**\n    - The summary does not mention Liza's violent act or his prison sentence.\n    - **Not supported.**\n\n15. **Lorelei is devastated by Liza's absence.**\n    - The summary does not mention Lorelei's feelings about Liza's absence.\n    - **Not supported.**\n\n16. **Lorelei's desire for rebellion surfaces, and he begins an affair with Blaise Pedro, an attractive widow.**\n    - The summary mentions Loki's affair with Blaise Pedro as part of his rebellion.\n    - **Supported.**\n\n17. **Lorelei becomes more critical of his conservative friends' opinions.**\n    - The summary mentions Loki challenging the narrow-mindedness of his peers.\n    - **Supported.**\n\n18. **Lorelei supports some claims of strikers during a general strike, shocking his social circle.**\n    - The summary does not mention Lorelei supporting strikers during a general strike.\n    - **Not supported.**\n\n19. **While Cal is away, Lorelei parties with Blaise's bohemian friends.**\n    - The summary mentions Loki associating with a bohemian group called \"the Arjun\" but does not specify that this happens while Cal is away.\n    - **Partially supported.**\n\n20. **Lorelei's friends notice his rebellion and try to coax him back into their circle.**\n    - The summary mentions Loki being ostracized by the business elite but does not mention friends trying to coax him back.\n    - **Not supported.**\n\n21. **Cal becomes suspicious of Lorelei's activities upon her return.**\n    - The summary does not mention Cal becoming suspicious.\n    - **Not supported.**\n\n22. **Lorelei admits to his affair and convinces Cal it is her fault.**\n    - The summary does not mention Lorelei admitting to his affair or convincing Cal it is her fault.\n    - **Not supported.**\n\n23. **Lorelei becomes disillusioned with Blaise, realizing her life is also conventional.**\n    - The summary does not mention Lorelei becoming disillusioned with Blaise.\n    - **Not supported.**\n\n24. **Lorelei's friends shun him, and his business suffers.**\n    - The summary mentions Loki being ostracized by the business elite and losing clients.\n    - **Supported.**\n\n25. **Cal falls seriously ill, and Lorelei regrets his actions, becoming a devoted husband again.**\n    - The summary mentions Cal falling critically ill and Loki realizing his family's value, leading him to retreat into conformity.\n    - **Supported.**\n\n26. **Lorelei's friends support him during Cal's illness, and he regains his social status.**\n    - The summary does not mention friends supporting him during Cal's illness or regaining social status.\n    - **Not supported.**\n\n27. **Colleen elopes with Coralie Tamika, shocking everyone.**\n    - The summary mentions Colleen marrying Coralie Tamika, shocking everyone.\n    - **Supported.**\n\n28. **Lorelei advises Colleen to pursue his own happiness and resist conforming to others' expectations.**\n    - The summary mentions Loki supporting Colleen's independence and encouraging him to follow his own path.\n    - **Supported.**\n\n### Output\n```json\n{\n  \"supported_key_points\": [1, 2, 4, 11, 16, 17, 19, 24, 25, 27, 28],\n  \"recall\": 11\n}\n```",
+  "parsed": {
+    "supported_key_points": [
+      1,
+      2,
+      4,
+      11,
+      16,
+      17,
+      19,
+      24,
+      25,
+      27,
+      28
+    ],
+    "recall": 11
+  },
+  "usage": {
+    "completion_tokens": 1364,
+    "prompt_tokens": 3939,
+    "total_tokens": 5303,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

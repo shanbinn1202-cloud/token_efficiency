@@ -1,0 +1,7 @@
+{
+  "time": 1792837236.184969,
+  "status": "candidate-only",
+  "reason": "Apptainer fakeroot dpkg stat reports krb5-locales.list not regular; verifier fails installing curl before tests; test exact nativeARM64KVMroot runtime",
+  "original_task_and_verifier_unchanged": true,
+  "resources": "originaltask.toml"
+}

@@ -1,0 +1,134 @@
+{
+  "time": 1792859430.324977,
+  "verified": true,
+  "runs": [
+    {
+      "key": "terminal-gemma-agentkv",
+      "job_id": "3448995",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-goal",
+      "job_id": "3448998",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-intentkv",
+      "job_id": "3448992",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-random_attention",
+      "job_id": "3448996",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-sliding_window",
+      "job_id": "3448987",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-vanilla",
+      "job_id": "3448994",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-agentkv",
+      "job_id": "3448989",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-goal",
+      "job_id": "3448997",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-intentkv",
+      "job_id": "3448993",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-random_attention",
+      "job_id": "3448990",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-sliding_window",
+      "job_id": "3448991",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-vanilla",
+      "job_id": "3448988",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    }
+  ],
+  "original_task_count": 89,
+  "reference_passes": 86,
+  "negative_controls": 33,
+  "approved_reference_exceptions": [
+    "protein-assembly",
+    "crack-7z-hash",
+    "portfolio-optimization"
+  ]
+}

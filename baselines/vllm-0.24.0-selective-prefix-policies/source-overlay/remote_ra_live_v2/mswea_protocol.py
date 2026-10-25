@@ -18,16 +18,30 @@ Upstream reference: ``scripts/serve_online_selector_v2.py`` (``_render``,
 The same ``Transcript`` logic runs in the API server (to build the prompt token
 IDs) and in EngineCore (to re-derive and verify them from its own record of
 the generated tokens).
+
+The turn literals above are the ``QWEN_XML`` grammar, the default. The Gemma 4
+model profile (stage 1) uses ``GEMMA4_XML`` (protocol ``mswea_xml_gemma4_v1``):
+a later message is ``<|turn>{role}\\n{content.strip()}<turn|>\\n`` with role
+``model`` for an assistant (rebuilds only) after the empty thought channel, the
+generation header is ``<|turn>model\\n<|channel>thought\\n<channel|>`` (Gemma's
+thinking-off generation prompt) and the boundary is ``<turn|>\\n`` (``\\n``
+after a stop id). History keeps the empty thought channel of every reply, which
+Gemma's own template drops when it re-renders a conversation: the transcript is
+append-only (design D-6).
 """
 from __future__ import annotations
 
 import re
 
+from .context_limits import MAX_TOKENS_CHOICES
 from .contract import require
 
 PROTOCOL = 'mswea_xml_v1'
 MARKER = '</mswea_bash_command>'
 GENERATION_HEADER = '<|im_start|>assistant\n<think>\n\n</think>\n\n'
+# The PoC's reply bound, also the server default. The reply bound is a server
+# setting (serve.py --max-tokens, context_limits), not part of this protocol:
+# check_sampling takes the server's pinned value.
 MAX_TOKENS = 1536
 RETURN_CODE = re.compile(r'<returncode>(-?\d+)</returncode>')
 TASK = re.compile(r'<pr_description>\s*(.*?)\s*</pr_description>', re.DOTALL)
@@ -67,8 +81,9 @@ def validate_messages(messages, problem_statement=None):
     return messages
 
 
-def check_sampling(params, stop_ids):
-    """Upstream greedy generation: argmax, 1536 tokens, EOS/pad stop, no other controls.
+def check_sampling(params, stop_ids, max_tokens=MAX_TOKENS):
+    """Upstream greedy generation: argmax, ``max_tokens`` new tokens (the server's
+    pinned reply bound, 1536 by default), EOS/pad stop, no other controls.
 
     The action marker is not a vLLM stop string: vLLM checks stop strings in the
     frontend and aborts the engine request afterwards.  ``MarkerStop`` ends the
@@ -79,12 +94,13 @@ def check_sampling(params, stop_ids):
     upstream decode.  vLLM's Qwen3 parser engine sets it to False while
     rendering, after the route has fixed the request.
     """
+    require(type(max_tokens) is int and max_tokens in MAX_TOKENS_CHOICES, 'pinned reply bound required')
     value = lambda name, default=None: getattr(params, name, default)
     stops = set(value('stop_token_ids') or ()) | {value('eos_token_id')}
     stops.discard(None)
     wrong = [name for name, ok in (
         ('n', value('n', 1) == 1), ('temperature', value('temperature') == 0),
-        ('max_tokens', value('max_tokens') == MAX_TOKENS), ('min_tokens', value('min_tokens', 0) == 0),
+        ('max_tokens', value('max_tokens') == max_tokens), ('min_tokens', value('min_tokens', 0) == 0),
         ('stop', not value('stop')), ('ignore_eos', not value('ignore_eos', False)),
         ('stop_token_ids', stops == set(stop_ids)),
         ('repetition_penalty', value('repetition_penalty', 1.0) == 1.0),
@@ -99,14 +115,71 @@ def check_sampling(params, stop_ids):
 
 
 class MarkerStop:
-    """Engine-side upstream stop: the decoded output contains the action marker."""
+    """Engine-side upstream stop: the decoded output contains the action marker.
 
-    def __init__(self, decode):
+    ``incremental`` (--decode-fastpath): the scheduler calls this once per
+    appended output token, and a request whose decoded output held the marker is
+    stopped. The marker is ASCII and ends in '>'; a byte-level decode maps ASCII
+    bytes to themselves wherever they sit (UTF-8 never uses them inside a
+    multi-byte sequence) and an output only grows at its end, so if the previous
+    output of this request (one token shorter) was decoded without the marker,
+    the marker can newly appear only if the new token's own bytes hold its final
+    '>', which the token decoded alone shows. Such a token, and any call that does
+    not follow the request's previous call by exactly one token, decodes the
+    whole output as before. The answer is the same in every case."""
+
+    # Requests remembered at most (output length checked without the marker); past
+    # this the table starts over and the next call per request decodes in full.
+    INCREMENTAL_REQUESTS = 4096
+    # ``token_cache``: token ids remembered at most; past this the cache starts over.
+    TOKEN_CACHE = 1 << 18
+
+    def __init__(self, decode, incremental=False, token_cache=False):
+        """``token_cache`` (--decode-fastpath2, with ``incremental``): remember per token id
+        whether the token decoded alone holds a '>' (a token decodes to the same text
+        every time, so the answer is the one the decode gives)."""
         require(callable(decode), 'decoder required')
+        require(type(incremental) is bool, 'incremental is a switch')
+        require(type(token_cache) is bool and (incremental or not token_cache),
+                'token_cache is a switch of the incremental check')
         self.decode = decode
+        self.incremental = incremental
+        self._checked = {}
+        self._gt = {} if token_cache else None
+
+    def _closes(self, token):
+        """``token_cache``: True when ``token`` decoded alone holds a '>' (the marker's last character)."""
+        cache = self._gt
+        found = cache.get(token)
+        if found is None:
+            if len(cache) >= self.TOKEN_CACHE:
+                cache.clear()
+            found = cache[token] = '>' in self.decode([token])
+        return found
+
+    def _absent(self, request):
+        """True when the marker is known absent from the request's decoded output."""
+        tokens = request.output_token_ids
+        n = len(tokens)
+        rid = (request.request_id, id(request))     # this request object, never a reused id
+        if n > 0 and self._checked.get(rid) == n - 1 and (
+                '>' not in self.decode([tokens[-1]]) if self._gt is None else not self._closes(tokens[-1])):
+            absent = True
+        else:
+            absent = MARKER not in self.decode(list(tokens))
+        if absent:
+            if len(self._checked) >= self.INCREMENTAL_REQUESTS and rid not in self._checked:
+                self._checked.clear()
+            self._checked[rid] = n
+        else:
+            self._checked.pop(rid, None)
+        return absent
 
     def __call__(self, request):
-        if MARKER not in self.decode(list(request.output_token_ids)):
+        if self.incremental:
+            if self._absent(request):
+                return False
+        elif MARKER not in self.decode(list(request.output_token_ids)):
             return False
         from vllm.v1.request import RequestStatus
         request.status = RequestStatus.FINISHED_STOPPED
@@ -117,6 +190,79 @@ class MarkerStop:
 def boundary_text(generated, stop_ids):
     """Upstream ``_append_boundary``: EOS/pad already closed the turn."""
     return '\n' if generated and generated[-1] in stop_ids else '<|im_end|>\n'
+
+
+class QwenGrammar:
+    """The turn literals of the upstream protocol (Qwen3.6-27B): the functions above."""
+    protocol = PROTOCOL
+    header = GENERATION_HEADER
+
+    @staticmethod
+    def message_text(role, content):
+        return message_text(role, content)
+
+    @staticmethod
+    def boundary_text(generated, stop_ids):
+        return boundary_text(generated, stop_ids)
+
+
+GEMMA4_PROTOCOL = 'mswea_xml_gemma4_v1'
+GEMMA4_HEADER = '<|turn>model\n<|channel>thought\n<channel|>'
+GEMMA4_END_OF_TURN = '<turn|>\n'
+
+
+def strip_thinking(text):
+    """Gemma 4 template ``strip_thinking``: drop every ``<|channel>...<channel|>`` part,
+    then ``trim`` (Python ``str.strip``)."""
+    result = ''
+    for part in text.split('<channel|>'):
+        result += part.split('<|channel>')[0] if '<|channel>' in part else part
+    return result.strip()
+
+
+class Gemma4Grammar:
+    """The Gemma 4 turn literals (model profile gemma4-31b-it, stage 1).
+
+    Every piece equals what the pinned template renders for that turn, except that a
+    model turn keeps the empty thought channel of its generation header (the template
+    drops it from history; the transcript is append-only). The stage-0 stock-vLLM
+    append reference (job 3364469) is reproduced token for token from these literals."""
+    protocol = GEMMA4_PROTOCOL
+    header = GEMMA4_HEADER
+
+    @staticmethod
+    def message_text(role, content):
+        require(role in ('user', 'assistant'), 'Gemma XML history holds user and assistant messages only')
+        if role == 'assistant':
+            # A rebuild re-encodes a reply from text: the kept channel, then the
+            # template's strip_thinking (what the continuing transcript holds when
+            # the reply round-trips).
+            return GEMMA4_HEADER + strip_thinking(content) + GEMMA4_END_OF_TURN
+        return '<|turn>user\n' + content.strip() + GEMMA4_END_OF_TURN
+
+    @staticmethod
+    def boundary_text(generated, stop_ids):
+        return '\n' if generated and generated[-1] in stop_ids else GEMMA4_END_OF_TURN
+
+
+QWEN_XML = QwenGrammar()
+GEMMA4_XML = Gemma4Grammar()
+GRAMMARS = {PROTOCOL: QWEN_XML, GEMMA4_PROTOCOL: GEMMA4_XML}
+
+
+def xml_transcripts(renderer, protocol, count):
+    """One transcript per session of a server whose startup config pins an XML protocol
+    (``protocol``: Qwen's or Gemma's turn grammar), else (). Startup only.
+
+    Each transcript's grammar must be the pinned protocol's: a Gemma release renders
+    with Gemma's grammar, every other release with Qwen's (renderers without a
+    ``grammar`` attribute render Qwen's)."""
+    if protocol not in GRAMMARS:
+        return ()
+    transcripts = tuple(renderer.transcript() for _ in range(count))
+    require(all(getattr(t, 'grammar', QWEN_XML) is GRAMMARS[protocol] for t in transcripts),
+            "the renderer's turn grammar differs from the pinned protocol")
+    return transcripts
 
 
 class Transcript:
@@ -133,14 +279,17 @@ class Transcript:
     resend) makes upstream open a fresh cold session whose render re-encodes
     every assistant message from text.  ``allow_rebuild`` enables that path;
     otherwise it fails closed with ``SESSION_REBUILD_REQUIRED``.
+
+    ``grammar``: the turn literals, ``QWEN_XML`` (the default) or ``GEMMA4_XML``.
     """
 
-    def __init__(self, *, encode, render_initial, decode, stop_ids, allow_rebuild=False):
+    def __init__(self, *, encode, render_initial, decode, stop_ids, allow_rebuild=False, grammar=QWEN_XML):
         require(callable(encode) and callable(render_initial) and callable(decode)
                 and type(stop_ids) is frozenset and stop_ids, 'transcript tokenizer callbacks required')
+        require(grammar is QWEN_XML or grammar is GEMMA4_XML, 'known XML grammar required')
         self.encode, self.render_initial, self.decode = encode, render_initial, decode
-        self.stop_ids, self.allow_rebuild = stop_ids, allow_rebuild
-        self.header = tuple(self.encode(GENERATION_HEADER))
+        self.stop_ids, self.allow_rebuild, self.grammar = stop_ids, allow_rebuild, grammar
+        self.header = tuple(self.encode(grammar.header))
         self.sessions = 0        # sessions opened, including rebuilds
         self._reset()
 
@@ -182,11 +331,11 @@ class Transcript:
             require(initial, 'initial template render is empty')
             complete = initial
             for message in messages[2:]:
-                complete += tuple(self.encode(message_text(message['role'], message['content'])))
+                complete += tuple(self.encode(self.grammar.message_text(message['role'], message['content'])))
             tokens, stable, span = complete + self.header, len(complete), None
             self.initial_length = len(initial)
         else:
-            observed = tuple(self.encode(message_text('user', messages[-1]['content'])))
+            observed = tuple(self.encode(self.grammar.message_text('user', messages[-1]['content'])))
             stable = len(self.stream)
             span = (stable, stable + len(observed))
             tokens = self.stream + observed + self.header
@@ -197,6 +346,11 @@ class Transcript:
     def abandon(self):
         self.pending = None
 
+    def release(self):
+        """Session pool: the session closed for good; drop its history, token stream
+        and any render a failed request left pending. Nothing renders on it again."""
+        self._reset()
+
     def commit(self, prompt_tokens, generated):
         """Append the generated tokens and the upstream boundary; return the reply."""
         pending = self.pending
@@ -204,7 +358,7 @@ class Transcript:
                 'committed prompt differs from the rendered XML turn')
         generated = tuple(generated)
         require(all(type(t) is int and t >= 0 for t in generated), 'generated token IDs required')
-        boundary = tuple(self.encode(boundary_text(generated, self.stop_ids)))
+        boundary = tuple(self.encode(self.grammar.boundary_text(generated, self.stop_ids)))
         text = self.decode(list(generated))
         if not self.turns:
             self.sessions += 1

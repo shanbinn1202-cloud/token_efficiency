@@ -1,0 +1,25 @@
+{
+  "time": 1792848870.833419,
+  "first_failure_retained": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/qemu-startup-nop.json",
+  "diagnosis": "isolated verifier-log export infrastructure failure; exact initiating cause not reproduced",
+  "clean_retries": [
+    {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-qemu-log-diagnostic-v32/clean-retry-0.json",
+      "sha256": "64a98661aabc3aeaa8ec1bfdbcad218ad53cb6b9cceac742b2708be4276d1b1c",
+      "reward": 0
+    },
+    {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-qemu-log-diagnostic-v32/clean-retry-1.json",
+      "sha256": "f2574726969e2ce7d5201178ada5840a22e121fca66b29276c012def91593e19",
+      "reward": 0
+    },
+    {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-qemu-log-diagnostic-v32/clean-retry-2.json",
+      "sha256": "d6630deb2cbc617de1ba8082c526084d250bc40d15f0665d6a33e8abfbdff440",
+      "reward": 0
+    }
+  ],
+  "candidate_runtime_unchanged": true,
+  "no_test_or_solution_changes": true,
+  "not_claimed_code_fix": true
+}

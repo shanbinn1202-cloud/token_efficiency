@@ -1,0 +1,12 @@
+{
+  "formal": false,
+  "task": "qemu-alpine-ssh",
+  "reason": "Nested x86 QEMU guest has not completed SSH setup when the original reference finishes in an outer VM. Diagnose with original task running directly in native ARM64 root-mapped Apptainer namespace.",
+  "changes": [
+    "No fakeroot LD_PRELOAD: real kernel file types, UID0 mapped to owner",
+    "Authenticated APT remains root to handle flattened image modes",
+    "Pin task runtime to one available CPU; retain original memory watchdog",
+    "All other 88 tasks keep byte-identical KVM implementation and backend choice"
+  ],
+  "original_task_tests_unchanged": true
+}

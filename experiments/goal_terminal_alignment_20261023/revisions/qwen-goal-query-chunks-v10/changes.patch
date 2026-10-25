@@ -1,0 +1,62 @@
+--- before/phase1_coordinator.py
++++ after/phase1_coordinator.py
+@@ -175,8 +175,7 @@
+             from runtime_renderer import PLAIN_GOAL_SCHEMA
+             goal_tokens = [int(t) for t in self.renderer(dict(schema=PLAIN_GOAL_SCHEMA,
+                                                              text=goal_payload)).token_ids]
+-            require(0 < len(goal_tokens) <= self.max_tokens,
+-                    'PHASE1_TOO_LONG: Goal forward exceeds one native forward')
++            require(0 < len(goal_tokens), 'Goal forward must contain tokens')
+         fresh = list(geo.fresh_pages)
+         Mt = mamba_tokens(P, self.layout)
+         M = -(-plan[0][1] // Mt)                      # Mamba row length (ceil(e/P) shared)
+--- before/native_probe.py
++++ after/native_probe.py
+@@ -183,9 +183,23 @@
+                 # Own blocks and zero list: the phase-1 KV is handed to phase 2.
+                 self._cleanup_request(rid)
+                 goal=lease.goal
+-                self.active.update(request=goal.lease_id,phase='goal',start=0,
+-                                   tokens=goal.tokens,rows=None,restored=False)
+-                goal_rows=self._execute(goal.lease_id,goal.tokens,0,goal.rows,goal.zero)
++                from .phase1_chunks import aligned_chunks
++                window=getattr(self.backend,'window',False)
++                plan=([(0,len(goal.tokens))] if window else aligned_chunks(
++                    0,len(goal.tokens),self.runner.max_num_tokens,lease.mamba_tokens or lease.page_tokens))
++                goal_parts=[]
++                self.active.pop('goal_chunk_carry',None)
++                for k,(start,end) in enumerate(plan):
++                    if k:self._cleanup_request(goal.lease_id)
++                    grows=list(goal.rows)
++                    if not window:
++                        n=-(-end//(lease.mamba_tokens or lease.page_tokens))
++                        for g in self.owner.hybrid_groups:grows[g]=(0,)*(n-1)+(goal.rows[g][-1],)
++                    self.active.update(request=goal.lease_id,phase='goal',start=start,
++                        tokens=goal.tokens[:end],rows=None,restored=False,chunk=k,chunk_rows=tuple(grows))
++                    goal_parts.append(self._execute(goal.lease_id,goal.tokens[:end],start,tuple(grows),goal.zero if k==0 else ()))
++                goal_rows=goal_parts[0] if len(goal_parts)==1 else (
++                    ProbeRows.join(goal_parts) if type(goal_parts[0]) is ProbeRows else _cat(goal_parts))
+             return dict(rows=rows,goal_rows=goal_rows,state=state,tail_capture=tail,
+                         position_evidence=plain_copy(self.active['position_evidence']))
+         finally:
+@@ -296,6 +310,10 @@
+             require(a.get('chunk_carry') is not None, 'missing preceding chunk GDN carry')
+             self.backend.io.restore(self._mamba_slot(),'hybrid',a['chunk_carry'])
+             self.backend.io.drain()
++        elif a['phase']=='goal' and a.get('chunk',0)>0 and not getattr(self.backend,'window',False):
++            require(a.get('goal_chunk_carry') is not None, 'missing preceding Goal chunk GDN carry')
++            self.backend.io.restore(self._mamba_slot(),'hybrid',a['goal_chunk_carry'])
++            self.backend.io.drain()
+         a['restored']=True
+ 
+     def after_forward(self,hidden):
+@@ -311,6 +329,9 @@
+             rows=ProbeRows(hidden,a['start'],count,a['lease'].page_tokens,a['phase']=='phase1')
+         if a['phase']=='phase1' and a['start']+count<a['lease'].end and not getattr(self.backend,'window',False):
+             a['chunk_carry']=self.backend.io.capture(self._mamba_slot(),'hybrid')
++            self.backend.io.drain()
++        if a['phase']=='goal' and a['start']+count<len(a['lease'].goal.tokens) and not getattr(self.backend,'window',False):
++            a['goal_chunk_carry']=self.backend.io.capture(self._mamba_slot(),'hybrid')
+             self.backend.io.drain()
+         if a['phase']=='phase1' and a['start']+count==a['lease'].end:
+             # The last forward of phase 1 (of its chunks, gemma-goal) captures its state.

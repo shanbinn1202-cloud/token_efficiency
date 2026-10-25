@@ -58,6 +58,9 @@ def validate(c):
         raise ValueError("backend.name must be transformers or vllm")
     if not 0 < c["backend"]["gpu_memory_utilization"] <= 1:
         raise ValueError("gpu_memory_utilization must be in (0, 1]")
+    batch = c["backend"]["max_num_batched_tokens"]
+    if type(batch) is not int or batch < c["evaluation"]["workers"]:
+        raise ValueError("max_num_batched_tokens must be an integer covering all request slots")
     pool = c["backend"]["kv_cache_memory_bytes"]
     if pool is not None and (type(pool) is not int or pool <= 0):
         raise ValueError("backend.kv_cache_memory_bytes must be null or a positive integer")

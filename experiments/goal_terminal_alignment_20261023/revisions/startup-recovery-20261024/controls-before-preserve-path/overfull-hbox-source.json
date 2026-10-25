@@ -1,0 +1,20 @@
+{
+  "files": {
+    "instruction.md": "91381d7490afbbf11255e22471d3ed76317353d8e1da372fbc91887e65c57f47",
+    "solution/solve.sh": "cc92ef1bf45e0a7cc9799be0fb64314b33c97d6448c6c885b50df08136b095da",
+    "environment/Dockerfile": "f73659a7e258641b2b93affb1d854dbba93239478707255767003e59cf1d1477",
+    "tests/synonyms.txt": "bc8f7cf4b41914be036e6d4666e1550971d39b2f23b7e69e3e975f4bdb387be6",
+    "tests/input.tex": "7bf7dbe58dbbfb08b6a652c547daa09a57cdbccc0fd18141b4968756061326a3",
+    "tests/main.tex": "6c07d3203fdc3fc54317fafeee9d19b576418c9de2e142a599814b2f6cb32b2f",
+    "tests/test.sh": "ab4ef5988c8694f6049eac703b7683a7f846c4714a61b764bd8e66e116abe16f",
+    "tests/test_outputs.py": "09756f87d1a29df533e86c5c7d5fd14f64acb17b03cabb55921bb2890d368e5d",
+    "environment/tests/synonyms.txt": "bc8f7cf4b41914be036e6d4666e1550971d39b2f23b7e69e3e975f4bdb387be6",
+    "environment/tests/input.tex": "7bf7dbe58dbbfb08b6a652c547daa09a57cdbccc0fd18141b4968756061326a3",
+    "environment/tests/main.tex": "6c07d3203fdc3fc54317fafeee9d19b576418c9de2e142a599814b2f6cb32b2f",
+    "environment/tests/test_outputs.py": "09756f87d1a29df533e86c5c7d5fd14f64acb17b03cabb55921bb2890d368e5d"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "d24390ba221061b27cd05ef37504614cb76a489956640a3a74a3d7e773c5518b"
+}

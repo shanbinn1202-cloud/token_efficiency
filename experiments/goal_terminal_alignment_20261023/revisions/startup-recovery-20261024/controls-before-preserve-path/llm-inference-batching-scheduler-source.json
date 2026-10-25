@@ -1,0 +1,20 @@
+{
+  "files": {
+    "instruction.md": "0817374767533fbf51bb93345ee1bba266263c216c6cc55c096e71b4a1d37dfc",
+    "solution/solve.sh": "cb9efb586d76a893c3027e62029e286eb6c7583dc92dbf1840a3adc236a926d7",
+    "environment/Dockerfile": "10a6193904ee0022ac098504182989893b196dfc74e626a3ca48534a8eacde48",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/test.sh": "005f980332355e2fe143d4ff4aac11828adf070594bbe7055399c238f06953ca",
+    "tests/cost_model_for_tests.py": "d3e810a99d40327fb8317f6512d879c52c6aeebdf5dcdc0c5e117c7df61c9ab9",
+    "tests/test_outputs.py": "80b06b7c4ba0db28832b767d48be74bb462d7f5df5798d9cb58c4f1160d96ffa",
+    "environment/task_file/input_data/requests_bucket_1.jsonl": "8b3cf1e2b06074162038064dd2c114abe308acd32cec7d365ee63ee81978f7de",
+    "environment/task_file/input_data/requests_bucket_2.jsonl": "e15e2d4c4d55f875c42a6042610d6282f6c0657c39d3e0d0f087268252525cb5",
+    "environment/task_file/scripts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "environment/task_file/scripts/baseline_packer.py": "547d230d5e6d93197803480cb81cab0ec6ac63fcfa0a24b246f549523f216c4e",
+    "environment/task_file/scripts/cost_model.py": "0cf417fd5ff0112defcd46970d37a290c0763c5a9092e91cb3ebb86c3f20e6ce"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "bad604d2617cbaef8d184f69553263f2ee8a007180ee2e4f6af4ff495afb2e7e"
+}

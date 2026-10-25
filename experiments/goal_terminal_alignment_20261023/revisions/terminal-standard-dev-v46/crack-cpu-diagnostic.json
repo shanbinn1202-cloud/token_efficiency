@@ -1,0 +1,11 @@
+[
+  {
+    "time": 1792854118.2650661,
+    "runtime": "/tmp/terminal-arm64-kvm-cckzji39/runtime.json",
+    "diagnostic": {
+      "stdout": "PID     ELAPSED     TIME %CPU NLWP COMMAND\n  848       03:20 00:03:20 99.8    1 john\n/app/john/run/john.log\n/app/john/run/john.rec\n0",
+      "stderr": null,
+      "return_code": 0
+    }
+  }
+]

@@ -10,7 +10,10 @@ The multi-session SWE-bench pilots (Slurm jobs 3299922 and 3300434) used these e
 ten Astropy instances the statement SHA-256 values are pinned below and checked here. Needs the `datasets` package
 and the dataset (online, or cached with HF_DATASETS_OFFLINE=1).
 
-Usage: build_tasks.py --output-dir DIR [--max-sessions 5] INSTANCE_ID...
+With --pool (a session-pool server, `serve.py --max-running-sessions K`) it writes one `tasks-pool.json` with every
+instance, in the order given (1 to 64; the order in which run_agents.sh refills its K agents), instead of groups.
+
+Usage: build_tasks.py --output-dir DIR [--max-sessions 5 | --pool] INSTANCE_ID...
 """
 import argparse
 import hashlib
@@ -18,7 +21,8 @@ import json
 from pathlib import Path
 
 DATASET = 'princeton-nlp/SWE-Bench_Verified'   # the pilots found SWE-bench/SWE-bench_Verified identical for all ten
-MAX_SESSIONS = 8                               # serve.py: 1..8 tasks per server
+MAX_SESSIONS = 16                              # serve.py: 1..16 tasks per server
+MAX_TASKS = 64                                 # serve.py --max-running-sessions: 1..64 registered tasks
 # Problem-statement SHA-256 of the pilot instances (pilot pins; jobs 3299922 and 3300434).
 PILOT_STATEMENT_SHA256 = {
     'astropy__astropy-12907': 'c01334ec1b21a089c650cf2e7b96ab974469076bf1260d23885799e1f0a7551f',
@@ -89,11 +93,18 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--max-sessions', type=int, default=5,
                         help='sessions per server (default 5: the validated cap at --kv-cache-gib 24)')
+    parser.add_argument('--pool', action='store_true',
+                        help='one tasks-pool.json with every instance, for serve.py --max-running-sessions')
     parser.add_argument('--dataset', default=DATASET)
     parser.add_argument('--split', default='test')
     parser.add_argument('instances', nargs='+')
     args = parser.parse_args()
-    groups = session_groups(args.instances, args.max_sessions)
+    if args.pool:
+        if not 1 <= len(args.instances) <= MAX_TASKS:
+            raise SystemExit('a session pool registers 1 to %d instances' % MAX_TASKS)
+        groups = []
+    else:
+        groups = session_groups(args.instances, args.max_sessions)
     tasks = load_tasks(args.instances, args.dataset, args.split)
     check_tasks(tasks)
     for task in tasks:
@@ -113,6 +124,9 @@ def main():
         name = 'tasks-g%d.json' % k
         report['groups'].append(dict(file=name, instances=group,
                                      sha256=write(args.output_dir / name, tasks_bytes([by_id[i] for i in group]))))
+    if args.pool:
+        report['pool'] = dict(file='tasks-pool.json', instances=list(args.instances),
+                              sha256=write(args.output_dir / 'tasks-pool.json', tasks_bytes(tasks)))
     print(json.dumps(report, indent=1))
 
 

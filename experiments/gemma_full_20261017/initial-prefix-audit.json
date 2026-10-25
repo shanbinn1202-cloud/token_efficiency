@@ -1,0 +1,5505 @@
+[
+  {
+    "instance_id": "astropy__astropy-12907",
+    "prefix_tokens": 1522,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13033",
+    "prefix_tokens": 1958,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13236",
+    "prefix_tokens": 1680,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13398",
+    "prefix_tokens": 2592,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13453",
+    "prefix_tokens": 3925,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13579",
+    "prefix_tokens": 2897,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-13977",
+    "prefix_tokens": 2212,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14096",
+    "prefix_tokens": 1440,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14182",
+    "prefix_tokens": 1788,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14309",
+    "prefix_tokens": 2720,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14365",
+    "prefix_tokens": 1649,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14369",
+    "prefix_tokens": 2010,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14508",
+    "prefix_tokens": 2099,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14539",
+    "prefix_tokens": 1644,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14598",
+    "prefix_tokens": 2125,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-14995",
+    "prefix_tokens": 1997,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-7166",
+    "prefix_tokens": 1163,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-7336",
+    "prefix_tokens": 1611,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-7606",
+    "prefix_tokens": 1481,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-7671",
+    "prefix_tokens": 1786,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-8707",
+    "prefix_tokens": 1345,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "astropy__astropy-8872",
+    "prefix_tokens": 1512,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10097",
+    "prefix_tokens": 1751,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10554",
+    "prefix_tokens": 2163,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10880",
+    "prefix_tokens": 1184,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10914",
+    "prefix_tokens": 1362,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10973",
+    "prefix_tokens": 1211,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-10999",
+    "prefix_tokens": 1364,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11066",
+    "prefix_tokens": 1613,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11087",
+    "prefix_tokens": 4420,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11095",
+    "prefix_tokens": 1224,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11099",
+    "prefix_tokens": 1296,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11119",
+    "prefix_tokens": 1225,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11133",
+    "prefix_tokens": 1332,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11138",
+    "prefix_tokens": 2167,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11141",
+    "prefix_tokens": 1323,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11149",
+    "prefix_tokens": 1336,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11163",
+    "prefix_tokens": 1237,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11179",
+    "prefix_tokens": 1201,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11206",
+    "prefix_tokens": 1312,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11211",
+    "prefix_tokens": 1396,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11239",
+    "prefix_tokens": 1455,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11265",
+    "prefix_tokens": 2494,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11276",
+    "prefix_tokens": 1426,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11292",
+    "prefix_tokens": 1204,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11299",
+    "prefix_tokens": 1988,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11333",
+    "prefix_tokens": 1479,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11400",
+    "prefix_tokens": 1336,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11433",
+    "prefix_tokens": 1282,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11451",
+    "prefix_tokens": 1633,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11477",
+    "prefix_tokens": 1175,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11490",
+    "prefix_tokens": 1276,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11532",
+    "prefix_tokens": 1988,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11551",
+    "prefix_tokens": 2606,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11555",
+    "prefix_tokens": 1299,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11603",
+    "prefix_tokens": 1211,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11728",
+    "prefix_tokens": 1253,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11734",
+    "prefix_tokens": 1393,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11740",
+    "prefix_tokens": 1713,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11749",
+    "prefix_tokens": 1458,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11790",
+    "prefix_tokens": 1279,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11815",
+    "prefix_tokens": 1530,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11820",
+    "prefix_tokens": 1249,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11848",
+    "prefix_tokens": 1320,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11880",
+    "prefix_tokens": 1432,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11885",
+    "prefix_tokens": 1454,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11951",
+    "prefix_tokens": 1313,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11964",
+    "prefix_tokens": 1782,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-11999",
+    "prefix_tokens": 1294,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12039",
+    "prefix_tokens": 1473,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12050",
+    "prefix_tokens": 1201,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12125",
+    "prefix_tokens": 1581,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12143",
+    "prefix_tokens": 1555,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12155",
+    "prefix_tokens": 1333,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12193",
+    "prefix_tokens": 1299,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12209",
+    "prefix_tokens": 1435,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12262",
+    "prefix_tokens": 1376,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12273",
+    "prefix_tokens": 1410,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12276",
+    "prefix_tokens": 1307,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12304",
+    "prefix_tokens": 1267,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12308",
+    "prefix_tokens": 1236,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12325",
+    "prefix_tokens": 1370,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12406",
+    "prefix_tokens": 1438,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12419",
+    "prefix_tokens": 1301,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12663",
+    "prefix_tokens": 2092,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12708",
+    "prefix_tokens": 1373,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12713",
+    "prefix_tokens": 1197,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12741",
+    "prefix_tokens": 1230,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12754",
+    "prefix_tokens": 1341,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12774",
+    "prefix_tokens": 1481,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12858",
+    "prefix_tokens": 1386,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-12965",
+    "prefix_tokens": 1918,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13012",
+    "prefix_tokens": 1496,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13023",
+    "prefix_tokens": 1250,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13028",
+    "prefix_tokens": 2031,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13033",
+    "prefix_tokens": 2329,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13089",
+    "prefix_tokens": 1655,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13109",
+    "prefix_tokens": 1620,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13112",
+    "prefix_tokens": 1752,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13121",
+    "prefix_tokens": 1510,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13128",
+    "prefix_tokens": 1228,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13158",
+    "prefix_tokens": 1442,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13195",
+    "prefix_tokens": 1756,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13212",
+    "prefix_tokens": 1229,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13279",
+    "prefix_tokens": 1267,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13297",
+    "prefix_tokens": 1560,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13315",
+    "prefix_tokens": 1191,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13343",
+    "prefix_tokens": 1391,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13344",
+    "prefix_tokens": 1458,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13346",
+    "prefix_tokens": 1301,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13363",
+    "prefix_tokens": 1570,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13401",
+    "prefix_tokens": 1442,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13406",
+    "prefix_tokens": 2074,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13410",
+    "prefix_tokens": 1538,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13417",
+    "prefix_tokens": 1398,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13449",
+    "prefix_tokens": 3271,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13512",
+    "prefix_tokens": 1257,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13513",
+    "prefix_tokens": 1486,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13516",
+    "prefix_tokens": 1299,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13551",
+    "prefix_tokens": 1262,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13568",
+    "prefix_tokens": 1326,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13569",
+    "prefix_tokens": 1707,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13590",
+    "prefix_tokens": 1334,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13658",
+    "prefix_tokens": 1479,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13670",
+    "prefix_tokens": 1394,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13741",
+    "prefix_tokens": 1355,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13786",
+    "prefix_tokens": 1297,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13794",
+    "prefix_tokens": 1188,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13807",
+    "prefix_tokens": 1577,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13809",
+    "prefix_tokens": 1246,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13810",
+    "prefix_tokens": 1628,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13820",
+    "prefix_tokens": 1594,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13821",
+    "prefix_tokens": 1293,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13837",
+    "prefix_tokens": 1518,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13925",
+    "prefix_tokens": 2208,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13933",
+    "prefix_tokens": 1433,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-13964",
+    "prefix_tokens": 1581,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14007",
+    "prefix_tokens": 1461,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14011",
+    "prefix_tokens": 1592,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14017",
+    "prefix_tokens": 1567,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14034",
+    "prefix_tokens": 1493,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14053",
+    "prefix_tokens": 2009,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14089",
+    "prefix_tokens": 1197,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14122",
+    "prefix_tokens": 1262,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14140",
+    "prefix_tokens": 1451,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14155",
+    "prefix_tokens": 1252,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14170",
+    "prefix_tokens": 1624,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14238",
+    "prefix_tokens": 1980,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14311",
+    "prefix_tokens": 1323,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14315",
+    "prefix_tokens": 1318,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14349",
+    "prefix_tokens": 1820,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14351",
+    "prefix_tokens": 3888,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14373",
+    "prefix_tokens": 1186,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14376",
+    "prefix_tokens": 1430,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14404",
+    "prefix_tokens": 1223,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14434",
+    "prefix_tokens": 1167,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14493",
+    "prefix_tokens": 1570,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14500",
+    "prefix_tokens": 1190,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14534",
+    "prefix_tokens": 1575,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14539",
+    "prefix_tokens": 1248,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14559",
+    "prefix_tokens": 1270,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14580",
+    "prefix_tokens": 1591,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14608",
+    "prefix_tokens": 1266,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14631",
+    "prefix_tokens": 1463,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14672",
+    "prefix_tokens": 3365,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14725",
+    "prefix_tokens": 1212,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14752",
+    "prefix_tokens": 1873,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14765",
+    "prefix_tokens": 1266,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14771",
+    "prefix_tokens": 1480,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14787",
+    "prefix_tokens": 1332,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14792",
+    "prefix_tokens": 1604,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14855",
+    "prefix_tokens": 1381,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14915",
+    "prefix_tokens": 1416,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-14999",
+    "prefix_tokens": 1188,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15022",
+    "prefix_tokens": 1492,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15037",
+    "prefix_tokens": 1268,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15098",
+    "prefix_tokens": 1994,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15103",
+    "prefix_tokens": 1225,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15104",
+    "prefix_tokens": 2485,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15127",
+    "prefix_tokens": 1195,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15128",
+    "prefix_tokens": 1886,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15161",
+    "prefix_tokens": 1240,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15252",
+    "prefix_tokens": 1524,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15268",
+    "prefix_tokens": 1519,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15277",
+    "prefix_tokens": 1926,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15278",
+    "prefix_tokens": 1492,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15280",
+    "prefix_tokens": 1839,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15315",
+    "prefix_tokens": 1345,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15368",
+    "prefix_tokens": 1515,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15375",
+    "prefix_tokens": 1687,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15380",
+    "prefix_tokens": 1672,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15382",
+    "prefix_tokens": 1240,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15467",
+    "prefix_tokens": 1351,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15499",
+    "prefix_tokens": 1177,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15503",
+    "prefix_tokens": 1751,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15525",
+    "prefix_tokens": 2584,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15554",
+    "prefix_tokens": 1490,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15561",
+    "prefix_tokens": 1208,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15563",
+    "prefix_tokens": 1684,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15569",
+    "prefix_tokens": 1316,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15572",
+    "prefix_tokens": 1547,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15629",
+    "prefix_tokens": 1849,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15695",
+    "prefix_tokens": 1642,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15731",
+    "prefix_tokens": 1445,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15732",
+    "prefix_tokens": 1286,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15741",
+    "prefix_tokens": 1227,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15814",
+    "prefix_tokens": 2030,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15851",
+    "prefix_tokens": 1294,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15863",
+    "prefix_tokens": 1374,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15916",
+    "prefix_tokens": 1554,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15930",
+    "prefix_tokens": 1328,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15957",
+    "prefix_tokens": 1329,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15973",
+    "prefix_tokens": 2916,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-15987",
+    "prefix_tokens": 1162,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16032",
+    "prefix_tokens": 1386,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16082",
+    "prefix_tokens": 1188,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16100",
+    "prefix_tokens": 1182,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16116",
+    "prefix_tokens": 1305,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16136",
+    "prefix_tokens": 1834,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16139",
+    "prefix_tokens": 1560,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16145",
+    "prefix_tokens": 1318,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16255",
+    "prefix_tokens": 1625,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16256",
+    "prefix_tokens": 2080,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16263",
+    "prefix_tokens": 1257,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16315",
+    "prefix_tokens": 1490,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16333",
+    "prefix_tokens": 1279,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16429",
+    "prefix_tokens": 1467,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16454",
+    "prefix_tokens": 1680,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16485",
+    "prefix_tokens": 1204,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16493",
+    "prefix_tokens": 1388,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16502",
+    "prefix_tokens": 1688,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16527",
+    "prefix_tokens": 1279,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16560",
+    "prefix_tokens": 1305,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16569",
+    "prefix_tokens": 1658,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16595",
+    "prefix_tokens": 1583,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16612",
+    "prefix_tokens": 1387,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16631",
+    "prefix_tokens": 1329,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16642",
+    "prefix_tokens": 1205,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16661",
+    "prefix_tokens": 1477,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16662",
+    "prefix_tokens": 1282,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16667",
+    "prefix_tokens": 1633,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16801",
+    "prefix_tokens": 1289,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16819",
+    "prefix_tokens": 1153,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16877",
+    "prefix_tokens": 1231,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16899",
+    "prefix_tokens": 1312,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16901",
+    "prefix_tokens": 1482,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16938",
+    "prefix_tokens": 2401,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-16950",
+    "prefix_tokens": 1556,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-17029",
+    "prefix_tokens": 1435,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-17084",
+    "prefix_tokens": 1324,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-17087",
+    "prefix_tokens": 1443,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-7530",
+    "prefix_tokens": 1248,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "django__django-9296",
+    "prefix_tokens": 1236,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-13989",
+    "prefix_tokens": 1698,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-14623",
+    "prefix_tokens": 1583,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-20488",
+    "prefix_tokens": 1806,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-20676",
+    "prefix_tokens": 1604,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-20826",
+    "prefix_tokens": 1979,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-20859",
+    "prefix_tokens": 1918,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-21568",
+    "prefix_tokens": 1629,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-22719",
+    "prefix_tokens": 4413,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-22865",
+    "prefix_tokens": 1661,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-22871",
+    "prefix_tokens": 1630,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-23299",
+    "prefix_tokens": 1762,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-23314",
+    "prefix_tokens": 1460,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-23412",
+    "prefix_tokens": 1869,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-23476",
+    "prefix_tokens": 2657,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24026",
+    "prefix_tokens": 1892,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24149",
+    "prefix_tokens": 2244,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24177",
+    "prefix_tokens": 1828,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24570",
+    "prefix_tokens": 1651,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24627",
+    "prefix_tokens": 1280,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24637",
+    "prefix_tokens": 1846,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24870",
+    "prefix_tokens": 1541,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-24970",
+    "prefix_tokens": 1702,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25122",
+    "prefix_tokens": 1562,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25287",
+    "prefix_tokens": 1853,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25311",
+    "prefix_tokens": 1463,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25332",
+    "prefix_tokens": 1526,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25479",
+    "prefix_tokens": 3123,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25775",
+    "prefix_tokens": 1289,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-25960",
+    "prefix_tokens": 1385,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-26113",
+    "prefix_tokens": 4491,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-26208",
+    "prefix_tokens": 1985,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-26291",
+    "prefix_tokens": 2468,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-26342",
+    "prefix_tokens": 1327,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "matplotlib__matplotlib-26466",
+    "prefix_tokens": 1668,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "mwaskom__seaborn-3069",
+    "prefix_tokens": 1409,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "mwaskom__seaborn-3187",
+    "prefix_tokens": 1611,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pallets__flask-5014",
+    "prefix_tokens": 1179,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-1142",
+    "prefix_tokens": 1215,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-1724",
+    "prefix_tokens": 3633,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-1766",
+    "prefix_tokens": 1351,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-1921",
+    "prefix_tokens": 1318,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-2317",
+    "prefix_tokens": 1361,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-2931",
+    "prefix_tokens": 1215,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-5414",
+    "prefix_tokens": 1698,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "psf__requests-6028",
+    "prefix_tokens": 1649,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-2905",
+    "prefix_tokens": 1935,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-3095",
+    "prefix_tokens": 1846,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-3151",
+    "prefix_tokens": 2023,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-3305",
+    "prefix_tokens": 1879,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-3677",
+    "prefix_tokens": 1665,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-3993",
+    "prefix_tokens": 1377,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4075",
+    "prefix_tokens": 2046,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4094",
+    "prefix_tokens": 1828,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4356",
+    "prefix_tokens": 1389,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4629",
+    "prefix_tokens": 2190,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4687",
+    "prefix_tokens": 2746,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4695",
+    "prefix_tokens": 2661,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-4966",
+    "prefix_tokens": 2681,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6461",
+    "prefix_tokens": 1470,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6599",
+    "prefix_tokens": 3469,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6721",
+    "prefix_tokens": 4659,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6744",
+    "prefix_tokens": 1642,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6938",
+    "prefix_tokens": 2295,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-6992",
+    "prefix_tokens": 1603,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-7229",
+    "prefix_tokens": 2235,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-7233",
+    "prefix_tokens": 1795,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pydata__xarray-7393",
+    "prefix_tokens": 2032,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-4551",
+    "prefix_tokens": 1451,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-4604",
+    "prefix_tokens": 1411,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-4661",
+    "prefix_tokens": 1369,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-4970",
+    "prefix_tokens": 1286,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-6386",
+    "prefix_tokens": 1423,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-6528",
+    "prefix_tokens": 1846,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-6903",
+    "prefix_tokens": 2209,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-7080",
+    "prefix_tokens": 10263,
+    "methods": [
+      "random_attention",
+      "sliding_window"
+    ],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-7277",
+    "prefix_tokens": 1471,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pylint-dev__pylint-8898",
+    "prefix_tokens": 2417,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-10051",
+    "prefix_tokens": 1655,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-10081",
+    "prefix_tokens": 2026,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-10356",
+    "prefix_tokens": 2600,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-5262",
+    "prefix_tokens": 2657,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-5631",
+    "prefix_tokens": 1944,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-5787",
+    "prefix_tokens": 2271,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-5809",
+    "prefix_tokens": 1463,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-5840",
+    "prefix_tokens": 1316,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-6197",
+    "prefix_tokens": 2130,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-6202",
+    "prefix_tokens": 2013,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7205",
+    "prefix_tokens": 2626,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7236",
+    "prefix_tokens": 1997,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7324",
+    "prefix_tokens": 1282,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7432",
+    "prefix_tokens": 1386,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7490",
+    "prefix_tokens": 5662,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7521",
+    "prefix_tokens": 2460,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7571",
+    "prefix_tokens": 1280,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-7982",
+    "prefix_tokens": 1273,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "pytest-dev__pytest-8399",
+    "prefix_tokens": 1432,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-10297",
+    "prefix_tokens": 1619,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-10844",
+    "prefix_tokens": 1852,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-10908",
+    "prefix_tokens": 1722,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-11310",
+    "prefix_tokens": 1472,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-11578",
+    "prefix_tokens": 3455,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-12585",
+    "prefix_tokens": 1539,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-12682",
+    "prefix_tokens": 1267,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-12973",
+    "prefix_tokens": 1578,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13124",
+    "prefix_tokens": 4200,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13135",
+    "prefix_tokens": 3061,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13142",
+    "prefix_tokens": 2314,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13328",
+    "prefix_tokens": 2872,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13439",
+    "prefix_tokens": 1617,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13496",
+    "prefix_tokens": 1482,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-13779",
+    "prefix_tokens": 1318,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14053",
+    "prefix_tokens": 2167,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14087",
+    "prefix_tokens": 2011,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14141",
+    "prefix_tokens": 1164,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14496",
+    "prefix_tokens": 1867,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14629",
+    "prefix_tokens": 1792,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14710",
+    "prefix_tokens": 3355,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14894",
+    "prefix_tokens": 1877,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-14983",
+    "prefix_tokens": 1666,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-15100",
+    "prefix_tokens": 1874,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-25102",
+    "prefix_tokens": 1826,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-25232",
+    "prefix_tokens": 1508,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-25747",
+    "prefix_tokens": 3338,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-25931",
+    "prefix_tokens": 2165,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-25973",
+    "prefix_tokens": 1723,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-26194",
+    "prefix_tokens": 1523,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-26323",
+    "prefix_tokens": 2226,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "scikit-learn__scikit-learn-9288",
+    "prefix_tokens": 2388,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10323",
+    "prefix_tokens": 2149,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10435",
+    "prefix_tokens": 2151,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10449",
+    "prefix_tokens": 2523,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10466",
+    "prefix_tokens": 2268,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10614",
+    "prefix_tokens": 2159,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-10673",
+    "prefix_tokens": 1581,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-11445",
+    "prefix_tokens": 1791,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-11510",
+    "prefix_tokens": 3029,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7440",
+    "prefix_tokens": 1476,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7454",
+    "prefix_tokens": 2042,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7462",
+    "prefix_tokens": 1551,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7590",
+    "prefix_tokens": 1341,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7748",
+    "prefix_tokens": 1213,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7757",
+    "prefix_tokens": 1392,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7889",
+    "prefix_tokens": 1511,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7910",
+    "prefix_tokens": 1503,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-7985",
+    "prefix_tokens": 1665,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8035",
+    "prefix_tokens": 1305,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8056",
+    "prefix_tokens": 1714,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8120",
+    "prefix_tokens": 1711,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8265",
+    "prefix_tokens": 1756,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8269",
+    "prefix_tokens": 1523,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8459",
+    "prefix_tokens": 1611,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8475",
+    "prefix_tokens": 1336,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8548",
+    "prefix_tokens": 1236,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8551",
+    "prefix_tokens": 1839,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8593",
+    "prefix_tokens": 1353,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8595",
+    "prefix_tokens": 1385,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8621",
+    "prefix_tokens": 1786,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8638",
+    "prefix_tokens": 1921,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-8721",
+    "prefix_tokens": 1316,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9229",
+    "prefix_tokens": 2326,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9230",
+    "prefix_tokens": 1640,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9258",
+    "prefix_tokens": 1265,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9281",
+    "prefix_tokens": 1402,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9320",
+    "prefix_tokens": 1508,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9367",
+    "prefix_tokens": 1314,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9461",
+    "prefix_tokens": 1833,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9591",
+    "prefix_tokens": 1807,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9602",
+    "prefix_tokens": 1527,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9658",
+    "prefix_tokens": 2157,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9673",
+    "prefix_tokens": 1548,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9698",
+    "prefix_tokens": 1409,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sphinx-doc__sphinx-9711",
+    "prefix_tokens": 1629,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-11618",
+    "prefix_tokens": 1201,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-12096",
+    "prefix_tokens": 1365,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-12419",
+    "prefix_tokens": 1528,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-12481",
+    "prefix_tokens": 1225,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-12489",
+    "prefix_tokens": 1403,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13031",
+    "prefix_tokens": 1498,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13091",
+    "prefix_tokens": 1593,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13372",
+    "prefix_tokens": 1545,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13480",
+    "prefix_tokens": 1304,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13551",
+    "prefix_tokens": 1353,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13615",
+    "prefix_tokens": 1209,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13647",
+    "prefix_tokens": 1665,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13757",
+    "prefix_tokens": 1317,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13798",
+    "prefix_tokens": 1379,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13852",
+    "prefix_tokens": 1793,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13877",
+    "prefix_tokens": 2657,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13878",
+    "prefix_tokens": 2127,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-13974",
+    "prefix_tokens": 1564,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-14248",
+    "prefix_tokens": 1352,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-14531",
+    "prefix_tokens": 1396,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-14711",
+    "prefix_tokens": 1470,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-14976",
+    "prefix_tokens": 1454,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15017",
+    "prefix_tokens": 1469,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15345",
+    "prefix_tokens": 1212,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15349",
+    "prefix_tokens": 1399,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15599",
+    "prefix_tokens": 1888,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15809",
+    "prefix_tokens": 1209,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15875",
+    "prefix_tokens": 1314,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-15976",
+    "prefix_tokens": 1630,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-16450",
+    "prefix_tokens": 1432,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-16597",
+    "prefix_tokens": 1236,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-16766",
+    "prefix_tokens": 1319,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-16792",
+    "prefix_tokens": 1694,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-16886",
+    "prefix_tokens": 1182,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-17139",
+    "prefix_tokens": 1897,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-17318",
+    "prefix_tokens": 2151,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-17630",
+    "prefix_tokens": 2402,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-17655",
+    "prefix_tokens": 1736,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-18189",
+    "prefix_tokens": 1477,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-18199",
+    "prefix_tokens": 1230,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-18211",
+    "prefix_tokens": 1357,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-18698",
+    "prefix_tokens": 1349,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-18763",
+    "prefix_tokens": 1383,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19040",
+    "prefix_tokens": 1602,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19346",
+    "prefix_tokens": 1307,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19495",
+    "prefix_tokens": 1847,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19637",
+    "prefix_tokens": 1197,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19783",
+    "prefix_tokens": 1240,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-19954",
+    "prefix_tokens": 1488,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20154",
+    "prefix_tokens": 1246,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20428",
+    "prefix_tokens": 2819,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20438",
+    "prefix_tokens": 1635,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20590",
+    "prefix_tokens": 1340,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20801",
+    "prefix_tokens": 1325,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-20916",
+    "prefix_tokens": 1204,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-21379",
+    "prefix_tokens": 1644,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-21596",
+    "prefix_tokens": 1445,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-21612",
+    "prefix_tokens": 1420,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-21847",
+    "prefix_tokens": 1457,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-21930",
+    "prefix_tokens": 1336,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-22080",
+    "prefix_tokens": 1369,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-22456",
+    "prefix_tokens": 1204,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-22714",
+    "prefix_tokens": 1699,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-22914",
+    "prefix_tokens": 1357,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-23262",
+    "prefix_tokens": 1461,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-23413",
+    "prefix_tokens": 1262,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-23534",
+    "prefix_tokens": 1338,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-23824",
+    "prefix_tokens": 1788,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-23950",
+    "prefix_tokens": 1395,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24066",
+    "prefix_tokens": 1319,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24213",
+    "prefix_tokens": 1488,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24443",
+    "prefix_tokens": 1363,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24539",
+    "prefix_tokens": 1409,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24562",
+    "prefix_tokens": 1214,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  },
+  {
+    "instance_id": "sympy__sympy-24661",
+    "prefix_tokens": 1257,
+    "methods": [],
+    "budget": 8192,
+    "reserve_tokens": {
+      "random_attention": 64,
+      "sliding_window": 0
+    },
+    "action": "count_as_failure"
+  }
+]

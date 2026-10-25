@@ -349,6 +349,11 @@ class Pages:
         return [list(v.values), v.scale]
 
 
+def reference_path():
+    """Authorities built inside take the reference selection path (no fast_selection)."""
+    return patch.object(query_selection.fast_selection, 'available', return_value=None)
+
+
 def run_turns(policy, P, contract, compact, compact_query=False, observe=None):
     auth, transcript = authority(policy, P, contract)
     pages, rows = Pages(P, compact), []
@@ -405,9 +410,19 @@ class SelectionMatrixTests(unittest.TestCase):
         def capture(auth, turn):
             records.clear()
 
+        # The fast path (fast_selection) builds no PageRecord and decides alike.
         with patch.object(query_selection.upstream()[1], 'PageRecord',
                           side_effect=lambda **kw: records.append(kw) or original(**kw)):
+            fast_auth, fast_rows = run_turns('observation_query', 16, contract_for(16, True), compact=True,
+                                             observe=capture)
+        self.assertIsNotNone(fast_auth.fast)
+        self.assertEqual(records, [])
+        with reference_path(), patch.object(query_selection.upstream()[1], 'PageRecord',
+                                            side_effect=lambda **kw: records.append(kw) or original(**kw)):
             auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True, observe=capture)
+        self.assertIsNone(auth.fast)
+        self.assertEqual([(r['ranking'], r['count'], r['body']['selection']) for r in rows],
+                         [(r['ranking'], r['count'], r['body']['selection']) for r in fast_rows])
         last = rows[-1]
         selection, geo = last['body']['selection'], last['geo']
         n = geo.n
@@ -452,8 +467,20 @@ class SelectionMatrixTests(unittest.TestCase):
         def observe(auth, turn):
             calls[turn] = (len(published), len(hashes))
         publish = page_vectors.PageVectorPublisher.publish_page
+        # Fast path: nothing is published and no plan hashes per Page (a constant
+        # few: the selector config and the new vectors' content hashes).
         with patch.object(page_vectors.PageVectorPublisher, 'publish_page', autospec=True,
                           side_effect=lambda self, *a: published.append(a[1]) or publish(self, *a)), \
+                patch.object(page_vectors, '_stable_hash', side_effect=count):
+            auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True, observe=observe)
+        n2, n3 = rows[2]['geo'].n, rows[3]['geo'].n
+        self.assertEqual(published, [])
+        self.assertLessEqual(len(hashes) - calls[3][1], 8)
+        self.assertEqual(len(auth.page_columns['s'].objects), n3)
+        published.clear(); hashes.clear(); calls.clear()
+        with reference_path(), \
+                patch.object(page_vectors.PageVectorPublisher, 'publish_page', autospec=True,
+                             side_effect=lambda self, *a: published.append(a[1]) or publish(self, *a)), \
                 patch.object(page_vectors, '_stable_hash', side_effect=count):
             auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True, observe=observe)
         n2, n3 = rows[2]['geo'].n, rows[3]['geo'].n
@@ -469,10 +496,15 @@ class SelectionMatrixTests(unittest.TestCase):
         self.assertLessEqual(per_plan, 2 * (n3 - n2) + n3 + selected + 8)
 
     def test_rebuild_drops_the_session_index(self):
-        auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True)
+        with reference_path():
+            auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True)
         self.assertIn('s', auth.page_index)
         auth.reset_session('s')
         self.assertNotIn('s', auth.page_index)
+        auth, rows = run_turns('observation_query', 16, contract_for(16, True), compact=True)
+        self.assertIn('s', auth.page_columns)
+        auth.reset_session('s')
+        self.assertNotIn('s', auth.page_columns)
 
 
 class GeometryTests(unittest.TestCase):

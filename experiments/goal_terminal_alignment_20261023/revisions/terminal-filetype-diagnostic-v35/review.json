@@ -1,0 +1,11 @@
+{
+  "time": 1792849930.0940888,
+  "original_failure": "dpkg rejected krb5-locales.list as non-regular; no assertions ran",
+  "clean_instrumented_retry": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "exception": null,
+  "conclusion": "Not reproduced. Diagnostic showed fake and actual file types equal. Root cause not yet established. Separate native ARM64 KVM controls are in progress; original failure retained."
+}

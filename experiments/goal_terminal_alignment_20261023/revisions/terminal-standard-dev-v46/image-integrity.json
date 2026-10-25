@@ -1,0 +1,1166 @@
+{
+  "time": 1792857851.7834752,
+  "expected": 89,
+  "checked": 89,
+  "complete": true,
+  "images": {
+    "adaptive-rejection-sampler": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/adaptive-rejection-sampler.sif",
+      "sha256": "3b26f4b457193afb2317033a851fbcbf589816ad8632f5642499368ed6e8d218",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/adaptive-rejection-sampler.sif",
+        "device": 1808112826,
+        "inode": 1459169593791660823,
+        "size": 29069312,
+        "mtime_ns": 1792749689000000000,
+        "ctime_ns": 1792749689000000000
+      },
+      "checked_at": 1792857794.8115833
+    },
+    "bn-fit-modify": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/bn-fit-modify.sif",
+      "sha256": "63304d2fc60b54b364aa66ee2c123d6fefd2b03eb120611a504a8d91c0de44db",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/bn-fit-modify.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677618,
+        "size": 246194176,
+        "mtime_ns": 1792752361000000000,
+        "ctime_ns": 1792752361000000000
+      },
+      "checked_at": 1792857795.2914085
+    },
+    "break-filter-js-from-html": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/break-filter-js-from-html.sif",
+      "sha256": "eb386f0194b5f68ebd4d0ad6d99d86c4cb48c979b43e27deba9e1ea25c66460c",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/break-filter-js-from-html.sif",
+        "device": 1808112826,
+        "inode": 1459169593791729355,
+        "size": 393519104,
+        "mtime_ns": 1792828389000000000,
+        "ctime_ns": 1792828390000000000
+      },
+      "checked_at": 1792857795.8243048
+    },
+    "build-cython-ext": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-cython-ext.sif",
+      "sha256": "ee25d91c7de677fe5e5f55cb2b11178c8b9a2e5eb3d23bd7930f1a71ae6c1e3a",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-cython-ext.sif",
+        "device": 1808112826,
+        "inode": 1459169593791729307,
+        "size": 267096064,
+        "mtime_ns": 1792828335000000000,
+        "ctime_ns": 1792828336000000000
+      },
+      "checked_at": 1792857796.6776853
+    },
+    "build-pmars": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-pmars.sif",
+      "sha256": "35a670e604f392e4db33fad67588fa958ae06ab34d0cf0cea95e2efd7c61354e",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-pmars.sif",
+        "device": 1808112826,
+        "inode": 1459169593791729197,
+        "size": 60854272,
+        "mtime_ns": 1792828104000000000,
+        "ctime_ns": 1792828104000000000
+      },
+      "checked_at": 1792857797.15192
+    },
+    "build-pov-ray": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-pov-ray.sif",
+      "sha256": "97e71199724e9d645aed0c7699ddb260e971c675d7b069b709d7b342980e6ac7",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/build-pov-ray.sif",
+        "device": 1808112826,
+        "inode": 1459169593791729215,
+        "size": 158109696,
+        "mtime_ns": 1792828113000000000,
+        "ctime_ns": 1792828114000000000
+      },
+      "checked_at": 1792857797.682607
+    },
+    "caffe-cifar-10": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/caffe-cifar-10.sif",
+      "sha256": "7601a143f5a5f3f3cc9e89939124a2d1c0feea3da8e374d63aa700abffd33c25",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/caffe-cifar-10.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677694,
+        "size": 197697536,
+        "mtime_ns": 1792752636000000000,
+        "ctime_ns": 1792752636000000000
+      },
+      "checked_at": 1792857798.6326666
+    },
+    "cancel-async-tasks": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cancel-async-tasks.sif",
+      "sha256": "b8cf8b52e10b2425c0960a5ce3b2cde2143f85c30c7f3c6eba63889e3c1521a8",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cancel-async-tasks.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677727,
+        "size": 42901504,
+        "mtime_ns": 1792752646000000000,
+        "ctime_ns": 1792752646000000000
+      },
+      "checked_at": 1792857798.9105027
+    },
+    "chess-best-move": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/chess-best-move.sif",
+      "sha256": "12f354f020336b19bfb0edbf78e77a93533a6702a1bbd888ae543ed450f93315",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/chess-best-move.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677743,
+        "size": 216309760,
+        "mtime_ns": 1792752759000000000,
+        "ctime_ns": 1792752759000000000
+      },
+      "checked_at": 1792857799.616061
+    },
+    "circuit-fibsqrt": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/circuit-fibsqrt.sif",
+      "sha256": "47be322a9214ed779d01d05a5a6ad36177ee9785313293a7fc343fad3a7d6d7d",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/circuit-fibsqrt.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677754,
+        "size": 131440640,
+        "mtime_ns": 1792752795000000000,
+        "ctime_ns": 1792752795000000000
+      },
+      "checked_at": 1792857800.2657247
+    },
+    "cobol-modernization": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cobol-modernization.sif",
+      "sha256": "99b4a53b907ce4485b13a7f50ca773bde549818c19517492137b759041626c3b",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/cobol-modernization.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677769,
+        "size": 149004288,
+        "mtime_ns": 1792752831000000000,
+        "ctime_ns": 1792752831000000000
+      },
+      "checked_at": 1792857801.0079763
+    },
+    "code-from-image": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/code-from-image.sif",
+      "sha256": "be485f17fe5651821b597f21f00603c07353ade433fda983b2f32a6ab920c955",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/code-from-image.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677776,
+        "size": 42967040,
+        "mtime_ns": 1792752842000000000,
+        "ctime_ns": 1792752843000000000
+      },
+      "checked_at": 1792857801.380325
+    },
+    "compile-compcert": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/compile-compcert.sif",
+      "sha256": "32d98f1d79332168627bf33965f7849c51c4a844ecbadf60ab2e812f0441963c",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/compile-compcert.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677783,
+        "size": 29073408,
+        "mtime_ns": 1792752848000000000,
+        "ctime_ns": 1792752849000000000
+      },
+      "checked_at": 1792857801.552692
+    },
+    "configure-git-webserver": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/configure-git-webserver.sif",
+      "sha256": "b166ecc98cc5d38054bc5bba789c8e96c83d5b7cca26194bfc7a7780b5d33b1d",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/configure-git-webserver.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677791,
+        "size": 73900032,
+        "mtime_ns": 1792752876000000000,
+        "ctime_ns": 1792752876000000000
+      },
+      "checked_at": 1792857801.7633197
+    },
+    "constraints-scheduling": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/constraints-scheduling.sif",
+      "sha256": "e8dd8961cf901f75b00e8068377d19d33c5703b1a98d4916001e074783c553f9",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/constraints-scheduling.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677804,
+        "size": 48340992,
+        "mtime_ns": 1792752942000000000,
+        "ctime_ns": 1792752942000000000
+      },
+      "checked_at": 1792857801.9625347
+    },
+    "count-dataset-tokens": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/count-dataset-tokens.sif",
+      "sha256": "2cf7ad9c86e58bbe359b96d1660728dc2358dad5c16fc494651ffd9eca0d0556",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/count-dataset-tokens.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677814,
+        "size": 42901504,
+        "mtime_ns": 1792752950000000000,
+        "ctime_ns": 1792752951000000000
+      },
+      "checked_at": 1792857802.2137356
+    },
+    "crack-7z-hash": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/crack-7z-hash.sif",
+      "sha256": "032ec8d1d2e911dad7b080296fa17de79c0deca40046ad9ac14a97030910dc90",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/crack-7z-hash.sif",
+        "device": 1808112826,
+        "inode": 1459169593791677871,
+        "size": 342990848,
+        "mtime_ns": 1792753222000000000,
+        "ctime_ns": 1792753223000000000
+      },
+      "checked_at": 1792857803.0011237
+    },
+    "custom-memory-heap-crash": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/custom-memory-heap-crash.sif",
+      "sha256": "9a5155b7da1d69a12c3929bc2e3adb0c0f00d4f56c7151a49e3adec31646ce12",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/custom-memory-heap-crash.sif",
+        "device": 1808112826,
+        "inode": 1459169593791678429,
+        "size": 397189120,
+        "mtime_ns": 1792754071000000000,
+        "ctime_ns": 1792754075000000000
+      },
+      "checked_at": 1792857803.5610774
+    },
+    "db-wal-recovery": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/db-wal-recovery.sif",
+      "sha256": "f848ca349c79f84d448f2bfc93e066aefa3ef35e3f127c5b626e32de85d31b1e",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/db-wal-recovery.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683872,
+        "size": 163160064,
+        "mtime_ns": 1792762836000000000,
+        "ctime_ns": 1792762836000000000
+      },
+      "checked_at": 1792857804.0223944
+    },
+    "distribution-search": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/distribution-search.sif",
+      "sha256": "ef19d66db0cf963cce79f99a34c7b614713cddb7ae6d3e5fa55b49df0ad91a31",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/distribution-search.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683897,
+        "size": 170041344,
+        "mtime_ns": 1792762850000000000,
+        "ctime_ns": 1792762850000000000
+      },
+      "checked_at": 1792857804.4115157
+    },
+    "dna-assembly": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/dna-assembly.sif",
+      "sha256": "83ab7d484704a2562503c4545b7eaf1db18ae48a39ab94d647b1bb1b74d4d5bd",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/dna-assembly.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683904,
+        "size": 29073408,
+        "mtime_ns": 1792762855000000000,
+        "ctime_ns": 1792762855000000000
+      },
+      "checked_at": 1792857804.5534616
+    },
+    "dna-insert": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/dna-insert.sif",
+      "sha256": "95e36e6625a7ad4cabb7b8ed30a5f6fdce0b736c780b4a574014797e977fdfef",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/dna-insert.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683911,
+        "size": 29073408,
+        "mtime_ns": 1792762859000000000,
+        "ctime_ns": 1792762859000000000
+      },
+      "checked_at": 1792857804.670289
+    },
+    "extract-elf": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/extract-elf.sif",
+      "sha256": "48417f5a63d5f6692e099da840f7ac0b86e3646bae7396e70b282c1075625916",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/extract-elf.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683924,
+        "size": 337551360,
+        "mtime_ns": 1792762897000000000,
+        "ctime_ns": 1792762897000000000
+      },
+      "checked_at": 1792857805.2585068
+    },
+    "extract-moves-from-video": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/extract-moves-from-video.sif",
+      "sha256": "4624560ada2a3ebf2bd8dfdfa560392d664fe972299a1bf9acce9f4be804aedd",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/extract-moves-from-video.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683948,
+        "size": 29073408,
+        "mtime_ns": 1792762903000000000,
+        "ctime_ns": 1792762903000000000
+      },
+      "checked_at": 1792857805.4103777
+    },
+    "feal-differential-cryptanalysis": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/feal-differential-cryptanalysis.sif",
+      "sha256": "6527ded7504aca3fcaaa8bfbef8ad346d8059fcdaccbd9de3def2966aa5f31c4",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/feal-differential-cryptanalysis.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683956,
+        "size": 50438144,
+        "mtime_ns": 1792762909000000000,
+        "ctime_ns": 1792762909000000000
+      },
+      "checked_at": 1792857805.5683706
+    },
+    "feal-linear-cryptanalysis": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/feal-linear-cryptanalysis.sif",
+      "sha256": "f6dc5dd2d1f909b92a2e5b076ccc061ccb6559ae98f0b7cd1471a8f95f933581",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/feal-linear-cryptanalysis.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683963,
+        "size": 138977280,
+        "mtime_ns": 1792762923000000000,
+        "ctime_ns": 1792762923000000000
+      },
+      "checked_at": 1792857805.8262444
+    },
+    "filter-js-from-html": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/filter-js-from-html.sif",
+      "sha256": "11bd6332653eac357e8c6cd8fc1ec519ef0c146242173f7f2e7f5b43f51c3057",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/filter-js-from-html.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683990,
+        "size": 390373376,
+        "mtime_ns": 1792762963000000000,
+        "ctime_ns": 1792762963000000000
+      },
+      "checked_at": 1792857806.3031118
+    },
+    "financial-document-processor": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/financial-document-processor.sif",
+      "sha256": "7f1bb43e95685649fdb8c1ee236109950c9d1b6c7e21696d26f3b6ce0db72642",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/financial-document-processor.sif",
+        "device": 1808112826,
+        "inode": 1459169593791683997,
+        "size": 49586176,
+        "mtime_ns": 1792762969000000000,
+        "ctime_ns": 1792762969000000000
+      },
+      "checked_at": 1792857806.5228333
+    },
+    "fix-code-vulnerability": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-code-vulnerability.sif",
+      "sha256": "db297e14e81a340e2ec62c589efcc2abb60b644cf8d5900034fbbc676a18945a",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-code-vulnerability.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684004,
+        "size": 181837824,
+        "mtime_ns": 1792762985000000000,
+        "ctime_ns": 1792762985000000000
+      },
+      "checked_at": 1792857806.8813646
+    },
+    "fix-git": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-git.sif",
+      "sha256": "9c67fe112bf5d1807a1e8343b3e7c491ba6e31228734ef83981726bb43728f45",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-git.sif",
+        "device": 1808112826,
+        "inode": 1459169593791728328,
+        "size": 149004288,
+        "mtime_ns": 1792827056000000000,
+        "ctime_ns": 1792827056000000000
+      },
+      "checked_at": 1792857807.3594222
+    },
+    "fix-ocaml-gc": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-ocaml-gc.sif",
+      "sha256": "9f739e3cf728b3fbb2dac234100b2d0c13fb524deed05d97bacb2b605112f1c6",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/fix-ocaml-gc.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684012,
+        "size": 230137856,
+        "mtime_ns": 1792763010000000000,
+        "ctime_ns": 1792763010000000000
+      },
+      "checked_at": 1792857807.7329292
+    },
+    "gcode-to-text": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/gcode-to-text.sif",
+      "sha256": "7f97cddf0c11f79418b61b3ecfe797281c7da864174aa990b97a9b5c7a4d27d7",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/gcode-to-text.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684020,
+        "size": 43360256,
+        "mtime_ns": 1792763016000000000,
+        "ctime_ns": 1792763016000000000
+      },
+      "checked_at": 1792857807.8939195
+    },
+    "git-leak-recovery": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/git-leak-recovery.sif",
+      "sha256": "5f8222c61f7d83a70f754b138b2e6251a3788f156046e8aecb6786b7e1ea7ec0",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/git-leak-recovery.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684045,
+        "size": 93757440,
+        "mtime_ns": 1792763024000000000,
+        "ctime_ns": 1792763024000000000
+      },
+      "checked_at": 1792857808.1112614
+    },
+    "git-multibranch": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/git-multibranch.sif",
+      "sha256": "1878fd76220d91728210f81b2c47b4d820798cbeee5d6460c986e8abfb63e578",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/git-multibranch.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684052,
+        "size": 205168640,
+        "mtime_ns": 1792763049000000000,
+        "ctime_ns": 1792763049000000000
+      },
+      "checked_at": 1792857808.4100528
+    },
+    "gpt2-codegolf": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/gpt2-codegolf.sif",
+      "sha256": "f996b15b1c52b2e54cb1f18f60d26cbdbafe6ea7cf48b69fc011f9071c1d25e1",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/gpt2-codegolf.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684062,
+        "size": 608739328,
+        "mtime_ns": 1792763072000000000,
+        "ctime_ns": 1792763072000000000
+      },
+      "checked_at": 1792857809.1279864
+    },
+    "headless-terminal": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/headless-terminal.sif",
+      "sha256": "ebc86e60e19decf11e0ae0c89156c29a251feeccdf47799c114ead7db5f5853e",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/headless-terminal.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684071,
+        "size": 60661760,
+        "mtime_ns": 1792763079000000000,
+        "ctime_ns": 1792763079000000000
+      },
+      "checked_at": 1792857809.3556306
+    },
+    "hf-model-inference": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/hf-model-inference.sif",
+      "sha256": "e375174d577ad544ec60693db4e13905864ebd6d20618a205029f4c96adba965",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/hf-model-inference.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684097,
+        "size": 393060352,
+        "mtime_ns": 1792763118000000000,
+        "ctime_ns": 1792763118000000000
+      },
+      "checked_at": 1792857809.868253
+    },
+    "install-windows-3.11": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/install-windows-3.11.sif",
+      "sha256": "e6902070c42eedef9d3ac6bdfbae98128e5cd3065a47f8a61dba3c868dd47906",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/install-windows-3.11.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684125,
+        "size": 547069952,
+        "mtime_ns": 1792763170000000000,
+        "ctime_ns": 1792763170000000000
+      },
+      "checked_at": 1792857810.7359648
+    },
+    "kv-store-grpc": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/kv-store-grpc.sif",
+      "sha256": "85a6bcfb47b272179336d7e1c577343ef9f1abd48d5cc026f7bb66f55cd5ce5a",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/kv-store-grpc.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684132,
+        "size": 42901504,
+        "mtime_ns": 1792763177000000000,
+        "ctime_ns": 1792763177000000000
+      },
+      "checked_at": 1792857810.9984539
+    },
+    "large-scale-text-editing": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/large-scale-text-editing.sif",
+      "sha256": "c45af18612bcb1564d41a1bad1e38c37104335d1a5f13442777a6c353e1feb5e",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/large-scale-text-editing.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684140,
+        "size": 71540736,
+        "mtime_ns": 1792763185000000000,
+        "ctime_ns": 1792763185000000000
+      },
+      "checked_at": 1792857811.2794907
+    },
+    "largest-eigenval": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/largest-eigenval.sif",
+      "sha256": "370c68cd164a4221d1196219b89ebdc856e6217675790d630f9fc23eb4df545d",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/largest-eigenval.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684147,
+        "size": 78815232,
+        "mtime_ns": 1792763192000000000,
+        "ctime_ns": 1792763192000000000
+      },
+      "checked_at": 1792857811.5983365
+    },
+    "llm-inference-batching-scheduler": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/llm-inference-batching-scheduler.sif",
+      "sha256": "a3955fd8be063461284eae86b66f3cf71aaf4b407b86d294fd26f5285c07521b",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/llm-inference-batching-scheduler.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684155,
+        "size": 42901504,
+        "mtime_ns": 1792763198000000000,
+        "ctime_ns": 1792763198000000000
+      },
+      "checked_at": 1792857811.8622355
+    },
+    "log-summary-date-ranges": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/log-summary-date-ranges.sif",
+      "sha256": "87828cb43b5b8a847a01ec6e991b97eac23df370e93d544626c4bb0cdae24083",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/log-summary-date-ranges.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684163,
+        "size": 43622400,
+        "mtime_ns": 1792763203000000000,
+        "ctime_ns": 1792763203000000000
+      },
+      "checked_at": 1792857812.173991
+    },
+    "mailman": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mailman.sif",
+      "sha256": "97c6bff536bb99214f444cc6bb7983655ba3b36d22a8d6f3158aa0491c049c29",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mailman.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684187,
+        "size": 117874688,
+        "mtime_ns": 1792763221000000000,
+        "ctime_ns": 1792763221000000000
+      },
+      "checked_at": 1792857812.6006362
+    },
+    "make-doom-for-mips": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/make-doom-for-mips.sif",
+      "sha256": "822183d811dd88f666ea0e12b18246b572c4e9abc0a7e333799355fc0b79fe6e",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/make-doom-for-mips.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684194,
+        "size": 172007424,
+        "mtime_ns": 1792763235000000000,
+        "ctime_ns": 1792763235000000000
+      },
+      "checked_at": 1792857813.3970406
+    },
+    "make-mips-interpreter": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/make-mips-interpreter.sif",
+      "sha256": "7759fa5432d377c357649073b83332e87e3e6f59b18b586ee41f6689d829ecef",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/make-mips-interpreter.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684226,
+        "size": 461152256,
+        "mtime_ns": 1792763284000000000,
+        "ctime_ns": 1792763284000000000
+      },
+      "checked_at": 1792857814.9530833
+    },
+    "mcmc-sampling-stan": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mcmc-sampling-stan.sif",
+      "sha256": "d3bc261db6e4ca23576705ee1d06e4dd7228c60e38ca2d02bf0eb0fc2b9f69e5",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mcmc-sampling-stan.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684238,
+        "size": 224239616,
+        "mtime_ns": 1792763307000000000,
+        "ctime_ns": 1792763307000000000
+      },
+      "checked_at": 1792857815.8766313
+    },
+    "merge-diff-arc-agi-task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/merge-diff-arc-agi-task.sif",
+      "sha256": "0acd40bb06d7ed544732bb3285349b40bb94c49bc777a8745addb494d517eae9",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/merge-diff-arc-agi-task.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684245,
+        "size": 29073408,
+        "mtime_ns": 1792763311000000000,
+        "ctime_ns": 1792763311000000000
+      },
+      "checked_at": 1792857816.0781984
+    },
+    "model-extraction-relu-logits": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/model-extraction-relu-logits.sif",
+      "sha256": "03ebdfe23ef1c4b5dc4edf51cdb35d1f84fdfb9bb5c8f64cce4b69ae948c0c78",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/model-extraction-relu-logits.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684253,
+        "size": 78487552,
+        "mtime_ns": 1792763319000000000,
+        "ctime_ns": 1792763319000000000
+      },
+      "checked_at": 1792857816.4180737
+    },
+    "modernize-scientific-stack": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/modernize-scientific-stack.sif",
+      "sha256": "f241d28b71451f6867a013016cd191d7e4fe34c5e8f9ee2807ccd6be4adc0d89",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/modernize-scientific-stack.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684278,
+        "size": 307929088,
+        "mtime_ns": 1792763352000000000,
+        "ctime_ns": 1792763352000000000
+      },
+      "checked_at": 1792857817.2058756
+    },
+    "mteb-leaderboard": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mteb-leaderboard.sif",
+      "sha256": "51e1aa1ed5ccc73ccf1c2713ef7a47805ffc1e99e4308f1bb56123b3574b1bc4",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mteb-leaderboard.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684353,
+        "size": 6926802944,
+        "mtime_ns": 1792763568000000000,
+        "ctime_ns": 1792763568000000000
+      },
+      "checked_at": 1792857825.1331308
+    },
+    "mteb-retrieve": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mteb-retrieve.sif",
+      "sha256": "62aab7e3e1e60c7466eee90d3b85de7b63aa9bde7096aefefe7206cbf0b01792",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/mteb-retrieve.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684554,
+        "size": 6945087488,
+        "mtime_ns": 1792763818000000000,
+        "ctime_ns": 1792763818000000000
+      },
+      "checked_at": 1792857834.672203
+    },
+    "multi-source-data-merger": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/multi-source-data-merger.sif",
+      "sha256": "6fe3c8384a96aafa57ceff7c939d348b9fb503a6cb959a9cd58d91b235c8a733",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/multi-source-data-merger.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684579,
+        "size": 218144768,
+        "mtime_ns": 1792763848000000000,
+        "ctime_ns": 1792763848000000000
+      },
+      "checked_at": 1792857835.0429742
+    },
+    "nginx-request-logging": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/nginx-request-logging.sif",
+      "sha256": "fc8939104940c957b797988c45a0e7e8d4b783b50c176505eb3a299d696a1ba0",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/nginx-request-logging.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684586,
+        "size": 65970176,
+        "mtime_ns": 1792763856000000000,
+        "ctime_ns": 1792763856000000000
+      },
+      "checked_at": 1792857835.2478273
+    },
+    "openssl-selfsigned-cert": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/openssl-selfsigned-cert.sif",
+      "sha256": "92a4c37fcef94bf8f3c0c66d58a5909a90b987dd34f885813ae55ff97e52b4b4",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/openssl-selfsigned-cert.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684594,
+        "size": 42901504,
+        "mtime_ns": 1792763861000000000,
+        "ctime_ns": 1792763861000000000
+      },
+      "checked_at": 1792857835.500202
+    },
+    "overfull-hbox": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/overfull-hbox.sif",
+      "sha256": "0430e00094dc0042c4f3d1c8fb472cc799b0ca94f5c3f43e2fbb4ac0d0cd1543",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/overfull-hbox.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684607,
+        "size": 126656512,
+        "mtime_ns": 1792763874000000000,
+        "ctime_ns": 1792763874000000000
+      },
+      "checked_at": 1792857835.9401815
+    },
+    "password-recovery": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/password-recovery.sif",
+      "sha256": "f5087e013d9d82c4d96f08a7617755bf63f20d3179056036596803615765c199",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/password-recovery.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684614,
+        "size": 61644800,
+        "mtime_ns": 1792763882000000000,
+        "ctime_ns": 1792763882000000000
+      },
+      "checked_at": 1792857836.1672735
+    },
+    "path-tracing": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/path-tracing.sif",
+      "sha256": "2d810ec5ec20ef44f0ccbcc03f51a8a0e8191ea34db77edcdb45282136aa077c",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/path-tracing.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684668,
+        "size": 381067264,
+        "mtime_ns": 1792763936000000000,
+        "ctime_ns": 1792763936000000000
+      },
+      "checked_at": 1792857836.768201
+    },
+    "path-tracing-reverse": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/path-tracing-reverse.sif",
+      "sha256": "80b111ce1fa7f8e17f75f3d68d26ae4cb71d438fd70e05f7997cd58aecde8ae8",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/path-tracing-reverse.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684622,
+        "size": 163094528,
+        "mtime_ns": 1792763899000000000,
+        "ctime_ns": 1792763899000000000
+      },
+      "checked_at": 1792857837.1454246
+    },
+    "polyglot-c-py": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/polyglot-c-py.sif",
+      "sha256": "11764d602406ccd968a920c753aa2b1b7707c8f860507d7186aa3288b1fba2ad",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/polyglot-c-py.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684675,
+        "size": 142843904,
+        "mtime_ns": 1792763948000000000,
+        "ctime_ns": 1792763948000000000
+      },
+      "checked_at": 1792857837.5520852
+    },
+    "polyglot-rust-c": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/polyglot-rust-c.sif",
+      "sha256": "a4dd55ca852accfa4a63e382b022f3e1d34676ec7de63f02f4201c3bcb0ef399",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/polyglot-rust-c.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684702,
+        "size": 254124032,
+        "mtime_ns": 1792763974000000000,
+        "ctime_ns": 1792763974000000000
+      },
+      "checked_at": 1792857837.946406
+    },
+    "portfolio-optimization": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/portfolio-optimization.sif",
+      "sha256": "57750d606b3d4d075f26c75ba9c6e25a1b871c7126aac7b732f7ca88950cf855",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/portfolio-optimization.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684711,
+        "size": 171483136,
+        "mtime_ns": 1792763992000000000,
+        "ctime_ns": 1792763992000000000
+      },
+      "checked_at": 1792857838.270998
+    },
+    "protein-assembly": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/protein-assembly.sif",
+      "sha256": "8e0febc108432ff61fe50041d66cebdcf8fe454fce843804a771342930b78045",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/protein-assembly.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684718,
+        "size": 42901504,
+        "mtime_ns": 1792763998000000000,
+        "ctime_ns": 1792763998000000000
+      },
+      "checked_at": 1792857838.426123
+    },
+    "prove-plus-comm": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/prove-plus-comm.sif",
+      "sha256": "1e5ba8e859e2bf388849b6459e6349baf2d0465a997fece4c0831b5a43840b4c",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/prove-plus-comm.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684745,
+        "size": 490446848,
+        "mtime_ns": 1792764054000000000,
+        "ctime_ns": 1792764054000000000
+      },
+      "checked_at": 1792857839.1936936
+    },
+    "pypi-server": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pypi-server.sif",
+      "sha256": "c4593d7d37b0be934a20c1349a6f7d58b77475f19409f41c55393dca3f3e42d1",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pypi-server.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684752,
+        "size": 83730432,
+        "mtime_ns": 1792764063000000000,
+        "ctime_ns": 1792764063000000000
+      },
+      "checked_at": 1792857839.585323
+    },
+    "pytorch-model-cli": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pytorch-model-cli.sif",
+      "sha256": "2d05ae5e59d82699327d1da8a8dc65dff1f72ce11d794f482e4855882bd6a4c9",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pytorch-model-cli.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684759,
+        "size": 43098112,
+        "mtime_ns": 1792764068000000000,
+        "ctime_ns": 1792764068000000000
+      },
+      "checked_at": 1792857839.7635324
+    },
+    "pytorch-model-recovery": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pytorch-model-recovery.sif",
+      "sha256": "4c5d4817641c87ba2720a4a501e0d9cba6ab4d79def4711896e1a727195c8c26",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/pytorch-model-recovery.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684787,
+        "size": 309895168,
+        "mtime_ns": 1792764094000000000,
+        "ctime_ns": 1792764094000000000
+      },
+      "checked_at": 1792857840.5513985
+    },
+    "qemu-alpine-ssh": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/qemu-alpine-ssh.sif",
+      "sha256": "82b7b843e448f8f9a409801328ce4d33a2006ae9d271b1b34dc3d01a40ac3fda",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/qemu-alpine-ssh.sif",
+        "device": 1808112826,
+        "inode": 1459169593791728212,
+        "size": 1270976512,
+        "mtime_ns": 1792826861000000000,
+        "ctime_ns": 1792826861000000000
+      },
+      "checked_at": 1792857842.01223
+    },
+    "qemu-startup": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/qemu-startup.sif",
+      "sha256": "5bef3c92bb95c859c68a6f259c080cbb9ea4c63d2b328f059e6717067385d488",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/qemu-startup.sif",
+        "device": 1808112826,
+        "inode": 1459169593791728259,
+        "size": 1270976512,
+        "mtime_ns": 1792826983000000000,
+        "ctime_ns": 1792826983000000000
+      },
+      "checked_at": 1792857843.5940907
+    },
+    "query-optimize": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/query-optimize.sif",
+      "sha256": "bb16220ef13058745d80fe42fab4c4a45c8cb607d602a59dc79feb80b34e8a9c",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/query-optimize.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684795,
+        "size": 97951744,
+        "mtime_ns": 1792764102000000000,
+        "ctime_ns": 1792764102000000000
+      },
+      "checked_at": 1792857843.9581273
+    },
+    "raman-fitting": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/raman-fitting.sif",
+      "sha256": "c324e182fcf95f2f33819589438ea917d7e664d2616b55a7a8499a34b0079751",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/raman-fitting.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684803,
+        "size": 42967040,
+        "mtime_ns": 1792764108000000000,
+        "ctime_ns": 1792764108000000000
+      },
+      "checked_at": 1792857844.1037028
+    },
+    "regex-chess": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/regex-chess.sif",
+      "sha256": "28d878e2656d58812913502c56160d02da1af726d0697537b20de51b7e18ef76",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/regex-chess.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684810,
+        "size": 54173696,
+        "mtime_ns": 1792764113000000000,
+        "ctime_ns": 1792764113000000000
+      },
+      "checked_at": 1792857844.2927344
+    },
+    "regex-log": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/regex-log.sif",
+      "sha256": "4ab9acdb7dc6c1ba82feb5a7d06d12fedfe8b2ac3a6c767c1838119394ce28a6",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/regex-log.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684817,
+        "size": 29073408,
+        "mtime_ns": 1792764117000000000,
+        "ctime_ns": 1792764117000000000
+      },
+      "checked_at": 1792857844.4672084
+    },
+    "reshard-c4-data": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/reshard-c4-data.sif",
+      "sha256": "aedb6b0c3c394c943d070082885d6e7ed13992d866e9f7491cbf35b345a48fcb",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/reshard-c4-data.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684846,
+        "size": 1131913216,
+        "mtime_ns": 1792764203000000000,
+        "ctime_ns": 1792764203000000000
+      },
+      "checked_at": 1792857845.9431713
+    },
+    "rstan-to-pystan": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/rstan-to-pystan.sif",
+      "sha256": "ff55d794f5dd5dbcdf0bb8336f23f40a157874bfbb6fa74490f1f6b37c36ba70",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/rstan-to-pystan.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684871,
+        "size": 49389568,
+        "mtime_ns": 1792764211000000000,
+        "ctime_ns": 1792764211000000000
+      },
+      "checked_at": 1792857846.132825
+    },
+    "sam-cell-seg": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sam-cell-seg.sif",
+      "sha256": "1c691beb36e5b1a43a0042996a4466eb22376ddeb580c0bbc990eb986b703789",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sam-cell-seg.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684880,
+        "size": 373399552,
+        "mtime_ns": 1792764252000000000,
+        "ctime_ns": 1792764252000000000
+      },
+      "checked_at": 1792857846.8820596
+    },
+    "sanitize-git-repo": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sanitize-git-repo.sif",
+      "sha256": "64ce6f06bdb9d81b2ba7ab6c8e3143505c558f273dd0cf09ebd72f5ef10dd002",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sanitize-git-repo.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684887,
+        "size": 193961984,
+        "mtime_ns": 1792764262000000000,
+        "ctime_ns": 1792764262000000000
+      },
+      "checked_at": 1792857847.3371372
+    },
+    "schemelike-metacircular-eval": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/schemelike-metacircular-eval.sif",
+      "sha256": "3daa9cf1eb08bca4c5ee2fe8419f279497a6a515c16367035ebdd3a1cf4fcf72",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/schemelike-metacircular-eval.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684895,
+        "size": 42901504,
+        "mtime_ns": 1792764268000000000,
+        "ctime_ns": 1792764268000000000
+      },
+      "checked_at": 1792857847.5041354
+    },
+    "sparql-university": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sparql-university.sif",
+      "sha256": "5865b6e87663a4ec02fa684307f7c4d3a8b5b822e573dd74b6fe5e756c3a206f",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sparql-university.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684921,
+        "size": 29073408,
+        "mtime_ns": 1792764272000000000,
+        "ctime_ns": 1792764272000000000
+      },
+      "checked_at": 1792857847.7569332
+    },
+    "sqlite-db-truncate": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sqlite-db-truncate.sif",
+      "sha256": "4f7ed1458045a764014112ae2888d19a67e3abfdb43655fa7083d75f909bf733",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sqlite-db-truncate.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684929,
+        "size": 42901504,
+        "mtime_ns": 1792764277000000000,
+        "ctime_ns": 1792764277000000000
+      },
+      "checked_at": 1792857847.9820418
+    },
+    "sqlite-with-gcov": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sqlite-with-gcov.sif",
+      "sha256": "a6faa169b46c1b5616cc46bd9fc97045c1d84607da7b6ceb703b54ff01f14ae9",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/sqlite-with-gcov.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684936,
+        "size": 41590784,
+        "mtime_ns": 1792764281000000000,
+        "ctime_ns": 1792764281000000000
+      },
+      "checked_at": 1792857848.1721828
+    },
+    "torch-pipeline-parallelism": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/torch-pipeline-parallelism.sif",
+      "sha256": "3e29be1d2869a89efea73bf50ae761aba999cc1a7923f94f71718e6267053740",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/torch-pipeline-parallelism.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684944,
+        "size": 29073408,
+        "mtime_ns": 1792764285000000000,
+        "ctime_ns": 1792764285000000000
+      },
+      "checked_at": 1792857848.3179846
+    },
+    "torch-tensor-parallelism": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/torch-tensor-parallelism.sif",
+      "sha256": "340d22edf92ee0ead2d30253eec115bb4a9ad6c63a8ee9ad1b6f65ba7c2026f5",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/torch-tensor-parallelism.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684951,
+        "size": 29073408,
+        "mtime_ns": 1792764289000000000,
+        "ctime_ns": 1792764289000000000
+      },
+      "checked_at": 1792857848.4994829
+    },
+    "train-fasttext": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/train-fasttext.sif",
+      "sha256": "665c238d9184e8cdfd02fd4c8b7c1a5808bde305a143820c7d57f35a1bfc1232",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/train-fasttext.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684958,
+        "size": 478257152,
+        "mtime_ns": 1792764312000000000,
+        "ctime_ns": 1792764312000000000
+      },
+      "checked_at": 1792857849.0747232
+    },
+    "tune-mjcf": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/tune-mjcf.sif",
+      "sha256": "9452a12cafebb2d060a983d7bfd9d6cce5bfce4ca7d482af0099cae470c291d1",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/tune-mjcf.sif",
+        "device": 1808112826,
+        "inode": 1459169593791684965,
+        "size": 77504512,
+        "mtime_ns": 1792764322000000000,
+        "ctime_ns": 1792764322000000000
+      },
+      "checked_at": 1792857849.3519638
+    },
+    "video-processing": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/video-processing.sif",
+      "sha256": "69e4dd685aaab324cd716a3167d2d72f26ebe9fd69c35aed1db210c65c195c24",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/video-processing.sif",
+        "device": 1808112826,
+        "inode": 1459169593791685284,
+        "size": 272343040,
+        "mtime_ns": 1792764339000000000,
+        "ctime_ns": 1792764339000000000
+      },
+      "checked_at": 1792857850.158095
+    },
+    "vulnerable-secret": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/vulnerable-secret.sif",
+      "sha256": "9531dff141f49a025b407f58409a50556ad585fee40a715d9d88b4fd54888637",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/vulnerable-secret.sif",
+        "device": 1808112826,
+        "inode": 1459169593791685292,
+        "size": 116236288,
+        "mtime_ns": 1792764351000000000,
+        "ctime_ns": 1792764351000000000
+      },
+      "checked_at": 1792857850.7593856
+    },
+    "winning-avg-corewars": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/winning-avg-corewars.sif",
+      "sha256": "ec65c1fe694065994b3f040bfc30c2a6305280eaddfa4075ae3fc19733a2f8ba",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/winning-avg-corewars.sif",
+        "device": 1808112826,
+        "inode": 1459169593791685299,
+        "size": 274829312,
+        "mtime_ns": 1792764378000000000,
+        "ctime_ns": 1792764378000000000
+      },
+      "checked_at": 1792857851.2733257
+    },
+    "write-compressor": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/write-compressor.sif",
+      "sha256": "78904e9c82060ae506bb217110ab5a415d9a5d73ca9bb488161ead7a84e55d9a",
+      "stamp": {
+        "resolved": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-images/write-compressor.sif",
+        "device": 1808112826,
+        "inode": 1459169593791685326,
+        "size": 279158784,
+        "mtime_ns": 1792764405000000000,
+        "ctime_ns": 1792764405000000000
+      },
+      "checked_at": 1792857851.7834706
+    }
+  },
+  "formal_release_authorized": false
+}

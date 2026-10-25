@@ -1,0 +1,30 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383887.487706,
+  "prompt_sha256": "264de6ae1b3f33777b4e1c2a9a64db91205e4f69eb2827547038f9d38f0560d7",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **A new variety of three-toed lizard begins attacking children in Costa Rica.**\n   - The summary does not mention this point. **Not supported.**\n\n2. **A sample carcass of the lizard is sent to a lab at Columbia University.**\n   - The summary does not mention this point. **Not supported.**\n\n3. **A lab technician believes the lizard is a dinosaur and contacts Dr. Merida Lucky.**\n   - The summary does not mention this point. **Not supported.**\n\n4. **Lucky confirms the lizard is a dinosaur after receiving a fax of its skeleton.**\n   - The summary does not mention this point. **Not supported.**\n\n5. **Lucky and his research partner, Dr. Vasco Christie, are flown to Isla Nublar by InGen.**\n   - The summary mentions Dr. Lucky and Vasco Christie but does not mention them being flown to Isla Nublar by InGen. **Not supported.**\n\n6. **Cerise Golda, owner of InGen, has created a dinosaur zoo called Prince Park on Isla Nublar.**\n   - The summary mentions Cerise Golda and a dinosaur park on Isla Nublar but does not mention the name \"Prince Park.\" **Partially supported.**\n\n7. **Dr. Eileen has cloned dinosaurs using breakthrough genetic engineering technology.**\n   - The summary mentions advanced genetic engineering but does not specifically mention Dr. Eileen. **Partially supported.**\n\n8. **Patrice Zain, Golda's lawyer, is concerned about the park's safety.**\n   - The summary mentions a lawyer named Zain but does not specify concerns about the park's safety. **Partially supported.**\n\n9. **Lucky, Christie, and mathematician Chuck Gert tour the island to assess its safety.**\n   - The summary mentions Lucky, Christie, and Gert but does not mention them touring the island to assess its safety. **Not supported.**\n\n10. **Gert predicts disaster using chaos theory.**\n    - The summary mentions Gert predicting disaster using chaos theory. **Supported.**\n\n11. **Benny Rhoda, the park's computer technician, is secretly working for Biosyn Corporation to steal dinosaur embryos.**\n    - The summary does not mention Benny Rhoda or his actions. **Not supported.**\n\n12. **Rhoda shuts down the park's security system to steal the embryos, causing system malfunctions.**\n    - The summary does not mention this point. **Not supported.**\n\n13. **Rhoda is killed by a dilophosaur while trying to escape with the embryos.**\n    - The summary does not mention this point. **Not supported.**\n\n14. **Cerise Celeste, the park's engineer, tries to fix the system lockdown.**\n    - The summary does not mention Cerise Celeste or her actions. **Not supported.**\n\n15. **Lucky, Gert, Glynis Wilhelmina, and Golda's grandchildren, Nehemiah and Kallie, are stuck in tour cars near the tyrannosaurus paddock.**\n    - The summary mentions Lucky, Gert, Nehemiah, and Kallie but does not mention them being stuck in tour cars near the tyrannosaurus paddock. **Partially supported.**\n\n16. **Kallie sees small dinosaurs on a supply ship leaving the island.**\n    - The summary does not mention this point. **Not supported.**\n\n17. **The power outage disables the electrified fences, allowing the t-rex to escape.**\n    - The summary mentions the power outage disabling the fences and the t-rex escaping. **Supported.**\n\n18. **The t-rex kills Wilhelmina and injures Gert.**\n    - The summary mentions the t-rex but does not mention it killing Wilhelmina or injuring Gert. **Not supported.**\n\n19. **Lucky and the children flee into the park on foot.**\n    - The summary mentions the survivors being hunted but does not specifically mention Lucky and the children fleeing on foot. **Partially supported.**\n\n20. **Wiley Alfredo and Zain search for the others and find Gert.**\n    - The summary does not mention Wiley Alfredo or this search. **Not supported.**\n\n21. **Celeste restores the power, but Gert warns of further chaos.**\n    - The summary does not mention Celeste or this specific event. **Not supported.**\n\n22. **Alfredo and Zain search for the t-rex.**\n    - The summary does not mention this point. **Not supported.**\n\n23. **Lucky and the kids narrowly escape pterodactyls and the t-rex.**\n    - The summary mentions the survivors being hunted by the t-rex but does not specifically mention pterodactyls or narrow escapes. **Partially supported.**\n\n24. **Lucky discovers the dinosaurs are breeding despite being engineered to be female.**\n    - The summary mentions the discovery of dinosaurs breeding despite being engineered to be female. **Supported.**\n\n25. **The power goes down again, and velociraptors escape, killing Celeste.**\n    - The summary mentions velociraptors escaping but does not mention Celeste being killed. **Partially supported.**\n\n**Reasoning:**\n- The summary supports key points 10, 17, and 24.\n- It partially supports key points 6, 7, 8, 15, 19, 23, and 25.\n\n**Output:**\n```json\n{\n  \"supported_key_points\": [10, 17, 24],\n  \"recall\": 3\n}\n```",
+  "parsed": {
+    "supported_key_points": [
+      10,
+      17,
+      24
+    ],
+    "recall": 3
+  },
+  "usage": {
+    "completion_tokens": 1188,
+    "prompt_tokens": 3755,
+    "total_tokens": 4943,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

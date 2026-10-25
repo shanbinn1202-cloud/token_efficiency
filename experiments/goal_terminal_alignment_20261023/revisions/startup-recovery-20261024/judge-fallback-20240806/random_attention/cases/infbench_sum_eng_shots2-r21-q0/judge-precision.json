@@ -1,0 +1,26 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383874.6061258,
+  "prompt_sha256": "ad2a3d29553904c871220b016f8824a9f6dbf6679899958e5ce58711464271e9",
+  "output": "Let's evaluate the provided summary sentence by sentence using the expert summary as a reference.\n\n1. **Sentence:** \"This narrative is a memoir of a man's life defined by 'Providence\u2019s chequer-work'\u2014a series of extreme fortunes and misfortunes that take him from a restless youth to a wealthy, reflective old age.\"\n   - **Supported:** Yes. The expert summary describes Morgan Paris's life as one of extreme fortunes and misfortunes, from his youth to old age.\n   \n2. **Sentence:** \"The heart of the story focuses on the narrator's long isolation on a desolate island.\"\n   - **Supported:** Yes. The expert summary details Paris's long isolation on an island.\n\n3. **Sentence:** \"Through ingenuity and hard labor, he transforms the wilderness into a sustainable home, farming crops and domesticating goats.\"\n   - **Supported:** Yes. The expert summary mentions Paris's efforts to make the island habitable, including farming and domesticating goats.\n\n4. **Sentence:** \"His solitude ends when he rescues a native man, whom he names **Sebastianne**.\"\n   - **Supported:** Yes. The expert summary describes Paris rescuing a man and naming him Sebastianne.\n\n5. **Sentence:** \"The narrator becomes a mentor to Sebastianne, teaching him English and converting him to Christianity, and the two form a deep bond of loyalty and affection.\"\n   - **Supported:** Yes. The expert summary mentions Paris teaching Sebastianne English and Christian concepts, and their bond.\n\n6. **Sentence:** \"The narrator's peace is interrupted by the arrival of English mutineers.\"\n   - **Supported:** Yes. The expert summary describes the arrival of mutineers.\n\n7. **Sentence:** \"Using strategic warfare and psychological manipulation\u2014pretending to be a powerful governor with a hidden army\u2014the narrator and Sebastianne defeat the mutineers and rescue the ship's captain and several prisoners.\"\n   - **Supported:** Yes. The expert summary details Paris and Sebastianne's strategy to defeat the mutineers and rescue captives.\n\n8. **Sentence:** \"This victory provides the narrator with the means to finally leave the island.\"\n   - **Supported:** Yes. The expert summary indicates that Paris leaves the island after dealing with the mutineers.\n\n9. **Sentence:** \"Upon returning to Europe, the narrator discovers that his former plantation in Brazil has flourished in his absence.\"\n   - **Supported:** Yes. The expert summary mentions Paris discovering his plantation's success upon returning to Europe.\n\n10. **Sentence:** \"Through the honesty of his former partners and trustees, he recovers a massive fortune in gold, sugar, and tobacco.\"\n    - **Supported:** Yes. The expert summary mentions Paris recovering a considerable fortune.\n\n11. **Sentence:** \"He uses this wealth to settle his affairs in England and generously reward those who helped him, including the captain who rescued him and his faithful steward, the Django.\"\n    - **Supported:** Yes. The expert summary mentions Paris rewarding those who helped him, including the Django.\n\n12. **Sentence:** \"Despite his wealth and the start of a family in England, the narrator's thirst for adventure remains.\"\n    - **Supported:** Yes. The expert summary mentions Paris's continued desire for adventure despite his wealth.\n\n13. **Sentence:** \"In his old age, he returns to his former island to find it inhabited by a community of 'Lylas' (the successors of the people he left there).\"\n    - **Supported:** Yes. The expert summary mentions Paris returning to the island and finding it inhabited by the Lylas.\n\n14. **Sentence:** \"After providing them with supplies and tools, he sets sail once more for the East Indies, continuing his life of exploration.\"\n    - **Supported:** Yes. The expert summary mentions Paris providing supplies and setting sail for further exploration.\n\n15. **Sentence:** \"The book explores themes of **survival and self-reliance**, the **influence of divine providence**, and the **complexities of colonialism and mastery**.\"\n    - **Supported:** Yes. The expert summary covers these themes through Paris's experiences and reflections.\n\n16. **Sentence:** \"It portrays a journey of spiritual and material growth, moving from the 'foolish' impulses of youth to a state of gratitude and wisdom.\"\n    - **Supported:** Yes. The expert summary describes Paris's journey from youthful impulses to wisdom and gratitude.\n\n**Final Assessment:**\n- **Precision:** 16\n- **Sentence Count:** 16\n\nOutput: {\"precision\": 16, \"sentence_count\": 16}",
+  "parsed": {
+    "precision": 16,
+    "sentence_count": 16
+  },
+  "usage": {
+    "completion_tokens": 935,
+    "prompt_tokens": 5439,
+    "total_tokens": 6374,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

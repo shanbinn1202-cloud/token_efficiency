@@ -1,0 +1,12 @@
+{
+  "task_ids": [
+    "qemu-startup",
+    "qemu-alpine-ssh"
+  ],
+  "change": "Official Debian security archive for historical bullseye-security packages removed from live CDN; original ARM64 package version retained. Check-Valid-Until disabled only on archived security source. Original solution/assertions unchanged.",
+  "source_evidence": {
+    "live_curl_7.74.0-1.3+deb11u16_arm64": "404",
+    "https://archive.debian.org/debian-security/pool/updates/main/c/curl/curl_7.74.0-1.3+deb11u16_arm64.deb": "200"
+  },
+  "status": "candidate unpromoted"
+}

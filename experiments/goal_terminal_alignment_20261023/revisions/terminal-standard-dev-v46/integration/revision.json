@@ -1,0 +1,9 @@
+{
+  "time": 1792854048.1535912,
+  "change": "Add standard dev fd/stdin/out/err links only. Original configs and task/test/solution untouched. Validation may select any original task via env; formal still all 89.",
+  "goal_qualifications_unchanged": true,
+  "earlier_gpu_validation": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/vanilla/allocations/3448478-terminal-native-kvm-v42",
+  "earlier_gpu_accuracy": 0,
+  "earlier_gpu_infrastructure_errors": 0,
+  "new_gpu_validation": "db-wal-recovery"
+}

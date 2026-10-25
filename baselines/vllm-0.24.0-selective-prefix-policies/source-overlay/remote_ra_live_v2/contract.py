@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 import hashlib
 import json
 import math
+import operator
 import re
 
 
@@ -41,13 +42,63 @@ def _int(value, low=0) -> bool:
     return type(value) is int and value >= low
 
 
+def token_ids(values) -> bool:
+    """``all(type(v) is int and v >= 0 for v in values)`` at C speed (bool excluded)."""
+    return not values or (set(map(type, values)) == {int} and min(values) >= 0)
+
+
+_ATOMS = frozenset({str, int, float, bool, type(None)})
+
+
+def plain_copy(value):
+    """``copy.deepcopy`` of JSON-shaped data (dicts, lists and tuples of str, int,
+    float, bool and None): new containers, the same immutable atoms. A list of
+    atoms (a prompt) is copied in one C call instead of one deepcopy dispatch per
+    element (~1 us per token). Any other object goes through ``deepcopy``."""
+    kind = type(value)
+    if kind in _ATOMS:
+        return value
+    if kind is list or kind is tuple:
+        if set(map(type, value)) <= _ATOMS:
+            return list(value) if kind is list else value
+        items = [plain_copy(item) for item in value]
+        return items if kind is list else tuple(items)
+    if kind is dict:
+        if set(map(type, value)) <= _ATOMS and set(map(type, value.values())) <= _ATOMS:
+            return dict(value)          # e.g. a lease's per-block incarnations
+        return {plain_copy(key): plain_copy(item) for key, item in value.items()}
+    from copy import deepcopy
+    return deepcopy(value)
+
+
+def same_atoms(a, b) -> bool:
+    """True when ``b`` holds what ``a`` holds as the very same atom objects: the same
+    container shapes (dicts with str keys, lists, tuples) with ``is``-identical
+    atoms, as ``plain_copy`` (or ``deepcopy``) copies JSON-shaped data. Then
+    ``canonical(a) == canonical(b)`` without encoding either; a prompt list is
+    compared at C speed. False only means "not shown": the caller compares
+    digests (e.g. a payload that went through JSON has new int objects)."""
+    if a is b:
+        return True
+    kind = type(a)
+    if kind is not type(b):
+        return False
+    if kind is list or kind is tuple:
+        return len(a) == len(b) and (all(map(operator.is_, a, b)) or all(map(same_atoms, a, b)))
+    if kind is dict:
+        return (len(a) == len(b) and all(type(k) is str for k in a) and a.keys() == b.keys() and
+                all(same_atoms(v, b[k]) for k, v in a.items()))
+    return False
+
+
 def mamba_tokens(page_tokens: int, layout=None) -> int:
     """M, the Mamba align block (GDN crossing cadence) of a KvLayout (interface I0).
 
     One shared pool (layout None or legacy): M == P, as in every Stage B fixture.
-    Decoupled: the layout's M, a multiple of P.
+    Decoupled: the layout's M, a multiple of P. The window layout (gemma-s1) has no
+    Mamba align block: P.
     """
-    if layout is None or not layout.decoupled:
+    if layout is None or not layout.decoupled or getattr(layout, "state", None) == "sliding":
         return page_tokens
     require(layout.page_tokens == page_tokens and layout.mamba_tokens % page_tokens == 0,
             "KV layout Page size differs from the runtime Page")
@@ -64,6 +115,16 @@ def startup_layout(record):
     raw = None if record is None else record.get("kv_layout")
     if raw is None:
         return None
+    if type(raw) is dict and "state" in raw:
+        # The window layout of a sliding-window model (gemma-s1): its own record.
+        from types import SimpleNamespace
+        from .kv_layout import LAYOUT_KEY, from_vllm_config
+        try:
+            layout = from_vllm_config(SimpleNamespace(additional_config={LAYOUT_KEY: raw}))
+        except (TypeError, ValueError) as error:
+            raise LiveV2Error("startup KV layout invalid: %s" % error) from None
+        require(layout.page_tokens == record.get("page_tokens"), "startup KV layout record required")
+        return layout
     from .kv_layout import KvLayout
     require(type(raw) is dict and set(raw) == {"page_tokens", "mamba_tokens", "mamba_slots"} and
             raw["page_tokens"] == record.get("page_tokens"), "startup KV layout record required")
@@ -138,7 +199,7 @@ class Allocation:
                 "non-negative allocation identity required")
         require(self.block > 0, "null/kernel IDs cannot be allocation leases")
         require(type(self.incarnation) is int and self.incarnation>=0,'invalid allocation incarnation')
-        require(self.kind in {"attention", "mamba", "suffix", "decode"},
+        require(self.kind in {"attention", "mamba", "suffix", "decode", "sliding"},
                 "unknown allocation kind")
 
     @property
@@ -249,15 +310,32 @@ class StepLease:
     hybrid: HybridLease
 
     def __post_init__(self):
+        self._check(self.attention)
+
+    def _check(self, attention):
         require(type(self.allocation_generation) is int and
                 self.allocation_generation >= 0 and 0 <= self.start < self.end,
                 "invalid step lease")
         require(self.phase in {"prefill", "suffix", "decode"},
                 "invalid step phase")
-        require(all(type(v) is Allocation for v in self.attention),
+        require(all(type(v) is Allocation for v in attention),
                 "attention leases required")
         require(self.hybrid.identity == self.identity,
                 "hybrid lease identity mismatch")
+
+    @classmethod
+    def extending(cls, identity, allocation_generation, start, end, phase, attention, hybrid, checked):
+        """--decode-fastpath: the lease ``cls(...)`` builds, whose ``attention[:checked]``
+        is the attention tuple of an earlier accepted lease of the same request and
+        generation (the same objects, already type-checked): only the rest is checked."""
+        require(type(checked) is int and 0 <= checked <= len(attention), "invalid checked lease prefix")
+        lease = object.__new__(cls)
+        for name, value in (("identity", identity), ("allocation_generation", allocation_generation),
+                            ("start", start), ("end", end), ("phase", phase),
+                            ("attention", attention), ("hybrid", hybrid)):
+            object.__setattr__(lease, name, value)
+        lease._check(attention[checked:])
+        return lease
 
 
 @dataclass(frozen=True)
@@ -392,6 +470,20 @@ class Phase1Lease:
     # Startup KV layout (never on the wire): M and each group's block pool.
     mamba_tokens: int = field(default=0, compare=False, repr=False)       # 0: M == P
     pools: tuple[int, ...] = field(default=(), compare=False, repr=False)  # (): all pool 0
+    # Chunked phase 1 (window layout, gemma-goal): the forwards after the first, each
+    # (start, end, rows of every group); () for one forward over [C, e) on ``rows``.
+    chunks: tuple = ()
+
+    def forwards(self) -> tuple:
+        """Phase 1's native forwards in order: ((start, end, rows), ...)."""
+        if not self.chunks:
+            return ((self.start, self.end, self.rows),)
+        return ((self.start, self.chunks[0][0], self.rows),) + tuple(self.chunks)
+
+    @property
+    def final_rows(self) -> tuple:
+        """The rows of phase 1's last forward (the window it ends in)."""
+        return self.forwards()[-1][2]
 
     @property
     def fresh_pages(self) -> range:
@@ -410,25 +502,31 @@ class Phase1Lease:
     def block_keys(self) -> frozenset:
         """(pool, id) of every block the lease names: its rows and the Goal rows."""
         rows = tuple(enumerate(self.rows))
+        for _, _, more in self.chunks:
+            rows += tuple(enumerate(more))
         if self.goal is not None:
             rows += tuple(enumerate(self.goal.rows))
         return frozenset((self.pool_of(g), b) for g, row in rows for b in row if b)
 
 
-def _parse_goal(raw, attention, groups, page_tokens, taken, mamba_tokens=None, pools=None):
-    """pools (decoupled only): each group's block pool; blocks are keyed (pool, id)."""
+def _parse_goal(raw, attention, groups, page_tokens, taken, mamba_tokens=None, pools=None, window=False,
+                limit=None):
+    """pools (decoupled only): each group's block pool; blocks are keyed (pool, id).
+    window (gemma-s1): the Goal forward's sliding rows are cold rows like its FA rows;
+    ``limit`` (gemma-goal): its tokens fit the layout's Goal transient."""
     require(type(raw) is dict and set(raw) == GOAL_LEASE_KEYS and
             type(raw["lease_id"]) is str and _GOAL_ID.fullmatch(raw["lease_id"]) is not None
             and hex64(raw["payload_sha256"]), "goal lease identity")
     tokens = raw["tokens"]
     require(_seq(tokens) and len(tokens) > 0 and all(_int(x) for x in tokens),
             "goal tokens required")
+    require(limit is None or len(tokens) <= limit, "goal forward exceeds the Goal transient")
     width = -(-len(tokens) // page_tokens)
     mamba_width = -(-len(tokens) // (mamba_tokens or page_tokens))
     rows = _rows(raw["rows"], groups)
     ids = []
     for g, row in enumerate(rows):
-        if g in attention:
+        if g in attention or window:
             require(len(row) == width and 0 not in row, "goal FullAttention row layout")
         else:
             require(len(row) == mamba_width and row[:-1] == (0,) * (mamba_width - 1) and
@@ -450,6 +548,46 @@ def _parse_goal(raw, attention, groups, page_tokens, taken, mamba_tokens=None, p
                      raw["payload_sha256"])
 
 
+def _parse_chunks(raw, rows, att, key, where, owned_all, C, end0, e, W, P):
+    """The later forwards of a chunked window phase 1 (gemma-goal, design WP10): each
+    [start, end, sliding rows in group order] tiles [end0, e) after the first forward.
+    A forward's row is the null head before its window, the blocks it carries from the
+    previous forward ([start - W + 1, start)), then distinct blocks for its new tokens:
+    fresh blocks of the lease, possibly ones that left the window (their tokens are
+    never read again), never the borrowed window. New blocks join ``where`` and
+    ``owned_all`` in order of first use. Returns ((start, end, rows of every group), ...)."""
+    from .sliding_window import kept_blocks, phase1_row
+    groups = [g for g in range(len(rows)) if g not in att]
+    _, (b0, b1), _ = phase1_row(C, end0, W, P)
+    pinned = {key(g, b) for g in groups for b in rows[g][b0:b1]}
+    previous, start, out = {g: rows[g] for g in groups}, end0, []
+    for item in raw:
+        require(_seq(item) and len(item) == 3 and _int(item[0]) and _int(item[1]) and
+                item[0] == start and item[0] < item[1] <= e and _seq(item[2]) and len(item[2]) == len(groups),
+                "phase-1 chunks must tile [C, e) in order")
+        start, end = item[0], item[1]
+        head, carried, n = kept_blocks(start, W, P)[0], -(-start // P), -(-end // P)
+        full = list(rows)
+        for g, row in zip(groups, item[2]):
+            require(_seq(row) and all(_int(b) for b in row), "phase-1 chunk row of block ids required")
+            row = tuple(row)
+            require(len(row) == n and row[:head] == (0,) * head and 0 not in row[head:] and
+                    len(set(row[head:])) == n - head and row[head:carried] == previous[g][head:carried],
+                    "phase-1 chunk row must carry the window and append distinct blocks")
+            for b in row[carried:]:
+                k = key(g, b)
+                require(k not in pinned and where.get(k, g) == g,
+                        "phase-1 chunk reuses the borrowed window or another group's block")
+                if k not in where:
+                    where[k] = g
+                    owned_all.append(b)
+            full[g] = previous[g] = row
+        out.append((start, end, tuple(full)))
+        start = end
+    require(start == e, "phase-1 chunks must end at e")
+    return tuple(out)
+
+
 def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
     """Structural, pure check of an engine-built phase-1 lease; fail closed.
 
@@ -463,7 +601,8 @@ def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
     Mamba rows are ceil(e/M) long and hold pool-1 ids, block ids are unique per
     pool and keyed (pool, id), and attention_groups is required.
     """
-    require(type(raw) is dict and set(raw) == LEASE_KEYS, "phase-1 lease key set")
+    # A chunked phase 1 (window layout, gemma-goal) adds "chunks": its later forwards.
+    require(type(raw) is dict and set(raw) - {"chunks"} == LEASE_KEYS, "phase-1 lease key set")
     require(type(raw["lease_id"]) is str and _PHASE1_ID.fullmatch(raw["lease_id"]) is not None,
             "phase-1 lease id")
     require(all(type(raw[k]) is str and 0 < len(raw[k]) <= 256
@@ -485,6 +624,17 @@ def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
             all(p < Q // P for p in R), "resident Pages must be ascending below Q")
     R = tuple(R)
     M = -(-e // mamba_tokens(P, layout))     # Mamba row length; ceil(e/P) in the shared pool
+    # The window layout (gemma-s1): a sliding row is the null head, the borrowed window
+    # the session pins after C and the fresh blocks of [C, e) (sliding_window.phase1_row).
+    window = getattr(layout, "state", None) == "sliding"
+    chunked = "chunks" in raw
+    end0 = e
+    if chunked:
+        # The first forward is [C, end0) on ``rows``; each chunk is [start, end, rows].
+        require(window and _seq(raw["chunks"]) and raw["chunks"] and _seq(raw["chunks"][0]) and
+                len(raw["chunks"][0]) == 3 and _int(raw["chunks"][0][0]) and C < raw["chunks"][0][0] < e,
+                "phase-1 chunks belong to a window-layout lease and split [C, e)")
+        end0 = raw["chunks"][0][0]
     fresh = range(Q // P + tail, -(-e // P))
     rows = _rows(raw["rows"])
     decoupled = layout is not None and layout.decoupled
@@ -536,9 +686,18 @@ def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
     owned_fa = len(owned_all)
     for g, row in enumerate(rows):
         if g not in att:
+            if window:
+                from .sliding_window import phase1_row
+                head, (b0, b1), (f0, f1) = phase1_row(C, end0, layout.window_tokens, P)
+                require(len(row) == f1 and row[:head] == (0,) * head and 0 not in row[head:],
+                        "phase-1 sliding row must be the null head, the window and the fresh blocks")
+                owned_all.extend(row[f0:])
+                continue
             require(len(row) == M and row[:-1] == (0,) * (M - 1) and row[-1] > 0,
                     "phase-1 Mamba row must be null-padded")
             owned_all.append(row[-1])
+    chunks = _parse_chunks(raw["chunks"], rows, att, key, where, owned_all, C, end0, e,
+                           layout.window_tokens, P) if chunked else ()
     borrowed, owned, zero = raw["borrowed"], raw["owned"], raw["zero"]
     if decoupled:
         # owned: fresh FA (pool 0) then fresh Mamba (pool 1), whose ids may coincide;
@@ -557,7 +716,8 @@ def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
             "phase-1 SparsePlan mismatch")
     goal = raw["goal"]
     if goal is not None:
-        goal = (_parse_goal(goal, att, len(rows), P, set(where), mamba_tokens(P, layout), pools)
+        goal = (_parse_goal(goal, att, len(rows), P, set(where), mamba_tokens(P, layout), pools,
+                            **({"window": True, "limit": getattr(layout, "goal_tokens", 0)} if window else {}))
                 if decoupled else _parse_goal(goal, att, len(rows), P, set(where)))
     return Phase1Lease(
         raw["lease_id"], raw["request"], raw["binding"], raw["session"], raw["namespace"],
@@ -566,7 +726,7 @@ def parse_lease(raw, *, attention_groups=None, layout=None) -> Phase1Lease:
         tuple(owned), tuple(zero), run_fresh,
         _incarnations(raw["incarnations"], where, "phase-1"), dict(sparse),
         raw["carry_digest"], goal, raw["mac"], att, digest(raw),
-        mamba_tokens(P, layout) if decoupled else 0, pools)
+        mamba_tokens(P, layout) if decoupled else 0, pools, chunks)
 
 
 # Phase-1 Page-vector representations: float rows (legacy) or the worker's

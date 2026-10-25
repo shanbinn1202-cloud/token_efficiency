@@ -1,0 +1,78 @@
+--- before/vllm/v1/core/sched/scheduler.py
++++ after/vllm/v1/core/sched/scheduler.py
+@@ -314,12 +314,6 @@
+             if mamba_block_sizes:
+                 assert len(mamba_block_sizes) == 1, mamba_block_sizes
+                 self._remote_ra_mamba_align_tokens = mamba_block_sizes.pop()
+-            if self.defer_block_free:
+-                # Deferred frees hold blocks of several pools in one list.
+-                raise ValueError(
+-                    "decoupled KV layout does not support deferred block frees "
+-                    "(overlapping batches with a consumer KV connector)"
+-                )
+ 
+         # Counts of non-empty steps scheduled / processed. update_from_output
+         # is called once per scheduled step in FIFO order, so these stay in sync.
+@@ -327,7 +321,7 @@
+         self.processed_step_seq = 0
+         # FIFO of (fence_seq, blocks): blocks become safe to free once
+         # processed_step_seq >= fence_seq.
+-        self.deferred_frees: deque[tuple[int, list[KVCacheBlock]]] = deque()
++        self.deferred_frees: deque[tuple[int, list[tuple[int, list[KVCacheBlock]]]]] = deque()
+ 
+         self.perf_metrics: ModelMetrics | None = None
+         if self.log_stats and vllm_config.observability_config.enable_mfu_metrics:
+@@ -2430,9 +2424,9 @@
+         ):
+             self.kv_cache_manager.free(request)
+             return
+-        blocks = self.kv_cache_manager.pop_blocks_for_free(request)
+-        if blocks:
+-            self.deferred_frees.append((self.sched_step_seq, blocks))
++        blocks_by_pool = self.kv_cache_manager.pop_blocks_for_free_by_pool(request)
++        if blocks_by_pool:
++            self.deferred_frees.append((self.sched_step_seq, blocks_by_pool))
+ 
+     def _drain_deferred_frees(self):
+         """Return deferred blocks whose fence step has completed.
+@@ -2444,9 +2438,11 @@
+             fence, _ = self.deferred_frees[0]
+             if fence > self.processed_step_seq:
+                 break
+-            _, blocks = self.deferred_frees.popleft()
+-            # Free in reverse order so that the tail blocks are evicted first.
+-            self.kv_cache_manager.block_pool.free_blocks(reversed(blocks))
++            _, blocks_by_pool = self.deferred_frees.popleft()
++            # Block IDs are pool-local. Keep each owning pool until the same
++            # native in-flight-step fence has completed; never cross-free.
++            for pool_id, blocks in blocks_by_pool:
++                self.kv_cache_manager.block_pools[pool_id].free_blocks(reversed(blocks))
+ 
+     def get_num_unfinished_requests(self) -> int:
+         if self._pause_state == PauseState.PAUSED_ALL:
+--- before/vllm/v1/core/kv_cache_manager.py
++++ after/vllm/v1/core/kv_cache_manager.py
+@@ -597,6 +597,23 @@
+         """
+         self.coordinator.remove_skipped_blocks(request_id, total_computed_tokens)
+ 
++    def pop_blocks_for_free_by_pool(self, request: Request) -> list[tuple[int, list[KVCacheBlock]]]:
++        """Detach bookkeeping without releasing in-flight pages in any pool.
++
++        Multiple groups can share a pool; retain every reference, including
++        repeated block objects, just as the native flattened shared-pool path.
++        The scheduler releases each pool's references after its FIFO fence.
++        """
++        grouped: dict[int, list[KVCacheBlock]] = {}
++        for pool_id, manager in zip(
++            self.coordinator.group_pool, self.coordinator.single_type_managers,
++            strict=True,
++        ):
++            blocks = manager.pop_blocks_for_free(request.request_id)
++            if blocks:
++                grouped.setdefault(pool_id, []).extend(blocks)
++        return list(grouped.items())
++
+     def pop_blocks_for_free(self, request: Request) -> list[KVCacheBlock]:
+         """Pop the request's bookkeeping and return its blocks without
+         returning them to the block pool. The caller must eventually free

@@ -1,0 +1,189 @@
+{
+  "time": 1792859430.3431427,
+  "formal_release": "All 16 formal jobs submitted; awaiting Slurm resources",
+  "terminal": {
+    "candidate": "terminal-standard-dev-v46",
+    "all_original_tasks": 89,
+    "approved_reference_exception": "protein-assembly",
+    "formal_submitted": true,
+    "original_assertions_unchanged": true,
+    "gpu_validation": "3448478-terminal-native-kvm-v42",
+    "prior_diagnostic_variants_superseded": true,
+    "approved_reference_exceptions": [
+      "protein-assembly",
+      "crack-7z-hash",
+      "portfolio-optimization"
+    ]
+  },
+  "active_job": null,
+  "goal": {
+    "qualified_models": [
+      "qwen",
+      "gemma"
+    ],
+    "revision": "v18",
+    "async_permits": 16,
+    "formal_jobs": {
+      "qwen_swebench": "3448597",
+      "qwen_memagent": "3448596",
+      "gemma_swebench": "3448595",
+      "gemma_memagent": "3448594"
+    },
+    "partition": "ghx4",
+    "hours": 10,
+    "validation": "Both models v18 qualified; earlier v16/v17 issues superseded"
+  },
+  "active_validation_job": null,
+  "validation_node": "gh040",
+  "session_supervision": "active; no AI background supervisor",
+  "goal_status": "Both models qualified on SWE and MemAgent; four 10-hour ghx4 jobs submitted and pending Priority.",
+  "goal_jobs": [
+    3448597,
+    3448596,
+    3448595,
+    3448594
+  ],
+  "terminal_runtime": "terminal-standard-dev-v46",
+  "terminal_control_review": {
+    "reference_passes": 86,
+    "valid_negative_controls": 33,
+    "approved_reference_exception": [
+      "protein-assembly",
+      "crack-7z-hash",
+      "portfolio-optimization"
+    ],
+    "pending_user_decision": [],
+    "original_tasks_retained": 89
+  },
+  "terminal_gpu": {
+    "job": 3448478,
+    "state": "allocation_deadline",
+    "completed_flow": "v42 official Terminus2 Qwen Vanilla: completed, formally graded 0, no infrastructure errors",
+    "v46_smoke": "14 requests; incomplete at allocation cutoff; no passed marker",
+    "evidence_review": "Completed GPU flow and scoped CPU regression evidence recorded separately; unreviewed model/proxy changes rejected"
+  },
+  "terminal_formal_released": true,
+  "terminal_status": "All 89 original tasks retained: 86 reference passes, three user-approved exceptions, 33 valid negative controls; twelve five-hour ghx4 jobs submitted.",
+  "terminal_jobs": [
+    {
+      "key": "terminal-gemma-agentkv",
+      "job_id": "3448995",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-goal",
+      "job_id": "3448998",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-intentkv",
+      "job_id": "3448992",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-random_attention",
+      "job_id": "3448996",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-sliding_window",
+      "job_id": "3448987",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-gemma-vanilla",
+      "job_id": "3448994",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-agentkv",
+      "job_id": "3448989",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-goal",
+      "job_id": "3448997",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-intentkv",
+      "job_id": "3448993",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-random_attention",
+      "job_id": "3448990",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-sliding_window",
+      "job_id": "3448991",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    },
+    {
+      "key": "terminal-qwen-vanilla",
+      "job_id": "3448988",
+      "partition": "ghx4",
+      "hours": 5,
+      "memory_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "tasks": 89
+    }
+  ]
+}

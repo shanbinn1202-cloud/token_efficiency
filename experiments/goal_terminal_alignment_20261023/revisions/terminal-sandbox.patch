@@ -1,0 +1,73 @@
+--- harbor/src/harbor/environments/singularity/singularity.py
++++ terminal-runtime/terminal_environment.py
+@@ -53,7 +53,7 @@
+     pass
+ 
+ 
+-class SingularityEnvironment(BaseEnvironment):
++class Arm64ApptainerEnvironment(BaseEnvironment):
+     """
+     Singularity-based environment for HPC clusters.
+ 
+@@ -332,6 +332,18 @@
+         shutil.copy(bootstrap_src, bootstrap_script)
+         bootstrap_script.chmod(0o755)
+ 
++        # A private writable directory avoids overlay rename(EXDEV) failures in
++        # ordinary apt/dpkg operations. The base SIF remains immutable.
++        self._sandbox_parent = Path(tempfile.mkdtemp(prefix="terminal-arm64-root-"))
++        sandbox = self._sandbox_parent / "rootfs"
++        build = await asyncio.create_subprocess_exec(
++            "apptainer", "build", "--sandbox", str(sandbox), str(self._sif_path),
++            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
++        output, _ = await build.communicate()
++        if build.returncode:
++            raise RuntimeError("ARM64 sandbox extraction failed: " + output.decode(errors="replace")[-4000:])
++        for directory in ("staging", "logs/agent", "logs/verifier", "logs/artifacts", "tmp", "var/tmp"):
++            (sandbox / directory).mkdir(parents=True, exist_ok=True)
+         max_port_retries = 3
+         last_error = None
+ 
+@@ -382,12 +394,12 @@
+                 *no_mount_args,
+                 "--pwd",
+                 self._workdir,
+-                "--writable-tmpfs",
++                "--writable",
+                 "--fakeroot",
+                 "--containall",
+                 "--pid",
+                 *bind_mounts,
+-                str(self._sif_path),
++                str(sandbox),
+                 *bootstrap_cmd,
+             ]
+ 
+@@ -710,6 +722,8 @@
+         if self._staging_dir and self._staging_dir.exists():
+             shutil.rmtree(self._staging_dir, ignore_errors=True)
+ 
++        if getattr(self, "_sandbox_parent", None):
++            shutil.rmtree(self._sandbox_parent, ignore_errors=True)
+         if delete:
+             self.logger.debug(
+                 f"Singularity image preserved at {self._sif_path} for reuse"
+--- harbor/src/harbor/environments/singularity/server.py
++++ terminal-runtime/server.py
+@@ -376,12 +376,14 @@
+ def setup_singularity_environment(workdir: str) -> None:
+     """Run all Singularity environment setup."""
+     setup_workdir(workdir)
+-    setup_dpkg_for_overlay()
++    # Writable sandbox: retain the original dpkg database and package policy.
++    os.umask(0o022)
+     setup_common_directories()
+     setup_fake_sudo()
+ 
+     try:
+-        setup_apt_sources()
++        # Keep the image's signed, architecture-correct apt sources unchanged.
++        pass
+     except Exception as e:
+         logger.warning(f"Could not setup apt sources: {e}")
+ 

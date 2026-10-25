@@ -1,0 +1,1947 @@
+{
+  "time": 1792856779.4040499,
+  "ready_for_formal": false,
+  "original_task_count": 89,
+  "reference_passed": [
+    {
+      "task": "adaptive-rejection-sampler",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/adaptive-rejection-sampler-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 9,
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792851942.1047015,
+        "stop": 1792851942.9681041
+      }
+    },
+    {
+      "task": "bn-fit-modify",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/bn-fit-modify-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 9,
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852443.9152193,
+        "stop": 1792852446.1108341
+      }
+    },
+    {
+      "task": "break-filter-js-from-html",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/break-filter-js-from-html-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852430.7059383,
+        "stop": 1792852431.9737654
+      }
+    },
+    {
+      "task": "build-cython-ext",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/build-cython-ext-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 11,
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852496.1263008,
+        "stop": 1792852499.224829
+      }
+    },
+    {
+      "task": "build-pmars",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/build-pmars-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792851937.2350562,
+        "stop": 1792851937.3431048
+      }
+    },
+    {
+      "task": "build-pov-ray",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/build-pov-ray-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792851984.444245,
+        "stop": 1792851991.2420576
+      }
+    },
+    {
+      "task": "caffe-cifar-10",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/caffe-cifar-10-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852487.7606838,
+        "stop": 1792852504.5752637
+      }
+    },
+    {
+      "task": "cancel-async-tasks",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/cancel-async-tasks-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852470.2503214,
+        "stop": 1792852484.091335
+      }
+    },
+    {
+      "task": "chess-best-move",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/chess-best-move-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852578.185073,
+        "stop": 1792852578.2325733
+      }
+    },
+    {
+      "task": "circuit-fibsqrt",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/circuit-fibsqrt-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852524.8134966,
+        "stop": 1792852555.2497873
+      }
+    },
+    {
+      "task": "cobol-modernization",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/cobol-modernization-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852023.9192054,
+        "stop": 1792852024.1703954
+      }
+    },
+    {
+      "task": "code-from-image",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/code-from-image-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852577.894554,
+        "stop": 1792852577.9461684
+      }
+    },
+    {
+      "task": "compile-compcert",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/compile-compcert-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853950.2413607,
+        "stop": 1792853950.3880045
+      }
+    },
+    {
+      "task": "configure-git-webserver",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/configure-git-webserver-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852659.0884457,
+        "stop": 1792852700.050278
+      }
+    },
+    {
+      "task": "constraints-scheduling",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/constraints-scheduling-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852376.199343,
+        "stop": 1792852376.6174514
+      }
+    },
+    {
+      "task": "count-dataset-tokens",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/count-dataset-tokens-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852188.736211,
+        "stop": 1792852188.7513728
+      }
+    },
+    {
+      "task": "custom-memory-heap-crash",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/custom-memory-heap-crash-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852853.4168706,
+        "stop": 1792852858.458997
+      }
+    },
+    {
+      "task": "db-wal-recovery",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/db-wal-recovery-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853751.8251693,
+        "stop": 1792853751.8905296
+      }
+    },
+    {
+      "task": "distribution-search",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/distribution-search-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852859.2222996,
+        "stop": 1792852859.4100804
+      }
+    },
+    {
+      "task": "dna-assembly",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/dna-assembly-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852934.2901483,
+        "stop": 1792852934.3585436
+      }
+    },
+    {
+      "task": "dna-insert",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/dna-insert-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852901.446368,
+        "stop": 1792852901.5017724
+      }
+    },
+    {
+      "task": "extract-elf",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/extract-elf-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852933.4183865,
+        "stop": 1792852933.6866648
+      }
+    },
+    {
+      "task": "extract-moves-from-video",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/extract-moves-from-video-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852998.1065717,
+        "stop": 1792852998.3624315
+      }
+    },
+    {
+      "task": "feal-differential-cryptanalysis",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/feal-differential-cryptanalysis-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852995.651004,
+        "stop": 1792852996.3673782
+      }
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/feal-linear-cryptanalysis-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853022.6258464,
+        "stop": 1792853022.6451263
+      }
+    },
+    {
+      "task": "filter-js-from-html",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/filter-js-from-html-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853052.4462879,
+        "stop": 1792853086.883668
+      }
+    },
+    {
+      "task": "financial-document-processor",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/financial-document-processor-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853141.6252544,
+        "stop": 1792853142.6296737
+      }
+    },
+    {
+      "task": "fix-code-vulnerability",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/fix-code-vulnerability-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853105.991025,
+        "stop": 1792853106.0145874
+      }
+    },
+    {
+      "task": "fix-git",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/fix-git-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853139.3350058,
+        "stop": 1792853139.3947723
+      }
+    },
+    {
+      "task": "fix-ocaml-gc",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/fix-ocaml-gc-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852570.5329561,
+        "stop": 1792852570.580586
+      }
+    },
+    {
+      "task": "gcode-to-text",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/gcode-to-text-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853244.0650408,
+        "stop": 1792853244.1474998
+      }
+    },
+    {
+      "task": "git-leak-recovery",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/git-leak-recovery-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853175.3722465,
+        "stop": 1792853175.4406514
+      }
+    },
+    {
+      "task": "git-multibranch",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/git-multibranch-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853214.383858,
+        "stop": 1792853222.6680498
+      }
+    },
+    {
+      "task": "gpt2-codegolf",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/gpt2-codegolf-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853294.2463648,
+        "stop": 1792853299.262428
+      }
+    },
+    {
+      "task": "headless-terminal",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/headless-terminal-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852248.0063484,
+        "stop": 1792852261.1544313
+      }
+    },
+    {
+      "task": "hf-model-inference",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/hf-model-inference-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853315.8700545,
+        "stop": 1792853318.5710063
+      }
+    },
+    {
+      "task": "install-windows-3.11",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/install-windows-3.11-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852343.2548606,
+        "stop": 1792852350.0088668
+      }
+    },
+    {
+      "task": "kv-store-grpc",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/kv-store-grpc-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853346.0299437,
+        "stop": 1792853346.10084
+      }
+    },
+    {
+      "task": "large-scale-text-editing",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/large-scale-text-editing-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853370.4749596,
+        "stop": 1792853450.623492
+      }
+    },
+    {
+      "task": "largest-eigenval",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/largest-eigenval-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853446.900183,
+        "stop": 1792853447.1273265
+      }
+    },
+    {
+      "task": "llm-inference-batching-scheduler",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/llm-inference-batching-scheduler-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853472.6364875,
+        "stop": 1792853472.7417145
+      }
+    },
+    {
+      "task": "log-summary-date-ranges",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/log-summary-date-ranges-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853661.8864253,
+        "stop": 1792853661.9603758
+      }
+    },
+    {
+      "task": "mailman",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/mailman-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854285.537848,
+        "stop": 1792854311.597007
+      }
+    },
+    {
+      "task": "make-doom-for-mips",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/make-doom-for-mips-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852330.8719356,
+        "stop": 1792852334.2451513
+      }
+    },
+    {
+      "task": "make-mips-interpreter",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/make-mips-interpreter-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853509.3374727,
+        "stop": 1792853513.1261928
+      }
+    },
+    {
+      "task": "mcmc-sampling-stan",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mcmc-sampling-stan-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854140.0261395,
+        "stop": 1792854465.9223611
+      }
+    },
+    {
+      "task": "merge-diff-arc-agi-task",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/merge-diff-arc-agi-task-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853603.6251438,
+        "stop": 1792853603.6837525
+      }
+    },
+    {
+      "task": "model-extraction-relu-logits",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/model-extraction-relu-logits-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853636.1349518,
+        "stop": 1792853643.2537625
+      }
+    },
+    {
+      "task": "modernize-scientific-stack",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/modernize-scientific-stack-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853687.3180616,
+        "stop": 1792853688.6004272
+      }
+    },
+    {
+      "task": "mteb-leaderboard",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mteb-leaderboard-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853883.2558308,
+        "stop": 1792853883.3100529
+      }
+    },
+    {
+      "task": "mteb-retrieve",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mteb-retrieve-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792851996.9412756,
+        "stop": 1792851996.9671652
+      }
+    },
+    {
+      "task": "multi-source-data-merger",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/multi-source-data-merger-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853974.077888,
+        "stop": 1792853975.1462314
+      }
+    },
+    {
+      "task": "nginx-request-logging",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/nginx-request-logging-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854000.0629337,
+        "stop": 1792854002.5221727
+      }
+    },
+    {
+      "task": "openssl-selfsigned-cert",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/openssl-selfsigned-cert-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854009.309418,
+        "stop": 1792854009.5233438
+      }
+    },
+    {
+      "task": "overfull-hbox",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/overfull-hbox-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854053.4168835,
+        "stop": 1792854077.0046177
+      }
+    },
+    {
+      "task": "password-recovery",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/password-recovery-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854059.8497374,
+        "stop": 1792854059.895327
+      }
+    },
+    {
+      "task": "path-tracing",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/path-tracing-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854092.1517894,
+        "stop": 1792854101.8816805
+      }
+    },
+    {
+      "task": "path-tracing-reverse",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/path-tracing-reverse-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854231.2575479,
+        "stop": 1792854234.039973
+      }
+    },
+    {
+      "task": "polyglot-c-py",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/polyglot-c-py-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854129.6504,
+        "stop": 1792854129.7537153
+      }
+    },
+    {
+      "task": "polyglot-rust-c",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/polyglot-rust-c-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854164.6073523,
+        "stop": 1792854164.917945
+      }
+    },
+    {
+      "task": "prove-plus-comm",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/prove-plus-comm-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854338.6965857,
+        "stop": 1792854338.9347932
+      }
+    },
+    {
+      "task": "pypi-server",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/pypi-server-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854387.69282,
+        "stop": 1792854388.9267619
+      }
+    },
+    {
+      "task": "pytorch-model-cli",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/pytorch-model-cli-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852558.6390855,
+        "stop": 1792852579.365317
+      }
+    },
+    {
+      "task": "pytorch-model-recovery",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/pytorch-model-recovery-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852524.6004488,
+        "stop": 1792852526.808843
+      }
+    },
+    {
+      "task": "qemu-alpine-ssh",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/qemu-alpine-ssh-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853716.7342162,
+        "stop": 1792853717.146752
+      }
+    },
+    {
+      "task": "qemu-startup",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/qemu-startup-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852251.0590007,
+        "stop": 1792852253.2135656
+      }
+    },
+    {
+      "task": "query-optimize",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/query-optimize-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852609.3190656,
+        "stop": 1792853295.4163666
+      }
+    },
+    {
+      "task": "raman-fitting",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/raman-fitting-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852596.5276694,
+        "stop": 1792852596.544689
+      }
+    },
+    {
+      "task": "regex-chess",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/regex-chess-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852619.510853,
+        "stop": 1792852873.9040596
+      }
+    },
+    {
+      "task": "regex-log",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/regex-log-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852665.1656125,
+        "stop": 1792852665.2111413
+      }
+    },
+    {
+      "task": "reshard-c4-data",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/reshard-c4-data-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852701.719556,
+        "stop": 1792852780.1030908
+      }
+    },
+    {
+      "task": "rstan-to-pystan",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/rstan-to-pystan-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853172.1400638,
+        "stop": 1792853172.1936169
+      }
+    },
+    {
+      "task": "sam-cell-seg",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sam-cell-seg-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 9,
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852986.008504,
+        "stop": 1792853009.2852242
+      }
+    },
+    {
+      "task": "sanitize-git-repo",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sanitize-git-repo-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853035.2172825,
+        "stop": 1792853035.5904138
+      }
+    },
+    {
+      "task": "schemelike-metacircular-eval",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/schemelike-metacircular-eval-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853090.8178828,
+        "stop": 1792853161.2344968
+      }
+    },
+    {
+      "task": "sparql-university",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sparql-university-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853221.666957,
+        "stop": 1792853222.0804238
+      }
+    },
+    {
+      "task": "sqlite-db-truncate",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sqlite-db-truncate-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853247.8508134,
+        "stop": 1792853247.899785
+      }
+    },
+    {
+      "task": "sqlite-with-gcov",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sqlite-with-gcov-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853313.7164626,
+        "stop": 1792853313.773503
+      }
+    },
+    {
+      "task": "torch-pipeline-parallelism",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/torch-pipeline-parallelism-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853297.9660199,
+        "stop": 1792853317.1258614
+      }
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/torch-tensor-parallelism-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853359.839648,
+        "stop": 1792853393.1964185
+      }
+    },
+    {
+      "task": "train-fasttext",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/train-fasttext-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853426.0654893,
+        "stop": 1792853429.0135956
+      }
+    },
+    {
+      "task": "tune-mjcf",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/tune-mjcf-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853352.3142025,
+        "stop": 1792853364.2887304
+      }
+    },
+    {
+      "task": "video-processing",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/video-processing-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853390.3129034,
+        "stop": 1792853394.6036716
+      }
+    },
+    {
+      "task": "vulnerable-secret",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/vulnerable-secret-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853419.0123522,
+        "stop": 1792853419.064503
+      }
+    },
+    {
+      "task": "winning-avg-corewars",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/winning-avg-corewars-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853414.255077,
+        "stop": 1792853414.8167903
+      }
+    },
+    {
+      "task": "write-compressor",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/write-compressor-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853538.2489023,
+        "stop": 1792853538.3856266
+      }
+    }
+  ],
+  "reference_failures": [
+    {
+      "task": "crack-7z-hash",
+      "passed": false,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/crack-7z-hash-oracle.json",
+      "exception_type": "AgentTimeoutError",
+      "test_counts": {
+        "tests": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854787.2413635,
+        "stop": 1792854787.2937624
+      }
+    },
+    {
+      "task": "portfolio-optimization",
+      "passed": false,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/portfolio-optimization-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854554.7426136,
+        "stop": 1792854644.8645122
+      }
+    },
+    {
+      "task": "protein-assembly",
+      "passed": false,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/protein-assembly-oracle.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854378.819646,
+        "stop": 1792854378.8804886
+      }
+    }
+  ],
+  "negative_controls": [
+    {
+      "task": "adaptive-rejection-sampler",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/adaptive-rejection-sampler-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 9,
+        "passed": 0,
+        "failed": 9,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852002.7799685,
+        "stop": 1792852003.185416
+      }
+    },
+    {
+      "task": "caffe-cifar-10",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/caffe-cifar-10-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 0,
+        "failed": 6,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852564.4942994,
+        "stop": 1792852564.5874968
+      }
+    },
+    {
+      "task": "constraints-scheduling",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/constraints-scheduling-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852405.6094747,
+        "stop": 1792852405.723973
+      }
+    },
+    {
+      "task": "count-dataset-tokens",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/count-dataset-tokens-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852220.2069397,
+        "stop": 1792852220.28656
+      }
+    },
+    {
+      "task": "db-wal-recovery",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/db-wal-recovery-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 0,
+        "failed": 7,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853816.9693975,
+        "stop": 1792853817.0502515
+      }
+    },
+    {
+      "task": "dna-assembly",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/dna-assembly-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852968.9307203,
+        "stop": 1792852968.9901993
+      }
+    },
+    {
+      "task": "feal-differential-cryptanalysis",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/feal-differential-cryptanalysis-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853025.4226785,
+        "stop": 1792853025.8861153
+      }
+    },
+    {
+      "task": "feal-linear-cryptanalysis",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/feal-linear-cryptanalysis-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853046.3314524,
+        "stop": 1792853046.3550901
+      }
+    },
+    {
+      "task": "gcode-to-text",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/gcode-to-text-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853271.9044378,
+        "stop": 1792853271.9919856
+      }
+    },
+    {
+      "task": "git-multibranch",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/git-multibranch-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853256.89598,
+        "stop": 1792853260.9125464
+      }
+    },
+    {
+      "task": "gpt2-codegolf",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/gpt2-codegolf-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853404.0511134,
+        "stop": 1792853404.1541183
+      }
+    },
+    {
+      "task": "headless-terminal",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/headless-terminal-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 7,
+        "passed": 0,
+        "failed": 7,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852284.8499165,
+        "stop": 1792852284.9245932
+      }
+    },
+    {
+      "task": "install-windows-3.11",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/install-windows-3.11-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 1,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852388.2975457,
+        "stop": 1792852392.471227
+      }
+    },
+    {
+      "task": "mailman",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/mailman-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854343.1923006,
+        "stop": 1792854345.6354315
+      }
+    },
+    {
+      "task": "make-doom-for-mips",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/make-doom-for-mips-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852362.0281847,
+        "stop": 1792852392.190913
+      }
+    },
+    {
+      "task": "make-mips-interpreter",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/make-mips-interpreter-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853538.9533777,
+        "stop": 1792853569.1066718
+      }
+    },
+    {
+      "task": "mcmc-sampling-stan",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mcmc-sampling-stan-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 2,
+        "failed": 4,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854495.8719268,
+        "stop": 1792854496.0493326
+      }
+    },
+    {
+      "task": "mteb-leaderboard",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mteb-leaderboard-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853979.5200727,
+        "stop": 1792853979.574943
+      }
+    },
+    {
+      "task": "mteb-retrieve",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/mteb-retrieve-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852121.3006625,
+        "stop": 1792852121.3284695
+      }
+    },
+    {
+      "task": "nginx-request-logging",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/nginx-request-logging-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 8,
+        "passed": 0,
+        "failed": 8,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854025.7000248,
+        "stop": 1792854030.3414211
+      }
+    },
+    {
+      "task": "polyglot-rust-c",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/polyglot-rust-c-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854240.8911164,
+        "stop": 1792854240.9459836
+      }
+    },
+    {
+      "task": "qemu-alpine-ssh",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/qemu-alpine-ssh-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853764.0874398,
+        "stop": 1792853764.2088568
+      }
+    },
+    {
+      "task": "qemu-startup",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/qemu-startup-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852282.5706034,
+        "stop": 1792852284.6340897
+      }
+    },
+    {
+      "task": "query-optimize",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/query-optimize-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 2,
+        "failed": 4,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852558.1829305,
+        "stop": 1792853225.8693774
+      }
+    },
+    {
+      "task": "raman-fitting",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/raman-fitting-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852602.9606576,
+        "stop": 1792852603.0233922
+      }
+    },
+    {
+      "task": "rstan-to-pystan",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/rstan-to-pystan-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 6,
+        "passed": 1,
+        "failed": 5,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792852935.3923411,
+        "stop": 1792852935.4608023
+      }
+    },
+    {
+      "task": "sanitize-git-repo",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sanitize-git-repo-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 1,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853062.018503,
+        "stop": 1792853062.4648015
+      }
+    },
+    {
+      "task": "sparql-university",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/sparql-university-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853233.8724585,
+        "stop": 1792853234.1038544
+      }
+    },
+    {
+      "task": "torch-pipeline-parallelism",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/torch-pipeline-parallelism-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853314.36599,
+        "stop": 1792853328.3889146
+      }
+    },
+    {
+      "task": "torch-tensor-parallelism",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/torch-tensor-parallelism-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792853474.0963638,
+        "stop": 1792853507.284741
+      }
+    },
+    {
+      "task": "crack-7z-hash",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/crack-7z-hash-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854817.9632585,
+        "stop": 1792854818.014275
+      }
+    },
+    {
+      "task": "portfolio-optimization",
+      "passed": true,
+      "record": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/portfolio-optimization-nop.json",
+      "exception_type": null,
+      "test_counts": {
+        "tests": 4,
+        "passed": 1,
+        "failed": 3,
+        "skipped": 0,
+        "pending": 0,
+        "other": 0,
+        "start": 1792854705.894892,
+        "stop": 1792854730.1835337
+      }
+    }
+  ]
+}

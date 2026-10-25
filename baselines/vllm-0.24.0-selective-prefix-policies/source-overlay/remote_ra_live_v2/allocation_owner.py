@@ -1,6 +1,7 @@
 """Loaded GPUModelRunner allocation owner for Stage B two-phase turns."""
 from __future__ import annotations
 
+from operator import is_ as _is
 from typing import NamedTuple
 
 from .contract import (Allocation, NativeIdentity, RenderAssignment, ZERO_DIGEST,
@@ -8,7 +9,9 @@ from .contract import (Allocation, NativeIdentity, RenderAssignment, ZERO_DIGEST
 
 # Spec 2 whitelist; append/query_prepare/probe_drain are gone (sealing is at complete).
 OPERATIONS = frozenset(("prepare", "phase1", "phase1_drain", "reserve",
-                        "allocation_update", "complete", "cancel", "close_session"))
+                        "allocation_update", "complete", "cancel", "close_session",
+                        "phase1_arm", "phase1_collect",      # --phase1-in-step
+                        "evict", "readmit"))                 # --release-idle-pages
 
 
 class StepRow(NamedTuple):
@@ -49,7 +52,18 @@ class _Observed:
     allocation sets currently hold (``claimed``, ``materialized``)."""
     __slots__ = ('layout', 'generation', 'kind', 'native', 'rows', 'fa_ids', 'unique',
                  'step', 'base', 'added', 'removed', 'claim_added', 'claim_removed',
-                 'claimed', 'materialized')
+                 'claimed', 'materialized',
+                 'mamba', 'idx')    # --decode-fastpath3: the Mamba rows and slot index of ``step``
+
+
+def _same_row(view, kernel):
+    """--decode-fastpath3: ``np.array_equal(view, kernel)`` for two 1-D arrays, by their bytes
+    when both have one integer dtype (equal bytes are equal integers); else ``np.array_equal``."""
+    import numpy as np
+    if (type(view) is np.ndarray and type(kernel) is np.ndarray and view.dtype == kernel.dtype and
+            view.dtype.kind in 'iu' and view.ndim == 1 and kernel.ndim == 1):
+        return view.shape == kernel.shape and view.tobytes() == kernel.tobytes()
+    return np.array_equal(view, kernel)
 
 
 def _page(value):
@@ -70,6 +84,23 @@ class RunnerAllocationOwner:
     # Legacy defaults (also for owners built without __init__ in tests).
     layout = pool_of = None
     decoupled = batched_pages = False
+    # Session pool: sessions closed for good (close_session reason "close").
+    closed_sessions = frozenset()
+    # --gdn-device-handoff (gdn_handoff.attach_worker): issue-variant IO and the
+    # held probe slots {(Mamba group, block): (request, generation)}; off: None.
+    handoff = False
+    held_claims = None
+    # --phase1-in-step (admission_flags, attach_loaded_worker): phase1_arm/collect accepted.
+    phase1_in_step = False
+    # --decode-fastpath2 (decode_fastpath2.attach_worker): allocation updates may come
+    # without rows (unchanged since the last accepted ones) and the incremental
+    # observation reads Mamba incarnations at the row index and reuses unchanged tuples.
+    decode_fastpath2 = False
+    # --decode-fastpath3 (decode_fastpath3.attach_worker): an unchanged request's observation
+    # keeps its last Mamba leases and differences, and ``materialize_steady`` is used.
+    decode_fastpath3 = False
+    # --release-idle-pages (idle_release, attach_loaded_worker): evict/readmit accepted.
+    release_idle = False
 
     def __init__(self, runner, io, startup, layout=None):
         self.runner, self.io, self.startup = runner, io, dict(startup)
@@ -80,7 +111,7 @@ class RunnerAllocationOwner:
         self._next_generation = 1
         self.page_tokens = self.startup["page_tokens"]
         self.attention_groups = tuple(sorted({v.group for v in io.views if v.kind == "attention"}))
-        self.hybrid_groups = tuple(sorted({v.group for v in io.views if v.kind == "hybrid"}))
+        self.hybrid_groups = self._state_groups(runner, io)
         require(self.attention_groups and self.hybrid_groups and
                 type(self.page_tokens) is int and self.page_tokens > 0,
                 "FullAttention and Mamba loaded views required")
@@ -102,6 +133,12 @@ class RunnerAllocationOwner:
                     "decoupled layout requires FA groups in pool 0 and Mamba groups in pool 1")
         # Batched FA Page capture/restore through the pinned arena (decoupled).
         self.batched_pages = self.decoupled and getattr(io, "arena", None) is not None
+
+    @staticmethod
+    def _state_groups(runner, io):
+        """The KV groups of the per-request state: the Mamba groups (the loaded views of
+        kind ``hybrid``). The window layout's owner (gemma-s1) names its sliding groups."""
+        return tuple(sorted({v.group for v in io.views if v.kind == "hybrid"}))
 
     def bind_backend(self, backend): self.backend = backend
     def bind_bridge(self, bridge): self.bridge = bridge
@@ -160,6 +197,8 @@ class RunnerAllocationOwner:
             return self._phase1_drain(payload)
         if operation == "close_session":
             return self._close_session(payload)
+        if operation == "evict":
+            return self._evict(payload)
         binding = payload["binding"]
         prior=self.terminals.get(payload['request'])
         if prior is not None:
@@ -190,6 +229,7 @@ class RunnerAllocationOwner:
                 len(tokens) == a.prompt_tokens,
                 "prepare identity/assignment mismatch or replay")
         current = self.session_namespaces.get(session)
+        require(session not in self.closed_sessions, "worker session closed for good")
         if a.local_turn:
             s = self.sessions.get(ns)
             carry = self.backend.carry.get(session)
@@ -226,6 +266,14 @@ class RunnerAllocationOwner:
         from .model_queries import phase1
         return lambda backend, qwen: phase1(self, backend, rec, payload)
 
+    def _phase1_arm(self, rec, payload):
+        from .model_queries import phase1_arm
+        return lambda backend, qwen: phase1_arm(self, backend, rec, payload)
+
+    def _phase1_collect(self, rec, payload):
+        from .model_queries import phase1_collect
+        return lambda backend, qwen: phase1_collect(self, backend, rec, payload)
+
     def _phase1_drain(self, payload):
         def drained(backend, qwen):
             driver = self.runner._remote_ra_native_query_forward
@@ -240,6 +288,16 @@ class RunnerAllocationOwner:
 
     def _allocation_update(self, rec, payload):
         def update(backend,qwen):
+            if payload['rows'] is None:
+                # --decode-fastpath2: the engine's rows equal the last accepted ones
+                # (no FA block appended, the same Mamba rows); they stay as accepted.
+                require(self.decode_fastpath2 and rec.get('native_rows') is not None and
+                        (rec.get('rows_seen') is not None or not INCREMENTAL),
+                        'allocation update without rows before any accepted rows')
+                from .chunk_protocol import worker_interval
+                worker_interval(rec,qwen.requests[rec['identity'].request],payload['start'],payload['count'])
+                rec['native_interval']=(payload['start'],payload['count'])
+                return dict(operation='allocation_update',binding=payload['binding'],drained=True)
             fast = self._rows_increment(rec, payload['rows']) if INCREMENTAL else None
             if fast is not None:
                 rows, commit = fast
@@ -532,11 +590,73 @@ class RunnerAllocationOwner:
             return result
         return cancel_unstarted
 
+    def _evict(self, payload):
+        """--release-idle-pages: an idle session's resident Pages leave the GPU. Their
+        DRAM copies stay in the catalog; the tail, the carry and the catalog stay.
+        Nothing physical happens: the engine frees the blocks after this receipt."""
+        require(self.release_idle, "evict needs --release-idle-pages")
+        session, ns, pages = payload["session"], payload["namespace"], payload["pages"]
+        s = self.sessions.get(ns)
+        require(type(ns) is str and self.session_namespaces.get(session) == ns and s is not None and
+                not s["poisoned"] and type(pages) is list and tuple(pages) == tuple(s["resident"]) and pages and
+                all(p in s["catalog"] for p in pages), "evict differs from the committed worker session")
+        require(not any(r["identity"].session == session for r in self.records.values()),
+                "worker session still owns native requests")
+        driver = getattr(self.runner, "_remote_ra_native_query_forward", None)
+        require(driver is None or all(key in driver.drains for key, lease in driver.leases.items()
+                                      if lease["identity"].session == session),
+                "phase-1 lease not drained before eviction")
+        def evict(backend, qwen):
+            backend.verify_identity()
+            blocks = len(s["resident_blocks"])
+            s.update(resident=(), resident_blocks={})
+            return dict(operation="evict", evicted=list(pages), namespace=ns, drained=True, pages=blocks)
+        return evict
+
+    def _readmit(self, rec, payload):
+        """--release-idle-pages: an evicted session's Pages come back before its phase 1:
+        each DRAM copy is restored into the fresh blocks the engine pinned for it, and
+        they are the session's resident Pages again (the turn then runs as if they had
+        never left)."""
+        require(self.release_idle, "readmit needs --release-idle-pages")
+        self._same_turn(rec, payload)
+        a, ns = rec["assignment"], rec["namespace"]
+        s = self.sessions[ns]
+        require(payload["namespace"] == ns and a.local_turn > 0 and "plan" not in rec and
+                rec["phase1"] is None, "readmission belongs before this turn's phase 1")
+        blocks = {_page(k): self._groups(v, "readmit") for k, v in payload["pages"].items()}
+        pages = sorted(blocks)
+        ids = [b for groups in blocks.values() for v in groups.values() for b in v]
+        require(pages and not s["resident"] and not s["resident_blocks"] and
+                all(p < a.sealed_start // a.page_tokens and p in s["catalog"] for p in pages) and
+                len(ids) == len(set(ids)) and not set(ids) & self._pinned(s),
+                "readmission differs from the committed worker session")
+        def readmit(backend, qwen):
+            fresh = {g: tuple(b for groups in blocks.values() for b in groups[g]) for g in self.attention_groups}
+            self.io.zero(fresh, "attention")
+            if self.batched_pages:
+                self.io.restore_pages([(blocks[p], s["catalog"][p]) for p in pages])
+            else:
+                for p in pages:
+                    self.io.restore(blocks[p], "attention", s["catalog"][p])
+            self.io.drain()
+            s.update(resident=tuple(pages), resident_blocks=blocks)
+            return dict(operation="readmit", binding=payload["binding"], readmitted=pages, drained=True)
+        return readmit
+
     def _close_session(self, payload):
+        """Drop the session's worker mirrors: CPU catalog (its arena slots return
+        with the last payload reference), committed carry and Qwen terminals.
+        ``reason`` "close" (session pool) also closes the session for good, drops
+        the terminal receipts and phase-1 leases of its ``requests`` (all drained)
+        and reports what it released."""
         session, ns, reason = payload["session"], payload["namespace"], payload.get("reason")
-        require(reason in {"shutdown", "rebuild"} and type(ns) is str and
+        require(reason in {"shutdown", "rebuild", "close"} and type(ns) is str and
                 self.session_namespaces.get(session) in (None, ns),
                 "close_session namespace/reason mismatch")
+        requests = frozenset(payload.get("requests", ()) if reason == "close" else ())
+        require(all(type(r) is str for r in requests) and not requests & set(self.records),
+                "close_session requests must be terminal")
         require(not any(r["identity"].session == session for r in self.records.values()),
                 "worker session still owns native requests")
         driver = getattr(self.runner, "_remote_ra_native_query_forward", None)
@@ -546,15 +666,39 @@ class RunnerAllocationOwner:
         def close(backend, qwen):
             backend.verify_identity(); self.io.drain()
             # Frees nothing physical: the engine releases pins after this receipt.
-            self.sessions.pop(ns, None)
+            mirror = self.sessions.pop(ns, None)
+            pages = 0 if mirror is None else len(mirror["catalog"])
+            del mirror      # the catalog's arena payloads go with their last reference
             self.session_namespaces.pop(session, None)
-            backend.carry.pop(session, None)
+            carry = backend.carry.pop(session, None) is not None
+            if getattr(backend, "handoff", False):
+                backend.carry_buffers.pop(session, None)    # joined by the drain above
             for rid, state in tuple(qwen.requests.items()):
                 if state.assignment.identity.session == session:
                     require(state.terminal, "worker close before Qwen terminal")
                     del qwen.requests[rid]
-            return dict(operation="close_session", closed=True, drained=True,
-                        namespace=ns, reason=reason)
+            receipt = dict(operation="close_session", closed=True, drained=True,
+                           namespace=ns, reason=reason)
+            if reason == "close":
+                self.closed_sessions = frozenset(self.closed_sessions) | {session}
+                released = dict(catalog_pages=pages, carry=carry)
+                if requests:
+                    terminals = getattr(self, "terminals", {})
+                    released["terminals"] = sum(terminals.pop(r, None) is not None for r in requests)
+                    if driver is not None:
+                        leases = [key for key, lease in driver.leases.items()
+                                  if lease["payload"]["request"] in requests]
+                        for key in leases:
+                            driver.leases.pop(key)
+                            driver.drains.pop(key, None)
+                            if key in driver.retired:       # --phase1-in-step
+                                driver.retired = driver.retired - {key}
+                        released["phase1_leases"] = len(leases)
+                stats = getattr(getattr(self.io, "arena", None), "stats", None)
+                if callable(stats):
+                    released["arena"] = stats()     # pages_held after this release
+                receipt["released"] = released
+            return receipt
         return close
 
     @staticmethod
@@ -570,11 +714,14 @@ class RunnerAllocationOwner:
         batch = tuple(runner.input_batch.req_ids)
         require(type(scheduled) is dict and scheduled and len(batch) == len(scheduled) and
                 set(batch) == set(scheduled), "persistent batch differs from the scheduled requests")
+        from .native_probe import mixed_ids
+        probes = mixed_ids(runner)      # --phase1-in-step: the probe row is the driver's
         rows, offset = [], 0
         for row, rid in enumerate(batch):
             count = int(scheduled[rid])
             require(count > 0, "positive scheduled token count required")
-            rows.append((rid, row, offset, count))
+            if rid not in probes:
+                rows.append((rid, row, offset, count))
             offset += count
         return tuple(rows)
 
@@ -597,6 +744,8 @@ class RunnerAllocationOwner:
         rows = self.scheduled_rows(runner, scheduler_output)
         try:
             steps = tuple(self._observe(runner, *row) for row in rows)
+            if self.held_claims:
+                self._refuse_held(steps)
             if INCREMENTAL and self._claim_increment(steps):
                 return steps
             # Pass 1: drop stale claims of every stepped request before any claim.
@@ -620,12 +769,96 @@ class RunnerAllocationOwner:
                 self.records.get(rid, {}).pop('observed', None)
             raise
 
+    def _refuse_held(self, steps):
+        """--gdn-device-handoff: no step allocation may name another request's held probe slot."""
+        for s in steps:
+            owner = (s.request, s.generation)
+            require(all(self.held_claims.get(key[:2]) in (None, owner) for key in s.current),
+                    "allocation aliases a held phase-1 GDN slot")
+
+    # ---- --gdn-device-handoff: the held probe slot and the device copies ----
+
+    def hold_probe(self, identity, groups, generation):
+        """Phase 1 ended: the probe slot keeps the state at e, claimed until phase 2 copies it."""
+        rec = self.records.get(identity.request)
+        require(self.held_claims is not None and rec is not None and rec["identity"] == identity and
+                rec["generation"] == generation and not rec.get("held_gdn"),
+                "held phase-1 slot without its generation")
+        owner = (identity.request, generation)
+        keys = tuple(sorted((g, b) for g, ids in groups.items() for b in ids))
+        require(set(g for g, _ in keys) == set(self.hybrid_groups) and len(keys) == len(self.hybrid_groups) and
+                all(self.claims.get(k) in (None, owner) and self.held_claims.get(k) is None for k in keys),
+                "held phase-1 GDN slot aliases another claim")
+        for k in keys:
+            self.held_claims[k] = owner
+        rec["held_gdn"] = keys
+
+    def verify_held(self, identity, groups, generation):
+        rec = self.records.get(identity.request)
+        owner = (identity.request, generation)
+        keys = tuple(sorted((g, b) for g, ids in groups.items() for b in ids))
+        require(rec is not None and rec["generation"] == generation and rec.get("held_gdn") == keys and
+                all(self.held_claims.get(k) == owner for k in keys),
+                "phase-1 GDN slot no longer held by this generation")
+
+    def release_probe(self, identity, generation):
+        """The copy is issued (or the request ended): the held slot's claim goes, once."""
+        rec = self.records.get(identity.request)
+        if rec is None or self.held_claims is None:
+            return
+        owner = (identity.request, generation)
+        for k in rec.get("held_gdn", ()):
+            if self.held_claims.get(k) == owner:
+                del self.held_claims[k]
+        rec["held_gdn"] = ()
+
+    def _copy_target(self, rec, s):
+        """Whether this step's new Mamba slot is written whole by a device copy: the
+        hand-off (first phase-2 step of a continuing turn) or a crossing."""
+        state = self.bridge.assignments.get(s.request) if self.bridge is not None else None
+        if state is None:
+            return False
+        if state.current_hybrid is None:
+            return rec["assignment"].local_turn > 0
+        return tuple(s.hybrid) != tuple(state.current_hybrid)
+
+    def verify_copy_targets(self, identity, slots, generation):
+        """Structural coverage: the slots are this step's own and their zero was skipped
+        because the copy writes every Mamba view of them (one slot per group)."""
+        self.verify_allocations(identity, slots, generation)
+        rec = self.records[identity.request]
+        require(len(slots) == len(self.hybrid_groups) and
+                sorted(v.group for v in slots) == list(self.hybrid_groups) and
+                all(v.kind == "mamba" and v.key in rec.get("copied", ()) for v in slots),
+                "device copy target is not a fresh slot of this step")
+
+    def verify_previous_slots(self, identity, old, generation):
+        """A crossing's source: still in this request's native Mamba rows this step
+        (align mode frees it one step later), at the same incarnation."""
+        rec = self.records.get(identity.request)
+        native = None if rec is None else rec.get("native_rows")
+        require(rec is not None and rec["generation"] == generation and native is not None and
+                len(old) == len(self.hybrid_groups) and
+                all(v.kind == "mamba" and v.generation == generation and
+                    (v.block, v.incarnation) in native[v.group] for v in old),
+                "crossing source slot no longer owned by the request")
+
     def _claim_full(self, s):
         pools = self.pool_of
         require(len({key[1] for key in s.current} if pools is None else
                     {(pools[key[0]], key[1]) for key in s.current}) == len(s.current),
                 'simultaneous attention/Mamba pool allocation alias')
         owner = (s.request, s.generation)
+        if self.decode_fastpath2:
+            # --decode-fastpath2: a claim this generation already holds is not set again
+            # (the same value: the claim counts do not churn).
+            claims = self.claims
+            for key in s.current:
+                held = claims.get(key[:2])
+                require(held in (None, owner), "allocation owned by another generation")
+                if held != owner:
+                    claims[key[:2]] = owner
+            return
         for key in s.current:
             require(self.claims.get(key[:2]) in (None, owner), "allocation owned by another generation")
             self.claims[key[:2]] = owner
@@ -755,6 +988,7 @@ class RunnerAllocationOwner:
         o.step, o.base = s, None
         o.added = o.removed = o.claim_added = o.claim_removed = None
         o.claimed = o.materialized = None
+        o.mamba = o.idx = None
         rec['observed'] = o
 
     def _observe_increment(self, runner, rec, request, rid, row, offset, start, count, idx, native_rows):
@@ -769,6 +1003,8 @@ class RunnerAllocationOwner:
         are unchanged.  The Mamba slots are observed in full (one per group).
         """
         import numpy as np
+        fast2 = self.decode_fastpath2
+        fast3 = fast2 and self.decode_fastpath3
         o = rec.get('observed')
         a = rec["assignment"]
         kind = ("decode" if start >= a.prompt_tokens else
@@ -785,14 +1021,16 @@ class RunnerAllocationOwner:
                     int(table.block_size) != fa.kernel_tokens):
                 return None
             ids, k = request.block_ids[group], len(fa.ids)
-            if type(ids) is not list or len(ids) < k or ids[:k] != fa.ids:
-                return None
+            if type(ids) is not list or len(ids) < k or (
+                    ids != fa.ids if fast2 and len(ids) == k else ids[:k] != fa.ids):
+                return None                   # (fast2: no block appended, the list itself is compared)
             new = ids[k:]
             if new and not all(type(b) is int and b > 0 for b in new):
                 return None
             n = int(table.num_blocks_per_row[row])
             device = table.block_table.np
-            if n != len(ids) * r or not np.array_equal(device[row, :k * r], fa.kernel):
+            if n != len(ids) * r or not (_same_row(device[row, :k * r], fa.kernel) if fast3 else
+                                         np.array_equal(device[row, :k * r], fa.kernel)):
                 return None
             tail = device[row, k * r:n]
             if new and [int(v) for v in tail] != [b * r + i for b in new for i in range(r)]:
@@ -800,23 +1038,61 @@ class RunnerAllocationOwner:
             pairs, incarnations = None, [0] * len(new)
             if native_rows is not None:
                 pairs = native_rows[group]
-                if len(pairs) != len(ids) or pairs[:k] != fa.pairs:
-                    return None
+                if len(pairs) != len(ids) or (not (fast2 and pairs is fa.pairs) and pairs[:k] != fa.pairs):
+                    return None               # (fast2: the rows accepted unchanged are the same tuple)
                 if new:
                     if [b for b, _ in pairs[k:]] != new:
                         return None
                     incarnations = [i for _, i in pairs[k:]]
             grown.append((fa, group, new, tail, pairs, incarnations))
         generation = rec["generation"]
+        if (fast3 and native_rows is not None and o.base is not None and o.mamba is not None and
+                o.idx == idx and not any(item[2] for item in grown) and
+                all(map(_is, [native_rows[g] for g in self.hybrid_groups], o.mamba))):
+            # --decode-fastpath3: no FA block appended, and the Mamba rows are the objects the last
+            # step observed at the same index (immutable tuples, the same generation). The path
+            # below would rebuild that step's Mamba leases unchanged, find nothing added or
+            # removed (its uniqueness test gives the last step's answer) and keep that step's
+            # attention and key tuples: they are taken as they are, after the same Mamba check.
+            try:
+                require(all(idx<len(native_rows[g]) and native_rows[g][idx][0]>0 and
+                            request.block_ids[g][idx]==native_rows[g][idx][0] for g in self.hybrid_groups),
+                        'native Mamba current row index does not name a live owned allocation')
+            except Exception:
+                return None                   # the full observation refuses it in order
+            for fa, group, new, tail, pairs, incarnations in grown:
+                fa.pairs = pairs
+            base = o.step
+            o.added = o.removed = ()
+            o.claim_added, o.claim_removed = [], []
+            s = StepRow(rid, row, offset, start, count, base.attention, base.hybrid, generation, base.current)
+            o.base, o.step = base, s
+            return s
         try:
             if native_rows is not None:
                 require(all(idx<len(native_rows[g]) and native_rows[g][idx][0]>0 and
                             request.block_ids[g][idx]==native_rows[g][idx][0] for g in self.hybrid_groups),
                         'native Mamba current row index does not name a live owned allocation')
-            hybrid = tuple(Allocation(group, int(request.block_ids[group][idx]), generation, "mamba",
-                                      dict(native_rows[group])[int(request.block_ids[group][idx])]
-                                      if native_rows is not None else 0)
-                           for group in self.hybrid_groups)
+            if fast2 and native_rows is not None:
+                # --decode-fastpath2: the slot at idx is that block (checked just above) and live
+                # ids are unique per row (every accepted update checked it), so its incarnation
+                # is the one the dict of the whole row gives; unchanged slots keep their leases.
+                last = o.step.hybrid
+                hybrid = tuple(
+                    old if (old.block == native_rows[group][idx][0] and
+                            old.incarnation == native_rows[group][idx][1] and old.group == group and
+                            old.generation == generation)
+                    else Allocation(group, int(request.block_ids[group][idx]), generation, "mamba",
+                                    native_rows[group][idx][1])
+                    for group, old in zip(self.hybrid_groups, last)) \
+                    if len(last) == len(self.hybrid_groups) else \
+                    tuple(Allocation(group, int(request.block_ids[group][idx]), generation, "mamba",
+                                     native_rows[group][idx][1]) for group in self.hybrid_groups)
+            else:
+                hybrid = tuple(Allocation(group, int(request.block_ids[group][idx]), generation, "mamba",
+                                          dict(native_rows[group])[int(request.block_ids[group][idx])]
+                                          if native_rows is not None else 0)
+                               for group in self.hybrid_groups)
         except Exception:
             return None                       # the full observation refuses it in order
         pools = self.pool_of
@@ -850,15 +1126,48 @@ class RunnerAllocationOwner:
         o.claim_added = [(group, b) for _, group, new, _, _, _ in grown for b in new] + \
             [k for k in new_claims if k not in old_claims]
         o.claim_removed = [k for k in old_claims if k not in new_claims]
-        attention = sum((o.rows[group].allocs for group in self.attention_groups), ())
-        current = sum((o.rows[group].keys for group in self.attention_groups), ()) + \
-            tuple(v.key for v in hybrid)
-        rec["last_tables"] = {group: (o.rows[group].ids_tuple,
-                                      o.rows[group].kernel_tokens * o.rows[group].ratio)
-                              for group in self.attention_groups}
+        if (fast2 and not added and len(hybrid) == len(base.hybrid) and
+                all(map(_is, hybrid, base.hybrid))):
+            # --decode-fastpath2: no block appended and the same Mamba leases: the last
+            # step's attention and key tuples (and last tables) are this step's.
+            attention, current = base.attention, base.current
+        else:
+            attention = sum((o.rows[group].allocs for group in self.attention_groups), ())
+            current = sum((o.rows[group].keys for group in self.attention_groups), ()) + \
+                tuple(v.key for v in hybrid)
+            rec["last_tables"] = {group: (o.rows[group].ids_tuple,
+                                          o.rows[group].kernel_tokens * o.rows[group].ratio)
+                                  for group in self.attention_groups}
         s = StepRow(rid, row, offset, start, count, attention, hybrid, generation, current)
         o.base, o.step = base, s
+        if fast3:
+            # --decode-fastpath3: what this step observed, for the next step's test above.
+            o.mamba = None if native_rows is None else tuple(native_rows[g] for g in self.hybrid_groups)
+            o.idx = idx
         return s
+
+    def materialize_steady(self, s):
+        """--decode-fastpath3: True when ``materialize(s)`` would only mark this observation
+        materialized, after doing that; else False (call ``materialize``).
+
+        That is the case when the request's first step is done (no zero or restore), no Mamba
+        slot of the step is fresh (all zeroed), and the allocation sets hold the last step's
+        keys with nothing added or removed: ``materialize`` then issues no IO and its set
+        updates are empty. Never with --gdn-device-handoff."""
+        rec = self.records.get(s.request)
+        if (rec is None or not INCREMENTAL or self.handoff or not rec.get("attention_ready", False) or
+                'last_tables' not in rec or 'current_allocations' not in rec):
+            return False
+        o = rec.get('observed')
+        if (o is None or o.step is not s or o.base is None or o.materialized is not o.base or
+                o.added or o.removed):
+            return False
+        zeroed = rec["zeroed"]
+        for v in s.hybrid:
+            if v.key not in zeroed:
+                return False
+        o.materialized = s
+        return True
 
     def materialize(self, s):
         """One stepped request's first-step zero/restore and fresh Mamba zero (after claims)."""
@@ -873,29 +1182,34 @@ class RunnerAllocationOwner:
                      for group in self.attention_groups}
             require(not {b for v in fresh.values() for b in v} & self._pinned(session),
                     "zero set touches a resident or tail block")
+            issue = self.handoff     # --gdn-device-handoff: issued on the stream, joined lazily
             if any(fresh.values()):
                 require(all(fresh.values()), "zero set must cover every FullAttention group")
-                self.io.zero(fresh, "attention")
+                (self.io.issue_zero if issue else self.io.zero)(fresh, "attention")
             if self.batched_pages:
                 # Decoupled: every restored Page in one H2D + scatter per FA layer.
                 restore = rec["plan"]["restore"]
                 require(all(page < a.candidate_end // a.page_tokens and page in session["catalog"]
                             for page in restore), "restored page missing from worker DRAM")
                 if restore:
-                    self.io.restore_pages([(rec["target"][page], session["catalog"][page])
-                                           for page in restore])
+                    (self.io.issue_restore_pages if issue else self.io.restore_pages)(
+                        [(rec["target"][page], session["catalog"][page]) for page in restore])
             else:
                 for page in rec["plan"]["restore"]:
                     require(page < a.candidate_end // a.page_tokens and page in session["catalog"],
                             "restored page missing from worker DRAM")
-                    self.io.restore(rec["target"][page], "attention", session["catalog"][page])
+                    (self.io.issue_restore if issue else self.io.restore)(
+                        rec["target"][page], "attention", session["catalog"][page])
             rec["attention_ready"] = True
-        new_hybrid = tuple(v for v in hybrid if v.key not in rec["zeroed"])
-        if new_hybrid:
-            groups = {g: tuple(v.block for v in new_hybrid if v.group == g)
-                      for g in self.hybrid_groups}
-            self.io.zero(groups, "hybrid")
-            rec["zeroed"].update(v.key for v in new_hybrid)
+        if self.handoff:
+            self._materialize_hybrid(rec, s, hybrid)
+        else:
+            new_hybrid = tuple(v for v in hybrid if v.key not in rec["zeroed"])
+            if new_hybrid:
+                groups = {g: tuple(v.block for v in new_hybrid if v.group == g)
+                          for g in self.hybrid_groups}
+                self.io.zero(groups, "hybrid")
+                rec["zeroed"].update(v.key for v in new_hybrid)
         o = rec.get('observed') if INCREMENTAL else None
         if (o is not None and o.step is s and o.base is not None and o.materialized is o.base and
                 'current_allocations' in rec):
@@ -908,6 +1222,20 @@ class RunnerAllocationOwner:
             rec['current_allocations']=set(current)
         if o is not None and o.step is s:
             o.materialized = s
+
+    def _materialize_hybrid(self, rec, s, hybrid):
+        """--gdn-device-handoff: a new slot that a device copy writes whole this step
+        (hand-off or crossing) is not zeroed; any other new slot is (issued)."""
+        copied = rec.setdefault("copied", set())
+        new_hybrid = tuple(v for v in hybrid if v.key not in rec["zeroed"] and v.key not in copied)
+        if not new_hybrid:
+            return
+        if self._copy_target(rec, s):
+            copied.update(v.key for v in new_hybrid)
+            return
+        groups = {g: tuple(v.block for v in new_hybrid if v.group == g) for g in self.hybrid_groups}
+        self.io.issue_zero(groups, "hybrid")
+        rec["zeroed"].update(v.key for v in new_hybrid)
 
     def verify_allocations(self, identity, slots, generation):
         rec = self.records.get(identity.request)
@@ -930,4 +1258,6 @@ class RunnerAllocationOwner:
         for key in released:
             if self.claims.get(key[:2])==(identity.request,generation):
                 self.claims.pop(key[:2], None)
+        if self.held_claims is not None:
+            self.release_probe(identity, generation)    # a hand-off that never ran
         return released

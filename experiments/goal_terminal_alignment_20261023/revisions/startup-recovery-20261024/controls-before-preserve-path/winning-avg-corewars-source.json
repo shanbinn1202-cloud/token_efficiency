@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "f8198a1644547b116b4b67384f6bb6b3a78e85076f8cda20079a77f2f3499242",
+    "solution/solve.sh": "760a9abad5281db831e579c2529fa30c58d9e61fb923d9d46edac165669c3682",
+    "environment/Dockerfile": "645036f0bc26d9dccfa943bae20536e3d849540b919bcdbbd1c6e62a9ea4c9f9",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "252f78e5ce87ae3cf5852f192889aef5bd693ab0a13a6bf94cbb2fdce3218e93",
+    "environment/warriors/snake.red": "91b332b675f86d871ddca2ba0d2629c3361252ed3edf794de55e6693fbb1c7bd",
+    "environment/warriors/g2-clear.red": "3f542cc0f2304f0b5365df39e4f098dfca66280dad1db8e9ba4b668f8a51c8b5",
+    "environment/warriors/vampire.red": "28e1945cd6bbe52166b69215be3cb763e391fa0fe65e8550f2d6e3d6621da622",
+    "environment/warriors/stone.red": "fbddb5ac8c4cd04beba68ae03e91e281072b0e131c36c976943f38ce78c11a55",
+    "environment/warriors/paper.red": "ece3b39b4eb597cacb85b0e399a0be017c17ea59fbf4d901fae4108a5430a13b"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "f63017781e8a02275be923b47069cdabc4e74ab6ffd63d33c57cb98f9620c99d"
+}

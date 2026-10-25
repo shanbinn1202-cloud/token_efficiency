@@ -5,6 +5,13 @@ This backend performs byte movement only for allocation-generation leases that
 the owner has validated.  Three GDN states stay distinct: the committed
 session carry (after token C-1), the per-request phase-1 state (at e) and the
 volatile latest state of the running request.
+
+--gdn-device-handoff (``handoff``, gdn_handoff.attach_worker): the phase-1 state
+stays in its probe slot (HeldPhase1State, claimed by the request until the copy
+is issued) and phase 2's first step copies it device-to-device; an M-block
+crossing copies device-to-device from the slot the request still owns; the
+carry is captured asynchronously into one of two pinned buffers per session
+and joined at the complete drain. Only the committed carry keeps a host copy.
 """
 from __future__ import annotations
 
@@ -55,6 +62,27 @@ class Phase1State:
                 hex64(self.digest), "invalid phase-1 state")
 
 
+@dataclass(frozen=True)
+class HeldPhase1State:
+    """--gdn-device-handoff: the GDN state at ``end`` (= e), still in the probe slot.
+
+    ``groups`` names the probe slot ({Mamba group: (block,)}); the worker owner
+    claims it for the request's generation until phase 2 copies it on the device.
+    ``digest`` is an identity token (no bytes are read), like payload_digest's."""
+
+    request: str
+    lease_id: str
+    end: int
+    groups: dict
+    generation: int
+    digest: str
+
+    def __post_init__(self):
+        require(type(self.request) is str and type(self.lease_id) is str and self.lease_id and
+                type(self.end) is int and self.end > 0 and type(self.groups) is dict and self.groups and
+                type(self.generation) is int and hex64(self.digest), "invalid held phase-1 state")
+
+
 def _probe_groups(groups):
     # Phase-1 slots come from the signed engine lease, not runner allocations.
     require(type(groups) is dict and groups and
@@ -68,6 +96,8 @@ class CudaWorkerBackend:
     # page_compaction.PageCompactor in the decoupled layout; None (legacy)
     # keeps the float Page vectors.
     compactor = None
+    # --gdn-device-handoff (gdn_handoff.attach_worker); off keeps every path below.
+    handoff = False
 
     def __init__(self, tensor_io, owner, *, source):
         require(getattr(tensor_io, "evidence_kind", None) ==
@@ -123,7 +153,13 @@ class CudaWorkerBackend:
         require(identity.request not in self.phase1_states and
                 record.get("carry_restored", groups) == groups,
                 "phase-1 carry restore after capture or into another slot")
-        self.io.restore(groups, "hybrid", carry.payload)
+        if self.handoff:
+            # Issued on the stream (the probe forward follows it); the buffer's
+            # last use until a later capture may write it again.
+            self._buffer_event(identity.session, carry.payload,
+                               self.io.issue_restore(groups, "hybrid", carry.payload))
+        else:
+            self.io.restore(groups, "hybrid", carry.payload)
         record["carry_restored"] = groups
 
     def capture_phase1_state(self, identity, lease_id, end, groups, generation):
@@ -136,6 +172,14 @@ class CudaWorkerBackend:
                 identity.request not in self.phase1_states and
                 type(end) is int and end > record["carry"].computed_end,
                 "phase-1 state needs its carry lineage and is captured once")
+        if self.handoff:
+            # No host copy: the probe slot holds the state and the request claims it.
+            from remote_ra_growing_worker.tensors import identity_token
+            self.owner.hold_probe(identity, groups, generation)
+            state = HeldPhase1State(identity.request, lease_id, end, dict(groups), generation,
+                                    identity_token())
+            self.phase1_states[identity.request] = state
+            return state
         payload = self.io.capture(groups, "hybrid")
         state = Phase1State(identity.request, lease_id, end, payload,
                             self.io.payload_digest(payload))
@@ -148,6 +192,19 @@ class CudaWorkerBackend:
         from .checkpoint import active_record
         record = active_record(self, identity, generation)
         state = self.phase1_states.get(identity.request)
+        if self.handoff:
+            require(type(state) is HeldPhase1State and state.end == end and
+                    state.generation == generation and "phase1_restored" not in record,
+                    "held phase-1 Mamba state absent/stale/replayed")
+            # The owner skipped this fresh slot's zero: the copy writes every byte of
+            # every Mamba view of it (structural coverage, checked by the owner).
+            self.owner.verify_copy_targets(identity, tuple(slots), generation)
+            self.owner.verify_held(identity, state.groups, generation)
+            self.io.issue_copy(state.groups, self._groups(slots), "hybrid")
+            # Issued: stream order protects the source from here on.
+            self.owner.release_probe(identity, generation)
+            record["phase1_restored"] = (state, tuple(slots))
+            return
         require(state is not None and state.end == end and "phase1_restored" not in record and
                 self.io.payload_digest(state.payload) == state.digest,
                 "phase-1 Mamba state absent/stale/replayed")
@@ -168,6 +225,13 @@ class CudaWorkerBackend:
 
     def relocate_latest_hybrid(self, identity, old, new, step, generation):
         self._verify(identity, new, generation)
+        if self.handoff:
+            # Align mode frees the old block one step after the crossing: this
+            # step's native rows still name it for this request (same incarnation).
+            self.owner.verify_previous_slots(identity, tuple(old), generation)
+            self.owner.verify_copy_targets(identity, tuple(new), generation)
+            self.io.issue_copy(self._groups(old), self._groups(new), "hybrid")
+            return
         record = self.latest.get(identity.request)
         require(record is not None and record[0] == step and
                 record[1] == tuple(old), "latest evolving Mamba state absent")
@@ -180,10 +244,13 @@ class CudaWorkerBackend:
                 "latest Mamba state changed outside owned forward")
         self.io.restore(self._groups(new), "hybrid", payload)
 
-    def forward_complete(self, identity, lease):
+    def forward_complete(self, identity, lease, drained=False):
+        """``drained`` (--decode-fastpath): the step's forward was already joined by one
+        drain for every request of the step (WorkerBridge.after_forward)."""
         self._verify(identity, lease.hybrid.slots,
                      lease.allocation_generation)
-        self.io.drain()
+        if not self.handoff and not drained:
+            self.io.drain()
 
     def capture_latest_hybrid(self, identity, slots, step, generation):
         self._verify(identity, slots, generation)
@@ -195,8 +262,35 @@ class CudaWorkerBackend:
         """Carry candidate: latest at the cursor, from the still-owned current slot."""
         record = self.latest.get(identity.request)
         if record is None or record[:2] != (step, tuple(slots)):
-            self.capture_latest_hybrid(identity, slots, step, generation)
+            if self.handoff:
+                self._capture_carry(identity, slots, step, generation)
+            else:
+                self.capture_latest_hybrid(identity, slots, step, generation)
         return self.latest[identity.request]
+
+    # ---- --gdn-device-handoff: the carry's two pinned buffers per session ----
+
+    def _buffer_event(self, session, payload, event):
+        for entry in self.carry_buffers.get(session, ()):
+            if entry[0] is payload:
+                entry[1] = event
+
+    def _capture_carry(self, identity, slots, step, generation):
+        """Async D2H of the carry candidate into the session's buffer that does not
+        hold the committed carry, after that buffer's last copy has completed."""
+        self._verify(identity, slots, generation)
+        groups = self._groups(slots)
+        buffers = self.carry_buffers.get(identity.session)
+        if buffers is None:
+            buffers = self.carry_buffers[identity.session] = [
+                [self.io.host_buffer(groups, "hybrid"), None] for _ in range(2)]
+        committed = self.carry.get(identity.session)
+        entry = next(e for e in buffers if committed is None or e[0] is not committed.payload)
+        self.io.wait(entry[1])      # never written while an earlier copy may still read it
+        entry[1] = self.io.issue_capture_into(groups, "hybrid", entry[0])
+        self.latest[identity.request] = (step, tuple(slots), entry[0],
+                                         self.io.payload_digest(entry[0]))
+        self.final_events[identity.request] = entry[1]
 
     def publish_vectors(self, identity, pages, generation):
         self.verify_identity()
@@ -240,6 +334,9 @@ class CudaWorkerBackend:
                 record["generation"] == generation,
                 "foreign/stale drain")
         self.io.drain()
+        final = self.final_events.pop(identity.request, None) if self.handoff else None
+        if final is not None:
+            require(self.io.joined(final), "carry capture not joined at the drain")
         carry = record["carry"]
         require(self.carry.get(identity.session) is carry,
                 "committed carry changed during transaction")

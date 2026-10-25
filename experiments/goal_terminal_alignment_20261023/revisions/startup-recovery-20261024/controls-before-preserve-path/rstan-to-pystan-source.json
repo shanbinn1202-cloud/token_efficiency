@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "7b6dd84eb47579469556915a5eab6d303217bba438424eaee4db52375d5add2a",
+    "solution/solve.sh": "069ac635c9ceda6d5235995ce7f005d924b911e3499895fb3bbad2311be56518",
+    "environment/Dockerfile": "9d813ec4fdc2054717f253e7acbc2740fe43f97d35a5545c91a9c06986d9d595",
+    "tests/test.sh": "6c3d54c3e703202edf4ee93b0a67790225e215d2ce1b8d8027759f2152bbaf0d",
+    "tests/test_outputs.py": "d740077bc8f6f9df7e81a1dd96f6c91cbbb86b04b556e803729a7a48a037acfc",
+    "environment/task-deps/meta_public.json": "cbd6d58749391d9875650cf9885379ca878ccacc9c99eef5f9a0d88dc323a529",
+    "environment/task-deps/train_y.csv": "e16e658582873ac0937e22f50eb1d1edd45acc3200d5d48dded2df59aac94315",
+    "environment/task-deps/test_X.csv": "08529740690113cb1d0948c3c98720223b14d5b0a8a582823a8a9db5b5fd64f4",
+    "environment/task-deps/train_X.csv": "6f0223165f21959266848051d94c5174c926a786143c95427fc4913feb42711a",
+    "environment/task-deps/gp_rstan.R": "9ec1dd99d26b1e2dcf8b41d404557b5d837802a9b5da287e5ab17bd40e9ecd8f"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "a9af1f9dab8e3135e3745e47dd1d18362a929da486e298c58ff682415d179066"
+}

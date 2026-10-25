@@ -1,0 +1,10 @@
+# Common runtime settings aligned with the archived 16K/5GiB Vanilla run.
+# RepairKV's budget covers resumed history after each turn (paper Algorithm 1).
+backend:
+  name: vllm
+  endpoint: http://127.0.0.1:42420/v1
+  kv_cache_memory_bytes: 5368709120
+generation:
+  max_window_size: 65536
+cache:
+  kv_budget: 16384

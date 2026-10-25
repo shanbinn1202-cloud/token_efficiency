@@ -1,0 +1,8 @@
+{
+  "time": 1792838287.3022482,
+  "scope": "isolated candidate only",
+  "reason": "HTTP cache candidate generic proxy delayed APT; APT now explicitly bypasses proxy as original direct path",
+  "official_task_solution_tests_limits_changed": false,
+  "dataset_artifact_sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+  "validation": "fresh original Oracle running"
+}

@@ -1,0 +1,15 @@
+{
+  "task_ids": [
+    "mailman"
+  ],
+  "scope": "isolated native ARM64 package ownership restoration",
+  "cause": "rootless build explicitly flattens ownership; original reference Postfix fails scan_dir_push permission denied",
+  "fix": "run installed Postfix standard set-permissions helper before agent; no mail routing configuration or service startup",
+  "task_solution_tests_limits_changed": false,
+  "followup": {
+    "time": 1792840263.79246,
+    "original_helper_failure": "set-permissions attempted omitted manual pages",
+    "helper": "postfix post-install upgrade-permissions",
+    "effect": "only package-defined upgrade file ownership/modes; does not run upgrade-configuration"
+  }
+}

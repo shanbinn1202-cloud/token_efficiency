@@ -19,6 +19,17 @@ class ActualRendererBinding:
         self.compiled = {}
         self.callback = bind_vllm_template_callback(hf_renderer_module=self.hf,
             model_config=self.model_config, tokenizer=self.tokenizer, verify_identity=self.verify)
+        # Model profile (gemma-s1): a release installed for Gemma 4 names it in its
+        # manifest; every other release is the Qwen profile and renders as before.
+        manifest = getattr(getattr(authority, "loaded", None), "manifest", None)
+        from remote_ra_live_v2.model_profile import QWEN, from_manifest, is_gemma4
+        self.gemma4 = is_gemma4(from_manifest(manifest) if isinstance(manifest, dict) else QWEN)
+        if self.gemma4:
+            from gemma4_renderer import Gemma4SourceRenderer
+            self.renderer = Gemma4SourceRenderer(model_dir=authority.model_root,
+                tokenizer=self.tokenizer, render_template=self.render_template,
+                verify_identity=self.verify, page_tokens=authority.smoke_config["page_tokens"])
+            return
         self.renderer = EngineSourceRenderer(evidence_dir=Path(__file__).with_name("model-evidence"),
             tokenizer=self.tokenizer, render_template=self.render_template,
             verify_identity=self.verify, page_tokens=authority.smoke_config["page_tokens"])
@@ -35,6 +46,8 @@ class ActualRendererBinding:
         names = ("vllm.renderers.hf", "vllm.renderers.base", "vllm.renderers.params",
                  "vllm.entrypoints.chat_utils", "runtime_renderer", "tokenizer_semantics",
                  "transformers.utils.chat_template_utils")
+        if getattr(self, "gemma4", False):
+            names += ("gemma4_renderer",)
         for name in names:
             self.authority.loaded.verify_module(name)
         for name, module in tuple(sys.modules.items()):

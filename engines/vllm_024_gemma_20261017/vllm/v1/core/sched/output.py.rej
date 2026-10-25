@@ -1,0 +1,11 @@
+diff a/vllm/v1/core/sched/output.py b/vllm/v1/core/sched/output.py	(rejected hunks)
+@@ -226,6 +226,9 @@ class SchedulerOutput:
+     # freed from the encoder cache.
+     free_encoder_mm_hashes: list[str]
+ 
++    # Physical KV mutations must finish before subsequent batches use the pages.
++    kv_commit_fence: bool = False
++
+     scheduled_encoder_input_stats: ScheduledEncoderInputStats | None = None
+ 
+     # Request IDs that are preempted in this step.

@@ -1,0 +1,42 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383905.115374,
+  "prompt_sha256": "d017022f8fd85e01cf9949158795a5c8f2bf645e91bbfe0877b94c7fb167f400",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Pearl Giorgio and Dr. Sergio speculate on the identity of the owner of a cane left in their office.**\n   - The summary does not mention this speculation or the cane. **Not supported.**\n\n2. **Giorgio predicts the appearance of James Trevor, the owner of the cane.**\n   - The summary does not mention James Trevor or any prediction. **Not supported.**\n\n3. **Trevor recounts the myth of Blossom Horatio and the supernatural black hound.**\n   - The summary does mention a local legend of the \"Hound of the Horatios,\" but not specifically Blossom Horatio or Trevor recounting it. **Partially supported.**\n\n4. **The recent death of Sir Fallon Horatio has rekindled fears of the Horatio curse.**\n   - The summary mentions the death of Sir Fallon Horatio and the legend of the hound, which implies rekindled fears. **Supported.**\n\n5. **Sir Dilan Horatio, the next of kin, has arrived in London and received an anonymous warning and had a shoe stolen.**\n   - The summary mentions Sir Dilan receiving a warning letter but does not mention the stolen shoe. **Partially supported.**\n\n6. **Giorgio and Sergio agree to take the case.**\n   - The summary mentions that Giorgio and Sergio are tasked with uncovering the truth. **Supported.**\n\n7. **Sir Dilan is being trailed by a mysterious bearded stranger in London.**\n   - The summary does not mention a mysterious bearded stranger. **Not supported.**\n\n8. **Giorgio sends Dr. Sergio to Devonshire to investigate while he stays in London.**\n   - The summary does not mention this division of labor. **Not supported.**\n\n9. **In Devonshire, Sergio discovers armed guards searching for an escaped convict.**\n   - The summary mentions an escaped convict but not armed guards. **Partially supported.**\n\n10. **Sergio meets potential suspects: Mr. Reanne, Mrs. Reanne, Mr. Kristopher Angelo, and Beryl Angelo.**\n    - The summary mentions Mr. Angelo and Beryl Angelo but not the Reannes. **Partially supported.**\n\n11. **Reanne is caught skulking around the mansion at night.**\n    - The summary does not mention Reanne skulking around. **Not supported.**\n\n12. **Sergio spies a lonely figure keeping watch over the moors.**\n    - The summary mentions a \"watcher\" on the moor. **Supported.**\n\n13. **Sergio hears what sounds like a dog's howling.**\n    - The summary does not mention this. **Not supported.**\n\n14. **Beryl Angelo provides an enigmatic warning.**\n    - The summary mentions Beryl Angelo being coerced but not providing a warning. **Not supported.**\n\n15. **Sergio learns of a secret encounter between Sir Fallon and Tyrone Rajesh on the night of his death.**\n    - The summary mentions a secret appointment with Mrs. Tyrone Rajesh. **Supported.**\n\n16. **Reanne's nightly jaunts are revealed to be attempts to aid the escaped convict, Mrs. Reanne's brother.**\n    - The summary does not mention this. **Not supported.**\n\n17. **Sergio discovers the lonely figure is Pearl Giorgio himself.**\n    - The summary does not mention this. **Not supported.**\n\n18. **Giorgio uncovers that Mr. Angelo is in line to inherit the Horatio fortune and is the prime suspect.**\n    - The summary mentions Mr. Angelo's scheme to seize the estate. **Supported.**\n\n19. **Tyrone Rajesh was a pawn in Angelo's scheme to lure Sir Fallon onto the moors.**\n    - The summary mentions Angelo's scheme involving Mrs. Rajesh. **Supported.**\n\n20. **Angelo released his pet dog to scare Sir Fallon, causing a heart attack.**\n    - The summary mentions Angelo using a dog to frighten Sir Fallon to death. **Supported.**\n\n21. **Giorgio and Sergio use Sir Dilan as bait to catch Angelo.**\n    - The summary mentions a trap set on the moor but not specifically using Sir Dilan as bait. **Partially supported.**\n\n22. **Angelo's pet dog attacks Sir Dilan, but Giorgio and Sergio subdue the beast.**\n    - The summary mentions the dog attacking a man they believed to be Sir Dilan and the dog being killed. **Partially supported.**\n\n23. **Angelo drowns in a marshland while fleeing.**\n    - The summary mentions Angelo fleeing into Grimpen Mire and perishing. **Supported.**\n\n24. **Beryl Angelo is found tied up in Angelo's house, having refused to participate in his scheme.**\n    - The summary mentions Beryl being tied up by her husband. **Supported.**\n\n25. **Back in London, Giorgio reveals the stolen shoe was used to give the hound Dilan's scent, and the warning note came from Beryl Angelo.**\n    - The summary does not mention the stolen shoe or the origin of the warning note. **Not supported.**\n\nBased on the evaluation, the supported key points are: 3, 4, 5, 6, 9, 10, 12, 15, 18, 19, 20, 21, 22, 23, and 24. The recall score is 15.\n\nOutput: {\"supported_key_points\": [3, 4, 5, 6, 9, 10, 12, 15, 18, 19, 20, 21, 22, 23, 24], \"recall\": 15}",
+  "parsed": {
+    "supported_key_points": [
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      12,
+      15,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "recall": 15
+  },
+  "usage": {
+    "completion_tokens": 1212,
+    "prompt_tokens": 3773,
+    "total_tokens": 4985,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

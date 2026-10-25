@@ -55,6 +55,9 @@ class PrivateBlockOwner:
     for retained blocks; new blocks initially belong to the request and acquire a
     session pin at commit, before native request free releases the borrow.
     """
+    # The window layout's WindowPins (gemma-s1): close_drained frees the session's window too.
+    window = None
+
     def __init__(self, pool):
         self.pool = pool
         self.sessions = {}
@@ -341,6 +344,46 @@ class PrivateBlockOwner:
         del self.leases[request_id]
         self.finished.add(request_id)
 
+    def evict(self, namespace):
+        """--release-idle-pages: release an idle session's resident Pages (S -> 0); the
+        live tail stays pinned. Returns the released Page -> groups map."""
+        require(not any(x.namespace == namespace for x in self.leases.values()),
+                "cannot evict while a native request exists")
+        resident = self.sessions.get(namespace, {})
+        blocks = self._blocks(resident)
+        self._validate(blocks, namespace)
+        require(all(b.ref_cnt == 1 for b in blocks), "evicted Page blocks are borrowed")
+        self.pool.free_blocks(reversed(blocks))
+        for b in blocks:
+            self.block_namespaces.pop(b.block_id)
+        self.sessions[namespace] = {}
+        return resident
+
+    def readmit(self, namespace, pages, groups):
+        """--release-idle-pages: fresh pinned blocks (S = 1) for an evicted session's
+        Pages before its next turn; the worker restores their DRAM copies into them.
+        Returns the Page -> groups map, now the session's resident Pages."""
+        require(not any(x.namespace == namespace for x in self.leases.values()) and
+                not self.sessions.get(namespace) and type(groups) is int and groups > 0 and
+                type(pages) is tuple and pages == tuple(sorted(set(pages))) and pages,
+                "readmission needs an idle session without resident Pages")
+        require(len(pages) * groups <= self.pool.get_num_free_blocks(), "insufficient native blocks")
+        tail = self.tails.get(namespace)
+        require(tail is None or all(p < tail.page for p in pages), "readmitted Page at or after the tail")
+        resident = {}
+        for page in pages:
+            fresh = []
+            for _ in range(groups):
+                block = self.pool.get_new_blocks(1)[0]
+                fresh.append((block,))
+            blocks = tuple(b for (b,) in fresh)
+            self._validate(blocks, namespace, may_be_new=True)
+            for b in blocks:
+                self.block_namespaces[b.block_id] = namespace
+            resident[page] = tuple(fresh)
+        self.sessions[namespace] = resident
+        return resident
+
     def close_drained(self, namespace):
         """Session close (shutdown or rebuild): free resident Pages and the tail."""
         require(not any(x.namespace == namespace for x in self.leases.values()),
@@ -353,3 +396,5 @@ class PrivateBlockOwner:
             self.block_namespaces.pop(b.block_id)
         self.sessions.pop(namespace, None)
         self.tails.pop(namespace, None)
+        if self.window is not None:
+            self.window.close(namespace)

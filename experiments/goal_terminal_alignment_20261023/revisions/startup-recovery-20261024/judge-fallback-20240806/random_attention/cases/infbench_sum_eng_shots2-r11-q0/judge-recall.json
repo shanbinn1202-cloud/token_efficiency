@@ -1,0 +1,32 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383842.6921077,
+  "prompt_sha256": "7a9c9db6bd0803b33c2996722795b96d8efe806f1e87e1d876f9c783865f75c6",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Perla is a World War I veteran and journalist in Paris.**\n   - The summary does not mention Perla or his background as a World War I veteran and journalist in Paris.\n   - **Not supported.**\n\n2. **Henley Kallie is a rich Jewish writer and American expatriate in Paris.**\n   - The summary mentions Henley Kallie but does not specify that he is a rich Jewish writer and American expatriate.\n   - **Not supported.**\n\n3. **Kallie lives with his controlling girlfriend, Xanthe Sania.**\n   - The summary does not mention Xanthe Sania or Kallie's living situation.\n   - **Not supported.**\n\n4. **Kallie wants Perla to go to South America with him, but Perla refuses.**\n   - The summary does not mention this plot point.\n   - **Not supported.**\n\n5. **Perla meets Quentin Katniss Jaden, a divorced socialite and his love interest, at a dance club.**\n   - The summary mentions Quentin Jaden and Katniss but does not describe their meeting at a dance club or their relationship dynamics.\n   - **Not supported.**\n\n6. **Katniss treated Perla for a war wound during World War I.**\n   - The summary does not mention this detail.\n   - **Not supported.**\n\n7. **Perla's injury has rendered him impotent, affecting his relationship with Katniss.**\n   - The summary does not mention Perla's injury or its impact on his relationship with Katniss.\n   - **Not supported.**\n\n8. **Katniss loves Perla but won't commit due to his impotence.**\n   - The summary does not mention this detail.\n   - **Not supported.**\n\n9. **Kallie becomes angry when Perla tells him Katniss plans to marry Jaylene Aurelia, a Scottish war veteran.**\n   - The summary does not mention this plot point.\n   - **Not supported.**\n\n10. **Katniss stands Perla up but later arrives at his apartment with Count Alivia.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n11. **Katniss tells Perla she is leaving for San Sebastian, Spain.**\n    - The summary mentions the narrator traveling to San Sebastian but does not mention Katniss telling Perla about her plans.\n    - **Not supported.**\n\n12. **Cece Kingston, a fellow American war veteran, arrives in Paris and plans a trip to Spain with Perla.**\n    - The summary does not mention Cece Kingston or the trip planning.\n    - **Not supported.**\n\n13. **Perla plans to meet Kallie on the way to Pamplona.**\n    - The summary does not mention this detail.\n    - **Not supported.**\n\n14. **Katniss and Jaylene ask to join Perla in Spain; Katniss reveals she was with Kallie in San Sebastian.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n15. **Cece and Perla travel to Bayonne and then to Pamplona, meeting Kallie.**\n    - The summary does not mention Cece or the travel details.\n    - **Not supported.**\n\n16. **Cece and Perla go to Burguete to fish, while Kallie stays to wait for Katniss.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n17. **Perla and Cece spend five days fishing and receive a letter from Jaylene.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n18. **Perla and Cece return to Pamplona to meet Katniss and Jaylene.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n19. **Jaylene mocks Kallie for following Katniss around.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n20. **The fiesta in Pamplona begins with dancing, drinking, and bullfighting.**\n    - The summary mentions the fiesta in Pamplona with bullfighting and the running of the bulls.\n    - **Supported.**\n\n21. **Katniss is captivated by bullfighter Mariam Alex.**\n    - The summary mentions Katniss being fascinated by Mariam Alex.\n    - **Supported.**\n\n22. **Katniss spends the night with Alex after Perla helps her find him.**\n    - The summary does not mention Perla helping Katniss find Alex or them spending the night together.\n    - **Not supported.**\n\n23. **Kallie attacks Jaylene and Perla in a drunken rage.**\n    - The summary mentions Kallie attacking the narrator (Quentin Jaden) but does not mention Jaylene.\n    - **Partially supported.**\n\n24. **Kallie also beats up Alex but later begs for his forgiveness.**\n    - The summary mentions Kallie attempting to confront Alex but does not mention him beating up Alex or begging for forgiveness.\n    - **Not supported.**\n\n25. **Katniss leaves for Madrid with Alex, but later breaks up with him.**\n    - The summary mentions Katniss breaking things off with Mariam Alex in Madrid.\n    - **Supported.**\n\n26. **Perla meets Katniss in Madrid, and she decides to return to Jaylene.**\n    - The summary mentions the narrator meeting Katniss in Madrid and her decision to return to Jaylene.\n    - **Supported.**\n\nBased on the evaluation, the supported key points are 20, 21, 23, 25, and 26. Therefore, the recall score is 5.\n\nOutput: {\"supported_key_points\": [20, 21, 23, 25, 26], \"recall\": 5}",
+  "parsed": {
+    "supported_key_points": [
+      20,
+      21,
+      23,
+      25,
+      26
+    ],
+    "recall": 5
+  },
+  "usage": {
+    "completion_tokens": 1254,
+    "prompt_tokens": 3788,
+    "total_tokens": 5042,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

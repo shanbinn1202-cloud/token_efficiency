@@ -1,0 +1,102 @@
+model:
+  name: Qwen/Qwen3.6-27B
+  path: /work/nvme/bcjw/ssun4/cache/huggingface/hub/models--Qwen--Qwen3.6-27B/snapshots/6a9e13bd6fc8f0983b9b99948120bc37f49c13e9
+  dtype: bfloat16
+  local_files_only: true
+  enable_thinking: true
+generation:
+  max_tokens: 4096
+  max_turns: 120
+  max_window_size: 262144
+  temperature: 0
+  top_p: 1.0
+  top_k: -1
+  repetition_penalty: 1.0
+  seed: 42
+  request_timeout: 3600
+  max_consecutive_format_errors: 2
+dataset:
+  name: cxkjntmngm/MemAgent_Bench
+  split: four_abilities_fixed200
+  start: 0
+  count: 200
+evaluation:
+  workers: 16
+  grading_workers: 4
+  timeout: 1800
+  apptainer: apptainer
+  image_manifest: null
+  output_root: results
+backend:
+  name: vllm
+  endpoint: http://127.0.0.1:19242/v1
+  api_key: EMPTY
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.9
+  kv_cache_memory_bytes: 26843545600
+  prefix_caching: true
+  async_scheduling: true
+  cuda_graph: true
+  torch_compile: true
+  vllm_attention_backend: TRITON_ATTN
+  gdn_prefill_backend: triton
+  max_num_batched_tokens: 4096
+  full_attention: sdpa
+  sdpa_kernel: auto
+  linear_attention: native
+  prefill_chunk_size: null
+cache:
+  kv_budget: 32768
+methods:
+  random_attention:
+    options:
+      window_size: 64
+      random_seed: 42
+  intentkv:
+    options:
+      init_q_window: 64
+      block_size: 16
+  repairkv:
+    options:
+      repair_tokens: 96
+      sink_size: 4
+      recency_window: 128
+      pooling: max
+      burst_left: 2
+      burst_right: 20
+  agentdiet:
+    variant: agentdiet
+    options:
+      delay_steps: 2
+      window_before_steps: 1
+      token_threshold: 500
+      reflection_enable_thinking: false
+  vanilla:
+    variant: full
+    options: {}
+  sliding_window:
+    variant: sliding_window
+    options: {}
+  group:
+    variant: scope_tool_v30
+    options: {}
+  agentkv:
+    options:
+      eviction_interval: 128
+      anchor_budget: 32
+      observation_window: 8
+      sink_tokens: 16
+      pooling_kernel_size: 1
+  dram_backed_kv:
+    options:
+      query_source: goal
+      budget_mode: fixed
+      active_ratio: 0.4
+      goal_rewriter_model: null
+      goal_rewriter_max_new_tokens: 384
+      goal_rewriter_timeout: 120.0
+      recent_turns: 2
+      recent_quota: 64
+      hidden_layer: -1
+      projection_dimension: 128
+      projection_seed: 42

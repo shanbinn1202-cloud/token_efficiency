@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "geometry": {
+    "layers": [
+      5,
+      11,
+      17,
+      23,
+      29,
+      35,
+      41,
+      47,
+      53,
+      59
+    ],
+    "heads": 32,
+    "kv_heads": 4,
+    "dim": 512
+  },
+  "native_parser": true,
+  "offset_kv_roundtrip": true,
+  "eos_ids": [
+    1,
+    50,
+    106
+  ]
+}

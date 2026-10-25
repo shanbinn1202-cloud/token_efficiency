@@ -1,0 +1,254 @@
+--- v1/serve.py
++++ v2/serve.py
+@@ -270,8 +270,8 @@
+         return chat.record(slots=slots,idle_timeout_s=idle,evict_after_s=evict)
+     return chat.record(slots=slots,idle_timeout_s=idle,evict_after_s=evict,profile=profile)
+ 
+-def prepare(release,task,policy,output,port,selection=None,protocol='mswea-xml',kv_cache_gib=8,
+-            page_tokens=784,layout=None,max_running=None,cuda_graphs='off',max_tokens=1536,
++def prepare(release,task,policy,output,port,selection=None,protocol='mswea-xml',kv_cache_gib=25,
++            page_tokens=784,layout=None,max_running=None,cuda_graphs='full',max_tokens=4096,
+             max_model_len=MAX_MODEL_LEN,dram_arena_gib=None,gdn_device_handoff=False,
+             phase1_in_step=False,admission_overlap=1,decode_fastpath=False,decode_fastpath2=False,
+             language_model_only=False,kv_session_thinking='on',kv_session_slots=None,
+@@ -646,8 +646,6 @@
+     need(protocol=='kv-session' or (kv_session_thinking=='on' and kv_session_slots is None),
+          '--kv-session-thinking/--kv-session-slots apply to --protocol kv-session only')
+     if protocol=='kv-session':
+-        need(kv_session_thinking=='off','the Gemma 4 kv-session serves --kv-session-thinking off only: thinking off, '
+-             'as decided for MemoryAgentBench (the header <|turn>model\\n<|channel>thought\\n<channel|>)')
+         task=kv_session_tasks(release,task,max_running,kv_session_thinking,kv_session_slots)
+     shares=1 if host_memory_shares is None else host_memory_shares
+     need(type(shares) is int and shares in GEMMA4_HOST_MEMORY_SHARES,
+--- v1/source-overlay/remote_ra_live_v2/sessions.py
++++ v2/source-overlay/remote_ra_live_v2/sessions.py
+@@ -33,7 +33,7 @@
+ 
+ MAX_SESSIONS = 16
+ # Registered tasks of a session-pool server (startup option --max-running-sessions).
+-MAX_TASKS = 64
++MAX_TASKS = 1024
+ # Registered slots of a chat-text server (serve.py --protocol chat-text,
+ # chat_text_protocol.MAX_SLOTS): its sessions bind lazily, one slot per client
+ # session and per rebind, so it registers more than the other pools. Only its own
+--- v1/source-overlay/remote_ra_live_v2/kv_session_protocol.py
++++ v2/source-overlay/remote_ra_live_v2/kv_session_protocol.py
+@@ -86,8 +86,9 @@
+ # Gemma 4 (gemma-mab): the grammar record value, thinking off only, its header after a
+ # user turn, the turn opener and the tool-response delimiters.
+ GEMMA4 = 'gemma4'
+-GEMMA4_THINKING = 'off'
+-GEMMA4_HEADER = '<|turn>model\n<|channel>thought\n<channel|>'
++GEMMA4_THINKING = 'on'
++GEMMA4_HEADER = '<|turn>model\n'
++GEMMA4_TOOL_HEADER = '<|channel>thought\n'
+ GEMMA4_TURN_START = '<|turn>'
+ GEMMA4_TOOL_OPEN = '<|tool_response>'
+ GEMMA4_TOOL_CLOSE = '<tool_response|>'
+@@ -102,7 +103,7 @@
+ # registered tasks (sessions.MAX_TASKS). One MemoryAgentBench allocation opens
+ # about 50 (warm-up, validation, 32 cases).
+ DEFAULT_SLOTS = 64
+-MAX_SLOTS = 64
++MAX_SLOTS = 1024
+ SLOT_INSTANCE = 'kv-session-slot-%03d'
+ SLOT_STATEMENT = 'kv-session slot %03d, bound to one client session at its first request'
+ # The engine's source (input_ids plus the new messages) has the source cap of every
+@@ -242,7 +243,7 @@
+     """Startup only (the Gemma 4 profile): with thinking off the pinned template's
+     generation header after a user turn is GEMMA4_HEADER, and after tool responses
+     it is empty, the render ending with ``<tool_response|>`` (the model turn goes on)."""
+-    flag = dict(enable_thinking=False)
++    flag = dict(enable_thinking=True)
+     probe = [dict(role='user', content='kv-session header probe')]
+     without = render_template(template, probe, dict(flag, add_generation_prompt=False))
+     with_header = render_template(template, probe, dict(flag, add_generation_prompt=True))
+@@ -253,7 +254,7 @@
+                      dict(role='tool', tool_call_id=_PROBE_CALL['id'], content='kv-session probe result')]
+     without = render_template(template, probe, dict(flag, add_generation_prompt=False))
+     with_header = render_template(template, probe, dict(flag, add_generation_prompt=True))
+-    require(type(without) is str and with_header == without and without.endswith(GEMMA4_TOOL_CLOSE)
++    require(type(without) is str and with_header == without + GEMMA4_TOOL_HEADER and without.endswith(GEMMA4_TOOL_CLOSE)
+             and without.count(GEMMA4_TOOL_OPEN) == 1,
+             'pinned Gemma template does not continue the model turn after a tool response')
+     return GEMMA4_HEADER
+@@ -538,13 +539,14 @@
+     """
+     protocol = PROTOCOL
+ 
+-    def __init__(self, *, header, im_start, vocab, decode, stop_ids, tools=None):
++    def __init__(self, *, header, im_start, vocab, decode, stop_ids, tools=None, tool_header=None):
+         require(type(header) is tuple and header and all(_int(t, 0) for t in header)
+                 and _int(im_start, 0) and _int(vocab, 1) and callable(decode)
+                 and type(stop_ids) is frozenset and stop_ids, 'kv-session transcript pins required')
+         require(tools is None or (type(tools) is tuple and len(tools) == 2 and all(_int(t, 0) for t in tools)
+                                   and tools[1] != header[-1]),
+                 'kv-session tool-response delimiters must be two ids (the Gemma grammar)')
++        self.tool_header = tool_header
+         self.header, self.im_start, self.vocab = header, im_start, vocab
+         self.decode, self.stop_ids = decode, stop_ids
+         self.tools = tools
+@@ -584,6 +586,8 @@
+         (the capacity gate of the window layout): the pinned header, or one token after
+         Gemma tool responses (the header's last token is never ``<tool_response|>``)."""
+         H = len(self.header)
++        if self.tool_header and tuple(tokens[-len(self.tool_header):]) == self.tool_header:
++            return len(self.tool_header)
+         if self.tools is not None and tuple(tokens[-H:]) != self.header and tokens[-1] == self.tools[1]:
+             return 1
+         return H
+@@ -591,7 +595,12 @@
+     def check(self, request):
+         """The request's structure against this session, without changing anything."""
+         ids, H = request.input_ids, len(self.header)
+-        if self.tools is not None and request.header_tokens == 0 and not request.first and self.turn > 0:
++        if (self.tool_header and not request.first and self.turn > 0
++                and request.header_tokens == len(self.tool_header)
++                and ids[-len(self.tool_header):] == self.tool_header):
++            if ids[-len(self.tool_header)-1] != self.tools[1]:
++                fail('HEADER_MISMATCH', 'thinking continuation must follow the tool response close')
++        elif self.tools is not None and request.header_tokens == 0 and not request.first and self.turn > 0:
+             # Gemma: the model turn goes on after tool responses, no generation header.
+             if ids[-1] != self.tools[1] or ids[request.boundary_tokens - 1] != self.tools[0]:
+                 fail('HEADER_MISMATCH', 'a request without a header continues the model turn after tool '
+--- v1/source-overlay/remote_ra_live_v2/phase1_coordinator.py
++++ v2/source-overlay/remote_ra_live_v2/phase1_coordinator.py
+@@ -131,6 +131,8 @@
+             return self._result(result, binding, geo, s, goal_tokens)
+         finally:
+             self.recover(binding.request)
++            from .async_support import after_probe
++            after_probe(self.core)
+ 
+     def run(self, binding, geo, *, allocation_generation, goal_payload=None, _lease_only=False):
+         """Lease, run and drain phase 1 for local turn > 0; return its Phase1Result.
+@@ -287,6 +289,8 @@
+             # A failed forward must expose its own signed drain through the
+             # separate idempotent RPC; never infer release from an error.
+             self.recover(binding.request)
++            from .async_support import after_probe
++            after_probe(self.core)
+ 
+     def _result(self, result, binding, geo, session, goal_tokens):
+         record = self.records[binding.request]
+--- v1/source-overlay/remote_ra_live_v2/window_phase1.py
++++ v2/source-overlay/remote_ra_live_v2/window_phase1.py
+@@ -246,6 +246,8 @@
+             return self._result(result, binding, geo, s, goal_tokens)
+         finally:
+             self.recover(binding.request)
++            from .async_support import after_probe
++            after_probe(self.core)
+ 
+     def held(self, request_id):
+         """(FA, sliding) blocks ``request_id``'s lease holds now (capacity ledger)."""
+--- v1/source-overlay/remote_ra_live_v2/window_worker.py
++++ v2/source-overlay/remote_ra_live_v2/window_worker.py
+@@ -116,6 +116,8 @@
+     bridge = WorkerBridge(qwen, owner)
+     owner.bind_bridge(bridge)
+     runner._remote_ra_live_v2_bridge = bridge
++    from .async_support import attach as attach_async
++    attach_async(runner)
+     if fastpath2:
+         # Before the step profile wraps the bridge (its deferred after-forward names).
+         from .decode_fastpath2 import attach_worker as attach_fastpath2
+--- v1/source-overlay/remote_ra_live_v2/async_support.py
++++ v2/source-overlay/remote_ra_live_v2/async_support.py
+@@ -75,6 +75,7 @@
+     if not runner.use_async_scheduling:
+         return
+     cfg = runner.vllm_config
++    require(cfg.max_concurrent_batches <= 2, 'async retention is qualified for at most two native batches')
+     require(cfg.parallel_config.tensor_parallel_size == 1 and
+             cfg.parallel_config.pipeline_parallel_size == 1 and
+             cfg.parallel_config.distributed_executor_backend == 'uni' and
+@@ -91,7 +92,16 @@
+         return
+     # GPU copies run on the forward stream: the next decode cannot overwrite
+     # the source before its checkpoint is captured. No D2H or hash per token.
+-    require(not getattr(owner.backend, "window", False), "Gemma async window validation pending")
++    if getattr(owner.backend, "window", False):
++        # Sliding-window KV is append-only within its retained blocks. There is
++        # no recurrent tensor to restore. Native removal retains the two-token
++        # async lag so the accepted cursor's window remains resident.
++        owner.final_window(state.assignment.identity, state.cursor, state.allocation_generation)
++        snapshots = runner._remote_ra_async_checkpoints.setdefault(state.assignment.identity.request, {})
++        snapshots[state.cursor] = (state.assignment.identity, state.allocation_generation, None)
++        while len(snapshots) > runner._remote_ra_async_depth:
++            snapshots.pop(min(snapshots))
++        return
+     identity = state.assignment.identity
+     groups = owner.backend._groups(state.latest_hybrid)
+     views = owner.io.validate(groups, 'hybrid')
+@@ -130,8 +140,12 @@
+         require(snapshot is not None and snapshot[:2] ==
+                 (identity, state.allocation_generation),
+                 'accepted async boundary has no same-generation GDN checkpoint')
+-        groups = owner.backend._groups(state.latest_hybrid)
+-        views = owner.io.validate(groups, 'hybrid')
++        if getattr(owner.backend, 'window', False):
++            owner.final_window(identity, end, state.allocation_generation)
++            views, groups = (), {}
++        else:
++            groups = owner.backend._groups(state.latest_hybrid)
++            views = owner.io.validate(groups, 'hybrid')
+         owner.io.drain()
+         for view in views:
+             for index, bid in enumerate(groups[view.group]):
+--- v1/source-overlay/remote_ra_live_v2/kv_layout.py
++++ v2/source-overlay/remote_ra_live_v2/kv_layout.py
+@@ -129,7 +129,9 @@
+     def window_blocks(self) -> int:
+         """Blocks of one window slot per sliding group: a query at position n reads
+         [n - W + 1, n], which spans at most ceil(W / P) + 1 blocks."""
+-        return _cdiv(self.window_tokens, self.page_tokens) + 1
++        # One extra physical block protects the accepted EOS window while native
++        # async decoding can be at most two tokens ahead. Attention W is unchanged.
++        return _cdiv(self.window_tokens, self.page_tokens) + 2
+ 
+     @property
+     def transient_blocks(self) -> int:
+--- v1/source-overlay/vllm/v1/core/single_type_kv_cache_manager.py
++++ v2/source-overlay/vllm/v1/core/single_type_kv_cache_manager.py
+@@ -87,6 +87,9 @@
+ 
+         self.kv_cache_group_id = kv_cache_group_id
+         self._null_block = block_pool.null_block
++        import os
++        self._selective_async_lag = (2 if os.environ.get("REMOTE_RA_HTTP_RUNTIME") == "1"
++                                    and type(kv_cache_spec).__name__ == "SlidingWindowSpec" else 0)
+ 
+         # Whether this group's prefix-cache hits drop the EAGLE/MTP lookahead
+         # block. Only consulted by managers whose hit logic is sparse within an
+@@ -153,7 +156,8 @@
+             # num_required_blocks may be smaller than num_req_blocks.
+             return max(num_required_blocks - num_req_blocks, 0)
+ 
+-        num_skipped_tokens = self.get_num_skipped_tokens(total_computed_tokens)
++        num_skipped_tokens = self.get_num_skipped_tokens(
++            max(0, total_computed_tokens - self._selective_async_lag))
+         num_local_computed_blocks = len(new_computed_blocks) + num_req_blocks
+         # Number of whole blocks that are skipped by the attention window.
+         # If nothing is skipped, this is 0.
+@@ -492,7 +496,8 @@
+                 local computed tokens and external computed tokens.
+         """
+         # Remove the blocks that will be skipped during attention computation.
+-        num_skipped_tokens = self.get_num_skipped_tokens(total_computed_tokens)
++        num_skipped_tokens = self.get_num_skipped_tokens(
++            max(0, total_computed_tokens - self._selective_async_lag))
+         if num_skipped_tokens <= 0:
+             # This indicates that ALL tokens are inside attention window.
+             # Thus we do not need to free any blocks outside attention window.
+--- v1/source-overlay/gemma4_renderer.py
++++ v2/source-overlay/gemma4_renderer.py
+@@ -194,7 +194,7 @@
+         def decode(token_ids):
+             return tokenizer.decode(list(token_ids), skip_special_tokens=False)
+         return lambda: kv.KvTranscript(header=header, im_start=start, vocab=vocab, decode=decode,
+-                                       stop_ids=stop_ids, tools=tools)
++                                       stop_ids=stop_ids, tools=tools, tool_header=tuple(self.encode_exact(kv.GEMMA4_TOOL_HEADER)))
+ 
+     def _render_chat_text(self, messages, generation):
+         """The pinned template's text of chat-text messages: OpenAI text parts, Gemma's

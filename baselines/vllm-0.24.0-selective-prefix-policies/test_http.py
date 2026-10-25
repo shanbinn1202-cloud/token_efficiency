@@ -56,6 +56,7 @@ def actual_router():
         m=ModuleType(name);m.__dict__.update(attrs);names[name]=m;return m
     class Router:
         def post(self,*args,**kwargs):return lambda f:f
+        def get(self,*args,**kwargs):return lambda f:f
     class Response:
         def __init__(self,**kwargs):self.__dict__.update(kwargs)
     class Completion:

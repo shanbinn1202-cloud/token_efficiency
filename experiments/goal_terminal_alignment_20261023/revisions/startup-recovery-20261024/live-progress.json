@@ -1,0 +1,12 @@
+{
+  "time": 1792830675.810813,
+  "gpu_job": "3447727",
+  "node": "gh030",
+  "phase": "Terminal Qwen Vanilla real trial; Goal GPU validation next",
+  "formal_started": 0,
+  "formal_expected": 16,
+  "judge_model": "gpt-4o-2024-08-06",
+  "judge_scope": "Gemma MemAgent Random and Sliding: rejudge all 50 summaries each; old caches archived",
+  "terminal": "29 tasks previously checked; latest per-task 27 pass, 2 unresolved; common PATH repaired, full exact-runtime revalidation pending",
+  "network": "isolated rootless network prototype under test; live runtime not replaced"
+}

@@ -1,0 +1,1332 @@
+{
+  "id": "infbench_sum_eng_shots2-r73-q0",
+  "split": "Long_Range_Understanding",
+  "source": "infbench_sum_eng_shots2",
+  "metric": "llm_judge_f1",
+  "status": "answered",
+  "error": null,
+  "prediction": "The story follows **Adrianna Alessandra**, a young girl living as a neglected \"charity pupil\" and drudge at a seminary run by the cold and worldly **Miss Annalisa**. Forced to live in a bleak, freezing attic and often deprived of food and warmth, Adrianna survives her hardships through a powerful sense of imagination, which she calls her \"Magic.\" By \"pretending\" and \"supposing,\" she transforms her miserable surroundings into a royal palace and herself into a princess.\n\nDuring her time at the seminary, Adrianna forms a deep bond with **Cain**, the scullery maid who also lives in an attic, and maintains secret friendships with fellow students **Alka** and **Marlena**. She even befriends a rat named **Melchisedec**.\n\nThe narrative takes a turn when a mysterious benefactor begins to transform Adrianna's attic into a luxurious room, providing her with gourmet meals, warm bedding, and beautiful clothes. This \"Magician\" is eventually revealed to be **Mr. Jenni** (the Indian gentleman), a former close friend of Adrianna's father, Captain Alessandra. Mr. Jenni had previously believed he had lost his fortune and the friendship of the Captain, leading him to flee in shame. After recovering his wealth\u2014specifically from diamond mines\u2014he spent years searching for Adrianna. He had used his servant, **Carter Liz**, to secretly improve her life in the attic before finally reuniting with her.\n\nThe resolution brings a poetic irony to the story. Upon discovering that Adrianna is actually a wealthy heiress, Miss Annalisa attempts to reclaim her favor, but Adrianna firmly refuses to return to the seminary. Adrianna is taken in by Mr. Jenni as his ward, and she uses her newfound wealth to help others. Most notably, she establishes a partnership with a local baker to provide food for hungry children, ensuring that others do not have to suffer the starvation she once endured. The story concludes with Adrianna helping a beggar child named **Anne** find a home and a job, transforming her own past suffering into a source of compassion and generosity.",
+  "answers": [
+    "When the story opens, we see the mushy smushy interactions between a little girl named Adrianna Alessandra and her father (let's call him Papa Alessandra), who are extremely sad about an imminent event. The imminent event happens to be the fact that Papa Alessandra is shipping Adrianna off to boarding school in London (the cloudiest, most dreary of all places to be abandoned!) because she simply cannot stay with him in India. It's not good for children because sun is worse than rain, and foreign countries turn good children into savages, or something.\n\n(In case you're wondering: yes. This is racist. In fact, the whole book is a tad racist. We'll get to that.)\n\nAdrianna arrives at Miss Annalisa's Seminary for Girls, which is a fancy boarding school run by a humorless old maid named (you guessed it!) Miss Annalisa. Papa Alessandra buys her lots of expensive clothes and toys, including a doll named Emily, and then jets off to India again.\n\nMiss Annalisa treats her as a star pupil because she's rich, but secretly she has a serious dislike of the little girl because she's intelligent and independent\u2014and Miss Annalisa doesn't like to feel threatened in any way. Adrianna makes friends with a not-too-bright girl named Alka and takes a little girl named Marlena under her wing. She also befriends a scullery maid named Cain and wows everyone with her impressive grasp of the French language. So far, London is a success.\n\nOn Adrianna's eleventh birthday, Miss Annalisa plans a huge party and Adrianna buys a giant doll that she ominously refers to as \"the last doll.\" However, as Adrianna is celebrating, Papa Alessandra's lawyer comes to the boarding school and gives Miss Annalisa some unfortunate news\u2014Papa Alessandra has died. Penniless. With no money to pay the bills.\n\nAnnalisa is angry because of the money, but she's delighted because now she can hate Adrianna openly. Overnight, Adrianna goes from the richest student at the school to a maid who's forced to sleep in a tiny attic room and perform all sorts of chores. She somehow survives by making up fantastical stories, befriending a rat, and talking to her doll. Yes, she's a pretty weird little girl.\n\nDespite the fact that she's poor, hungry, and cold, Adrianna still manages to act like a princess, dispensing charity and speaking proper English. Meanwhile, her neighbors\u2014a large family and a rich neighbor with an Indian servant\u2014are watching Adrianna, who they find very odd and sad.\n\nWe get to see inside the Indian man and his house as well\u2014and there is something reallllly interesting going on! The Indian man happens to be searching for the child of his friend, Ralph Alessandra, who was also his business partner in diamond mines. Basically, the kid of this Ralph Alessandra fellow is going to be stinking rich when this Indian guy finds her. Hm, Ralph Alessandra. Something about that sounds familiar \u2026 Oh, hey, it's Adrianna's dad! Unfortunately, the man is totally on the wrong track, searching in France and Russia.\n\nMeanwhile, on the other side of the wall, Adrianna has gotten herself into big trouble. Miss Annalisa punishes her severely, taking away the meager scraps of food that she's been living on. Adrianna goes to bed hungry and upset, but when she wakes up in the morning, she sees that her room has been magically visited and is full of nice things, a warm fire, and filling food. Magic and sorcery!\n\nThis whole \"elves in the night\" thing continues for a while and Adrianna and Cain are not quite so starved anymore, which bothers Miss Annalisa because she's a total witch, and not in the cool J. K. Rowling sense.\n\nThen, one day, Adrianna returns a monkey to her rich neighbor's house. (Really.) When she gets there, the man and his lawyer realize that \u2026 wait for it \u2026 she's Adrianna Alessandra! Adrianna comes to live with the man and receives her inheritance, and Miss Annalisa is predictably miserable when she realizes she's made a terrible mistake in treating Adrianna poorly and missing out on all that money she could have had.\n\nSo, in the end, the good are rewarded and the bad are punished\u2014just like in a real fairy tale. Happily ever after!"
+  ],
+  "question": "",
+  "query": "You are given a book above and you are tasked to summarize it. \n\n \n\n Now summarize the book.",
+  "context_sha256": "39d04545bb706a2a2d5f81e88f3159cca6e6e75b69bb4e5c02fe81e98939b39f",
+  "context_tokens": 85430,
+  "chunks_read": 21,
+  "total_chunks": 21,
+  "started": 1792383484.7849221,
+  "finished": 1792384313.7956536,
+  "wall_seconds": 829.0107316970825,
+  "agent_output_tokens": 1865,
+  "answer_output_tokens": 1004,
+  "auxiliary_output_tokens": 0,
+  "requests": [
+    {
+      "turn": 0,
+      "kind": "read",
+      "seconds": 51.745601654052734,
+      "usage": {
+        "completion_tokens": 161,
+        "prompt_tokens": 217,
+        "total_tokens": 378,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 0,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 51.2660253548529,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 161,
+        "compactions": 0,
+        "retained_kv_tokens": 377,
+        "logical_computed_tokens": 377,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 217,
+        "prefill_tokens": 217,
+        "cached_tokens": 0,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 339722240,
+        "checkpoint_restores": 0,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8d69bd3a8b9fdf34",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The user wants me to read a history provided in chunks using the `read_next` tool.\nI need to call `read_next` repeatedly until there are no more chunks left.\nI should not answer or summarize while reading.\nOnce all chunks are read, I will wait for the user's question.\n\nPlan:\n1. Call `read_next` in a loop.\n2. Stop when `read_next` indicates there are no more chunks (usually by returning a specific message or empty result, though the prompt says \"After the last chunk, the user will give you a question\").\n3. Acknowledge when I've finished reading all chunks."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 1,
+      "kind": "read",
+      "seconds": 22.885485410690308,
+      "usage": {
+        "completion_tokens": 36,
+        "prompt_tokens": 4509,
+        "total_tokens": 4545,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 377,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 22.4093761369586,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 36,
+        "compactions": 0,
+        "retained_kv_tokens": 4544,
+        "logical_computed_tokens": 4544,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 4509,
+        "prefill_tokens": 4132,
+        "cached_tokens": 377,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1210286080,
+        "checkpoint_restores": 1,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b037e61ef32df08f",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The first chunk ends with \"When Miss Annalisa sent her\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 2,
+      "kind": "read",
+      "seconds": 24.442101001739502,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 8667,
+        "total_tokens": 8706,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 4544,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 24.20066783693619,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 0,
+        "retained_kv_tokens": 8705,
+        "logical_computed_tokens": 8705,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 8667,
+        "prefill_tokens": 4123,
+        "cached_tokens": 4544,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1551155200,
+        "checkpoint_restores": 2,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-843597a70c9b2207",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The second chunk ends with \"She was the monumental dunce of the school,\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 3,
+      "kind": "read",
+      "seconds": 25.426857709884644,
+      "usage": {
+        "completion_tokens": 33,
+        "prompt_tokens": 12833,
+        "total_tokens": 12866,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 8705,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.184536940185353,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 33,
+        "compactions": 0,
+        "retained_kv_tokens": 12865,
+        "logical_computed_tokens": 12865,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 12833,
+        "prefill_tokens": 4128,
+        "cached_tokens": 8705,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 1891942400,
+        "checkpoint_restores": 3,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9cca28c2b2904316",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The third chunk ends with \"endeavoring to\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 4,
+      "kind": "read",
+      "seconds": 20.913144826889038,
+      "usage": {
+        "completion_tokens": 38,
+        "prompt_tokens": 16983,
+        "total_tokens": 17021,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 12865,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 20.680403927108273,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 38,
+        "compactions": 0,
+        "retained_kv_tokens": 17020,
+        "logical_computed_tokens": 17020,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 16983,
+        "prefill_tokens": 4118,
+        "cached_tokens": 12865,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2232320000,
+        "checkpoint_restores": 4,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-ad2d7a8a2e15a503",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The fourth chunk ends with \"The pupils were attired in their pretti\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 5,
+      "kind": "read",
+      "seconds": 24.035310983657837,
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 21169,
+        "total_tokens": 21201,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 17020,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 23.795479560969397,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 32,
+        "compactions": 0,
+        "retained_kv_tokens": 21200,
+        "logical_computed_tokens": 21200,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 21169,
+        "prefill_tokens": 4149,
+        "cached_tokens": 17020,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2574745600,
+        "checkpoint_restores": 5,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-97799208b7f0ea4c",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The fifth chunk ends with \"she held her\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 6,
+      "kind": "read",
+      "seconds": 25.293545484542847,
+      "usage": {
+        "completion_tokens": 33,
+        "prompt_tokens": 25352,
+        "total_tokens": 25385,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 21200,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.047770885983482,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 33,
+        "compactions": 0,
+        "retained_kv_tokens": 25384,
+        "logical_computed_tokens": 25384,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 25352,
+        "prefill_tokens": 4152,
+        "cached_tokens": 21200,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 2917498880,
+        "checkpoint_restores": 6,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8dd5f7ef7fdb1f20",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The sixth chunk ends with \"The instant she had\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 7,
+      "kind": "read",
+      "seconds": 20.686197996139526,
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 29470,
+        "total_tokens": 29502,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 25384,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 20.416035627014935,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 32,
+        "compactions": 0,
+        "retained_kv_tokens": 29501,
+        "logical_computed_tokens": 29501,
+        "total_evicted_tokens": 0,
+        "prompt_tokens": 29470,
+        "prefill_tokens": 4086,
+        "cached_tokens": 25384,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3254763520,
+        "checkpoint_restores": 7,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 0,
+          "history_cpu_bytes": 0
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b52e26d968e42da4",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The seventh chunk ends with \"Miss Adrianna\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 8,
+      "kind": "read",
+      "seconds": 22.751811027526855,
+      "usage": {
+        "completion_tokens": 38,
+        "prompt_tokens": 33648,
+        "total_tokens": 33686,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 29501,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 22.485162589000538,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 38,
+        "compactions": 1,
+        "retained_kv_tokens": 32805,
+        "logical_computed_tokens": 33685,
+        "total_evicted_tokens": 880,
+        "prompt_tokens": 33648,
+        "prefill_tokens": 4147,
+        "cached_tokens": 29501,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525427200,
+        "checkpoint_restores": 8,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 1,
+          "history_cpu_bytes": 5242880
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8dbb1b0f7f5b39f3",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The eighth chunk ends with \"she had saved herself annoyance several times by keeping\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 9,
+      "kind": "read",
+      "seconds": 60.65724587440491,
+      "usage": {
+        "completion_tokens": 38,
+        "prompt_tokens": 36897,
+        "total_tokens": 36935,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32805,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 60.411037613172084,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 38,
+        "compactions": 2,
+        "retained_kv_tokens": 32805,
+        "logical_computed_tokens": 37814,
+        "total_evicted_tokens": 5009,
+        "prompt_tokens": 36897,
+        "prefill_tokens": 4092,
+        "cached_tokens": 32805,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525427200,
+        "checkpoint_restores": 9,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 2,
+          "history_cpu_bytes": 10485760
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a3b7edd5bb273fed",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The ninth chunk ends with \"From the attic window, among the chimney pots\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 10,
+      "kind": "read",
+      "seconds": 27.12990093231201,
+      "usage": {
+        "completion_tokens": 34,
+        "prompt_tokens": 36904,
+        "total_tokens": 36938,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32805,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.77518261410296,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 34,
+        "compactions": 3,
+        "retained_kv_tokens": 32801,
+        "logical_computed_tokens": 41946,
+        "total_evicted_tokens": 9145,
+        "prompt_tokens": 36904,
+        "prefill_tokens": 4099,
+        "cached_tokens": 32805,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525099520,
+        "checkpoint_restores": 10,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 3,
+          "history_cpu_bytes": 15728640
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9bd9df4506af44d1",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The tenth chunk ends with \"All her valuable garments had\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 11,
+      "kind": "read",
+      "seconds": 26.715590000152588,
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 36910,
+        "total_tokens": 36947,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32801,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 26.477430711034685,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 37,
+        "compactions": 4,
+        "retained_kv_tokens": 32804,
+        "logical_computed_tokens": 46091,
+        "total_evicted_tokens": 13287,
+        "prompt_tokens": 36910,
+        "prefill_tokens": 4109,
+        "cached_tokens": 32801,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525345280,
+        "checkpoint_restores": 11,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 4,
+          "history_cpu_bytes": 20971520
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b8639e4d9c2a5fb9",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The eleventh chunk ends with \"He stayed inside quite a long time,\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 12,
+      "kind": "read",
+      "seconds": 23.407624006271362,
+      "usage": {
+        "completion_tokens": 39,
+        "prompt_tokens": 36926,
+        "total_tokens": 36965,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32804,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 23.153303679078817,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 39,
+        "compactions": 5,
+        "retained_kv_tokens": 32806,
+        "logical_computed_tokens": 50251,
+        "total_evicted_tokens": 17445,
+        "prompt_tokens": 36926,
+        "prefill_tokens": 4122,
+        "cached_tokens": 32804,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525509120,
+        "checkpoint_restores": 12,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 5,
+          "history_cpu_bytes": 26214400
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-afdb90efacb8a1b0",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The twelfth chunk ends with \"It took Adrianna a few seconds to control herself\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 13,
+      "kind": "read",
+      "seconds": 24.45352578163147,
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 36911,
+        "total_tokens": 36943,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32806,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 24.217837912030518,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 32,
+        "compactions": 6,
+        "retained_kv_tokens": 32799,
+        "logical_computed_tokens": 54387,
+        "total_evicted_tokens": 21588,
+        "prompt_tokens": 36911,
+        "prefill_tokens": 4105,
+        "cached_tokens": 32806,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3524935680,
+        "checkpoint_restores": 13,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 6,
+          "history_cpu_bytes": 31457280
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-9a3b275e9583ccc8",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The thirteenth chunk ends with \"combined itself with\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 14,
+      "kind": "read",
+      "seconds": 32.59959602355957,
+      "usage": {
+        "completion_tokens": 36,
+        "prompt_tokens": 36899,
+        "total_tokens": 36935,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32799,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 32.34791110805236,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 36,
+        "compactions": 7,
+        "retained_kv_tokens": 32803,
+        "logical_computed_tokens": 58522,
+        "total_evicted_tokens": 25719,
+        "prompt_tokens": 36899,
+        "prefill_tokens": 4100,
+        "cached_tokens": 32799,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525263360,
+        "checkpoint_restores": 14,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 7,
+          "history_cpu_bytes": 36700160
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8afeef879461bbcd",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The fourteenth chunk ends with \"I will send you pictures of muz\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 15,
+      "kind": "read",
+      "seconds": 148.07053542137146,
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 36902,
+        "total_tokens": 36939,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32803,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 147.58140803012066,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 37,
+        "compactions": 8,
+        "retained_kv_tokens": 32804,
+        "logical_computed_tokens": 62657,
+        "total_evicted_tokens": 29853,
+        "prompt_tokens": 36902,
+        "prefill_tokens": 4099,
+        "cached_tokens": 32803,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525345280,
+        "checkpoint_restores": 15,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 8,
+          "history_cpu_bytes": 41943040
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-a0733e59694db0ff",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The fourteenth chunk ends with \"And her eyes grew big, and her\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 16,
+      "kind": "read",
+      "seconds": 28.019716024398804,
+      "usage": {
+        "completion_tokens": 34,
+        "prompt_tokens": 36939,
+        "total_tokens": 36973,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32804,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 27.7624094421044,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 34,
+        "compactions": 9,
+        "retained_kv_tokens": 32801,
+        "logical_computed_tokens": 66825,
+        "total_evicted_tokens": 34024,
+        "prompt_tokens": 36939,
+        "prefill_tokens": 4135,
+        "cached_tokens": 32804,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525099520,
+        "checkpoint_restores": 16,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 9,
+          "history_cpu_bytes": 47185920
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-bec5d95681cd67df",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The sixteenth chunk ends with \"It was Alka's\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 17,
+      "kind": "read",
+      "seconds": 29.15031862258911,
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 36901,
+        "total_tokens": 36932,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32801,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 28.906296680914238,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 31,
+        "compactions": 10,
+        "retained_kv_tokens": 32798,
+        "logical_computed_tokens": 70955,
+        "total_evicted_tokens": 38157,
+        "prompt_tokens": 36901,
+        "prefill_tokens": 4100,
+        "cached_tokens": 32801,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3524853760,
+        "checkpoint_restores": 17,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 10,
+          "history_cpu_bytes": 52428800
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-bdc5baf60ac0e0f6",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The seventeenth chunk ends with \"and la\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 18,
+      "kind": "read",
+      "seconds": 25.878668546676636,
+      "usage": {
+        "completion_tokens": 31,
+        "prompt_tokens": 36917,
+        "total_tokens": 36948,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32798,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 25.63305253884755,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 31,
+        "compactions": 11,
+        "retained_kv_tokens": 32798,
+        "logical_computed_tokens": 75104,
+        "total_evicted_tokens": 42306,
+        "prompt_tokens": 36917,
+        "prefill_tokens": 4119,
+        "cached_tokens": 32798,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3524853760,
+        "checkpoint_restores": 18,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 11,
+          "history_cpu_bytes": 57671680
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-8edbfe7ec5831e9e",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The eighteenth chunk ends with \"brought the\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 19,
+      "kind": "read",
+      "seconds": 33.64645838737488,
+      "usage": {
+        "completion_tokens": 38,
+        "prompt_tokens": 36934,
+        "total_tokens": 36972,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32798,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 33.39685613499023,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 38,
+        "compactions": 12,
+        "retained_kv_tokens": 32805,
+        "logical_computed_tokens": 79277,
+        "total_evicted_tokens": 46472,
+        "prompt_tokens": 36934,
+        "prefill_tokens": 4136,
+        "cached_tokens": 32798,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525427200,
+        "checkpoint_restores": 19,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 12,
+          "history_cpu_bytes": 62914560
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-b4a47b466d2f1e31",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The nineteenth chunk ends with \"Carter Liz poured out drops from a bottle,\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 20,
+      "kind": "read",
+      "seconds": 36.00431442260742,
+      "usage": {
+        "completion_tokens": 32,
+        "prompt_tokens": 36934,
+        "total_tokens": 36966,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32805,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 35.76260846108198,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 32,
+        "compactions": 13,
+        "retained_kv_tokens": 32799,
+        "logical_computed_tokens": 83437,
+        "total_evicted_tokens": 50638,
+        "prompt_tokens": 36934,
+        "prefill_tokens": 4129,
+        "cached_tokens": 32805,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3524935680,
+        "checkpoint_restores": 20,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 13,
+          "history_cpu_bytes": 68157440
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"command\": \"read_next\"}",
+              "name": "bash"
+            },
+            "id": "chatcmpl-tool-976c75138493c8f7",
+            "type": "function"
+          }
+        ],
+        "reasoning_content": "The nineteenth chunk ends with \"said Mya\". I need to continue reading."
+      },
+      "finish_reason": "tool_calls"
+    },
+    {
+      "turn": 21,
+      "kind": "answer",
+      "seconds": 93.16375470161438,
+      "usage": {
+        "completion_tokens": 1004,
+        "prompt_tokens": 36766,
+        "total_tokens": 37770,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 32799,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": null
+        }
+      },
+      "backend": {
+        "seconds": 92.92018557386473,
+        "admission_wait_seconds": 0.0,
+        "finish_reason": "stop",
+        "completion_tokens": 1004,
+        "compactions": 29,
+        "retained_kv_tokens": 32811,
+        "logical_computed_tokens": 88407,
+        "total_evicted_tokens": 55596,
+        "prompt_tokens": 36766,
+        "prefill_tokens": 3967,
+        "cached_tokens": 32799,
+        "prefix_tokens": 214,
+        "checkpoint_bytes": 3525918720,
+        "checkpoint_restores": 21,
+        "recompute": {
+          "preemptions": 0,
+          "running_preemptions": 0,
+          "recomputed_tokens": 0,
+          "replayed_compactions": 0,
+          "history_events": 29,
+          "history_cpu_bytes": 152043520
+        },
+        "native_request_finished": true
+      },
+      "response": {
+        "content": "The story follows **Adrianna Alessandra**, a young girl living as a neglected \"charity pupil\" and drudge at a seminary run by the cold and worldly **Miss Annalisa**. Forced to live in a bleak, freezing attic and often deprived of food and warmth, Adrianna survives her hardships through a powerful sense of imagination, which she calls her \"Magic.\" By \"pretending\" and \"supposing,\" she transforms her miserable surroundings into a royal palace and herself into a princess.\n\nDuring her time at the seminary, Adrianna forms a deep bond with **Cain**, the scullery maid who also lives in an attic, and maintains secret friendships with fellow students **Alka** and **Marlena**. She even befriends a rat named **Melchisedec**.\n\nThe narrative takes a turn when a mysterious benefactor begins to transform Adrianna's attic into a luxurious room, providing her with gourmet meals, warm bedding, and beautiful clothes. This \"Magician\" is eventually revealed to be **Mr. Jenni** (the Indian gentleman), a former close friend of Adrianna's father, Captain Alessandra. Mr. Jenni had previously believed he had lost his fortune and the friendship of the Captain, leading him to flee in shame. After recovering his wealth\u2014specifically from diamond mines\u2014he spent years searching for Adrianna. He had used his servant, **Carter Liz**, to secretly improve her life in the attic before finally reuniting with her.\n\nThe resolution brings a poetic irony to the story. Upon discovering that Adrianna is actually a wealthy heiress, Miss Annalisa attempts to reclaim her favor, but Adrianna firmly refuses to return to the seminary. Adrianna is taken in by Mr. Jenni as his ward, and she uses her newfound wealth to help others. Most notably, she establishes a partnership with a local baker to provide food for hungry children, ensuring that others do not have to suffer the starvation she once endured. The story concludes with Adrianna helping a beggar child named **Anne** find a home and a job, transforming her own past suffering into a source of compassion and generosity.",
+        "role": "assistant",
+        "reasoning_content": "*   Source material: A story about a girl named Adrianna Alessandra.\n    *   Task: Summarize the book.\n\n    *   *Protagonist:* Adrianna Alessandra.\n    *   *Setting:* A school/seminary run by Miss Annalisa and Miss Lora.\n    *   *Initial Situation:* Adrianna is a \"charity pupil\" and a drudge, living in a cold, bare attic. She is treated poorly by Miss Annalisa and the other students (like Mya). She is often hungry and cold.\n    *   *Coping Mechanism:* Adrianna uses \"Magic\" (imagination/pretending) to survive. She imagines herself as a princess and transforms her bleak surroundings into a banquet hall or a castle.\n    *   *Key Relationships:*\n        *   Cain: The scullery maid, also living in an attic. They become close friends and share their struggles and dreams.\n        *   Alka and Marlena: Fellow students who secretly visit her.\n        *   Melchisedec: A rat in the attic who becomes her companion.\n        *   The \"Magician\": A mysterious benefactor who begins transforming her attic into a luxurious room with food, furniture, and clothes.\n    *   *The Climax/Turning Point:*\n        *   The benefactor is revealed to be Mr. Jenni (the Indian gentleman), a former friend of her father, Captain Alessandra.\n        *   Mr. Jenni had lost his fortune (or thought he had) and ran away, but later recovered it. He had been searching for Adrianna.\n        *   He used Carter Liz (his servant) to secretly improve her life in the attic.\n    *   *Resolution:*\n        *   Adrianna is reunited with Mr. Jenni, who becomes her guardian.\n        *   She is rescued from the seminary.\n        *   Miss Annalisa is humiliated by the revelation of Adrianna's wealth (diamond mines).\n        *   Adrianna uses her wealth to help others, specifically setting up a program with a local baker to feed hungry children.\n        *   She helps Anne, a beggar child she once fed, by ensuring she has a home and a job.\n\n    *   *Introduction:* Introduce Adrianna, her plight at the seminary, and her use of imagination.\n    *   *Development:* Describe her friendship with Cain and the mysterious transformation of her attic.\n    *   *The Reveal:* Explain the connection between Adrianna and Mr. Jenni.\n    *   *Conclusion:* Detail her rescue, the irony of Miss Annalisa's reaction, and Adrianna's philanthropic nature."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "auxiliary_requests": [],
+  "compression_stats": null,
+  "metrics": {
+    "exact_match": false,
+    "f1": 0.31880977683315626,
+    "substring_exact_match": false,
+    "rougeL_f1": 0.15384615384615383,
+    "rougeL_recall": 0.11171662125340599,
+    "rougeLsum_f1": 0.3133208255159475,
+    "rougeLsum_recall": 0.22752043596730245
+  },
+  "parsed": {
+    "parsed_output": "The story follows **Adrianna Alessandra**, a young girl living as a neglected \"charity pupil\" and drudge at a seminary run by the cold and worldly **Miss Annalisa**. Forced to live in a bleak, freezing attic and often deprived of food and warmth, Adrianna survives her hardships through a powerful sense of imagination, which she calls her \"Magic.\" By \"pretending\" and \"supposing,\" she transforms her miserable surroundings into a royal palace and herself into a princess."
+  },
+  "score": null,
+  "judge_pending": true,
+  "grading_pending": false,
+  "stage": "allocation-01"
+}

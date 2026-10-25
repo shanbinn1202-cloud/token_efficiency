@@ -40,7 +40,7 @@ class RegisteredRouteBridge:
         # has a record, turn, generation, lifecycle entry, render, lease or pin,
         # so its CAPACITY_WAIT leaves the engine unchanged (capacity.py).
         started = time.perf_counter_ns()
-        from .capacity import admission_gate
+        from .capacity import admission_gate, release_reservation
         admission_gate(self.lifecycle, command)
         record = dispatcher._reserve(command)
         record.update(fingerprint=fingerprint, session_id=command.session_id,
@@ -62,15 +62,19 @@ class RegisteredRouteBridge:
             require(view["state"] == "accepted", "live admission not accepted")
             # Engine evidence (timing only): this admission's wall time on the
             # engine thread, during which every running decode waits. A parked
-            # Goal's wait (goal_async_ms) is not on the engine thread.
+            # Goal's wait (goal_async_ms) is not on the engine thread, nor is a
+            # parked phase 1 or (--admission-overlap) a parked wait for its lease.
             entry = self.lifecycle.entries[command.request_id]
             entry["admission_engine_ms"] = round(
-                (time.perf_counter_ns() - started) / 1e6 - entry.get("goal_async_ms", 0), 3)
+                (time.perf_counter_ns() - started) / 1e6 - entry.get("goal_async_ms", 0)
+                - entry.get("phase1_park_ms", 0) - entry.get("lease_wait_ms", 0), 3)
             record.update(state="accepted", live_identity=ident,
                           ack=Ack(command.command_id, command.request_id,
                                   "accepted", view, ""))
+            release_reservation(self.lifecycle, command.request_id)
             return record["ack"]
         except BaseException:
+            release_reservation(self.lifecycle, command.request_id)
             entry = self.lifecycle.entries.get(command.request_id)
             record["state"] = (entry or {}).get("state", "cancelled")
             if record["state"] == "rejected": record["state"] = "cancelled"
@@ -102,6 +106,14 @@ class RegisteredRouteBridge:
         state = dispatcher._records[command.request_id]["state"]
         return Ack(command.command_id, command.request_id, state, {}, "")
 
+    def close_session(self, dispatcher, command):
+        """Session pool: close ``command.session_id`` (an authenticated
+        CloseSession frame); the Ack's receipt is the close receipt."""
+        from registered_add_protocol import Ack
+        from .session_pool import close_session
+        receipt = close_session(self.lifecycle, command.session_id)
+        return Ack(command.command_id, command.request_id, "complete", receipt, "")
+
     def finalize(self, dispatcher, request_id, successful):
         record = dispatcher._records[request_id]
         if record["state"] == "complete":
@@ -118,5 +130,8 @@ class RegisteredRouteBridge:
 def bind_registered_dispatcher(dispatcher, lifecycle):
     require(getattr(dispatcher, "_remote_ra_live_v2", None) is None,
             "registered live dispatcher binding collision")
+    # Startup only: the dispatcher's request tombstones (never evicted) cover
+    # every request the lifecycle may admit (256 per session, at least 1,024).
+    dispatcher._max_records = max(dispatcher._max_records, lifecycle.max_requests)
     dispatcher._remote_ra_live_v2 = RegisteredRouteBridge(lifecycle)
     return dispatcher._remote_ra_live_v2

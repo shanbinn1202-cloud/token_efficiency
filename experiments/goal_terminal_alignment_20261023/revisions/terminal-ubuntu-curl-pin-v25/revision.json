@@ -1,0 +1,9 @@
+{
+  "task_ids": [
+    "rstan-to-pystan"
+  ],
+  "cause": "Reference explicitly requests curl8.5.0-2ubuntu10.6 removed from live noble repositories.",
+  "change": "Add official Ubuntu snapshot20250801 containing exact original ARM64 curl/libcurl versions; pin only these two packages. No original script/version/algorithm/assertion changes. Native ARM64 KVM for root package installation.",
+  "evidence": "noble-updates and noble-security ARM64 Packages.xz both list exact version; original package URL HEAD200.",
+  "status": "candidate unpromoted"
+}

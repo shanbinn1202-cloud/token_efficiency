@@ -1,0 +1,10 @@
+{
+  "time": 1792829190.4718146,
+  "first_failure": "curl command not found immediately after official apt installation; pytest never ran",
+  "isolated_reproduction": "3 original tests passed, curl executable present",
+  "changed_code_or_image": false,
+  "fresh_control_passed": true,
+  "root_cause_confirmed": false,
+  "first_failure_retained": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/startup-recovery-20261024/circuit-first-curl-install-failure.json",
+  "action": "retain all evidence; watch verifier infrastructure in later trials"
+}

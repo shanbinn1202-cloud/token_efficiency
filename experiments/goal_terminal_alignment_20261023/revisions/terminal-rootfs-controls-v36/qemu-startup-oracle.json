@@ -1,0 +1,104 @@
+{
+  "id": "71ee1815-c316-41d8-a1bb-327ee7e1f2ab",
+  "task_name": "qemu-startup",
+  "trial_name": "qemu-startup-native-rootfs-v36-oracle-1792850107",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/qemu-startup-native-rootfs-v36-oracle-1792850107",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/qemu-startup"
+  },
+  "source": null,
+  "task_checksum": "3ac167129e620bf321fe0dea9e8bf8dd1eb052de0d353df34f2d748290632aa1",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/qemu-startup",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "qemu-startup-native-rootfs-v36-oracle-1792850107",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "terminal_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {},
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": null,
+  "verifier_result": null,
+  "verifier_environment_mode": "shared",
+  "exception_info": {
+    "exception_type": "RuntimeError",
+    "exception_message": "Guest root ownership invalid: debugfs 1.47.0 (5-Feb-2023)\n/usr/bin/bash: File not found by ext2_lookup \n",
+    "exception_traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor/src/harbor/trial/trial.py\", line 606, in run\n    await self._prepare()\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor/src/harbor/trial/trial.py\", line 645, in _prepare\n    await self._setup_agent_environment()\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor/src/harbor/trial/trial.py\", line 1849, in _setup_agent_environment\n    await self._start_agent_environment()\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/harbor/src/harbor/trial/trial.py\", line 1855, in _start_agent_environment\n    await asyncio.wait_for(\n  File \"/usr/lib64/python3.12/asyncio/tasks.py\", line 520, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-rootfs-controls-v36/terminal_environment.py\", line 72, in start\n    await super().start(force_build)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-rootfs-controls-v36/container_base.py\", line 726, in start\n    await self._start_server()\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-rootfs-controls-v36/terminal_environment.py\", line 55, in _start_server\n    await start_kvm(self)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-rootfs-controls-v36/kvm_environment.py\", line 90, in start_kvm\n    if not re.search(r'User:\\s+0\\s+Group:\\s+0',stat):raise RuntimeError('Guest root ownership invalid: '+stat)\n                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Guest root ownership invalid: debugfs 1.47.0 (5-Feb-2023)\n/usr/bin/bash: File not found by ext2_lookup \n\n",
+    "occurred_at": "2026-10-24T13:55:21.071513Z"
+  },
+  "started_at": "2026-10-24T13:55:07.776648Z",
+  "finished_at": "2026-10-24T13:55:21.645880Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T13:55:07.812456Z",
+    "finished_at": "2026-10-24T13:55:20.987145Z"
+  },
+  "agent_setup": null,
+  "agent_execution": null,
+  "verifier": null,
+  "step_results": null
+}

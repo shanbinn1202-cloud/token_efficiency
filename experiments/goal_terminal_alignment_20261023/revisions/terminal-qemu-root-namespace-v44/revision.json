@@ -1,0 +1,6 @@
+{
+  "formal": false,
+  "change": "For qemu-alpine-ssh native root-mapped namespace only, avoid redundant su root when server is already UID0. Other requested users retain normal su behavior; do not suppress privilege errors. Original tests unchanged.",
+  "namespace_identity_probe": "apptainer --fakeroot --ignore-fakeroot-command id reports uid=0 gid=0",
+  "other_88_tasks_unchanged": true
+}

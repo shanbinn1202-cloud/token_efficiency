@@ -295,8 +295,10 @@ class CompositionTests(unittest.TestCase):
         return plain, pinned(plain)
 
     def test_the_same_composition_as_observation_query_but_the_fill(self):
-        for P, compact in MATRIX:
-            with self.subTest(P=P):
+        # The reference path (Page records, upstream selectors) and the vectorized
+        # one (fast_selection: no Page record) compose alike.
+        for (P, compact), fast in itertools.product(MATRIX, (False, True)):
+            with self.subTest(P=P, fast=fast), (ExitStack() if fast else DS.reference_path()):
                 plain, fill = self.contracts(P, compact)
                 obs_records, rf_records = [], []
                 capture = lambda store: (lambda **kw: store[-1].append(kw) or original(**kw))
@@ -305,6 +307,7 @@ class CompositionTests(unittest.TestCase):
                     obs_auth, obs = play('observation_query', P, plain, compact, records=obs_records)
                 with patch.object(query_selection.upstream()[1], 'PageRecord', side_effect=capture(rf_records)):
                     rf_auth, rf = play(RF, P, fill, compact, records=rf_records)
+                self.assertEqual(rf_auth.fast is not None, fast)
                 obs, rf = obs['s'], rf['s']
                 self.assertEqual([r['body']['selection']['reason'] for r in rf],
                                  ['cold_start', 'below_switch_threshold', None, None])
@@ -319,9 +322,14 @@ class CompositionTests(unittest.TestCase):
                     self.assertEqual(a['body']['goal'], b['body']['goal'])      # the same deterministic Goal
                     self.assertEqual((b['goal_payload'], b['body']['goal']['forward']), (None, False))
                     # Page records: identical but for the vector reference random_fill never makes.
-                    self.assertEqual([{k: v for k, v in kw.items() if k != 'page_vector_ref'} for kw in obs_records[turn]],
-                                     [{k: v for k, v in kw.items() if k != 'page_vector_ref'} for kw in rf_records[turn]])
-                    self.assertTrue(all(kw['page_vector_ref'] is None for kw in rf_records[turn]))
+                    if fast:
+                        self.assertEqual(rf_records[turn], [])
+                    else:
+                        self.assertEqual([{k: v for k, v in kw.items() if k != 'page_vector_ref'}
+                                          for kw in obs_records[turn]],
+                                         [{k: v for k, v in kw.items() if k != 'page_vector_ref'}
+                                          for kw in rf_records[turn]])
+                        self.assertTrue(all(kw['page_vector_ref'] is None for kw in rf_records[turn]))
                     if sb['reason'] is not None:
                         self.assertEqual(sb, sa | {'contract_sha256': sb['contract_sha256']})   # inactive: alike
                         self.assertEqual(b['ranking'], tuple(range(sb['candidate_pages'])))
@@ -344,8 +352,8 @@ class CompositionTests(unittest.TestCase):
                     self.assertNotIn('fill', sa)
                     self.assertNotEqual(sb['retrieved_pages'], sa['retrieved_pages'])
                 # No query, projection, compaction or Page vector index: nothing reads a vector.
-                self.assertEqual((rf_auth.page_index, rf_auth.compact_cache, rf_auth._projection, rf_auth.rewriter),
-                                 ({}, {}, None, None))
+                self.assertEqual((rf_auth.page_index, rf_auth.compact_cache, rf_auth._projection, rf_auth.rewriter,
+                                  rf_auth.page_columns), ({}, {}, None, None, {}))
                 self.assertEqual(set(rf_auth.vector_catalog['s']), set(obs_auth.vector_catalog['s']))
 
     def test_selection_does_not_read_the_observation_vector(self):
@@ -519,7 +527,10 @@ class EndToEndTests(DE.MatrixChecks, unittest.TestCase):
 
     def test_random_fill_over_the_matrix(self):
         semantics = {}
-        for case, ratio in [(c, None) for c in DE.CASES] + [(DE.CASES[0], 0.8)]:
+        # Default suite: P = 16 and legacy-784 at an 0.8 ratio (fills and restores in both);
+        # the slow pass (README section 2.3) all four and the legacy/decoupled-784 comparison.
+        matrix = [(c, None) for c in DE.CASES] + [(DE.CASES[0], 0.8)]
+        for case, ratio in matrix if DE.SLOW else matrix[2:]:
             with self.subTest(case=case.name, ratio=ratio):
                 h, infos, cancel, files, bodies = self.run_policy(RF, case, ratio)
                 obs = self.run_policy('observation_query', case, ratio)[4]
@@ -543,7 +554,8 @@ class EndToEndTests(DE.MatrixChecks, unittest.TestCase):
                 if ratio is None:
                     semantics[case.name] = DE.semantics(h, infos, cancel)
         # Legacy and decoupled (784, 784) draw, restore and attend the same Pages.
-        self.assertEqual(semantics['legacy-784'], semantics['decoupled-784'])
+        if DE.SLOW:
+            self.assertEqual(semantics['legacy-784'], semantics['decoupled-784'])
 
     def test_three_sessions_decoding_together(self):
         case = DE.Case(**dict(vars(DE.CASES[2]), sessions=len(DE.TASKS)))

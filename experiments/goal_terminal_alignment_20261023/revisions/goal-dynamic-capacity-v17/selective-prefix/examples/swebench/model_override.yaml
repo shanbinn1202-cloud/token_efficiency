@@ -1,0 +1,25 @@
+model:
+  model_name: "openai/selective-prefix"
+  model_class: litellm_textbased
+  cost_tracking: ignore_errors
+  model_kwargs:
+    api_base: "http://127.0.0.1:<PORT>/v1"
+    api_key: "dummy"
+    temperature: 0.0
+    max_tokens: 1536
+
+environment:
+  environment_class: docker
+  cwd: "/testbed"
+  timeout: 120
+  interpreter: ["bash", "-c"]
+  env:
+    PAGER: cat
+    MANPAGER: cat
+    LESS: -R
+    PIP_PROGRESS_BAR: "off"
+    TQDM_DISABLE: "1"
+
+agent:
+  step_limit: 90
+  cost_limit: 0

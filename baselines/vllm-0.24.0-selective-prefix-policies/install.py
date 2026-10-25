@@ -57,6 +57,13 @@ def verify_package(root=ROOT):
         definition['source_closure']['files'],sort_keys=True,separators=(',',':')).encode()),
         'source closure inventory digest mismatch')
     for name,pin in expected.items():need(pin is None or re.fullmatch('[0-9a-f]{64}',pin),'bad baseline digest')
+    # Other model profiles (gemma-s1): a release is installed for one model; the default
+    # is the top-level Qwen pins. Each profile pins its own metadata files and revision.
+    for name,profile in definition.get('model_profiles',{}).items():
+        need(re.fullmatch('[a-z0-9.-]+',name) and type(profile) is dict and set(profile)=={'model_pins','model_revision'}
+             and re.fullmatch('[0-9a-f]{40}',profile['model_revision']) and profile['model_pins']
+             and all(re.fullmatch('[0-9a-f]{64}',p) and '/' not in n for n,p in profile['model_pins'].items()),
+             'bad model profile pins: '+name)
     for name in sources:
         if name.endswith('.py'):compile(safe(root/'source-overlay',name).read_bytes(),name,'exec')
     return definition
@@ -113,7 +120,15 @@ def verify_environment_identity(manifest):
     actual=environment_identity(manifest['site'])
     for name in actual:need(actual[name]==expected.get(name),'release environment mismatch: '+name)
 
-def check_environment(site,model,definition):
+def model_definition(definition,profile=None):
+    """(model_pins, model_revision) of the release's model: the top-level Qwen pins, or
+    those of a named model profile (``--model-profile``, gemma-s1)."""
+    if profile is None:return definition['model_pins'],definition['model_revision']
+    profiles=definition.get('model_profiles',{})
+    need(profile in profiles,'unknown model profile: %s (known: %s)'%(profile,', '.join(sorted(profiles)) or 'none'))
+    return profiles[profile]['model_pins'],profiles[profile]['model_revision']
+
+def check_environment(site,model,definition,profile=None):
     need(sys.version_info[:2]==(3,12),'supported target interpreter is Python 3.12')
     need(site.is_dir() and (site/'vllm').is_dir(),'explicit site-packages with vLLM required')
     for name,version in definition['qualified_dependency_versions'].items():
@@ -123,7 +138,7 @@ def check_environment(site,model,definition):
         path=safe(site,name)
         if pin is None:need(not path.exists(),'upstream-absent target exists: '+name)
         else:need(path.is_file() and digest(path.read_bytes())==pin,'clean v0.24.0 baseline mismatch: '+name)
-    for name,pin in definition['model_pins'].items():
+    for name,pin in model_definition(definition,profile)[0].items():
         need(safe(model,name).is_file() and digest(safe(model,name).read_bytes())==pin,'pinned model/tokenizer metadata mismatch: '+name)
     native={}
     for package in ('transformers','tokenizers','jinja2','markupsafe'):
@@ -169,15 +184,19 @@ def copy_owned(source,destination):
     Path(destination).chmod(stat.S_IMODE(Path(source).stat().st_mode)|stat.S_IRUSR|stat.S_IWUSR)
     return destination
 
-def install(site,model,release,*,apply=False,package_root=ROOT,fail_after=None):
+def install(site,model,release,*,apply=False,package_root=ROOT,fail_after=None,model_profile=None):
+    """model_profile: None (the Qwen model, the manifest unchanged) or a named profile of
+    INSTALL_RELEASE.json model_profiles (gemma-s1: gemma4-31b-it), recorded in the manifest."""
     site=Path(site).resolve(strict=True);model=Path(model).resolve(strict=True);release=Path(release).absolute()
     need(not release.exists() and not release.is_symlink(),'new release directory required')
     need(release.parent.is_dir() and release!=Path(release.anchor),'existing explicit release parent required')
     for protected in (site,model,Path(package_root).resolve()):
         need(not release.resolve().is_relative_to(protected),'release must be outside environment/model/package')
-    definition=verify_package(package_root);baseline,native=check_environment(site,model,definition)
+    definition=verify_package(package_root);baseline,native=check_environment(site,model,definition,model_profile)
+    model_pins,model_revision=model_definition(definition,model_profile)
     result=dict(status='CHECK_ONLY_PASS',mutated=False,site_packages_written=False,
         feature_default='off',source_files=len(definition['source_files']),release=str(release))
+    if model_profile is not None:result.update(model_profile=model_profile)
     if not apply:return result
     release.mkdir(mode=0o700);info=release.stat();identity=(info.st_dev,info.st_ino)
     try:
@@ -192,15 +211,17 @@ def install(site,model,release,*,apply=False,package_root=ROOT,fail_after=None):
             raw=safe(Path(package_root)/'source-overlay',name).read_bytes();need(digest(raw)==pin,'payload changed during install')
             target.write_bytes(raw)
             if i==fail_after:raise RuntimeError('injected installer failure')
-        after,native_after=check_environment(site,model,definition)
+        after,native_after=check_environment(site,model,definition,model_profile)
         need(after==baseline and native_after==native,'environment changed during install')
         manifest=dict(schema='selective-prefix-portable-runtime-v1',site=str(site),model_root=str(model),
             environment_identity=environment_identity(site),upstream_record=verify_vllm_record(site)[1],
             source_files=definition['source_files'],baseline_files=baseline,native_pins=native,
-            model_pins=definition['model_pins'],source_closure=definition['source_closure'],
+            model_pins=model_pins,source_closure=definition['source_closure'],
             qualification_parent_manifest='cc5b8c5b10818b12750cf9f1702a75b3753bf61b0fb3d3934af1057d8250bebb',
             release_id=definition['release_id'],default_enabled=False,provenance=definition['provenance'],
-            model_revision=definition['model_revision'])
+            model_revision=model_revision)
+        if model_profile is not None:
+            manifest.update(model_profile=model_profile)
         raw=encoded(manifest);save(release/'runtime-manifest.json',raw)
         save(release/'runtime-manifest.sha256',(digest(raw)+'  runtime-manifest.json\n').encode())
         index=dict(manifest_sha256=digest(raw),files=inventory(release));raw=encoded(index)
@@ -229,6 +250,11 @@ def main():
     parser.add_argument('--site-packages',type=Path,required=True)
     parser.add_argument('--model-dir',type=Path,required=True)
     parser.add_argument('--release-dir',type=Path,required=True)
+    parser.add_argument('--model-profile',
+        help='install for another model of INSTALL_RELEASE.json model_profiles (gemma4-31b-it: stage 1, '
+             'not GPU-validated); default: Qwen3.6-27B')
     parser.add_argument('--apply',action='store_true');args=parser.parse_args()
-    print(json.dumps(install(args.site_packages,args.model_dir,args.release_dir,apply=args.apply),sort_keys=True))
+    profile={} if args.model_profile is None else dict(model_profile=args.model_profile)
+    print(json.dumps(install(args.site_packages,args.model_dir,args.release_dir,apply=args.apply,**profile),
+                     sort_keys=True))
 if __name__=='__main__':main()

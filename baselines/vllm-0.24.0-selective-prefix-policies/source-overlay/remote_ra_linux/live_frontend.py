@@ -52,11 +52,10 @@ async def _bind(engine, state, args, authority):
                 and serving.openai_serving_render.renderer is renderer,
                 "frontend owner changed")
         return True
-    from remote_ra_live_v2.mswea_protocol import PROTOCOL
+    from remote_ra_live_v2.mswea_protocol import xml_transcripts
     config = load()
     # Multi-session stage 1: one frontend XML transcript per startup task/session.
-    transcripts = (tuple(loaded.renderer.transcript() for _ in config['tasks'])
-                   if config['protocol'] == PROTOCOL else ())
+    transcripts = xml_transcripts(loaded.renderer, config['protocol'], len(config['tasks']))
     capture = TrustedFrontendCapture(renderer=renderer, source_renderer=loaded.renderer,
         verify_identity=verify, goal_probe_text=None, transcripts=transcripts)
     registry = FrontendRegistry(llm=engine, capture_factory=capture, codec=authority.codec,

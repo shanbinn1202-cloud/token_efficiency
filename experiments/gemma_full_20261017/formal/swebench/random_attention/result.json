@@ -1,0 +1,16 @@
+{
+  "model": "Gemma 4 31B IT",
+  "method": "random_attention",
+  "benchmark": "swebench",
+  "tasks": 500,
+  "score_percent": 63.0,
+  "output_tokens_per_second": 316.1532078014045,
+  "output_tokens": 6032006,
+  "measured_seconds": 19079.37623643875,
+  "job": "3400133",
+  "seed": 42,
+  "kv_pool_GiB": 25,
+  "max_num_batched_tokens": 4096,
+  "budget": 8192,
+  "status": "complete"
+}

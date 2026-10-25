@@ -1,0 +1,26 @@
+{
+  "time": 1792768264.2768333,
+  "goal_validation_job": "3443363",
+  "goal_validation_state": "PENDING Priority",
+  "terminal_recovery_service": "terminal-arm64-recover-20261023.service",
+  "terminal_cache_root_cause": "68 OCI->SIF conversions used full /u/ssun4 Apptainer cache; exact ARM64 archives recovering with cache disabled",
+  "unresolved_builds": {
+    "fix-git": "Official setup repository unavailable anonymously; inspect legitimate upstream assets",
+    "qemu-alpine-ssh": "Fakeroot ABI fixed; now historical Debian security packages return404",
+    "qemu-startup": "Fakeroot ABI fixed; now historical Debian security packages return404"
+  },
+  "unresolved_transport": [
+    "Host Apptainer fakeroot requires GLIBC2.38; older Debian task images need compatible fakeroot command",
+    "Docker WORKDIR-only empty directory /app absent after OCI->SIF conversion; recreate declared WORKDIR before starting server",
+    "Review reference-control timeouts and rewards individually; do not relax official tests"
+  ],
+  "home_cleanup": "/projects/bcjw/ssun4/home_storage_20261023/state.json",
+  "old_grading_recovery": "/projects/bcjw/ssun4/home_storage_20261023/grading-recovery-state.json",
+  "formal_admission": "blocked until real GPU validation and89reference controls; no formal runs yet",
+  "terminal_reference_controls": {
+    "checked": 26,
+    "passed": 17,
+    "failed": 9
+  },
+  "runtime_transport_revision": "revisions/terminal-runtime-fakeroot"
+}

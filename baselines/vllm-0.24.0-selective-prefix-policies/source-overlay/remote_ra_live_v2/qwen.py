@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .contract import (Allocation, HybridLease, NativeIdentity,
-                       RenderAssignment, StepLease, closed_pages, require)
+                       RenderAssignment, StepLease, closed_pages, require, token_ids)
 
 
 @dataclass
@@ -44,6 +44,23 @@ class QwenAlignLifecycle:
     the phase-1 state on each move would discard header/decode progress.
     """
 
+    # --decode-fastpath (decode_fastpath.attach_worker): the step lease checks only the
+    # attention leases appended since the last accepted forward, and ``after_forward``
+    # skips the per-request drain when the bridge drained the step (``step_drained``).
+    decode_fastpath = False
+    # --decode-fastpath2 (decode_fastpath2.attach_worker): an unchanged attention tuple is
+    # taken by identity; ``step_joined``: WorkerBridge.finish_step joined the step's
+    # forward (its finiteness read), so ``leave_execute`` does not drain again.
+    decode_fastpath2 = False
+    step_joined = False
+    # --decode-fastpath on the window layout (window_owner.attach_fastpath): a step whose state
+    # tuple is the last accepted step's (the same objects, checked then) checks only the rest.
+    # The Qwen lifecycle never sets it.
+    reuse_state_leases = False
+    # --decode-fastpath3 (decode_fastpath3.attach_worker): WorkerBridge's step takes the
+    # leases through ``before_forward3``.
+    decode_fastpath3 = False
+
     def __init__(self, backend, *, page_tokens=784, mamba_tokens=None):
         # mamba_tokens: the Mamba align block M (GDN crossing cadence). Legacy
         # P == M; the decoupled layout keeps M = P * ceil(784 / P) (kv_layout).
@@ -61,7 +78,7 @@ class QwenAlignLifecycle:
         require(assignment.page_tokens == self.page_tokens and
                 type(canonical_tokens) is tuple and
                 len(canonical_tokens) == assignment.prompt_tokens and
-                all(type(v) is int and v >= 0 for v in canonical_tokens),
+                token_ids(canonical_tokens),
                 "canonical token assignment required")
         require(assignment.identity.request not in self.requests and
                 type(allocation_generation) is int and allocation_generation >= 0,
@@ -105,8 +122,21 @@ class QwenAlignLifecycle:
             state.execution_history.append(state.execution)
         require(all(state.active is None for state in states),
                 'native execute returned with unfinished forward callback')
-        # One device join covers the whole step.
-        self.backend.io.drain()
+        joined, self.step_joined = self.step_joined, False
+        if getattr(self.backend, 'handoff', False):
+            # --gdn-device-handoff: a step event, joined lazily (RPC frame boundaries,
+            # drains, host reads) instead of the device drain.
+            self.backend.io.record_step()
+        elif joined:
+            # --decode-fastpath2: WorkerBridge.finish_step joined the step's forward and
+            # closed every lease on it; the logits queued after it are joined by the
+            # sampled-token read and the next step's guard drain.
+            check = getattr(self.backend.io, 'connector_check', None)
+            if check is not None:
+                check()
+        else:
+            # One device join covers the whole step.
+            self.backend.io.drain()
         for state in states:
             state.execution = 'joined'
             state.execution_history.append(state.execution)
@@ -180,17 +210,108 @@ class QwenAlignLifecycle:
         # checked then (same generation), so only the appended ones are new.
         checked = state.checked_attention
         k = len(checked)
-        if not (k and len(attn) >= k and attn[0] is checked[0] and attn[k - 1] is checked[-1]
-                and attn[:k] == checked):
+        if self.decode_fastpath2 and attn is checked and k:
+            pass      # --decode-fastpath2: the last accepted tuple itself (its prefix test holds)
+        elif not (k and len(attn) >= k and attn[0] is checked[0] and attn[k - 1] is checked[-1]
+                  and attn[:k] == checked):
             k = 0
         fresh = attn[k:] if k else attn
+        same = self.reuse_state_leases and hybrid is state.current_hybrid
         require(attn and hybrid and
                 all(type(v) is Allocation and v.generation == allocation_generation
-                    for v in fresh + hybrid) and
-                all(v.kind == "mamba" for v in hybrid) and
+                    for v in (fresh if same else fresh + hybrid)) and
+                (same or all(v.kind == self.state_kind for v in hybrid)) and
                 all(v.kind in {"attention", "suffix", "decode"} for v in fresh),
                 "actual allocation-generation leases required")
+        hlease = self._state_lease(identity, state, hybrid, allocation_generation)
+        if self.decode_fastpath:
+            # attn[:k] is the last accepted lease's tuple (same objects, checked then).
+            state.active = StepLease.extending(identity, allocation_generation, start, end,
+                                               phase, attn, hlease, k)
+        else:
+            state.active = StepLease(identity, allocation_generation, start, end,
+                                     phase, attn, hlease)
+        state.checked_attention = attn
+        return state.active
 
+    def before_forward3(self, identity, start, count, logical_positions, position_evidence,
+                        attention_allocations, hybrid_allocations, allocation_generation):
+        """--decode-fastpath3: ``before_forward`` (the same checks, state and lease, in the same
+        order) for a request whose Mamba slots are the tuple of its last accepted lease.
+
+        That tuple's slots were checked (type, generation, kind, unique keys) when it was
+        accepted, with this generation; they are immutable, so only a changed tuple is checked
+        again. Identities are compared by ``is`` before ``==`` (the same answer). Anything
+        else (a repeated callback, a slot move, a first step) runs ``before_forward``."""
+        state = self.requests.get(identity.request)
+        hybrid = hybrid_allocations
+        if (state is None or state.active is not None or type(hybrid) is not tuple or
+                hybrid is not state.current_hybrid or type(attention_allocations) is not tuple or
+                type(logical_positions) is not tuple or not self.decode_fastpath2 or not self.decode_fastpath):
+            return self.before_forward(identity, start=start, count=count, logical_positions=logical_positions,
+                                       attention_allocations=attention_allocations,
+                                       hybrid_allocations=hybrid_allocations,
+                                       allocation_generation=allocation_generation,
+                                       position_evidence=position_evidence)
+        a = state.assignment
+        require((a.identity is identity or a.identity == identity) and not state.terminal,
+                "foreign or terminal Qwen request")
+        require(not state.poisoned and
+                type(start) is int and type(count) is int and count > 0 and
+                start == state.cursor and
+                allocation_generation == state.allocation_generation,
+                "discontinuous or stale forward lease")
+        end = start + count
+        require(logical_positions == tuple(range(start, end)),
+                "logical/RoPE positions changed")
+        state.position_evidence = position_evidence
+        prompt = a.prompt_tokens
+        require((start < prompt and end <= prompt) or (start >= prompt and count == 1),
+                "forward crosses prompt boundary or speculative decode")
+        phase = "decode" if start >= prompt else ("suffix" if a.local_turn else "prefill")
+        attn = attention_allocations
+        checked = state.checked_attention
+        k = len(checked)
+        if attn is checked and k:
+            pass      # the last accepted tuple itself (its prefix test holds)
+        elif not (k and len(attn) >= k and attn[0] is checked[0] and attn[k - 1] is checked[-1]
+                  and attn[:k] == checked):
+            k = 0
+        fresh = attn[k:] if k else attn
+        # hybrid is the accepted tuple: its slots passed the checks below with this generation.
+        require(attn and hybrid and
+                all(type(v) is Allocation and v.generation == allocation_generation for v in fresh) and
+                all(v.kind in {"attention", "suffix", "decode"} for v in fresh),
+                "actual allocation-generation leases required")
+        # _state_lease, unchanged slots: no restore or relocation.
+        state.current_hybrid = hybrid
+        state.latest_hybrid = hybrid
+        hlease = object.__new__(HybridLease)
+        seal = a.phase2_start if state.phase1_restored else 0
+        latest = state.latest_state_step
+        require(type(seal) is int and type(latest) is int and 0 <= seal <= latest,
+                "invalid hybrid state lineage")
+        hlease.__dict__.update(identity=identity, slots=hybrid, restored_checkpoint_seal=seal,
+                               latest_state_step=latest)
+        # StepLease.extending(identity, generation, start, end, phase, attn, hlease, k).
+        require(type(allocation_generation) is int and allocation_generation >= 0 and 0 <= start < end,
+                "invalid step lease")
+        require(phase in {"prefill", "suffix", "decode"}, "invalid step phase")
+        require(all(type(v) is Allocation for v in attn[k:]), "attention leases required")
+        lease = object.__new__(StepLease)
+        lease.__dict__.update(identity=identity, allocation_generation=allocation_generation, start=start,
+                              end=end, phase=phase, attention=attn, hybrid=hlease)
+        state.active = lease
+        state.checked_attention = attn
+        return lease
+
+    # The model-specific part of a step (the lifecycle split, gemma-s1 WP5): the Qwen
+    # GDN state here; window_lifecycle.WindowLifecycle overrides these three hooks.
+    state_kind = "mamba"       # the kind of the per-step state allocations
+
+    def _state_lease(self, identity, state, hybrid, allocation_generation):
+        """Before a forward: the GDN state of the step's Mamba slots, and its lease."""
+        a = state.assignment
         # preprocess_mamba has already picked/moved the running slot here.
         # Restore the phase-1 state once; later moves copy latest state.
         if state.current_hybrid is None:
@@ -209,20 +330,38 @@ class QwenAlignLifecycle:
                 state.latest_state_step, allocation_generation)
         state.current_hybrid = hybrid
         state.latest_hybrid = hybrid
-        hlease = HybridLease(identity, hybrid,
-                             a.phase2_start if state.phase1_restored else 0,
-                             state.latest_state_step)
-        state.active = StepLease(identity, allocation_generation, start, end,
-                                 phase, attn, hlease)
-        state.checked_attention = attn
-        return state.active
+        return HybridLease(identity, hybrid,
+                           a.phase2_start if state.phase1_restored else 0,
+                           state.latest_state_step)
 
-    def after_forward(self, identity, hidden_states, finite=None):
+    def _after_state(self, identity, state, lease):
+        """After a forward: the latest GDN state, captured where a slot may move."""
+        # Native preprocess moves the align slot only after an M-aligned
+        # end (M = P in legacy), so latest is needed only there; finish
+        # captures the carry candidate at the cursor otherwise (spec 7.3).
+        # --gdn-device-handoff: the crossing copies from the old slot on the
+        # device, so nothing is captured here.
+        if lease.end % self.mamba_tokens == 0 and not getattr(self.backend, 'handoff', False):
+            self.backend.capture_latest_hybrid(
+                identity, lease.hybrid.slots, lease.end,
+                state.allocation_generation)
+
+    def _final_state(self, identity, state):
+        """Complete: the carry candidate = GDN after C'-1, still in the current (owned) slot."""
+        self.backend.capture_final_hybrid(identity, state.latest_hybrid,
+                                          state.cursor, state.allocation_generation)
+
+    def after_forward(self, identity, hidden_states, finite=None, drained=False, finite_ok=False):
         """Close the step's lease on this request's hidden rows.
 
         ``finite``: the per-row finiteness of ``hidden_states`` as a CPU bool
         tensor, computed by the caller for every row of the step with one
         device join (WorkerBridge); None checks the rows here.
+        ``drained`` (--decode-fastpath): the caller drained the device once for
+        the whole step after the forward, so ``forward_complete`` does not drain
+        again for this request.
+        ``finite_ok`` (--decode-fastpath2): the caller found every row of the step
+        finite (one test of the step's finiteness read), so these rows are.
 
         The forward record names its rows by ``sequence`` (this worker's forward
         count) with the request, generation and [start, end); it stays on the
@@ -241,7 +380,9 @@ class QwenAlignLifecycle:
                       hidden_states.ndim == 2 and
                       hidden_states.shape[0] == count and
                       hidden_states.shape[1] > 0)
-            if finite is None:
+            if finite_ok is True:
+                require(shaped, "exact finite unpadded hidden rows required")
+            elif finite is None:
                 require(shaped and bool(torch.isfinite(hidden_states).all()),
                         "exact finite unpadded hidden rows required")
             else:
@@ -249,7 +390,10 @@ class QwenAlignLifecycle:
                         finite.dtype == torch.bool and finite.device.type == "cpu" and
                         tuple(finite.shape) == (count,) and bool(finite.all()),
                         "exact finite unpadded hidden rows required")
-            self.backend.forward_complete(identity, lease)
+            if drained:
+                self.backend.forward_complete(identity, lease, drained=True)
+            else:
+                self.backend.forward_complete(identity, lease)
             state.latest_hybrid = lease.hybrid.slots
             state.latest_state_step = lease.end
             P = a.page_tokens
@@ -271,13 +415,7 @@ class QwenAlignLifecycle:
                         "Page vector recomputed")
                 state.page_vectors.update(zip(pages, compactor.closing(
                     hidden_states, lease.start, pages)))
-            # Native preprocess moves the align slot only after an M-aligned
-            # end (M = P in legacy), so latest is needed only there; finish
-            # captures the carry candidate at the cursor otherwise (spec 7.3).
-            if lease.end % self.mamba_tokens == 0:
-                self.backend.capture_latest_hybrid(
-                    identity, lease.hybrid.slots, lease.end,
-                    state.allocation_generation)
+            self._after_state(identity, state, lease)
             state.cursor = lease.end
             state.prompt_complete = state.cursor >= a.prompt_tokens
             self.forwards += 1
@@ -319,8 +457,7 @@ class QwenAlignLifecycle:
             require(not state.poisoned and state.prompt_complete,
                     'failed/incomplete generation cannot commit')
             # Carry = GDN after C'-1, still in the current (owned) slot.
-            self.backend.capture_final_hybrid(identity, state.latest_hybrid,
-                                              state.cursor, state.allocation_generation)
+            self._final_state(identity, state)
             computed_end = state.cursor
         receipt = self.backend.drain(identity, operation,
                                      state.allocation_generation,

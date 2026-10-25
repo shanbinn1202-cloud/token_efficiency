@@ -1,0 +1,65 @@
+{
+  "time": 1792856779.4093847,
+  "qwen_v16": "previous proof archived, full v18 requalification queued",
+  "gemma_v17": "failed: capacity hook gated off by overlap=false",
+  "gemma_v18": "targeted32K passed including real history and full cleanup; merged source full8K32K tests queued",
+  "formal_release": "held pending exact-source full model matrix",
+  "terminal": {
+    "candidate": "terminal-native-kvm-apt-v42",
+    "all_original_tasks": 89,
+    "approved_reference_exception": "protein-assembly",
+    "formal_submitted": false,
+    "original_assertions_unchanged": true,
+    "gpu_validation": "3448478-terminal-native-kvm-v42",
+    "prior_diagnostic_variants_superseded": true
+  },
+  "active_job": "3448478",
+  "goal": {
+    "qualified_models": [
+      "qwen",
+      "gemma"
+    ],
+    "revision": "v18",
+    "async_permits": 16,
+    "formal_jobs": {
+      "qwen_swebench": "3448597",
+      "qwen_memagent": "3448596",
+      "gemma_swebench": "3448595",
+      "gemma_memagent": "3448594"
+    },
+    "partition": "ghx4",
+    "hours": 10
+  },
+  "active_validation_job": "3448478",
+  "validation_node": "gh040",
+  "session_supervision": "active; no AI background supervisor",
+  "goal_status": "Both models qualified on SWE and MemAgent; four 10-hour ghx4 jobs submitted and pending Priority.",
+  "goal_jobs": [
+    3448597,
+    3448596,
+    3448595,
+    3448594
+  ],
+  "terminal_runtime": "terminal-standard-dev-v46",
+  "terminal_control_review": {
+    "reference_passes": 86,
+    "valid_negative_controls": 32,
+    "approved_reference_exception": [
+      "protein-assembly"
+    ],
+    "pending_user_decision": [
+      "crack-7z-hash",
+      "portfolio-optimization"
+    ],
+    "original_tasks_retained": 89
+  },
+  "terminal_gpu": {
+    "job": 3448478,
+    "state": "allocation_deadline",
+    "completed_flow": "v42 official Terminus2 Qwen Vanilla: completed, formally graded 0, no infrastructure errors",
+    "v46_smoke": "14 requests; incomplete at allocation cutoff; no passed marker",
+    "evidence_review": "Completed GPU flow and scoped CPU regression evidence recorded separately; unreviewed model/proxy changes rejected"
+  },
+  "terminal_formal_released": false,
+  "terminal_status": "121 controls complete: 86 reference passes, 32 valid negative controls, protein exception approved; crack and portfolio exceptions await user decision."
+}

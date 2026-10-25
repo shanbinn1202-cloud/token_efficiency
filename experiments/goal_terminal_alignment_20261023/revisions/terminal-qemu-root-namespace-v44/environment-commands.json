@@ -1,0 +1,24 @@
+{
+  "bullseye": [
+    {
+      "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport re\nfiles=[Path('/etc/apt/sources.list')]+list(Path('/etc/apt/sources.list.d').glob('*.list'))+list(Path('/etc/apt/sources.list.d').glob('*.sources'))\nfor p in files:\n if not p.exists():continue\n text=p.read_text()\n if 'deb.debian.org/debian-security' not in text:continue\n text=text.replace('http://deb.debian.org/debian-security','https://archive.debian.org/debian-security').replace('https://deb.debian.org/debian-security','https://archive.debian.org/debian-security')\n if p.suffix=='.sources':\n  blocks=[]\n  for block in text.split('\\n\\n'):\n   if 'archive.debian.org/debian-security' in block and 'Check-Valid-Until:' not in block:block+='\\nCheck-Valid-Until: no'\n   blocks.append(block)\n  text='\\n\\n'.join(blocks)\n else:\n  lines=[]\n  for line in text.splitlines():\n   if 'archive.debian.org/debian-security' in line and line.startswith('deb ') and '[' not in line:line=line.replace('deb ','deb [check-valid-until=no] ',1)\n   lines.append(line)\n  text='\\n'.join(lines)+'\\n'\n p.write_text(text)\nPY\nrm -rf /var/lib/apt/lists/*\napt-get update",
+      "timeout_sec": 180
+    }
+  ],
+  "mteb": [
+    {
+      "command": "python -m pip install 'transformers==4.51.3' 'sentence-transformers==3.4.1' 'Pillow==11.2.1' && python -c 'import mteb; print(mteb.__version__)'",
+      "timeout_sec": 600
+    }
+  ],
+  "curl_pin": [
+    {
+      "command": "python3 -c 'import multiprocessing as m; lock=m.Lock(); lock.acquire(); lock.release(); print(\"shared semaphore ready\")'",
+      "timeout_sec": 30
+    },
+    {
+      "command": "cat > /etc/apt/sources.list.d/benchmark-original-curl.list <<'EOF'\ndeb [check-valid-until=no] https://snapshot.ubuntu.com/ubuntu/20250801T000000Z/ noble-updates main\nEOF\ncat > /etc/apt/preferences.d/benchmark-original-curl <<'EOF'\nPackage: curl libcurl4t64\nPin: version 8.5.0-2ubuntu10.6\nPin-Priority: 1001\nEOF\napt-get update -qq && apt-cache policy curl libcurl4t64",
+      "timeout_sec": 240
+    }
+  ]
+}

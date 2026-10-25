@@ -1,0 +1,15 @@
+{
+  "reason": "Original Transformers rewriter accepts >40960 default-RoPE positions; vLLM request limit rejects 44275..44322 tokens in valid 32K multiround stress.",
+  "change": "Runtime max_position_embeddings/max_model_len 40960 -> 46080 within unchanged 5GiB pool; default RoPE only. No file/weight/prompt/token truncation or rope scaling change.",
+  "status": "CPU_PASS_GPU_PENDING",
+  "old_sha256": "64c2125cfe6aa4402a570f568ba3602e7db93a61ef4bce57fa63e072da739553",
+  "new_sha256": "5d039a13add8e40b42b4257ee4552d60683aed0d25dd21725bf0d260d7603bfd",
+  "checks": [
+    "unchanged 5GiB pool",
+    "46080-token limit",
+    "scaled-RoPE exclusion",
+    "native RoPE old positions bit-identical",
+    "model config bytes unchanged"
+  ],
+  "time": 1792842477.6764915
+}

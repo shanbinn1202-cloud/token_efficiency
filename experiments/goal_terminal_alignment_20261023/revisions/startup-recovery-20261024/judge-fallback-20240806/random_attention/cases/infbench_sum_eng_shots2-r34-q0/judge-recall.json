@@ -1,0 +1,32 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383943.5420697,
+  "prompt_sha256": "227fa10c0084cc4d7c1a103b86ff65b297d11e75f59ec74abff56960ebf08cf5",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **In the mid-1600s, Yardley Bowen builds a house on fertile land near a spring.**\n   - The summary does not mention Yardley Bowen or the construction of a house in the mid-1600s.\n   - **Not supported.**\n\n2. **In the late 1600s, the neighborhood becomes fashionable, and Raquel Drake covets Bowen's land.**\n   - The summary does not mention the late 1600s, the neighborhood becoming fashionable, or Raquel Drake coveting Bowen's land.\n   - **Not supported.**\n\n3. **Bowen is hanged for witchcraft, and rumors suggest Drake was behind his conviction.**\n   - The summary does not mention Bowen being hanged for witchcraft or any rumors about Drake's involvement.\n   - **Not supported.**\n\n4. **Bowen curses Raquel Drake from the scaffold.**\n   - The summary does not mention Bowen cursing Raquel Drake.\n   - **Not supported.**\n\n5. **Raquel Drake hires Bowen's son to build a new mansion with seven children on the property.**\n   - The summary does not mention Raquel Drake hiring Bowen's son or the construction of a new mansion.\n   - **Not supported.**\n\n6. **At a party to inaugurate the mansion, Raquel Drake is found dead in his study with a bloody beard.**\n   - The summary does not mention a party, the inauguration of a mansion, or Raquel Drake's death.\n   - **Not supported.**\n\n7. **Raquel Drake's will orders that his portrait not be taken down, but the deed for a giant land claim in Maine is missing.**\n   - The summary does not mention Raquel Drake's will, his portrait, or a missing deed for a land claim in Maine.\n   - **Not supported.**\n\n8. **Generations of Drakes search for the missing deed in vain.**\n   - The summary does not mention generations of Drakes searching for a missing deed.\n   - **Not supported.**\n\n9. **The Drake house brings bad luck, culminating in Clara Drake's alleged murder of his uncle.**\n   - The summary mentions Clara being haunted by the death of his uncle and being blamed for it, which aligns with the key point.\n   - **Supported.**\n\n10. **Years later, Liv, an old maid in the Drake mansion, opens a small store to avoid starvation.**\n    - The summary mentions Liv running a small \"cent-shop\" to support herself, which aligns with the key point.\n    - **Supported.**\n\n11. **Liv is ashamed of the store despite comforting words from Uncle Zebulon and Archie, her lodger.**\n    - The summary does not mention Liv being ashamed of the store or receiving comforting words from Uncle Zebulon and Archie.\n    - **Not supported.**\n\n12. **Archie practices daguerreotypy and supports Liv.**\n    - The summary mentions Archie being a daguerreotypist and becoming a close friend to the family, which aligns with the key point.\n    - **Supported.**\n\n13. **Liv receives a visit from Ruthie, a young cousin from an extended branch of the Drake family.**\n    - The summary mentions Ruthie, a young relative, arriving at the mansion, which aligns with the key point.\n    - **Supported.**\n\n14. **Liv worries Ruthie's presence will upset her brother Clara, who is returning from prison.**\n    - The summary does not mention Clara returning from prison or Liv worrying about Ruthie's presence upsetting Clara.\n    - **Not supported.**\n\n15. **Ruthie convinces Liv to let her stay.**\n    - The summary does not mention Ruthie convincing Liv to let her stay.\n    - **Not supported.**\n\n16. **Clara returns from prison, battered and almost imbecilic, but impressed by Ruthie.**\n    - The summary does not mention Clara returning from prison or his condition upon return.\n    - **Not supported.**\n\n17. **Clara is more bothered by their poverty than by Liv tending a store.**\n    - The summary does not mention Clara's feelings about their poverty or Liv tending the store.\n    - **Not supported.**\n\n18. **Judge Drake visits, causing terror in Clara and Liv.**\n    - The summary mentions Judge Etienne Drake visiting and pressuring Clara, which aligns with the key point.\n    - **Supported.**\n\n19. **Judge Drake offers financial support, but Liv blocks his way into the house.**\n    - The summary does not mention Judge Drake offering financial support or Liv blocking his way into the house.\n    - **Not supported.**\n\n20. **Clara begs Judge Drake to go away.**\n    - The summary does not mention Clara begging Judge Drake to go away.\n    - **Not supported.**\n\n21. **Ruthie experiences revulsion when Judge Drake greets her.**\n    - The summary does not mention Ruthie's reaction to Judge Drake's greeting.\n    - **Not supported.**\n\n22. **Archie, the house's lodger, spends time with Ruthie, tending the garden and feeding chickens.**\n    - The summary does not mention Archie spending time with Ruthie in the garden or feeding chickens.\n    - **Not supported.**\n\n23. **Archie explains his radical politics to Ruthie and asks about Clara's past.**\n    - The summary mentions Archie being a \"wild reformer,\" which implies radical politics, but does not mention him explaining this to Ruthie or asking about Clara's past.\n    - **Partially supported.**\n\n24. **Archie tells Ruthie the story of Roseanne Drake and the younger Yardley Bowen.**\n    - The summary does not mention Archie telling Ruthie the story of Roseanne Drake and the younger Yardley Bowen.\n    - **Not supported.**\n\n25. **The younger Yardley Bowen hypnotizes Roseanne to summon spirits, but the spirits prevent finding the deed, leading to Roseanne's death and Bowen's devastation.**\n    - The summary does not mention the younger Yardley Bowen hypnotizing Roseanne or the events leading to her death.\n    - **Not supported.**\n\nTherefore, the supported key points are 9, 10, 12, 13, and 18, so the recall score is 5.\n\nOutput: {\"supported_key_points\": [9, 10, 12, 13, 18], \"recall\": 5}",
+  "parsed": {
+    "supported_key_points": [
+      9,
+      10,
+      12,
+      13,
+      18
+    ],
+    "recall": 5
+  },
+  "usage": {
+    "completion_tokens": 1345,
+    "prompt_tokens": 3777,
+    "total_tokens": 5122,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

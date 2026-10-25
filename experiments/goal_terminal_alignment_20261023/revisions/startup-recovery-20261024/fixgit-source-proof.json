@@ -1,0 +1,13 @@
+{
+  "published_task_image": "alexgshaw/fix-git:20251031",
+  "source_layer_digest": "sha256:39467b0699441e2a8aad92554e7119f6f277847f43bebace4865893335dc28d1",
+  "extracted_prefix": "app/personal-site/.git/",
+  "extracted_files": 32,
+  "original_commits_verified": {
+    "b0d59cd": "b0d59cded7105fea91a4ea0008098295d8895786",
+    "d7d3e4b": "d7d3e4ba9350f634d92d39ace2b471433ee57d50",
+    "c4e38a1": "c4e38a1833fdeaf320d60133c17e2930464c580c"
+  },
+  "native_arm64_environment": true,
+  "no_foreign_binaries_extracted_or_executed": true
+}

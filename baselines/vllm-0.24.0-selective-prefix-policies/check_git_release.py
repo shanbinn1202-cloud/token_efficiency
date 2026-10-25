@@ -24,9 +24,13 @@ def check(repo,ref='HEAD'):
                 if not member.isfile():raise ValueError('nonregular Git release entry: '+member.name)
                 path.parent.mkdir(parents=True,exist_ok=True)
                 path.write_bytes(archive.extractfile(member).read())
-        env=dict(os.environ,SELECTIVE_PREFIX_ARCHIVE_TEST='1',PYTHONDONTWRITEBYTECODE='1')
+        # One OpenMP thread, forced: without it the suite outran its former 840 s
+        # under load. 1800 s (was 1200 s): with the Gemma profile and the Goal
+        # rewriter work merged (integrate-1015) the 1,065 tests ran 1,191 s on the
+        # development machine and the archive run timed out at 1200 s.
+        env=dict(os.environ,SELECTIVE_PREFIX_ARCHIVE_TEST='1',PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS='1')
         run=subprocess.run([sys.executable,'-B','-m','unittest','discover','-s',str(root),'-p','test_*.py'],
-            cwd=root,env=env,capture_output=True,text=True,timeout=840)
+            cwd=root,env=env,capture_output=True,text=True,timeout=1800)
         if run.returncode:raise RuntimeError('Git archive tests failed:\n'+run.stdout+run.stderr)
         return dict(status='GIT_ARCHIVE_TESTS_PASS',commit=commit,tests=run.stderr.strip())
 

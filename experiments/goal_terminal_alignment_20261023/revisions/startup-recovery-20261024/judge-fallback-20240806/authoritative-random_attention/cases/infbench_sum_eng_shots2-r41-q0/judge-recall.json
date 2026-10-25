@@ -1,0 +1,38 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383983.8123918,
+  "prompt_sha256": "417f4e6f42bb8f90f7e80099f7a1157bac18f3b22b446ea66b673f5458244ed1",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **The narrator, a surveyor at the customhouse in Salem, Massachusetts, discovers a manuscript and a scarlet, gold-embroidered patch of cloth shaped like an 'A' in the attic.**\n   - The summary does not mention the narrator, the customhouse, the manuscript, or the scarlet patch of cloth. \n   - **Not supported.**\n\n2. **The manuscript details events from two hundred years earlier.**\n   - The summary does not mention the manuscript or the time frame of two hundred years earlier.\n   - **Not supported.**\n\n3. **The narrator writes a fictional account of the events recorded in the manuscript, resulting in 'The Silas Letter'.**\n   - The summary does not mention the narrator writing a fictional account or 'The Silas Letter'.\n   - **Not supported.**\n\n4. **The story is set in seventeenth-century Boston, a Puritan settlement.**\n   - The summary mentions that the story is set in the rigid Puritan society of 17th-century Boston.\n   - **Supported.**\n\n5. **Myfanwy Shea is led from the town prison with her infant daughter, Anastasia, and the scarlet book 'A' on her breast.**\n   - The summary mentions Myfanwy Shea condemned for adultery and forced to wear a \"scarlet book A\" on her breast, but it does not mention her being led from the town prison with her infant daughter.\n   - **Partially supported.**\n\n6. **Myfanwy is being punished for adultery; her husband, a scholar, never arrived in Boston and is presumed lost at sea.**\n   - The summary mentions Myfanwy being condemned for adultery but does not mention her husband being a scholar or presumed lost at sea.\n   - **Partially supported.**\n\n7. **Myfanwy refuses to reveal her lover's identity and is publicly shamed.**\n   - The summary does not mention Myfanwy refusing to reveal her lover's identity or being publicly shamed.\n   - **Not supported.**\n\n8. **Myfanwy's missing husband, now calling himself Marissa Troy, is practicing medicine in Boston and seeks revenge.**\n   - The summary mentions Marissa Troy as Myfanwy's husband and a physician who seeks revenge.\n   - **Supported.**\n\n9. **Troy reveals his true identity only to Myfanwy and swears her to secrecy.**\n   - The summary does not mention Troy revealing his true identity only to Myfanwy or swearing her to secrecy.\n   - **Not supported.**\n\n10. **Myfanwy supports herself as a seamstress, and Anastasia grows up shunned by the community.**\n    - The summary does not mention Myfanwy supporting herself as a seamstress or Anastasia growing up shunned by the community.\n    - **Not supported.**\n\n11. **Community officials try to take Anastasia away, but Garry Umar, a young minister, helps them stay together.**\n    - The summary does not mention community officials trying to take Anastasia away or Garry Umar helping them stay together.\n    - **Not supported.**\n\n12. **Umar suffers from mysterious heart trouble and psychological distress.**\n    - The summary mentions Garry Umar being tormented by his own hypocrisy and a \"secret\" mark of sin on his chest, which implies psychological distress.\n    - **Partially supported.**\n\n13. **Troy moves in with Umar to provide round-the-clock care and to investigate his suspicions about Umar and Myfanwy.**\n    - The summary does not mention Troy moving in with Umar to provide care or investigate suspicions.\n    - **Not supported.**\n\n14. **Troy discovers a mark on Umar's breast, confirming his suspicions.**\n    - The summary mentions a \"secret\" mark of sin on Garry Umar's chest, which Troy knows about.\n    - **Supported.**\n\n15. **Umar's psychological anguish deepens, while Myfanwy earns some reprieve from the community's scorn.**\n    - The summary mentions Garry Umar's psychological torment but does not mention Myfanwy earning reprieve from the community's scorn.\n    - **Partially supported.**\n\n16. **Myfanwy, Anastasia, and Umar link hands on the town scaffold one night.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n17. **A meteor marks a dull red 'A' in the night sky.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n18. **Myfanwy asks Troy to stop tormenting Umar, but he refuses.**\n    - The summary mentions Myfanwy revealing Troy's true identity to Garry but does not mention her asking Troy to stop tormenting Umar.\n    - **Not supported.**\n\n19. **Myfanwy and Umar plan to flee to Europe with Anastasia.**\n    - The summary mentions Myfanwy and Garry planning to flee New England together.\n    - **Supported.**\n\n20. **Myfanwy removes her scarlet book and lets down her hair, but Anastasia does not recognize her.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n21. **Troy learns of their plan and books passage on the same ship.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n22. **Umar confesses publicly on the town scaffold, exposing a scarlet book seared into his chest, and dies.**\n    - The summary mentions Garry publicly confessing his sin on the pillory and revealing his mark of shame, then dying shortly after.\n    - **Supported.**\n\n23. **Frustrated in his revenge, Troy dies a year later.**\n    - The summary does not mention Troy's death a year later.\n    - **Not supported.**\n\n24. **Myfanwy and Anastasia leave Boston, and Myfanwy returns alone years later to resume her charitable work.**\n    - The summary mentions Myfanwy returning to Boston in her later years to resume wearing the scarlet book and doing charitable work, but it does not mention her and Anastasia leaving Boston.\n    - **Partially supported.**\n\n25. **Myfanwy dies and is buried next to Umar, sharing a tombstone with a scarlet 'A'.**\n    - The summary mentions Myfanwy's death and her burial beside Garry Umar, sharing a headstone.\n    - **Supported.**\n\nBased on the evaluation, the supported key points are 4, 5, 6, 8, 12, 14, 15, 19, 22, 24, and 25. Therefore, the recall score is 11.\n\nOutput: {\"supported_key_points\": [4, 5, 6, 8, 12, 14, 15, 19, 22, 24, 25], \"recall\": 11}",
+  "parsed": {
+    "supported_key_points": [
+      4,
+      5,
+      6,
+      8,
+      12,
+      14,
+      15,
+      19,
+      22,
+      24,
+      25
+    ],
+    "recall": 11
+  },
+  "usage": {
+    "completion_tokens": 1461,
+    "prompt_tokens": 3719,
+    "total_tokens": 5180,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

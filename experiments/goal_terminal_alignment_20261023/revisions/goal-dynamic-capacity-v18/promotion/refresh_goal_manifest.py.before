@@ -1,0 +1,36 @@
+"""Publish an explicitly unqualified integration manifest; never touch upstream."""
+import difflib,hashlib,json
+from pathlib import Path
+R=Path(__file__).resolve().parent;P=R/'selective-prefix';S=Path(json.loads((R/'request.json').read_text())['source'])
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def main():
+    original=json.loads((S/'INSTALL_RELEASE.json').read_text())
+    actual={str(p.relative_to(P/'source-overlay')):sha(p) for p in (P/'source-overlay').rglob('*') if p.is_file() and '__pycache__' not in p.parts and not p.name.endswith('.pyc')}
+    original['source_files']=actual
+    original['payload']={n:h for n,h in actual.items() if original['expected_live'].get(n)!=h}
+    closure=original['source_closure']['files']
+    original['source_closure']['files']={n:actual[n] for n in closure}
+    for n in ['remote_ra_live_v2/async_support.py','remote_ra_live_v2/vllm_rewriter.py']:
+        original['source_closure']['files'][n]=actual[n]
+    original['source_closure']['manifest_sha256']=hashlib.sha256(json.dumps(original['source_closure']['files'],sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    original['release_id']+='-aligned-async-20261023'
+    original['validation']={'fresh_clean_install_gpu_validated':False,'task_accuracy_validated':False,'status':'INTEGRATION_REQUIRES_GPU_VALIDATION'}
+    original['provenance']['integration_revisions']=str(R/'revisions')
+    (P/'INSTALL_RELEASE.json').write_text(json.dumps(original,indent=2)+'\n')
+    (P/'SOURCE_SHA256SUMS.txt').write_text(''.join(f'{h}  source-overlay/{n}\n' for n,h in sorted(actual.items())))
+    protected={}
+    for sub in ['dram_kv','dram_kv_scripts']:
+        for p in (S/'source-overlay'/sub).rglob('*.py'):
+            name=str(p.relative_to(S/'source-overlay'));expected=sha(p)
+            if actual.get(name)!=expected:raise RuntimeError('Algorithm file changed: '+name)
+            protected[name]=expected
+    (R/'algorithm-source-audit.json').write_text(json.dumps({'unchanged':True,'files':protected},indent=2)+'\n')
+    diff=[]
+    for n in actual:
+        p=P/'source-overlay'/n;s=S/'source-overlay'/n
+        if n.endswith('.py') and (not s.exists() or sha(s)!=actual[n]):
+            before=s.read_text() if s.exists() else ''
+            diff+=difflib.unified_diff(before.splitlines(True),p.read_text().splitlines(True),fromfile='original/'+n,tofile='integration/'+n)
+    (R/'revisions/combined-source.patch').write_text(''.join(diff))
+    print('unqualified manifest:',len(actual),'files; unchanged algorithm:',len(protected))
+if __name__=='__main__':main()

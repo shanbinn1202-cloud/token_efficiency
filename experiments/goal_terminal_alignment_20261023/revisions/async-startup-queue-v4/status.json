@@ -1,0 +1,7 @@
+{
+  "status": "APPLIED_GPU_REQUIRED",
+  "reason": "Native async pre-serving queue exists but is empty; original check required None",
+  "safety": "Still reject any in-flight batch, pending requests, IO threads or ownership changes",
+  "algorithm_changes": false,
+  "time": 1792832798.0417273
+}

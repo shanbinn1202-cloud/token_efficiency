@@ -12,15 +12,22 @@ by ``abort``. Failure to prove a drain keeps EngineCore references held.
 Decoupled KV layout (interface I0/I1): FA blocks come from pool 0 (the
 adapter's ``block_pool``) and Mamba blocks from pool 1; each is freed to its
 own pool, Mamba rows are ceil(e/M) long and block ids are keyed (pool, id).
+
+--gdn-device-handoff (``handoff``, a gdn_handoff.HeldSlots): the probe's Mamba
+slot is not freed at the drain. It holds the GDN state at e until phase 2's
+first step copies it on the device; adopt (or abort) moves it to the held
+ledger, which frees it once: at the request's second scheduled allocation
+(EngineRpcBoundary) or after the request's terminal drain (LiveEndpoint).
 """
 from __future__ import annotations
-from copy import deepcopy
 from hashlib import sha256
 import secrets
 
+from remote_ra_native_growing.contract import prompt_digest
+
 from .contract import (PHASE1_COMPACT_VECTORS, PHASE1_FLOAT_VECTORS, Phase1Result, ZERO_DIGEST,
                        block_key, closed_pages, digest, group_pools, hex64, mamba_tokens,
-                       parse_lease, require)
+                       parse_lease, plain_copy, require)
 
 
 def _pages(mapping):
@@ -34,6 +41,12 @@ def _pages(mapping):
 
 
 class Phase1Coordinator:
+    handoff = None      # --gdn-device-handoff: gdn_handoff.HeldSlots (gdn_handoff.attach_engine)
+    in_step = False     # --phase1-in-step: reserve_steps uses run_steps (phase1_step.attach_engine)
+    # --admission-overlap: an admission waits (parked) for the one phase-1 lease
+    # instead of failing on another admission's in-step lease (admission_overlap).
+    overlap = False
+
     def __init__(self, core, proxy, renderer, *, max_tokens=None):
         self.core, self.proxy, self.renderer = core, proxy, renderer
         self.adapter = core._remote_ra_growing_adapter
@@ -49,8 +62,34 @@ class Phase1Coordinator:
         self.records = {}  # request -> lease record until adopt/abort
 
     def pending(self, session):
-        """Whether one session still holds a lease record (not adopted or aborted)."""
-        return any(r['lease']['session'] == session for r in self.records.values())
+        """Whether one session still holds a lease record (not adopted or aborted)
+        or, with the hand-off, a held phase-1 GDN slot."""
+        return (any(r['lease']['session'] == session for r in self.records.values()) or
+                (self.handoff is not None and self.handoff.holds(session)))
+
+    def held(self, request_id):
+        """(FA, Mamba) blocks ``request_id``'s lease holds now, for the capacity ledger
+        (--admission-overlap): its fresh FA run blocks, its probe and Goal blocks until
+        the drain frees them and, with the hand-off, the held probe slot; (0, 0)
+        without a lease. One shared pool: every block counts as FA."""
+        record = self.records.get(request_id)
+        if record is None:
+            return 0, 0
+        blocks = [b for groups in record['fa'].values() for (b,) in groups] + list(record.get('held', ()))
+        if not record['drained']:
+            blocks += list(record['transient'])
+        if self.mamba_pool is self.pool:
+            return len(blocks), 0
+        fa = sum(1 for b in blocks if b.block_id < len(self.pool.blocks) and self.pool.blocks[b.block_id] is b)
+        return fa, len(blocks) - fa
+
+    def lease_turn(self, request_id):
+        """--admission-overlap: one phase-1 lease at a time, process-wide (``run``). While
+        another admission's in-step phase 1 holds it, yield a LeaseWait (the admission
+        parks until no lease is outstanding) instead of failing at ``run``."""
+        from .goal_async import LeaseWait
+        while self.records:
+            yield LeaseWait(self, request_id)
 
     def _free(self, blocks):
         """Free blocks to their own pools, each in reverse order (one shared pool: as is)."""
@@ -80,8 +119,24 @@ class Phase1Coordinator:
         require(len(att) == len(self.adapter.managers), 'native attention manager order mismatch')
         return att, mam, len(kinds)
 
-    def run(self, binding, geo, *, allocation_generation, goal_payload=None):
-        """Lease, run and drain phase 1 for local turn > 0; return its Phase1Result."""
+    def run_steps(self, binding, geo, *, allocation_generation, goal_payload=None):
+        """``run`` as an admission generator (--phase1-in-step, phase1_step): the
+        same lease, then one Phase1Work yielded; its result is the same receipt,
+        from the engine's next step or from the separate pass."""
+        request, query_tokens, s, goal_tokens = self.run(binding, geo, allocation_generation=allocation_generation,
+                                                         goal_payload=goal_payload, _lease_only=True)
+        try:
+            from .phase1_step import Phase1Work
+            result = yield Phase1Work(self, binding.request, request, query_tokens)
+            return self._result(result, binding, geo, s, goal_tokens)
+        finally:
+            self.recover(binding.request)
+
+    def run(self, binding, geo, *, allocation_generation, goal_payload=None, _lease_only=False):
+        """Lease, run and drain phase 1 for local turn > 0; return its Phase1Result.
+
+        ``_lease_only`` (run_steps): return (request, query tokens, session, Goal
+        tokens) once the lease is recorded, before the RPC."""
         adapter = self.adapter
         adapter.authority.owner()
         P = adapter.page_tokens
@@ -195,25 +250,36 @@ class Phase1Coordinator:
             lease['mac'] = adapter.authority.sign(lease)
             # The worker parses the same shape.
             parse_lease(lease, attention_groups=att, layout=self.layout)
+            # prompt_digest: the binding's canonical prompt hash, hashed once per
+            # binding (at render, where it was checked against the frontend's).
             request = dict(request=binding.request, binding=binding.identity,
                 session=binding.session, turn=binding.turn, local_turn=geo.local_turn,
                 generation=binding.generation, allocation_generation=allocation_generation,
                 epoch=binding.epoch, source=adapter.authority.source, model=binding.model,
                 policy=s.policy, tokens=list(binding.tokens[:geo.e]),
-                prompt_digest=digest(list(binding.tokens)), lease=lease, lease_digest=digest(lease))
+                prompt_digest=prompt_digest(binding), lease=lease, lease_digest=digest(lease))
             request['request_digest'] = digest(request)
         except BaseException:
             self._free(allocated)
             raise
-        self.records[binding.request] = dict(binding=binding.identity, lease=deepcopy(lease),
-            request=deepcopy(request), drained=False,
+        # Private copies of what was sent (deepcopy semantics; the prompt list is
+        # copied in one call).
+        self.records[binding.request] = dict(binding=binding.identity, lease=plain_copy(lease),
+            request=plain_copy(request), drained=False,
             fa={p: tuple((fresh_fa[g][k],) for g in att) for k, p in enumerate(fresh)},
             transient=tuple(fresh_mam.values()) + tuple(b for g in att for b in goal_fa.get(g, ()))
                       + tuple(goal_mam.values()))
+        if self.handoff is not None:
+            # The probe slot outlives the drain: phase 2 copies the state at e from it.
+            record = self.records[binding.request]
+            record['held'] = tuple(fresh_mam.values())
+            record['transient'] = record['transient'][len(fresh_mam):]
         # Evidence: the query tokens are the Goal tokens when a Goal forward ran,
         # else the observation T[o:e] for observation_query.
         query_tokens = (goal_tokens if goal_tokens else
                         list(binding.tokens[geo.o:geo.e]) if s.policy == 'observation_query' else None)
+        if _lease_only:
+            return request, query_tokens, s, goal_tokens
         try:
             result = self.proxy.call('phase1', request, query_tokens=query_tokens)
             return self._result(result, binding, geo, s, goal_tokens)
@@ -300,6 +366,8 @@ class Phase1Coordinator:
                 'adoption requires a drained phase-1 lease')
         require(all(b.ref_cnt == 1 for groups in record['fa'].values() for (b,) in groups),
                 'phase-1 run blocks changed owner before adoption')
+        if 'held' in record:
+            self.handoff.hold(binding.request, record['lease']['session'], record['held'])
         del self.records[binding.request]
         return dict(record['fa'])
 
@@ -316,4 +384,7 @@ class Phase1Coordinator:
         blocks = tuple(b for groups in record['fa'].values() for (b,) in groups)
         require(all(b.ref_cnt == 1 for b in blocks), 'phase-1 run blocks changed owner before abort')
         self.pool.free_blocks(reversed(blocks))
+        if 'held' in record:
+            # The worker may still claim it: freed after the request's terminal drain.
+            self.handoff.hold(request_id, record['lease']['session'], record['held'])
         del self.records[request_id]

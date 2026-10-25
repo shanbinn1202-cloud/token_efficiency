@@ -3,8 +3,11 @@
 The upstream server ignores client sampling fields: greedy argmax, 1536 new
 tokens, stop on the action marker or EOS/pad.  Here the route fixes the same
 values before vLLM builds its SamplingParams (EngineCore re-checks them), and
-rebuilds the reply from the generated token IDs, as upstream does.
+rebuilds the reply from the generated token IDs, as upstream does.  The reply
+bound is the server's pinned ``max_tokens``, a server setting the live controller
+holds (1536 unless serve.py --max-tokens 4096 pinned the other choice at startup).
 """
+from remote_ra_live_v2.context_limits import MAX_TOKENS_CHOICES
 from remote_ra_live_v2.mswea_protocol import MAX_TOKENS
 
 
@@ -13,10 +16,11 @@ def require(ok, message):
         raise RuntimeError(message)
 
 
-def prepare_request(request, stop_ids):
+def prepare_request(request, stop_ids, max_tokens=MAX_TOKENS):
     require(not getattr(request, 'tools', None) and getattr(request, 'stream', False) is False
             and getattr(request, 'n', 1) == 1, 'XML protocol requires one nonstreaming reply without tools')
-    fixed = dict(max_tokens=MAX_TOKENS, max_completion_tokens=None, temperature=0.0, top_p=1.0,
+    require(type(max_tokens) is int and max_tokens in MAX_TOKENS_CHOICES, 'pinned reply bound required')
+    fixed = dict(max_tokens=max_tokens, max_completion_tokens=None, temperature=0.0, top_p=1.0,
                  min_tokens=0, repetition_penalty=1.0, presence_penalty=0.0, frequency_penalty=0.0,
                  stop=[], stop_token_ids=sorted(stop_ids), include_stop_str_in_output=False,
                  ignore_eos=False, skip_special_tokens=True, logprobs=False, top_logprobs=None,
@@ -25,7 +29,7 @@ def prepare_request(request, stop_ids):
     for name, value in fixed.items():
         if hasattr(request, name):
             setattr(request, name, value)
-    require(request.max_tokens == MAX_TOKENS and request.temperature == 0.0
+    require(request.max_tokens == max_tokens and request.temperature == 0.0
             and request.return_token_ids is True
             and set(request.stop_token_ids) == set(stop_ids), 'XML protocol generation contract not applied')
     return request

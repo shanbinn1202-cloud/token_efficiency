@@ -1,0 +1,55 @@
+{
+  "runs": [
+    {
+      "model": "qwen",
+      "benchmark": "swebench",
+      "tasks": 500,
+      "budget": 8192,
+      "hours": 10,
+      "partition": "ghx4",
+      "mem_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "status": "awaiting_GPU_and_real_task_validation"
+    },
+    {
+      "model": "qwen",
+      "benchmark": "memagent",
+      "tasks": 200,
+      "budget": 32768,
+      "hours": 10,
+      "partition": "ghx4",
+      "mem_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "status": "awaiting_GPU_and_real_task_validation"
+    },
+    {
+      "model": "gemma",
+      "benchmark": "swebench",
+      "tasks": 500,
+      "budget": 8192,
+      "hours": 10,
+      "partition": "ghx4",
+      "mem_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "status": "awaiting_GPU_and_real_task_validation"
+    },
+    {
+      "model": "gemma",
+      "benchmark": "memagent",
+      "tasks": 200,
+      "budget": 32768,
+      "hours": 10,
+      "partition": "ghx4",
+      "mem_gib": 256,
+      "cpus": 32,
+      "gpus": 1,
+      "status": "awaiting_GPU_and_real_task_validation"
+    }
+  ],
+  "formal_submitted": false,
+  "quality_requires_official_scoring": true,
+  "unfinished": "Retain completed cases and first allocation TPS; resume remaining cases; inspect infrastructure errors before resuming."
+}

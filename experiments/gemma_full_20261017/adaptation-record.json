@@ -1,0 +1,26 @@
+{
+  "model": "google/gemma-4-31B-it",
+  "base": "Current Qwen v0.24 Triton five-method settings",
+  "unchanged": [
+    "selection/eviction policies",
+    "native async FCFS scheduler",
+    "25 GiB KV pool",
+    "262144 context",
+    "16 concurrency",
+    "16384 batch tokens",
+    "seed 42",
+    "4096 output limit",
+    "120 turns",
+    "SWE500 case IDs/ARM64 images/grading",
+    "Memory200 case IDs/full history/chunks/scoring"
+  ],
+  "model_specific": [
+    "native Gemma chat template/parser/EOS",
+    "full-attention 32 Q heads, 4 KV heads, head_dim 512",
+    "local 1024-token window checkpoint/restore; no eviction of native sliding layers",
+    "no GDN layers in Gemma; assert empty GDN map",
+    "recount Gemma context and fixed-prefix tokens"
+  ],
+  "validation": "2-hour ghx4-interactive allocations; five methods per benchmark; 16 concurrent two-turn requests plus three-turn budget crossing and one real task each; exact restored KV equality checks enabled outside timing",
+  "formal": "Ten separate original salloc 24-hour ghx4 clients, persisted via systemd; only after both validations pass"
+}

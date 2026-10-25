@@ -1,0 +1,6 @@
+{
+  "time": 1792854774.614601,
+  "integrated": false,
+  "conclusion": "Original portfolio Oracle fails original 1.2x performance threshold both in native ARM64 KVM and direct native ARM64 Apptainer with one CPU. Numeric correctness passes. Native diagnostic additionally exposed unsupported non-root package ownership during tmux bootstrap, so this candidate must not be promoted. Retain the already tested KVM runtime.",
+  "original_tests_unchanged": true
+}

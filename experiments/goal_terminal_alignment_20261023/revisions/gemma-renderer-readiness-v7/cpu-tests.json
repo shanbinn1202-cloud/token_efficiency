@@ -1,0 +1,10 @@
+{
+  "time": 1792833605.379734,
+  "passed": true,
+  "checks": [
+    "Qwen exact renderer accepted",
+    "Gemma exact renderer accepted",
+    "Arbitrary subclasses rejected",
+    "Unrelated objects rejected"
+  ]
+}

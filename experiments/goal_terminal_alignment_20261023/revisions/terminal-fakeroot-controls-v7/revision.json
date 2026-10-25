@@ -1,0 +1,13 @@
+{
+  "scope": "isolated candidate",
+  "task_ids": [
+    "feal-differential-cryptanalysis",
+    "feal-linear-cryptanalysis",
+    "gcode-to-text",
+    "git-multibranch",
+    "gpt2-codegolf",
+    "headless-terminal"
+  ],
+  "reason": "native ARM64 control for fake-root metadata and shell identity failures; no task, solution, assertions, or task resource changes",
+  "production_runtime_changed": false
+}

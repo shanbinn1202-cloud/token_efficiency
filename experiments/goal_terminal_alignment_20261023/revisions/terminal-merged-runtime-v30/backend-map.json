@@ -1,0 +1,24 @@
+{
+  "kvm": [
+    "configure-git-webserver",
+    "constraints-scheduling",
+    "dna-assembly",
+    "feal-differential-cryptanalysis",
+    "feal-linear-cryptanalysis",
+    "gcode-to-text",
+    "git-multibranch",
+    "gpt2-codegolf",
+    "mailman",
+    "mcmc-sampling-stan",
+    "nginx-request-logging",
+    "polyglot-rust-c",
+    "query-optimize",
+    "raman-fitting",
+    "rstan-to-pystan",
+    "sanitize-git-repo",
+    "sparql-university",
+    "torch-pipeline-parallelism",
+    "torch-tensor-parallelism"
+  ],
+  "default": "ARM64 Apptainer"
+}

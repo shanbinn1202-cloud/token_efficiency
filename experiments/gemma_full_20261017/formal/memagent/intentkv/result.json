@@ -1,0 +1,16 @@
+{
+  "model": "Gemma 4 31B IT",
+  "method": "intentkv",
+  "benchmark": "memagent",
+  "tasks": 200,
+  "score_percent": 55.05329537002241,
+  "output_tokens_per_second": 42.33203545316393,
+  "output_tokens": 489732,
+  "measured_seconds": 11568.82712483406,
+  "job": "3400131",
+  "seed": 42,
+  "kv_pool_GiB": 25,
+  "max_num_batched_tokens": 4096,
+  "budget": 32768,
+  "status": "complete"
+}

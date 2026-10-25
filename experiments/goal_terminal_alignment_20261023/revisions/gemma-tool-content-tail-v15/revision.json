@@ -1,0 +1,13 @@
+{
+  "cause": "Pinned Gemma template emits assistant content and turn-close after tool responses when assistant has both tool_calls and content. Old validator accepted only empty-content tool tail.",
+  "change": "On non-direct tool-close only, compare exact suffix to pinned template rendered from same request.messages. Client prompt/algorithm unchanged; reject altered/missing tail.",
+  "status": "CPU_PASS_GPU_PENDING",
+  "checks": [
+    "official tokenizer/template",
+    "content plus tool calls",
+    "reasoning content",
+    "full transcript header/boundary check",
+    "altered header/missing close/bad boundary rejected"
+  ],
+  "time": 1792842477.6812482
+}

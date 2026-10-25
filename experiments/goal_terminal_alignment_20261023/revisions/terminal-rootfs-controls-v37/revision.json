@@ -1,0 +1,4 @@
+{
+  "formal": false,
+  "change": "Choose existing shell location for ext4 root ownership check. Debian bullseye has /bin/bash, not /usr/bin/bash. Preserve same strict UID0/GID0 check, original image/resources/task/tests."
+}

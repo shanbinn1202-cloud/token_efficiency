@@ -1,0 +1,10 @@
+{
+  "time": 1792832593.6821053,
+  "result": {
+    "stdout": "1\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                                                                                                         \nLISTEN 0      0            0.0.0.0:8080       0.0.0.0:*    users:((\"nginx\",pid=2253,fd=5),(\"nginx\",pid=2252,fd=5),(\"nginx\",pid=2251,fd=5),(\"nginx\",pid=2250,fd=5),(\"nginx\",pid=2249,fd=5))\nLISTEN 0      0            0.0.0.0:19965      0.0.0.0:*    users:((\"python3\",pid=164,fd=6))                                                                                               \nLISTEN 0      0            0.0.0.0:22         0.0.0.0:*    users:((\"sshd\",pid=2236,fd=3))                                                                                                 \nLISTEN 0      0                  *:22               *:*    users:((\"sshd\",pid=2236,fd=4))",
+    "stderr": null,
+    "return_code": 0
+  },
+  "official_sources_unchanged": true,
+  "runtime": "ARM64 KVM prototype; Ubuntu original SIF rootfs; native host ARM64 kernel"
+}

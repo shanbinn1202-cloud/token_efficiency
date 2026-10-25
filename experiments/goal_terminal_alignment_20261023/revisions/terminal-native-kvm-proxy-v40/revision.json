@@ -1,0 +1,9 @@
+{
+  "formal": false,
+  "change": "Route existing instance-local byte-identical public CIFAR HTTP cache through native KVM guest host alias 10.0.2.2. APT stays DIRECT.",
+  "affected_tasks": [
+    "caffe-cifar-10"
+  ],
+  "other_task_execution_unchanged": "Conditional checks absent _public_proxy; all other generated guest scripts remain identical to v39.",
+  "original_task_tests_inputs_unchanged": true
+}

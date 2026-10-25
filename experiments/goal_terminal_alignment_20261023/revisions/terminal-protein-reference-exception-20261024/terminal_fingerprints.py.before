@@ -1,0 +1,14 @@
+"""Bind GPU transport validation to the exact runtime and task-release sources."""
+import hashlib
+from pathlib import Path
+R=Path(__file__).resolve().parent
+T=R.parents[1]
+def identity():
+ files=[R/n for n in ['terminal_fingerprints.py','terminal_proxy.py','run_terminal.py','terminal_stage.py','terminal_timing.py','terminal_formal_job.sh','terminal_validation_job.sh','job_time.py','upstream-pins.json','preflight_cuda_libraries.py']]
+ files+=list((R/'terminal-runtime').glob('*.py'))+[R/'terminal-runtime/bootstrap.sh']
+ files+=list((R/'terminal-images/kvm-runtime').glob('*'))
+ files+=list((R/'terminal').glob('*/*/config.yaml'))
+ files+=[p for tree in ['runtime-tools-bullseye','build-tools'] for p in (R/'terminal-images'/tree).rglob('*') if p.is_file()]
+ for tree in [R/'harbor/src/harbor',R.parent/'gemma_full_20261017/harness',T/'engines/vllm_024/vllm',T/'engines/vllm_024_gemma_20261017/vllm']:
+  files.extend(tree.rglob('*.py'))
+ return {str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(files)) if '__pycache__' not in p.parts}

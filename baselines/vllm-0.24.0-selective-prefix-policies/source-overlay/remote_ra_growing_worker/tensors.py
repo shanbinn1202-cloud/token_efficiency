@@ -8,6 +8,7 @@ in the pinned GPUModelRunner._reshape_kv_cache_tensors implementation.
 from dataclasses import dataclass
 import itertools
 import secrets
+from typing import NamedTuple
 from .contract import require, digest
 
 # payload_digest identity tokens: a per-process random prefix and a sequence number,
@@ -108,12 +109,16 @@ class LayerView:
                       for t, a in zip(self.tensors, self.axes)))
 
 
-def views_from_runner(runner, caches, kernel_sizes):
+def views_from_runner(runner, caches, kernel_sizes, skip_sliding=False):
     """Called after the pinned hybrid reshape, with actual backend shapes.
 
     Infer block dimension from two backend shape calls, not from ambiguous actual
     sizes (e.g. 2 blocks and a K/V dimension both equal 2). Split allocations
     cover all B/K kernel slices; compressed storage remains unsupported.
+
+    ``skip_sliding`` (the window layout, gemma-s1): sliding-window groups get no view;
+    their KV is never captured, restored or zeroed by the runtime, and their tensors
+    are pool 1's own (no storage shared with the full-attention views).
     """
     result = []
     configs={}
@@ -124,6 +129,8 @@ def views_from_runner(runner, caches, kernel_sizes):
     for group in runner._kv_cache_spec_attn_group_iterator():
         gid, spec = group.kv_cache_group_id, group.kv_cache_spec
         if gid == len(kernel_sizes):
+            continue
+        if skip_sliding and type(spec).__name__ == "SlidingWindowSpec":
             continue
         for name in group.layer_names:
             if name in runner.runner_only_attn_layers:
@@ -165,7 +172,9 @@ def views_from_runner(runner, caches, kernel_sizes):
     return tuple(result)
 
 
-_COUNTERS = ("_http_h2d_issued", "_http_h2d_joined", "_http_zero_joins")
+# The fourth counter (device-to-device bytes) moves only with --gdn-device-handoff;
+# request_counters reports it only then, so frames keep their three keys when off.
+_COUNTERS = ("_http_h2d_issued", "_http_h2d_joined", "_http_zero_joins", "_http_d2d_bytes")
 
 
 class attributed:
@@ -202,9 +211,35 @@ class attributed:
 
 
 def request_counters(io, request):
-    """IO counters attributed to one request (zeros before its first scope)."""
+    """IO counters attributed to one request (zeros before its first scope).
+
+    With --gdn-device-handoff (``io.handoff``) also its device-to-device bytes."""
     values = getattr(io, "_http_requests", {}).get(request, (0,) * len(_COUNTERS))
-    return dict(h2d_issued=values[0], h2d_joined=values[1], zero_joins=values[2])
+    out = dict(h2d_issued=values[0], h2d_joined=values[1], zero_joins=values[2])
+    if getattr(io, "handoff", False) is True:
+        out["d2d_bytes"] = values[3]
+    return out
+
+
+class _Pending(NamedTuple):
+    """One issued batch of copies (--gdn-device-handoff): its event on the current
+    stream, what joins with it, the request whose IO scope issued it and the
+    host objects (pinned sources, arena Pages) kept alive until it is joined."""
+    event: object
+    h2d: int
+    zeros: int
+    d2h: int
+    request: object
+    holds: tuple
+
+
+class _DoneEvent:
+    """CPU tensors (CpuTensorTestIO): every copy has completed when it returns."""
+    def query(self):
+        return True
+
+    def synchronize(self):
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -213,6 +248,11 @@ def request_counters(io, request):
 
 def _token():
     return _PAYLOAD_PREFIX + "%016x" % next(_PAYLOAD_SEQUENCE)
+
+
+def identity_token():
+    """A fresh 64-hex identity in payload_digest's sequence (no bytes are read)."""
+    return _token()
 
 
 class SlotTable:
@@ -355,6 +395,10 @@ class TensorIO:
     # capture/restore; legacy keeps the per-block path and has no arena.
     decoupled = False
     arena = None
+    # --gdn-device-handoff (gdn_handoff.attach_worker -> enable_handoff): the issue
+    # variants below record an event instead of draining; off, nothing issues.
+    handoff = False
+    _pending = ()
 
     def __init__(self, views, *, decoupled=False):
         import torch
@@ -432,6 +476,8 @@ class TensorIO:
         if check is not None:check()
         self.torch.cuda.synchronize(self.device)
         if check is not None:check()
+        if self._pending:
+            self.poll_joins()   # --gdn-device-handoff: the device join completed every issued copy
 
     def validate(self, groups, kind):
         # One call names one kind, i.e. one pool (legacy: the shared pool;
@@ -670,6 +716,231 @@ class TensorIO:
         self.drain()
         self._http_h2d_joined = getattr(self, "_http_h2d_issued", 0)
 
+    # ---- --gdn-device-handoff: issue variants, events and lazy joins -------
+    #
+    # Each issue variant validates exactly like its synchronous twin, issues the
+    # same copies on the current stream without a device drain and records one
+    # event after them. H2D bytes count as issued at once and as joined when the
+    # event is joined (poll_joins at every RPC frame boundary, any drain, or
+    # ``join`` before a host read); each join is credited to the request whose
+    # IO scope issued it, never to a scope that is open at the join. Pinned
+    # sources and arena Pages stay referenced until their event is joined.
+    # Device-to-device bytes need no join and count at issue. Nothing here runs
+    # when the flag is off.
+
+    def enable_handoff(self):
+        """Worker startup, once: the issue variants become available."""
+        require(not self.handoff, "GDN device hand-off already enabled")
+        self.handoff, self._pending = True, []
+
+    def _event(self):
+        """An event recorded on the current stream, after the copies just issued."""
+        event = self.torch.cuda.Event()
+        event.record(self.torch.cuda.current_stream(self.device))
+        return event
+
+    def _issued(self, h2d=0, zeros=0, d2h=0, holds=()):
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        event = self._event()
+        scopes = self.__dict__.get("_http_scopes")
+        self._pending.append(_Pending(event, h2d, zeros, d2h, scopes[-1].request if scopes else None,
+                                      tuple(holds)))
+        return event
+
+    def _credit(self, entry):
+        """A joined entry: process counters and the issuing request; open scopes never see it."""
+        self._http_h2d_joined = getattr(self, "_http_h2d_joined", 0) + entry.h2d
+        self._http_zero_joins = getattr(self, "_http_zero_joins", 0) + entry.zeros
+        if entry.d2h:
+            self._http_d2h_joined = getattr(self, "_http_d2h_joined", 0) + entry.d2h
+        if entry.request is not None:
+            own = self.__dict__.setdefault("_http_requests", {}).setdefault(
+                entry.request, [0] * len(_COUNTERS))
+            own[1] += entry.h2d
+            own[2] += entry.zeros
+        for scope in self.__dict__.get("_http_scopes", ()):
+            start = list(scope.start)
+            start[1] += entry.h2d
+            start[2] += entry.zeros
+            scope.start = tuple(start)
+
+    def poll_joins(self):
+        """Join every issued copy, in issue order (RPC frame boundaries and drains)."""
+        if self._pending:
+            self.join(self._pending[-1].event)
+
+    def join(self, event):
+        """Join ``event`` and every copy issued before it (one stream: they complete in order)."""
+        index = next((i for i, entry in enumerate(self._pending) if entry.event is event), None)
+        if index is None:
+            return          # joined before
+        self._pending[index].event.synchronize()
+        done = self._pending[:index + 1]
+        del self._pending[:index + 1]
+        for entry in done:
+            self._credit(entry)
+
+    def joined(self, event):
+        return all(entry.event is not event for entry in self._pending)
+
+    def wait(self, event):
+        """Before a pinned buffer is reused: its last event has completed."""
+        if event is None:
+            return
+        if self.joined(event):
+            event.synchronize()
+        else:
+            self.join(event)
+
+    def check_connector(self):
+        """The drain's connector check without the device join (a step under the hand-off)."""
+        check = getattr(self, "connector_check", None)
+        if check is not None:
+            check()
+
+    def record_step(self):
+        """A step event instead of the step's device drain (joined lazily)."""
+        return self._issued()
+
+    def issue_restore(self, groups, kind, payload):
+        """``restore`` without the drain: non-blocking H2D from the pinned payload."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        relevant = self.validate(groups, kind)
+        require(set(payload) == {v.name for v in relevant}, "incomplete tensor payload")
+        for v in relevant:
+            require(len(payload[v.name]) == len(groups[v.group]), "block payload count mismatch")
+            for bid, pieces in zip(groups[v.group], payload[v.name]):
+                require(len(pieces) == len(v.tensors), "state payload count mismatch")
+                for tensor, axis, piece in zip(v.tensors, v.axes, pieces):
+                    target = self._slice(v,tensor,axis,bid)
+                    require(piece.device.type == "cpu" and piece.dtype == target.dtype
+                            and tuple(piece.shape) == tuple(target.shape), "tensor payload layout mismatch")
+        issued = 0
+        for v in relevant:
+            for bid, pieces in zip(groups[v.group], payload[v.name]):
+                for tensor, axis, piece in zip(v.tensors, v.axes, pieces):
+                    self._slice(v,tensor,axis,bid).copy_(piece, non_blocking=True)
+                    issued += piece.numel()*piece.element_size()
+        self._http_h2d_issued = getattr(self, "_http_h2d_issued", 0) + issued
+        return self._issued(h2d=issued, holds=(payload,))
+
+    def issue_copy(self, source, target, kind):
+        """``copy`` without the drains: device-to-device on the current stream."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        relevant = self.validate(source, kind)
+        require(set(target) == set(source) and self.validate(target, kind) == relevant and
+                all(len(target[g]) == len(ids) for g, ids in source.items()),
+                "copy source/target group coverage differs")
+        require(not {b for ids in source.values() for b in ids} &
+                {b for ids in target.values() for b in ids}, "copy source/target alias")
+        copied = 0
+        for v in relevant:
+            for src, dst in zip(source[v.group], target[v.group]):
+                for tensor, axis in zip(v.tensors, v.axes):
+                    piece = self._slice(v,tensor,axis,src)
+                    self._slice(v,tensor,axis,dst).copy_(piece, non_blocking=True)
+                    copied += piece.numel()*piece.element_size()
+        self._http_d2d_bytes = getattr(self, "_http_d2d_bytes", 0) + copied
+        return self._issued()
+
+    def issue_zero(self, groups, kind):
+        """``zero`` without the drains; it counts as a zero join once joined."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        relevant = self.validate(groups, kind)
+        if self.arena is not None and kind == "attention":
+            index = self._kernel_index(groups, relevant)
+            for v in relevant:
+                for tensor, axis in zip(v.tensors, v.axes):
+                    tensor.index_fill_(axis, index[(v.group, v.ratio)], 0)
+        else:
+            for v in relevant:
+                for bid in groups[v.group]:
+                    for tensor, axis in zip(v.tensors, v.axes):
+                        self._slice(v,tensor,axis,bid).zero_()
+        return self._issued(zeros=1)
+
+    def issue_restore_pages(self, items):
+        """``restore_pages`` without the drain; non-arena payloads go through issue_restore."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        items = list(items)
+        others = [(g, p) for g, p in items if type(p) is not PagePayload]
+        batch = sorted(((g, p) for g, p in items if type(p) is PagePayload), key=lambda x: x[1].slot)
+        require(not batch or self.arena is not None, "Page arena not attached")
+        if batch:
+            groups, relevant = self._page_groups([g for g, _ in batch])
+            require(len({p.slot for _, p in batch}) == len(batch) and
+                    all(p.arena is self.arena and self.arena.slots.holds(p.slot, p.token)
+                        for _, p in batch), "foreign or released Page arena payload")
+        events = [self.issue_restore(g, "attention", p) for g, p in others]
+        if not batch:
+            return events[-1] if events else None
+        issued, holds = 0, [p for _, p in batch]
+        for lo, hi in self._slices(relevant, len(batch)):
+            index = self._kernel_index({g: ids[lo:hi] for g, ids in groups.items()}, relevant)
+            segments = self.arena.slots.segments([p.slot for _, p in batch[lo:hi]])
+            for v in relevant:
+                r = v.ratio
+                for ti, (tensor, axis) in enumerate(zip(v.tensors, v.axes)):
+                    rest = tuple(s for i, s in enumerate(tensor.shape) if i != axis)
+                    staging = self.torch.empty(((hi - lo) * r,) + rest, dtype=tensor.dtype,
+                                               device=self.device)
+                    for chunk, offset, count, indices in segments:
+                        host = self.arena.host(chunk, v.name, ti)
+                        if type(indices) is range:
+                            source = host.narrow(0, indices.start * r, count * r)
+                        else:
+                            source = self.torch.empty((count * r,) + rest, dtype=tensor.dtype,
+                                                      device="cpu", pin_memory=self.arena.pin)
+                            self.torch.index_select(host, 0, self.torch.tensor(
+                                _expand(indices, r), dtype=self.torch.long), out=source)
+                            holds.append(source)        # pinned bounce: alive until joined
+                        staging.narrow(0, offset * r, count * r).copy_(source, non_blocking=True)
+                    tensor.index_copy_(axis, index[(v.group, r)],
+                                       staging.movedim(0, axis) if axis else staging)
+                    issued += staging.numel() * staging.element_size()
+        self._http_h2d_issued = getattr(self, "_http_h2d_issued", 0) + issued
+        return self._issued(h2d=issued, holds=holds)
+
+    def host_buffer(self, groups, kind):
+        """A pinned payload shaped like ``capture(groups, kind)``'s, for issue_capture_into."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        relevant = self.validate(groups, kind)
+        return {v.name: tuple(tuple(self._empty_host(self._slice(v,tensor,axis,bid))
+                                    for tensor, axis in zip(v.tensors, v.axes))
+                              for bid in groups[v.group])
+                for v in relevant}
+
+    def issue_capture_into(self, groups, kind, payload):
+        """``capture`` into a preallocated pinned payload, without the drains.
+
+        The payload gets a fresh identity token (``payload_digest``), so bytes
+        written again are never taken for the state they held before. The
+        caller has waited for the payload's previous event (``wait``)."""
+        require(self.handoff, "issue variants need --gdn-device-handoff")
+        relevant = self.validate(groups, kind)
+        require(set(payload) == {v.name for v in relevant}, "incomplete capture buffer")
+        copied = 0
+        for v in relevant:
+            require(len(payload[v.name]) == len(groups[v.group]), "capture buffer block count")
+            for bid, pieces in zip(groups[v.group], payload[v.name]):
+                require(len(pieces) == len(v.tensors), "capture buffer piece count")
+                for tensor, axis, host in zip(v.tensors, v.axes, pieces):
+                    sample = self._slice(v,tensor,axis,bid)
+                    require(host.device.type == "cpu" and host.dtype == sample.dtype and
+                            tuple(host.shape) == tuple(sample.shape), "capture buffer layout mismatch")
+                    host.copy_(sample, non_blocking=True)
+                    copied += host.numel() * host.element_size()
+        self.retoken(payload)
+        return self._issued(d2h=copied, holds=(payload,))
+
+    @staticmethod
+    def retoken(payload):
+        """A fresh payload_digest identity for a payload whose bytes are rewritten."""
+        first = next((t for name in sorted(payload) for pieces in payload[name] for t in pieces), None)
+        require(first is not None, "empty tensor payload")
+        first._remote_ra_payload_token = _PAYLOAD_PREFIX + "%016x" % next(_PAYLOAD_SEQUENCE)
+        return first._remote_ra_payload_token
+
     @staticmethod
     def payload_digest(payload):
         """Identity token of a captured CPU payload, not a content hash.
@@ -709,7 +980,12 @@ class CpuTensorTestIO(TensorIO):
         self._validate_aliases()
 
     def drain(self):
+        if self._pending:
+            self.poll_joins()   # --gdn-device-handoff: CPU copies completed when issued
         return None
+
+    def _event(self):
+        return _DoneEvent()
 
     def _empty_host(self, sample):
         return self.torch.empty(tuple(sample.shape), dtype=sample.dtype, device="cpu")

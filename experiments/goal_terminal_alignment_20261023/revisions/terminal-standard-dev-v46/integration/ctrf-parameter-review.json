@@ -1,0 +1,8 @@
+{
+  "time": 1792859216.7510815,
+  "before_sha256": "7c8b0a9bca8012f705f0248404457593c1606f1313f6f198bb9af39e232ac81f",
+  "after_sha256": "c740669582337bea44d53060f6c153e45691d0ddb46736ebaff3d05dc9e96703",
+  "reason": "CTRF aggregates parameterized pytest test names; require one aggregate failure plus exactly the three original parameter failures in raw pytest report.",
+  "inference_runtime_changed": false,
+  "original_tests_changed": false
+}

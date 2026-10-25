@@ -1,0 +1,12 @@
+{
+  "time": 1792859146.7948625,
+  "project_id": 18155,
+  "project_used_kib": 10478361316,
+  "project_soft_kib": 10485760000,
+  "project_hard_kib": 11534336000,
+  "project_block_grace": "1 week",
+  "currently_over_soft": false,
+  "personal_quota_limits": false,
+  "deleted_files": [],
+  "interpretation": "df available reflects project soft limit; hard headroom approximately 1 TiB. Monitor shared-project growth and grace, preserve required experiment data."
+}

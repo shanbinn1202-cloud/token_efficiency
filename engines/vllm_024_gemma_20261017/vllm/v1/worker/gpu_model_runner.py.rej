@@ -1,0 +1,30 @@
+diff a/vllm/v1/worker/gpu_model_runner.py b/vllm/v1/worker/gpu_model_runner.py	(rejected hunks)
+@@ -1265,10 +1265,17 @@ class GPUModelRunner(
+         for req_id in scheduler_output.finished_req_ids:
+             self.input_batch.remove_request(req_id)
+ 
++        from vllm.tebench.kv_session import worker_update
++
++        worker_update(self, scheduler_output)
++
+         # Zero GPU memory for freshly allocated cache blocks to prevent
+         # stale NaN/data from corrupting attention or SSM computation.
+         if scheduler_output.new_block_ids_to_zero:
+             self._zero_block_ids(scheduler_output.new_block_ids_to_zero)
++        from vllm.tebench.kv_session import restore_policy_kv
++
++        restore_policy_kv(self, scheduler_output)
+         if scheduler_output.kv_cache_block_copies:
+             copy_kv_cache_blocks_inplace(
+                 self.kv_caches,
+@@ -2486,6 +2508,10 @@ class GPUModelRunner(
+         rswa_prefix_lens = None
+         if self.model_config.rswa_window is not None:
+             rswa_prefix_lens = num_prompt_tokens_cpu
++            from vllm.tebench.native_window import ENABLED, prefix_lengths
++
++            if ENABLED:
++                rswa_prefix_lens = prefix_lengths(self, num_reqs_padded)
+ 
+         replayssm_decode_base_cpu = None
+         if self.cache_config.use_replayssm:

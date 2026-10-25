@@ -9,7 +9,10 @@ from .contract import require
 
 
 def runtime_mode(runner,context):
-    checks=(('mamba_cache_mode',runner.cache_config.mamba_cache_mode=='align'),
+    # The window layout (gemma-s1) has no Mamba layers: no align mode to require.
+    owner=getattr(runner,'_remote_ra_live_v2_allocation_owner',None)
+    window=getattr(getattr(owner,'layout',None),'state',None)=='sliding'
+    checks=(('mamba_cache_mode',window or runner.cache_config.mamba_cache_mode=='align'),
             ('num_spec_tokens',runner.num_spec_tokens==0),
             ('speculative_config',runner.speculative_config is None),
             ('use_async_scheduling',not runner.use_async_scheduling),
@@ -41,21 +44,41 @@ def text_request(runner,rid):
             'MRoPE text-only: stored position shape must be (3,prompt_tokens)')
 
 
-def text_positions(runner,positions,start,count,rid,offset=0):
+def step_positions(runner,positions,end):
+    """--decode-fastpath: the step's position columns [0, end) read from the device once.
+
+    ``text_positions(..., host=...)`` slices these host lists instead of reading
+    each request's columns itself (the same values). None when the tensors do not
+    have ``end`` columns: each request's own read and checks then run as before."""
+    if runner.uses_mrope:
+        if not (positions.ndim==2 and positions.shape[0]==3 and positions.shape[1]>=end):return None
+        return dict(rows=positions[:,:end].tolist(),logical=runner.positions[:end].tolist())
+    if not (positions.ndim==1 and positions.shape[0]>=end):return None
+    return dict(logical=positions[:end].tolist())
+
+
+def text_positions(runner,positions,start,count,rid,offset=0,host=None):
     """Request ``rid``'s columns [offset, offset + count) of the step's flattened positions.
 
     Several requests share one step in persistent-batch order; ``offset`` is the
     request's query_start_loc. Every row must read [start, start + count).
+    ``host`` (--decode-fastpath): ``step_positions`` of the step, sliced instead of
+    reading this request's columns from the device.
     """
     require(type(start) is int and start>=0 and type(count) is int and count>0 and
             type(offset) is int and offset>=0,'invalid logical position interval')
     expected=tuple(range(start,start+count));end=offset+count
+    if host is not None and len(host['logical'])<end:host=None
     if runner.uses_mrope:
         text_request(runner,rid)
         require(positions.ndim==2 and positions.shape[0]==3 and positions.shape[1]>=end,
                 'MRoPE text-only: native positions must be (3,tokens)')
-        rows=tuple(tuple(row) for row in positions[:,offset:end].tolist())
-        logical=tuple(runner.positions[offset:end].tolist())
+        if host is not None:
+            rows=tuple(tuple(row[offset:end]) for row in host['rows'])
+            logical=tuple(host['logical'][offset:end])
+        else:
+            rows=tuple(tuple(row) for row in positions[:,offset:end].tolist())
+            logical=tuple(runner.positions[offset:end].tolist())
         require(all(type(v) is int for row in rows for v in row) and all(row==expected for row in rows),
                 'MRoPE text-only: all three native rows must preserve original logical positions')
         require(all(type(v) is int for v in logical) and logical==expected,
@@ -63,7 +86,8 @@ def text_positions(runner,positions,start,count,rid,offset=0):
         layout='text_mrope_3row_interleaved_11_11_10'
     else:
         require(positions.ndim==1 and positions.shape[0]>=end,'ordinary RoPE positions must be one-dimensional')
-        logical=tuple(positions[offset:end].tolist());rows=(logical,)
+        logical=tuple(host['logical'][offset:end] if host is not None else positions[offset:end].tolist())
+        rows=(logical,)
         require(all(type(v) is int for v in logical) and logical==expected,'logical/RoPE positions changed')
         layout='ordinary_1d'
     return logical,dict(request=rid,start=start,end=start+count,layout=layout,

@@ -1,0 +1,120 @@
+{
+  "id": "899f32ec-1411-45d7-94ff-91618620cf4a",
+  "task_name": "make-doom-for-mips",
+  "trial_name": "make-doom-for-mips-native-control-oracle-1792840095",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/make-doom-for-mips-native-control-oracle-1792840095",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/make-doom-for-mips"
+  },
+  "source": null,
+  "task_checksum": "50b4d042b839e795ac618e7f3b79da4e6c777eb5041d63ce43ac87c981e57c3f",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/make-doom-for-mips",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "make-doom-for-mips-native-control-oracle-1792840095",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "wad_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {},
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T11:08:16.578137Z",
+  "finished_at": "2026-10-24T11:09:10.215206Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T11:08:32.408743Z",
+    "finished_at": "2026-10-24T11:08:44.791561Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T11:08:44.791610Z",
+    "finished_at": "2026-10-24T11:08:44.791659Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T11:08:44.791726Z",
+    "finished_at": "2026-10-24T11:09:02.106283Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T11:09:02.182451Z",
+    "finished_at": "2026-10-24T11:09:09.051251Z"
+  },
+  "step_results": null
+}

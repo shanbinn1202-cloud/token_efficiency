@@ -1,0 +1,1960 @@
+[
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/adaptive-rejection-sampler",
+    "name": "adaptive-rejection-sampler",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/adaptive-rejection-sampler:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/bn-fit-modify",
+    "name": "bn-fit-modify",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/bn-fit-modify:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/break-filter-js-from-html",
+    "name": "break-filter-js-from-html",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/break-filter-js-from-html:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/build-cython-ext",
+    "name": "build-cython-ext",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/build-cython-ext:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/build-pmars",
+    "name": "build-pmars",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/build-pmars:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/build-pov-ray",
+    "name": "build-pov-ray",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/build-pov-ray:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 12000.0
+    },
+    "verifier": {
+      "timeout_sec": 12000.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/caffe-cifar-10",
+    "name": "caffe-cifar-10",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/caffe-cifar-10:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/cancel-async-tasks",
+    "name": "cancel-async-tasks",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/cancel-async-tasks:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/chess-best-move",
+    "name": "chess-best-move",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/chess-best-move:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/circuit-fibsqrt",
+    "name": "circuit-fibsqrt",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/circuit-fibsqrt:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/cobol-modernization",
+    "name": "cobol-modernization",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/cobol-modernization:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/code-from-image",
+    "name": "code-from-image",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/code-from-image:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/compile-compcert",
+    "name": "compile-compcert",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/compile-compcert:20251031",
+      "cpus": 2,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 2400.0
+    },
+    "verifier": {
+      "timeout_sec": 2400.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/configure-git-webserver",
+    "name": "configure-git-webserver",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/configure-git-webserver:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/constraints-scheduling",
+    "name": "constraints-scheduling",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/constraints-scheduling:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/count-dataset-tokens",
+    "name": "count-dataset-tokens",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/count-dataset-tokens:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/crack-7z-hash",
+    "name": "crack-7z-hash",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/crack-7z-hash:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/custom-memory-heap-crash",
+    "name": "custom-memory-heap-crash",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/custom-memory-heap-crash:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/db-wal-recovery",
+    "name": "db-wal-recovery",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/db-wal-recovery:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/distribution-search",
+    "name": "distribution-search",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/distribution-search:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/dna-assembly",
+    "name": "dna-assembly",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/dna-assembly:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/dna-insert",
+    "name": "dna-insert",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/dna-insert:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/extract-elf",
+    "name": "extract-elf",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/extract-elf:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/extract-moves-from-video",
+    "name": "extract-moves-from-video",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/extract-moves-from-video:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/feal-differential-cryptanalysis",
+    "name": "feal-differential-cryptanalysis",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/feal-differential-cryptanalysis:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/feal-linear-cryptanalysis",
+    "name": "feal-linear-cryptanalysis",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/feal-linear-cryptanalysis:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/filter-js-from-html",
+    "name": "filter-js-from-html",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/filter-js-from-html:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/financial-document-processor",
+    "name": "financial-document-processor",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/financial-document-processor:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/fix-code-vulnerability",
+    "name": "fix-code-vulnerability",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/fix-code-vulnerability:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/fix-git",
+    "name": "fix-git",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/fix-git:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/fix-ocaml-gc",
+    "name": "fix-ocaml-gc",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/fix-ocaml-gc:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/gcode-to-text",
+    "name": "gcode-to-text",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/gcode-to-text:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/git-leak-recovery",
+    "name": "git-leak-recovery",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/git-leak-recovery:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/git-multibranch",
+    "name": "git-multibranch",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/git-multibranch:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/gpt2-codegolf",
+    "name": "gpt2-codegolf",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/gpt2-codegolf:20251031",
+      "cpus": 1,
+      "memory_mb": 8192,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/headless-terminal",
+    "name": "headless-terminal",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/headless-terminal:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/hf-model-inference",
+    "name": "hf-model-inference",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/hf-model-inference:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/install-windows-3.11",
+    "name": "install-windows-3.11",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/install-windows-3.11:20251031",
+      "cpus": 2,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/kv-store-grpc",
+    "name": "kv-store-grpc",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/kv-store-grpc:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/large-scale-text-editing",
+    "name": "large-scale-text-editing",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/large-scale-text-editing:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1200.0
+    },
+    "verifier": {
+      "timeout_sec": 1200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/largest-eigenval",
+    "name": "largest-eigenval",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/largest-eigenval:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/llm-inference-batching-scheduler",
+    "name": "llm-inference-batching-scheduler",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/llm-inference-batching-scheduler:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/log-summary-date-ranges",
+    "name": "log-summary-date-ranges",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/log-summary-date-ranges:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/mailman",
+    "name": "mailman",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/mailman:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/make-doom-for-mips",
+    "name": "make-doom-for-mips",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/make-doom-for-mips:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/make-mips-interpreter",
+    "name": "make-mips-interpreter",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/make-mips-interpreter:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/mcmc-sampling-stan",
+    "name": "mcmc-sampling-stan",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/mcmc-sampling-stan:20251031",
+      "cpus": 4,
+      "memory_mb": 8192,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/merge-diff-arc-agi-task",
+    "name": "merge-diff-arc-agi-task",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/merge-diff-arc-agi-task:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/model-extraction-relu-logits",
+    "name": "model-extraction-relu-logits",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/model-extraction-relu-logits:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/modernize-scientific-stack",
+    "name": "modernize-scientific-stack",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/modernize-scientific-stack:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 600.0
+    },
+    "verifier": {
+      "timeout_sec": 600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/mteb-leaderboard",
+    "name": "mteb-leaderboard",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/mteb-leaderboard:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/mteb-retrieve",
+    "name": "mteb-retrieve",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/mteb-retrieve:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/multi-source-data-merger",
+    "name": "multi-source-data-merger",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/multi-source-data-merger:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/nginx-request-logging",
+    "name": "nginx-request-logging",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/nginx-request-logging:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/openssl-selfsigned-cert",
+    "name": "openssl-selfsigned-cert",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/openssl-selfsigned-cert:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/overfull-hbox",
+    "name": "overfull-hbox",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/overfull-hbox:20251031",
+      "cpus": 2,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 750.0
+    },
+    "verifier": {
+      "timeout_sec": 360.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/password-recovery",
+    "name": "password-recovery",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/password-recovery:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/path-tracing",
+    "name": "path-tracing",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/path-tracing:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/path-tracing-reverse",
+    "name": "path-tracing-reverse",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/path-tracing-reverse:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/polyglot-c-py",
+    "name": "polyglot-c-py",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/polyglot-c-py:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/polyglot-rust-c",
+    "name": "polyglot-rust-c",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/polyglot-rust-c:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/portfolio-optimization",
+    "name": "portfolio-optimization",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/portfolio-optimization:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/protein-assembly",
+    "name": "protein-assembly",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/protein-assembly:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/prove-plus-comm",
+    "name": "prove-plus-comm",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/prove-plus-comm:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/pypi-server",
+    "name": "pypi-server",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/pypi-server:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/pytorch-model-cli",
+    "name": "pytorch-model-cli",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/pytorch-model-cli:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/pytorch-model-recovery",
+    "name": "pytorch-model-recovery",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/pytorch-model-recovery:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/qemu-alpine-ssh",
+    "name": "qemu-alpine-ssh",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/qemu-alpine-ssh:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/qemu-startup",
+    "name": "qemu-startup",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/qemu-startup:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/query-optimize",
+    "name": "query-optimize",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/query-optimize:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/raman-fitting",
+    "name": "raman-fitting",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/raman-fitting:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/regex-chess",
+    "name": "regex-chess",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/regex-chess:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/regex-log",
+    "name": "regex-log",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/regex-log:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/reshard-c4-data",
+    "name": "reshard-c4-data",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/reshard-c4-data:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/rstan-to-pystan",
+    "name": "rstan-to-pystan",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/rstan-to-pystan:20251031",
+      "cpus": 4,
+      "memory_mb": 8192,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 1800.0
+    },
+    "verifier": {
+      "timeout_sec": 1800.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/sam-cell-seg",
+    "name": "sam-cell-seg",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/sam-cell-seg:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 7200.0
+    },
+    "verifier": {
+      "timeout_sec": 7200.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/sanitize-git-repo",
+    "name": "sanitize-git-repo",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/sanitize-git-repo:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/schemelike-metacircular-eval",
+    "name": "schemelike-metacircular-eval",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/schemelike-metacircular-eval:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 2400.0
+    },
+    "verifier": {
+      "timeout_sec": 2400.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/sparql-university",
+    "name": "sparql-university",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/sparql-university:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/sqlite-db-truncate",
+    "name": "sqlite-db-truncate",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/sqlite-db-truncate:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/sqlite-with-gcov",
+    "name": "sqlite-with-gcov",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/sqlite-with-gcov:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/torch-pipeline-parallelism",
+    "name": "torch-pipeline-parallelism",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/torch-pipeline-parallelism:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/torch-tensor-parallelism",
+    "name": "torch-tensor-parallelism",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/torch-tensor-parallelism:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/train-fasttext",
+    "name": "train-fasttext",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/train-fasttext:20251031",
+      "cpus": 1,
+      "memory_mb": 4096,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/tune-mjcf",
+    "name": "tune-mjcf",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/tune-mjcf:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/video-processing",
+    "name": "video-processing",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/video-processing:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/vulnerable-secret",
+    "name": "vulnerable-secret",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/vulnerable-secret:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/winning-avg-corewars",
+    "name": "winning-avg-corewars",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/winning-avg-corewars:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 3600.0
+    },
+    "verifier": {
+      "timeout_sec": 3600.0,
+      "env": {}
+    }
+  },
+  {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-bench-2/write-compressor",
+    "name": "write-compressor",
+    "environment": {
+      "build_timeout_sec": 600.0,
+      "docker_image": "alexgshaw/write-compressor:20251031",
+      "cpus": 1,
+      "memory_mb": 2048,
+      "storage_mb": 10240,
+      "gpus": 0,
+      "allow_internet": true,
+      "mcp_servers": [],
+      "env": {}
+    },
+    "agent": {
+      "timeout_sec": 900.0
+    },
+    "verifier": {
+      "timeout_sec": 900.0,
+      "env": {}
+    }
+  }
+]

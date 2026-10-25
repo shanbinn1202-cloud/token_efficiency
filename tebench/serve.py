@@ -21,6 +21,7 @@ def command(c, method=None):
         "--max-num-seqs", str(c["evaluation"]["workers"]), "--seed", str(g["seed"]),
         "--gpu-memory-utilization", str(b["gpu_memory_utilization"]), "--language-model-only", "--generation-config", "vllm",
         "--enable-prefix-caching" if b["prefix_caching"] else "--no-enable-prefix-caching"]
+    cmd += ["--max-num-batched-tokens", str(b["max_num_batched_tokens"])]
     if b["kv_cache_memory_bytes"] is not None:
         cmd += ["--kv-cache-memory-bytes", str(b["kv_cache_memory_bytes"])]
     # Vanilla uses vLLM's native prefix cache, so identical history blocks are

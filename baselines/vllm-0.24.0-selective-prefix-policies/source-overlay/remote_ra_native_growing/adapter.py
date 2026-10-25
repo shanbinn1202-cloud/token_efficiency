@@ -80,6 +80,9 @@ class Session:
     resident: tuple = ()    # sorted(owner.sessions[namespace])
     poisoned: bool = False
     pending: dict | None = None
+    # --release-idle-pages (remote_ra_live_v2.idle_release): the resident Pages released
+    # under pressure, readmitted before the session's next phase 1; () otherwise.
+    evicted: tuple = ()
 
     @property
     def sealed_end(self):
@@ -96,6 +99,12 @@ class EngineCoreAdapter:
     source_test_backend is deliberately explicit and cannot produce live READY.
     No environment variable, HTTP flag, or advertised backend bool enables live.
     """
+    # The window layout's WindowPins (gemma-s1); None in every other layout.
+    window = None
+    # Sessions open at once: MAX_SESSIONS; a chat-text pool's K when larger
+    # (LiveSessionAuthority sets it at startup, sessions.MAX_CHAT_TEXT_RUNNING).
+    max_open = MAX_SESSIONS
+
     def __init__(self, authority, kv_manager, *, page_tokens, full_attention_managers,
                  source_test_backend=None, layout=None):
         require(type(authority) is Authority, "native private authority required")
@@ -112,7 +121,9 @@ class EngineCoreAdapter:
         self.pools = (kv_manager.block_pool,)
         self.mamba_pool, self.mamba_tokens = kv_manager.block_pool, page_tokens
         self.group_block_pools = None   # decoupled: the block pool of each KV group
-        if layout is not None:
+        if getattr(layout, "state", None) == "sliding":
+            self._check_window_layout(layout)
+        elif layout is not None:
             self._check_layout(layout)
         # One catalog entry per Page of the longest request: cdiv(max_model_len, P).
         limit = getattr(kv_manager, "max_model_len", None)
@@ -121,6 +132,8 @@ class EngineCoreAdapter:
         self.backend = source_test_backend or CompiledWorkerBoundary()
         self.source_test_only = source_test_backend is not None
         self.owner = PrivateBlockOwner(kv_manager.block_pool)
+        if self.window is not None:
+            self.owner.window = self.window     # close_drained frees the session's window
         self.sessions, self.requests = {}, {}
         self._unsubmitted_cancelled = {}
 
@@ -159,6 +172,36 @@ class EngineCoreAdapter:
         self.pools, self.mamba_pool, self.mamba_tokens = pools, pools[1], M
         self.group_block_pools = tuple(pools[p] for p in expected)
 
+    def _check_window_layout(self, layout):
+        """The window layout (gemma-s1): full-attention Pages in pool 0, the sliding-window
+        groups (block P) in pool 1 of 1 + groups x (slots x window + transient) blocks;
+        pool 1's sliding windows are pinned by WindowPins."""
+        from remote_ra_live_v2.contract import group_pools
+        from remote_ra_live_v2.kv_layout import window_pool_blocks
+        from .window_pins import WindowPins
+        kv, P = self.kv_manager, self.page_tokens
+        config = kv.kv_cache_config
+        kinds = tuple(type(g.kv_cache_spec).__name__ for g in config.kv_cache_groups)
+        managers = tuple(kv.coordinator.single_type_managers)
+        att = tuple(i for i, kind in enumerate(kinds) if kind == "FullAttentionSpec")
+        win = tuple(i for i, kind in enumerate(kinds) if kind == "SlidingWindowSpec")
+        require(layout.page_tokens == P and set(kinds) == {"FullAttentionSpec", "SlidingWindowSpec"} and
+                len(managers) == len(kinds) and tuple(managers[g] for g in att) == self.managers and
+                all(m.block_size == P for m in managers),
+                "KV manager groups differ from the window layout (full-attention and sliding blocks == P)")
+        pools, expected = tuple(getattr(kv, "block_pools", ())), group_pools(att, len(kinds), layout)
+        group_pool = getattr(config, "group_pool", None)
+        require(group_pool is not None and tuple(group_pool) == expected and len(pools) == 2 and
+                pools[0] is kv.block_pool and
+                all(kv.pool_of_group(g) is pools[expected[g]] and m.block_pool is pools[expected[g]]
+                    for g, m in enumerate(managers)) and
+                tuple(config.num_blocks_by_pool)[1] == window_pool_blocks(layout, len(win)),
+                "window layout requires full-attention pool 0 and the reserved sliding-window pool 1")
+        self.pools, self.mamba_pool, self.mamba_tokens = pools, pools[1], P
+        self.group_block_pools = tuple(pools[p] for p in expected)
+        self.window = WindowPins(pools[1], tuple(managers[g] for g in win), win,
+                                 window_tokens=layout.window_tokens, page_tokens=P)
+
     def capabilities(self):
         return {"protocol": 2, "loaded_source_sha256": self.authority.source,
                 "epoch": self.authority.epoch, "native_ready": False,
@@ -175,7 +218,7 @@ class EngineCoreAdapter:
 
     def open(self, session_id, policy, model, renderer):
         self.authority.owner()
-        require(session_id not in self.sessions and len(self.sessions) < MAX_SESSIONS,
+        require(session_id not in self.sessions and len(self.sessions) < self.max_open,
                 "session collision/limit")
         require(policy in {"full", "random50", "goal_query", "observation_query", "random_fill"},
                 "unknown shared-budget policy")
@@ -282,6 +325,10 @@ class EngineCoreAdapter:
             lease = self.owner.begin(ns, binding.request, geo, tuple(selected),
                                      len(self.managers), handover)
             self.owner.install_tables(binding.request, self.managers)
+            if self.window is not None and geo.local_turn:
+                # The window layout (gemma-s1): phase 2's sliding rows start with the
+                # window phase 1 ended in, behind its null head.
+                self.window.install(binding.request)
             pending["phase"] = "installed"
             # Once the worker may have seen a command, every exception requires
             # authenticated cancellation/drain, even before staging returns.
@@ -297,6 +344,8 @@ class EngineCoreAdapter:
             try:
                 if not adopted:
                     self.owner.discard_handover(handover)
+                if self.window is not None and (pending is None or not pending["worker_started"]):
+                    self.window.discard(binding.request)
                 if pending is not None and not pending["worker_started"]:
                     self._cleanup_unsubmitted(binding, s)
             except BaseException as error:
@@ -409,6 +458,10 @@ class EngineCoreAdapter:
                     "phase-2 vectors must cover exactly the Pages closed in [S2, C')")
             self.owner.commit(rid, keep_pages=resident,
                               tail=(Q2 // P, Q2, C2) if tail is not None else None)
+            if self.window is not None:
+                # The window layout (gemma-s1): pin the window after C' before vLLM
+                # frees the request's blocks.
+                self.window.pin_after(s.namespace, rid, C2)
             s.catalog.update(new)
             s.sealed_tokens, s.computed_tokens, s.next_token = full[:Q2], full[:C2], full[C2]
             s.boundary, s.tail, s.resident = carry["digest"], tail, resident
@@ -475,6 +528,8 @@ class EngineCoreAdapter:
         s = self.requests[request.request_id]
         try:
             self.owner.after_native_free(request.request_id)
+            if self.window is not None:
+                self.window.after_free(request.request_id, s.namespace)
         except BaseException:
             s.poisoned = True
             raise

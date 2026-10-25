@@ -1,0 +1,39 @@
+{
+  "time": 1792859176.8375993,
+  "authorized_by": "user",
+  "decision": "保留全部 89 题原样评测，分别注明这两题问题（推荐）",
+  "task": "crack-7z-hash",
+  "reason": "Original reference timed out twice at original one CPU and 900 seconds; limits and tests unchanged.",
+  "formal_task_count": 89,
+  "reference_failure_is_not_reference_pass": true,
+  "model_results_scored_by_original_tests": true,
+  "original_task_files_sha256": {
+    "instruction.md": "f5f89400c549eefb2c245caa7770356737b7a12098e6879787e846d9cb5eb822",
+    "task.toml": "431655d1681325e7a768d64f1425fdc3efa7a345cd69d265bcf1bd8811210906",
+    "solution/solve.sh": "2640463e6e14658426f3ea629e0702688e00553eb8006cf31ec3b9cff75c4b19",
+    "environment/Dockerfile": "387c60f7a21d4548c12e1af2453aa8bdd12c45bbe576666c3e48777c5b7c3ecb",
+    "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+    "tests/test_outputs.py": "f18d7565f690727484ac43d012d36a4f386236419501e4a4277134a8e8fcfcc9",
+    "environment/task-deps/secrets.7z": "a2e13fcbb4c2c8e92b1bf9d78ec91376705d1f5631d5bd4de64f82aa0553b773"
+  },
+  "reference_controls": [
+    {
+      "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/crack-7z-hash-oracle.json",
+      "result_sha256": "4797d06217940ec8d271175b2c200be8b808da14248ade05edf5ad57abcbefff",
+      "reward": {
+        "reward": 0.0
+      },
+      "exception_type": "AgentTimeoutError",
+      "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/crack-7z-hash-native-kvm-apt-v42-oracle-1792852584334962509"
+    },
+    {
+      "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/crack-7z-hash-oracle.json",
+      "result_sha256": "eed6d74c380838905c1d877e347b2c31bb356c6fe543749b727d1e9440a364a3",
+      "reward": {
+        "reward": 0.0
+      },
+      "exception_type": "AgentTimeoutError",
+      "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/crack-7z-hash-standard-dev-v46-oracle-1792853786350480026"
+    }
+  ]
+}

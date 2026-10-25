@@ -1,0 +1,12 @@
+{
+  "time": 1792843867.8491313,
+  "reason": "Frontend full-message check passes, EngineCore receives normalized _plain messages without tool call IDs/arguments and could not re-render them.",
+  "change": "Render only pinned-template post-tool suffix from the same assistant content using a dummy tool pair. Both frontend/full and EngineCore/plain representations produce the same exact suffix. No prompt/input tokens/Goal fields or KV selector changes.",
+  "status": "CPU_PASS_GPU_PENDING",
+  "checks": [
+    "full messages and _plain serialized source round trip",
+    "full KvTranscript.check on frontend and engine representations",
+    "content+calls and reasoning content",
+    "changed claimed content, malformed header, missing tool close, wrong boundary rejected"
+  ]
+}

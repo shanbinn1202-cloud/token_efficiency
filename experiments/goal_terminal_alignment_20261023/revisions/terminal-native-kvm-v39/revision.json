@@ -1,0 +1,10 @@
+{
+  "formal": false,
+  "reason": "A fourth previously-passing Apptainer task (install-windows-3.11) now reports curl not found immediately after successful dpkg install, alongside intermittent simulated file types. Per-task fallback does not address general execution fidelity. Validate native ARM64 KVM for all original task filesystems.",
+  "inference_unchanged": true,
+  "original_arm64_sif_unchanged": true,
+  "resources": "Original task CPU/memory/disk limits. No x86 substitute. Native KVM hardware acceleration required. Apptainer still launches sealed ARM64 QEMU tools.",
+  "all_89_reference_checks_required": true,
+  "approved_exception": "protein-assembly remains original and explicitly annotated",
+  "prior_failures_retained": true
+}

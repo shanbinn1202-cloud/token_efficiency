@@ -1,0 +1,12 @@
+{
+  "time": 1792833711.5971,
+  "changes": [
+    "unsquashfs umask=0 preserves image mode bits instead of stripping them with inherited077",
+    "configure-git-webserver uses native ARM64 KVM with original SIF disk root and original1CPU/2048MiB/10240MiB resources",
+    "other88tasks remainARM64Apptainer",
+    "KVM assets and runtime identities are now covered by qualification"
+  ],
+  "oracle_evidence": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/startup-recovery-20261024/kvm-prototype/harbor-control-result.json",
+  "official_tasks_changed": false,
+  "model_algorithm_changed": false
+}

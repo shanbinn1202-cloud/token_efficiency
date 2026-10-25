@@ -1,0 +1,27 @@
+{
+  "time": 1792849344.7469494,
+  "status": "merged_working_source_requires_full_GPU_requalification",
+  "targeted_GPU_proof": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/validation/3448478-goal-capacity-v18-retry1/gemma/targeted-transport-passed.json",
+  "changes": {
+    "remote_ra_live_v2/private_endpoint.py": {
+      "before": "1ce8dc0eaabf73f37209133beeffc35eacae9c25cb246fe896ecacbd2fe3e119",
+      "after": "977e1f90b3e72bd89fdf17bae56c58d74662f2fc03ff1148fb6656192c84e0f5"
+    },
+    "remote_ra_live_v2/allocation_owner.py": {
+      "before": "ea2f936a005c148ad0c90ed784964187128845701e1b4c3a0b7fd0928d7cd348",
+      "after": "ec8873cde9a783efb379fd3ef04e9cc0bcd60cae628408f0af5ccda22ee611c7"
+    },
+    "remote_ra_live_v2/window_phase1.py": {
+      "before": "a280a14a7bb0e4dca67a904d93ebfb7c5c0418c98db813ce0e5bfc35dc7cae62",
+      "after": "b6ba18d6dc602c7f4a4346ad8ac1f8a098b2d63e5a7f4e30c6dffb169e09b23f"
+    },
+    "remote_ra_live_v2/phase1_capacity.py": {
+      "before": null,
+      "after": "1b4b6c1dcfa6b7aea45aa5ad20ac19be1c51491faa26198aafcec80ace01d5c5"
+    }
+  },
+  "launcher": "existing native admission overlap16 enabled for both models",
+  "resources_and_selector_algorithm_unchanged": true,
+  "validation_environment": "copied once per fresh allocation; reuse only within same job",
+  "formal_release": "still held pending exact-source full model matrix"
+}

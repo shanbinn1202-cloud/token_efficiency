@@ -1,0 +1,14 @@
+{
+  "swe_original_manifest_sha256": "7c2b78c97c3ac34d221c01a4a7490c892c80a3e50c0f9366f8a45dbdef244e2c",
+  "mem_original_manifest_sha256": "713c4374d351f3bf6122e9f598b9940a3defccd841dcde9a8a74b3ca80c97aa4",
+  "formal_per_model": {
+    "swebench": 500,
+    "memagent": 200
+  },
+  "validation_per_model": {
+    "swebench": 1,
+    "memagent": 1
+  },
+  "selection": "unchanged fixed official cohorts",
+  "formal_ready": false
+}

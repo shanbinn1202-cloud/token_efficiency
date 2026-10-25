@@ -1,0 +1,11 @@
+{
+  "time": 1792829625.6498752,
+  "job_pending": "3447727",
+  "changes": [
+    "Tag reviewed follow-up validations within the same real Slurm job; keep separate output and release directories",
+    "Use fresh Terminal validation predictions for every attempt, preventing reuse of old completed smoke tests",
+    "Freeze Terminal formal throughput only for first allocation; require review if missing before continuation"
+  ],
+  "formal_algorithm_and_resource_config_changed": false,
+  "old_validation_and_experiment_evidence_preserved": true
+}

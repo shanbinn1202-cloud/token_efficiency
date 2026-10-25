@@ -20,7 +20,13 @@ from tokenizer_semantics import TokenizerSemanticGuard
 SOURCE_SCHEMA = "remote-ra-normalized-qwen-source-v1"
 PLAIN_GOAL_SCHEMA = "remote-ra-plain-goal-probe-v1"
 XML_SOURCE_SCHEMA = "remote-ra-mswea-xml-source-v1"
+KV_SOURCE_SCHEMA = "remote-ra-kv-session-source-v1"   # remote_ra_live_v2.kv_session_protocol.SOURCE_SCHEMA
+CHAT_SOURCE_SCHEMA = "remote-ra-chat-text-source-v1"  # remote_ra_live_v2.chat_text_protocol.SOURCE_SCHEMA
 MAX_SOURCE_BYTES = 1024 * 1024
+# Prompt ids of one render. Both caps are the 65536/131072-token values; a
+# 262144-token server sets 2 MiB and 262144 once at startup
+# (remote_ra_live_v2.context_limits.pin_request_caps).
+MAX_PROMPT_TOKENS = 131072
 TOKEN_OPTIONS = dict(truncate_prompt_tokens=None, pad_prompt_tokens=None,
                      truncation_side=None, do_lower_case=False, add_special_tokens=False)
 
@@ -96,6 +102,22 @@ def validate_xml_source(source):
             and all(type(m) is dict and set(m) == {"role", "content"}
                     and m["role"] in {"system", "user", "assistant"} and type(m["content"]) is str
                     for m in messages), "XML protocol messages must be role/content text")
+    return source
+
+
+def validate_chat_source(source):
+    """chat-text source: role/content text messages only (an optional system message,
+    then user and assistant, ending with a user); tokens come from the transcript."""
+    require(type(source) is dict and set(source) == {"schema", "messages"}
+            and source["schema"] == CHAT_SOURCE_SCHEMA, "exact chat-text source schema required")
+    source = _snapshot(source)
+    messages = source["messages"]
+    require(type(messages) is list and 1 <= len(messages) <= 4096
+            and all(type(m) is dict and set(m) == {"role", "content"}
+                    and m["role"] in {"system", "user", "assistant"} and type(m["content"]) is str
+                    for m in messages), "chat-text messages must be role/content text")
+    from remote_ra_live_v2.chat_text_protocol import validate_messages
+    validate_messages(messages)
     return source
 
 
@@ -236,15 +258,17 @@ class EngineSourceRenderer:
         """Upstream ``_encode``: no added special tokens; special-token text is parsed."""
         require(type(text) is str and len(text.encode("utf-8")) <= MAX_SOURCE_BYTES,
                 "bounded protocol text required")
-        # The tokenizer's semantics were checked on the pinned corpus at startup. Per message
-        # only the two complete encodings must agree: the corpus-style comparison (four
-        # tokenizers, encode/decode round trips) took ~120 ms per 6.5K-token observation,
-        # once in the frontend and once in the engine (v10d spans).
+        # The tokenizer's semantics are checked on the pinned corpus once, at startup. Per
+        # message the server encodes with the loaded HF tokenizer only, the one stock vLLM
+        # uses. A second encoding with the configured tokenizer.json reference is not a
+        # check of this request: Transformers 5.13 and that reference split some text
+        # differently (Devanagari vowel signs; a SWE-bench Django test file holds
+        # 'tld.उदाहरण.परीक्षा'),
+        # and refusing those requests failed an agent that stock vLLM would have served
+        # (job 3354504, 2026-10-11).
         tokens = self.tokenizer.encode(text, add_special_tokens=False)
-        raw = self.producer._tokenizer.encode(text, add_special_tokens=False)
-        require(type(tokens) is list and all(type(t) is int and t >= 0 for t in tokens)
-                and raw.ids == tokens and not raw.overflowing,
-                "loaded HF tokenization differs from pinned complete encoding")
+        require(type(tokens) is list and all(type(t) is int and t >= 0 for t in tokens),
+                "invalid loaded tokenizer output")
         return tokens
 
     def render_initial(self, messages):
@@ -274,6 +298,47 @@ class EngineSourceRenderer:
         return Transcript(encode=self.encode_exact, render_initial=self.render_initial,
                           decode=self.decode, stop_ids=self.stop_ids(), allow_rebuild=True)
 
+    def kv_transcripts(self, record):
+        """kv-session protocol: a factory of session transcripts. Startup only: the
+        pinned template's generation header is the record's (the client derives it the
+        same way), and its ids, <|im_start|>'s id and the vocabulary come from the
+        loaded tokenizer; replies decode with special tokens, as the client reads them."""
+        from remote_ra_live_v2 import kv_session_protocol as kv
+        self._check_identity()
+        text = kv.check_header(self._render_template, self.template, record["thinking"])
+        require(text == record["header_text"], "kv-session header differs from the startup record")
+        header = tuple(self.encode_exact(text))
+        start = self.tokenizer.convert_tokens_to_ids(kv.OBSERVATION_START)
+        require(type(start) is int and self.encode_exact(kv.OBSERVATION_START) == [start],
+                "<|im_start|> must be one loaded token")
+        vocab, stop_ids, tokenizer = len(self.tokenizer), self.stop_ids(), self.tokenizer
+
+        def decode(token_ids):
+            return tokenizer.decode(list(token_ids), skip_special_tokens=False)
+        return lambda: kv.KvTranscript(header=header, im_start=start, vocab=vocab, decode=decode,
+                                       stop_ids=stop_ids)
+
+    def render_chat(self, messages):
+        """chat-text protocol: role/content messages through the pinned template with
+        enable_thinking=False and preserve_thinking=True, no generation prompt."""
+        from remote_ra_live_v2.chat_text_protocol import TEMPLATE_KWARGS, validate_messages
+        text = self._render_template(self.template, validate_messages(messages),
+                                     dict(TEMPLATE_KWARGS, add_generation_prompt=False))
+        require(type(text) is str and text, "real template returned no text")
+        return self.encode_exact(text)
+
+    def chat_transcripts(self, record):
+        """chat-text protocol: a factory of session transcripts. Startup only: the pinned
+        template renders user messages, history replies and the generation header as the
+        transcript does (chat_text_protocol.check_template)."""
+        from remote_ra_live_v2 import chat_text_protocol as chat
+        self._check_identity()
+        text = chat.check_template(self._render_template, self.template)
+        require(text == record["header_text"], "chat-text header differs from the startup record")
+        stop_ids = self.stop_ids()
+        return lambda: chat.ChatTextTranscript(encode=self.encode_exact, render_chat=self.render_chat,
+                                               decode=self.decode, stop_ids=stop_ids)
+
     def __call__(self, source):
         self._check_identity()
         if type(source) is dict and source.get("schema") == PLAIN_GOAL_SCHEMA:
@@ -286,7 +351,7 @@ class EngineSourceRenderer:
             validate_identity_normalization(text=text, normalizer=self.tokenizer.backend_tokenizer.normalizer)
             tokens = self.tokenizer.encode(text, add_special_tokens=False)
             raw = self.producer._tokenizer.encode(text, add_special_tokens=False)
-            require(type(tokens) is list and tokens and len(tokens) <= 131072
+            require(type(tokens) is list and tokens and len(tokens) <= MAX_PROMPT_TOKENS
                     and all(type(t) is int and t >= 0 for t in tokens)
                     and raw.ids == tokens and not raw.overflowing,
                     "plain Goal tokenization differs from pinned complete encoding")
@@ -300,7 +365,7 @@ class EngineSourceRenderer:
         validate_identity_normalization(text=text, normalizer=self.tokenizer.backend_tokenizer.normalizer)
         self._semantic.check_text(text)
         tokens = self.tokenizer.encode(text, add_special_tokens=False)
-        require(type(tokens) is list and tokens and len(tokens) <= 131072
+        require(type(tokens) is list and tokens and len(tokens) <= MAX_PROMPT_TOKENS
                 and all(type(t) is int and t >= 0 for t in tokens), "invalid loaded tokenizer output")
         raw = self.producer._tokenizer.encode(text, add_special_tokens=False)
         require(raw.ids == tokens and not raw.overflowing,
@@ -320,6 +385,44 @@ class EngineSourceRenderer:
                        generation, model, renderer, native_prefix, transcript=None):
         # This method runs on the actual engine-owned renderer with its existing
         # loaded-source, tokenizer and Qwen template identity checks.
+        if type(source) is dict and source.get("schema") == KV_SOURCE_SCHEMA:
+            # kv-session protocol: the engine's own token stream plus the source's
+            # tail re-derives the prompt (no template); no rebuild exists.
+            from remote_ra_live_v2 import kv_session_protocol as kv
+            require(kv.kv(transcript) and transcript.turn == local_turn,
+                    "engine kv-session transcript missing or at another local turn")
+            request = kv.from_source(kv.validate_source(source))
+            self._check_identity()
+            tokens, stable_end, observation = transcript.render(request)
+            try:
+                self._check_identity()
+                return authority.render(native_request, session=session, turn=turn,
+                    local_turn=local_turn, rebuild=False, generation=generation, model=model,
+                    renderer=renderer, tokens=tokens, stable_prefix_tokens=tokens[:stable_end],
+                    observation_span=observation, native_prefix=native_prefix)
+            except BaseException:
+                transcript.abandon()
+                raise
+        if type(source) is dict and source.get("schema") == CHAT_SOURCE_SCHEMA:
+            # chat-text protocol: the engine's own transcript re-derives the prompt
+            # (template for a fresh or rebuilt session, exact reply ids otherwise).
+            from remote_ra_live_v2.chat_text_protocol import chat
+            require(chat(transcript) and transcript.turn == local_turn,
+                    "engine chat-text transcript missing or at another local turn")
+            messages = validate_chat_source(source)["messages"]
+            self._check_identity()
+            tokens, stable_end, observation = transcript.render(messages)
+            try:
+                rebuild = transcript.pending["rebuild"]
+                self._check_identity()
+                return authority.render(native_request, session=session, turn=turn,
+                    local_turn=0 if rebuild else local_turn, rebuild=rebuild,
+                    generation=generation, model=model, renderer=renderer, tokens=tokens,
+                    stable_prefix_tokens=tokens[:stable_end], observation_span=observation,
+                    native_prefix=native_prefix)
+            except BaseException:
+                transcript.abandon()
+                raise
         if type(source) is dict and source.get("schema") == XML_SOURCE_SCHEMA:
             # XML protocol: the engine's own transcript (generated token IDs it
             # produced) re-derives the prompt; the frontend tokens must match.

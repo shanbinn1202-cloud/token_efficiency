@@ -308,8 +308,12 @@ class Scheduler(SchedulerInterface):
                 for group in kv_cache_config.kv_cache_groups
                 if isinstance(group.kv_cache_spec, MambaSpec)
             }
-            assert len(mamba_block_sizes) == 1, mamba_block_sizes
-            self._remote_ra_mamba_align_tokens = mamba_block_sizes.pop()
+            # The window layout of a sliding-window model (gemma-s1) has no
+            # Mamba group (its planner refuses one): nothing to align. The
+            # Mamba layouts always have Mamba groups in pool 1.
+            if mamba_block_sizes:
+                assert len(mamba_block_sizes) == 1, mamba_block_sizes
+                self._remote_ra_mamba_align_tokens = mamba_block_sizes.pop()
             if self.defer_block_free:
                 # Deferred frees hold blocks of several pools in one list.
                 raise ValueError(

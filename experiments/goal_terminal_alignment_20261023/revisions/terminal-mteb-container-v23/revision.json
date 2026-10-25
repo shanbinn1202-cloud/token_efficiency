@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "mteb-leaderboard"
+  ],
+  "change": "Same compatible dependencies as v21 in original native ARM64 Apptainer backend. No KVM needed: original failure was import only. KVM standalone root disk caused extra total-root storage constraint absent from official Harbor Docker backend. Keep original task storage metadata, CPU/memory, solution/tests.",
+  "evidence": "Harbor environments/docker get_capabilities advertises CPU/memory only, no storage limit; unneeded KVM variant clone failed ENOSPC.",
+  "status": "candidate unpromoted"
+}

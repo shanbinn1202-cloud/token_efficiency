@@ -1,0 +1,10 @@
+{
+  "formal": false,
+  "purpose": "Compare native ARM64 KVM real root filesystem with intermittent fakeroot metadata failures; unchanged original SIF/task/tests/resource limits. Experimental environment candidate only.",
+  "tasks": [
+    "db-wal-recovery",
+    "count-dataset-tokens",
+    "qemu-startup"
+  ],
+  "based_on": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-cifar-bootstrap-v33"
+}

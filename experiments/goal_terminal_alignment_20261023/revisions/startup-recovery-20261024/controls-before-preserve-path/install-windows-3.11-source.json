@@ -1,0 +1,22 @@
+{
+  "files": {
+    "instruction.md": "2a7bf792c7d23129f93d27854067753c59cf52a4a3aae0a7065f2d9c5b63b310",
+    "solution/solve.sh": "68a9221b9a29331b66fd34fccd71db71d2b5a720e917f2ef95f4a8a542a71ee4",
+    "environment/Dockerfile": "91aa5335320f7c7721835eb6838bb878fd22cd6a6af50ced1efbc2696dea8dbf",
+    "environment/webaudio.js": "64fc61d7aff9c7a75dcabade403fb8e033f289c0c9a97dde83f6c95d521d33fb",
+    "tests/qemu-control.sh": "42c251cd17147e31ed46939248ecbaa95f153cdb86c38e4f1bf0e991156c82bf",
+    "tests/test.sh": "8c7a299c5ed8338d8d4f8a65db62d56c21496e62fe66e90719e417fd99c9423a",
+    "tests/test_outputs.py": "fbbb57a31ba922d610dcc9ef526b240cfc654c147dd9e16e7a13c4cdea389472",
+    "environment/isos/.gitignore": "240a3e0d37d2e86b614063f5347eb02d4f99ca6c254de6b82871ff8d95532a7d",
+    "environment/etc/pulse/client.conf": "877d174652a7e8e90c029216de74bea9ba9d8c3545074091847268835d7e6143",
+    "environment/etc/pulse/daemon.conf": "b82fccfb6ed1182b188ddc170c08e6ff09975888d3d2484e726980aae560585a",
+    "environment/etc/pulse/default.pa": "793345aa3fcbad6a3ec6b727abf884ad6480242530af92762787f88ae62e2b5d",
+    "environment/etc/nginx/nginx.conf": "4feedc03c1686f47ce5c38f040d80cf897252632992d55add9ccc3fc70141b1a",
+    "environment/etc/supervisor/supervisord.conf": "4cc4539ca8fb8e7967f7c5e8b561485079b6710cd9bfec1bac9a0e8f1b5e7dd7",
+    "environment/etc/pipewire/client.conf": "572ac2493489eb686e4e1b901775a945df85c84b5b0de1950b9829e389a66c82"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "392a6966f24744ee949dfa0eb2b7058e76771ba6e955b20c5808c2d8287f7d90"
+}

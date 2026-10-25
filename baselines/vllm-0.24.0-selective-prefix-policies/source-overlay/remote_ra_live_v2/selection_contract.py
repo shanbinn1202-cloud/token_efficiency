@@ -55,7 +55,9 @@ PROJECTION_DIMENSION = 128
 PROJECTION_SEED = 20260904
 # sha256 of the float32 projection for hidden size 5120, dimension 128 and the
 # seed above; equals the projection_hash recorded by the upstream cohort-2 runs.
-PROJECTION_SHA256 = {5120: '20c2e1cf4463ed9407a9f9af0a7794fe044c02c0da369128681270a7427c87aa'}
+# 5376 is Gemma 4 31B IT's hidden size (gemma-s1, the same builder and seed; D-9).
+PROJECTION_SHA256 = {5120: '20c2e1cf4463ed9407a9f9af0a7794fe044c02c0da369128681270a7427c87aa',
+                     5376: '852b42e43dc0beb2d2ea90deefc549a36acc0e08c088624bc0a4588658a1dfb7'}
 GOAL_QUERY_VARIANTS = ('full_goal', 'candidate_entity_cap8')
 REWRITER_KEYS = {'model', 'config_sha256', 'max_new_tokens', 'timeout_seconds',
                  'startup_timeout_seconds'}
@@ -133,7 +135,9 @@ def layout_fields(kv_layout):
     if kv_layout is None:
         return None
     value = kv_layout.get(LAYOUT_KEY, kv_layout) if type(kv_layout) is dict else None
-    require(type(value) is dict and {'page_tokens', 'mamba_tokens', 'mamba_slots'} <= set(value)
+    # The window layout of a sliding-window model (gemma-s1) names its state instead.
+    require(type(value) is dict and ({'page_tokens', 'mamba_tokens', 'mamba_slots'} <= set(value)
+                                      or value.get('state') == 'sliding' and 'page_tokens' in value)
             and value.get('decoupled', True) is True, 'kv_layout record must describe a decoupled layout')
     return value
 

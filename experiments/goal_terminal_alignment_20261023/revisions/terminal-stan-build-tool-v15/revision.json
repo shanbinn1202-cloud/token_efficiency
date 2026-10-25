@@ -1,0 +1,9 @@
+{
+  "task_ids": [
+    "mcmc-sampling-stan"
+  ],
+  "scope": "isolated ARM64 build-tool compatibility candidate",
+  "reason": "Original reference pins RStan but latest unpinned transitive RcppParallel now requires CMake; clean image lacks CMake",
+  "change": "install generic CMake build tool from unchanged Ubuntu24.04 ARM64 repositories before reference, no RStan or solution implementation preinstalled",
+  "task_solution_tests_resource_limits_changed": false
+}

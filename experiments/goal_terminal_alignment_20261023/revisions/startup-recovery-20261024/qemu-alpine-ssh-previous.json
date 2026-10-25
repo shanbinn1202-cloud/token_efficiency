@@ -1,0 +1,17 @@
+{
+  "task": "qemu-alpine-ssh",
+  "dockerfile_sha256": "015ce0601ff54758f66b33f4952e0d3a577d84c09aed8f3ec5945a570e8d168a",
+  "architecture": "arm64",
+  "source_unchanged": true,
+  "oracle_required": true,
+  "started": 1792764427.4049492,
+  "build_only_overrides": [
+    "APT Sandbox User=root",
+    "fakeroot1.25.3 Debian ARM64, DONTTRYCHOWN=1",
+    "vfs.ignore_chown_errors=true"
+  ],
+  "ownership": "rootless image ownership flattened; per-task oracle qualification required",
+  "status": "review_required",
+  "traceback": "Traceback (most recent call last):\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 50, in <module>\n    run(wrapped,log)\n  File \"/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/build_terminal_images.py\", line 29, in run\n    if rc:raise RuntimeError('Build subprocess exit '+str(rc))\nRuntimeError: Build subprocess exit 100\n",
+  "finished": 1792764441.064684
+}

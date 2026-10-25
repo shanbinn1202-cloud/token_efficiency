@@ -755,6 +755,9 @@ class GPUModelRunner(
         )
         self._selective_load_plans: dict[str, SelectiveLoadPlan] = {}
         self._selective_full_attention_group_ids: set[int] = set()
+        # FULL cudagraphs only (_check_and_update_cudagraph_mode): FullAttention
+        # groups that read the physical seq-len buffer at capture and replay.
+        self._selective_cudagraph_groups: frozenset[int] = frozenset()
         producer_flag = os.environ.get("VLLM_SELECTIVE_GOAL_PRODUCER", "0")
         if producer_flag not in {"0", "1"}:
             raise ValueError("VLLM_SELECTIVE_GOAL_PRODUCER must be 0 or 1")
@@ -2564,6 +2567,11 @@ class GPUModelRunner(
                 cm.max_seq_len = int(
                     self.selective_physical_seq_lens_cpu[:num_reqs].max().item()
                 )
+            elif kv_cache_gid in self._selective_cudagraph_groups:
+                # FULL cudagraphs: a captured graph keeps the seq_lens pointer
+                # it saw at capture, so this FA group reads the physical buffer
+                # in every step (equal to seq_lens without a selective plan).
+                cm.seq_lens = self.selective_physical_seq_lens[:num_reqs_padded]
 
             # Basically only the encoder seq_lens, block_table and slot_mapping change
             # for each kv_cache_group.
@@ -4313,6 +4321,14 @@ class GPUModelRunner(
                     item.goal_cache_hit,
                 )
 
+    def _selective_mirror_dummy_seq_lens(self) -> None:
+        """Dummy runs (warm-up, capture): bound FA groups see the dummy seq_lens.
+
+        Only with FULL cudagraphs (_selective_cudagraph_groups non-empty); the
+        captured graph then reads the physical buffer it replays with."""
+        if self._selective_cudagraph_groups:
+            self.selective_physical_seq_lens.copy_(self.seq_lens)
+
     @torch.inference_mode()
     def execute_model(
         self,
@@ -4412,6 +4428,7 @@ class GPUModelRunner(
             max_num_scheduled_tokens = int(num_scheduled_tokens_np.max())
             num_tokens_unpadded = scheduler_output.total_num_scheduled_tokens
 
+            from remote_ra_live_v2.hooks import force_eager as _ra_force_eager
             from remote_ra_live_v2.sparse_mapping import install_before_prepare
             install_before_prepare(self, scheduler_output)
             logits_indices, spec_decode_metadata = self._prepare_inputs(
@@ -4442,6 +4459,8 @@ class GPUModelRunner(
                 max_num_scheduled_tokens=max_num_scheduled_tokens,
                 use_cascade_attn=cascade_attn_prefix_lens is not None,
                 num_encoder_reqs=len(scheduler_output.scheduled_encoder_inputs),
+                # A probe-only pass never replays a CUDA graph (False: default).
+                force_eager=_ra_force_eager(self),
             )
 
             logger.debug(
@@ -6155,6 +6174,7 @@ class GPUModelRunner(
                 self.optimistic_seq_lens_cpu[:num_reqs] = seq_lens
                 self.optimistic_seq_lens_cpu[num_reqs:].fill_(0)
                 self.seq_lens.copy_(self.optimistic_seq_lens_cpu, non_blocking=True)
+                self._selective_mirror_dummy_seq_lens()
 
                 cum_num_tokens = self._get_cumsum_and_arange(
                     num_scheduled_tokens, self.query_pos.np
@@ -7217,6 +7237,19 @@ class GPUModelRunner(
             self.kv_cache_config,
             self.max_num_reqs,
             is_profiling=is_profiling,
+        )
+        # Remote-RA selective seq lens: with FULL cudagraphs every FullAttention
+        # group reads the physical seq-len buffer, at capture and replay alike
+        # (_build_attention_metadata, _dummy_run). Empty otherwise (eager,
+        # PIECEWISE: attention runs outside the graphs).
+        self._selective_cudagraph_groups = (
+            frozenset(
+                gid
+                for gid, group in enumerate(kv_cache_groups)
+                if isinstance(group.kv_cache_spec, FullAttentionSpec)
+            )
+            if cudagraph_mode.has_full_cudagraphs()
+            else frozenset()
         )
         # Trigger cudagraph dispatching keys initialization after
         # resolved cudagraph mode.

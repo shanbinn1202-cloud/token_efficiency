@@ -1,0 +1,44 @@
+--- before/phase1_coordinator.py
++++ after/phase1_coordinator.py
+@@ -153,8 +153,8 @@
+         # Process-wide, like the worker: no lease starts while any session's
+         # lease lacks its joined drain (native_probe refuses the alias).
+         require(not self.records, 'prior phase-1 lease lacks a drain, adoption or abort')
+-        from .phase1_chunks import aligned_chunks
+-        plan = aligned_chunks(geo.C, geo.e, self.max_tokens, mamba_tokens(P, self.layout))
++        from .phase1_chunks import aligned_chunks, private_probe_limit
++        plan = aligned_chunks(geo.C, geo.e, private_probe_limit(self.max_tokens), mamba_tokens(P, self.layout))
+         require(type(allocation_generation) is int and allocation_generation > 0,
+                 'worker allocation generation required')
+         require(hex64(s.boundary) and s.boundary != ZERO_DIGEST, 'phase 1 needs a committed carry')
+--- before/native_probe.py
++++ after/native_probe.py
+@@ -183,10 +183,10 @@
+                 # Own blocks and zero list: the phase-1 KV is handed to phase 2.
+                 self._cleanup_request(rid)
+                 goal=lease.goal
+-                from .phase1_chunks import aligned_chunks
++                from .phase1_chunks import aligned_chunks, private_probe_limit
+                 window=getattr(self.backend,'window',False)
+                 plan=([(0,len(goal.tokens))] if window else aligned_chunks(
+-                    0,len(goal.tokens),self.runner.max_num_tokens,lease.mamba_tokens or lease.page_tokens))
++                    0,len(goal.tokens),private_probe_limit(self.runner.max_num_tokens),lease.mamba_tokens or lease.page_tokens))
+                 goal_parts=[]
+                 self.active.pop('goal_chunk_carry',None)
+                 for k,(start,end) in enumerate(plan):
+--- before/phase1_chunks.py
++++ after/phase1_chunks.py
+@@ -29,3 +29,13 @@
+         chunks.append((a,b,tuple(current)));start=b
+     require(start==end,'Mamba chunks must end at e')
+     return tuple(chunks)
++
++
++def private_probe_limit(native_limit):
++    """Bound private forward activation peaks while the Goal rewriter co-resides.
++
++    The native scheduler capacity is unchanged. Private history/Goal queries
++    still consume their entire input, via the existing one-lease chunk plan.
++    """
++    require(type(native_limit) is int and native_limit>0,'native forward capacity required')
++    return min(native_limit,8192)

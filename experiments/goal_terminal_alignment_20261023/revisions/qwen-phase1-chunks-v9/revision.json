@@ -1,0 +1,35 @@
+{
+  "time": 1792834614.7789803,
+  "reason": "Qwen phase1 previously rejected new input beyond batch capacity; Gemma already had native chunk execution",
+  "implementation": "Tile new input in native batch capacity with recurrent alignment; one unchanged lease, resident set, page vector collection and final Goal selection. Carry exact GDN state between chunks using existing capture/restore APIs, never commit an intermediate turn.",
+  "algorithm_changes": false,
+  "validation_required": [
+    "lease rejection tests",
+    "chunked vs unchunked end-to-end comparison",
+    "GPU32Kmultiturn",
+    "realMemAgent"
+  ],
+  "cpu_validation": {
+    "passed": true,
+    "tests": 2,
+    "log": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/qwen-phase1-chunks-v9/tests.log",
+    "coverage": "Actual fake engine/worker Goal selection and GDN hash-chain comparison: four turns with long input, 4096 vs512 prefill; identical tokens/committed replies/selected pages and no pool leaks"
+  },
+  "gemma_regression": {
+    "passed": true,
+    "tests_passed": 2,
+    "optional_full_and_observation_test_skipped": 1,
+    "fixture_adaptation": "Add scheduler_config.async_scheduling=False to existing CPU fake scheduler; source code unchanged",
+    "log": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/qwen-phase1-chunks-v9/gemma-regression-fixture.log"
+  },
+  "lease_rejection_tests": {
+    "passed": true,
+    "log": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/qwen-phase1-chunks-v9/lease-tests.log",
+    "rejects": [
+      "noncontiguous chunks",
+      "missing final chunk",
+      "foreign group carry slot",
+      "non-null recurrent row head"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383933.5212767,
+  "prompt_sha256": "29c18ac4ff118cb16a3966af8faa587a83dfb7d303240b270bb73d4a961109c5",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Two young men, Klaus Sheila and Ashvini Henley (Ronaldo), arrive at a mountain lake.**\n   - The summary does not mention Klaus Sheila or Ashvini Henley (Ronaldo) arriving at a mountain lake.\n   - **Not supported.**\n\n2. **Klaus dismisses the lake as small compared to the Great Lakes of Canada.**\n   - The summary does not mention Klaus dismissing the lake.\n   - **Not supported.**\n\n3. **They find a hidden pirogue and reach a hermit Abrielle's dwelling on stilts.**\n   - The summary does not mention finding a hidden pirogue or reaching Abrielle's dwelling.\n   - **Not supported.**\n\n4. **The house is empty, and Klaus assumes Abrielle and his daughters are out hunting.**\n   - The summary does not mention an empty house or Klaus's assumptions.\n   - **Not supported.**\n\n5. **They find Wilhelm inspecting traps and a disguised barge called 'the ark'.**\n   - The summary does not mention Wilhelm inspecting traps or a barge called 'the ark'.\n   - **Not supported.**\n\n6. **Abrielle learns about the war between the British and French but is unaware of the nearby Indian tribe Ming.**\n   - The summary does not mention Abrielle learning about the war or the Indian tribe Ming.\n   - **Not supported.**\n\n7. **They decide to move 'the ark' to open water for safety.**\n   - The summary does not mention moving 'the ark' to open water.\n   - **Not supported.**\n\n8. **Klaus courts Juniper, but she does not like him.**\n   - The summary does not mention Klaus courting Juniper.\n   - **Not supported.**\n\n9. **At night, they capture two pirogues and Klaus and Wilhelm attack an Indian camp.**\n   - The summary does not mention capturing pirogues or attacking an Indian camp.\n   - **Not supported.**\n\n10. **Ronaldo is sent away as he would not agree to the attack.**\n    - The summary does not mention Ronaldo being sent away.\n    - **Not supported.**\n\n11. **Klaus and Wilhelm are captured by the Indians after a failed attack.**\n    - The summary does not mention Klaus and Wilhelm being captured.\n    - **Not supported.**\n\n12. **Ronaldo encounters an Indian, offers peace, but ends up killing him in self-defense.**\n    - The summary does not mention this encounter or killing in self-defense.\n    - **Not supported.**\n\n13. **The dying Indian calls Ronaldo 'Hawkeye'.**\n    - The summary does mention Ronaldo being called 'Hawkeye'.\n    - **Supported.**\n\n14. **Ronaldo returns to the 'castle' and informs Abrielle's daughters of the trouble.**\n    - The summary does not mention Ronaldo informing Abrielle's daughters.\n    - **Not supported.**\n\n15. **Ronaldo plans to meet Delaware warrior Adalia to come up with a solution.**\n    - The summary does not mention Ronaldo planning to meet Adalia.\n    - **Not supported.**\n\n16. **Adalia arrives to rescue his kidnapped bride, Wa-ta-ya.**\n    - The summary does not mention Adalia rescuing Wa-ta-ya.\n    - **Not supported.**\n\n17. **They move to 'the ark' and sail to safety.**\n    - The summary does not mention moving to 'the ark' and sailing to safety.\n    - **Not supported.**\n\n18. **Ronaldo and Adalia rescue Wa-ta-ya from the enemy camp.**\n    - The summary does not mention rescuing Wa-ta-ya.\n    - **Not supported.**\n\n19. **Ronaldo is captured during the rescue.**\n    - The summary does not mention Ronaldo being captured during a rescue.\n    - **Not supported.**\n\n20. **Juniper and her sister Hattie worry about Ronaldo's fate.**\n    - The summary does mention Juniper and Lola (presumably Hattie) worrying about Ronaldo.\n    - **Supported.**\n\n21. **Klaus and Wilhelm return to the 'castle' but are ambushed by the Ming.**\n    - The summary does not mention Klaus and Wilhelm being ambushed.\n    - **Not supported.**\n\n22. **Klaus escapes with Va-Va-ta's help and returns to the barge.**\n    - The summary does not mention Klaus escaping with Va-Va-ta's help.\n    - **Not supported.**\n\n23. **Juniper and Lola find their father scalped and fatally stabbed.**\n    - The summary does mention Thomas Wilhelm being killed, but not specifically scalped and fatally stabbed.\n    - **Partially supported.**\n\n24. **Ronaldo is released as a flag bearer but must return to the enemy.**\n    - The summary does not mention Ronaldo being released as a flag bearer.\n    - **Not supported.**\n\n25. **Ronaldo refuses to marry the widow of the Indian he killed and kills her brother in self-defense.**\n    - The summary does not mention this event.\n    - **Not supported.**\n\n26. **Adalia rescues Ronaldo from torture, but they are surrounded by enemies.**\n    - The summary does not mention Adalia rescuing Ronaldo from torture.\n    - **Not supported.**\n\n27. **Soldiers arrive, causing panic among the Hurons, and many are killed.**\n    - The summary does mention soldiers arriving and a violent clash with the Hurons.\n    - **Supported.**\n\n**Supported Key Points:**\n- 13\n- 20\n- 23 (partially)\n- 27\n\n**Recall:**\n- 4 (including partial support for key point 23)\n\nOutput:\n```json\n{\"supported_key_points\": [13, 20, 23, 27], \"recall\": 4}\n```",
+  "parsed": {
+    "supported_key_points": [
+      13,
+      20,
+      23,
+      27
+    ],
+    "recall": 4
+  },
+  "usage": {
+    "completion_tokens": 1251,
+    "prompt_tokens": 3800,
+    "total_tokens": 5051,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

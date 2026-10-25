@@ -1,0 +1,12 @@
+{
+  "task_ids": [
+    "qemu-startup",
+    "qemu-alpine-ssh"
+  ],
+  "scope": "isolated harness bootstrap repair",
+  "cause": "generic PyPA get-pip no longer supports original Python3.9",
+  "fix": "choose official PyPA bootstrap matching existing interpreter version; do not upgrade task Python",
+  "task_solution_tests_limits_changed": false,
+  "additional_missing_dependency": "Debian minimal Python3.9 lacks distutils.cmd; install matching official python3-distutils package",
+  "revision_time": 1792840843.590848
+}

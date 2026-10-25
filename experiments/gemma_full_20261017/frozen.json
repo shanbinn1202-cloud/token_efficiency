@@ -1,0 +1,10 @@
+{
+  "time": 1792243803.3596966,
+  "algorithm_files": 2125,
+  "protocol_files": 1017,
+  "engine": "/projects/bcjw/ssun4/token_efficiency/engines/vllm_024_gemma_20261017",
+  "passed": true,
+  "configuration_revision": "/projects/bcjw/ssun4/token_efficiency/experiments/gemma_full_20261017/configuration-revision.json",
+  "previous_frozen_record": "/projects/bcjw/ssun4/benchmark_batch4k_20261017/before/frozen.json",
+  "algorithm_manifest_unchanged": true
+}

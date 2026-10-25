@@ -1,0 +1,44 @@
+--- before/bootstrap_contract.py
++++ after/bootstrap_contract.py
+@@ -6,6 +6,12 @@
+ """
+ from runtime_renderer import EngineSourceRenderer
+ from dynamic_runtime import DynamicContextProvider, require
++
++
++def is_supported_renderer(renderer):
++    """Only the two pinned renderer implementations, never arbitrary subclasses."""
++    from gemma4_renderer import Gemma4SourceRenderer
++    return type(renderer) in (EngineSourceRenderer, Gemma4SourceRenderer)
+ 
+ 
+ def validate_topology(config):
+@@ -51,7 +57,7 @@
+         core, provider = self.core, self.provider
+         validate_topology(core.vllm_config)
+         require(isinstance(provider, DynamicContextProvider)
+-                and type(self.renderer) is EngineSourceRenderer
++                and is_supported_renderer(self.renderer)
+                 and provider._render is self.renderer,
+                 "dynamic provider must own the engine source renderer")
+         scheduler = core.scheduler
+--- before/engine_assembly.py
++++ after/engine_assembly.py
+@@ -8,7 +8,7 @@
+ import threading
+ from types import MethodType
+ 
+-from bootstrap_contract import EngineReadiness, validate_topology
++from bootstrap_contract import EngineReadiness, validate_topology, is_supported_renderer
+ from contracts import PolicyRuntimeAbort
+ from dynamic_runtime import DynamicContextProvider, require
+ from remote_ra_live_v2.compat import EngineLifecycle
+@@ -66,7 +66,7 @@
+         config.validate()
+         require(all(callable(f) for f in (verify_source, verify_worker, verify_quiescent)),
+                 "loaded source, worker, and pre-serving checks required")
+-        require(type(renderer) is EngineSourceRenderer and isinstance(provider, DynamicContextProvider),
++        require(is_supported_renderer(renderer) and isinstance(provider, DynamicContextProvider),
+                 "engine renderer and dynamic provider required")
+         require(type(codec) is ProtocolCodec, "private registered-add codec required")
+         self.config, self.core, self.provider, self.renderer = config, core, provider, renderer

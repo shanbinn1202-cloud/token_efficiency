@@ -1,0 +1,25 @@
+{
+  "time": 1792751076.940233,
+  "model_scope": [
+    "qwen",
+    "gemma"
+  ],
+  "status": "CPU_PASS_AWAITING_GPU",
+  "source_files": {
+    "selective-prefix/INSTALL_RELEASE.json": "9942d149715ff60346daadc4806f7efc941d68deaa8f145f3e223b4e5f63e292",
+    "selective-prefix/serve.py": "9b6619abde1f3788855587c55f84abbe2d60ee9c32d8d5e3f2331a2c8b3d2c23",
+    "goal_server.py": "c252aa4ea618d7927337946f145a2ef286162fdf369c2a7c26098a090342edb5",
+    "goal_client.py": "91d9a7f5d68413b9cab29fd5ea6ca5d7e95e4537467ca9779c4ca1378358120b",
+    "validate_goal_gpu.py": "8ef016d80c7acd7d620701fa75adda6b0c3d50fb2d3d177ac081f1c7c4f4f753",
+    "validation_job.sh": "d800dcc6c8489dd7209e36baed2d31c6f1fb71e28bd2f1e427a768fd313765c3",
+    "stage_goal_runtime.py": "0f629c75a0599ae3d8e8e9bc67c055d51cbd69a8610fbafdc6fec739628180a1"
+  },
+  "cpu_tests": 15,
+  "formal_jobs_allowed": false,
+  "updated": 1792752417.6636455,
+  "real_task_validation_per_model": [
+    "SWE fixed first official task",
+    "MemAgent fixed existing cohort case nearest40K"
+  ],
+  "cohort_audit": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/goal/cohort-audit.json"
+}

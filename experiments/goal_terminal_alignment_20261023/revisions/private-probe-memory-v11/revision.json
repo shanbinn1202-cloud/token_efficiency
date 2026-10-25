@@ -1,0 +1,10 @@
+{
+  "time": 1792836744.5246518,
+  "reason": "32K stress at16concurrency OOM in compiled private phase1 MLP BF16 tensor(tokens,17408),542MiBallocationwith530.5MiBfree; auxiliaryvLLM7.16GiB",
+  "private_probe_chunk_cap": 8192,
+  "native_max_num_batched_tokens": 16384,
+  "main_kv_pool_gib": 25,
+  "algorithm_changed": false,
+  "semantics": "All tokens processed. One final selection, exact recurrent carry, original score and fallback. Only private forward microbatch size changes; no token truncation or reduced concurrency.",
+  "validation_required": "CPUgeometry+freshGPU8K32Kandrealbenchmarks"
+}

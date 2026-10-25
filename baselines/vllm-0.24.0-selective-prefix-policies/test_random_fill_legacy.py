@@ -134,9 +134,33 @@ def source_path(module_name):
     return ROOT/'source-overlay'/(module_name.replace('.', '/') + '.py')
 
 
+# Later changes of a FORMER function that are not random_fill's: (current text, the text
+# before the change), undone before the comparison. gemma-s1: _bind builds its XML
+# transcripts with mswea_protocol.xml_transcripts (Qwen's or Gemma's grammar).
+# tb-runtime: EngineCoreAdapter.open caps open sessions at max_open (MAX_SESSIONS, or a
+# chat-text pool's K up to 24).
+LATER = {('remote_ra_native_growing.adapter', 'EngineCoreAdapter.open'): ((
+    "len(self.sessions) < self.max_open,", "len(self.sessions) < MAX_SESSIONS,"),),
+         ('remote_ra_linux.live_frontend', '_bind'): ((
+    """    from remote_ra_live_v2.mswea_protocol import xml_transcripts
+    config = load()
+    # Multi-session stage 1: one frontend XML transcript per startup task/session.
+    transcripts = xml_transcripts(loaded.renderer, config['protocol'], len(config['tasks']))""",
+    """    from remote_ra_live_v2.mswea_protocol import PROTOCOL
+    config = load()
+    # Multi-session stage 1: one frontend XML transcript per startup task/session.
+    transcripts = (tuple(loaded.renderer.transcript() for _ in config['tasks'])
+                   if config['protocol'] == PROTOCOL else ())"""),)}
+
+
 def current_node(module_name, target):
-    """The current definition of ``target`` (``Class.method`` or a function), from source."""
-    tree = ast.parse(source_path(module_name).read_text(encoding='utf-8'))
+    """The current definition of ``target`` (``Class.method`` or a function), from source,
+    with its LATER changes undone."""
+    text = source_path(module_name).read_text(encoding='utf-8')
+    for now, before in LATER.get((module_name, target), ()):
+        assert text.count(now) == 1, ('later change not found', module_name, target)
+        text = text.replace(now, before)
+    tree = ast.parse(text)
     owner, _, name = target.rpartition('.')
     body = tree.body
     if owner:
@@ -209,7 +233,10 @@ class StageBEquivalenceTests(unittest.TestCase):
     maxDiff = None
 
     def test_stageb_script_sends_and_writes_the_same(self):
+        # Default suite: full and goal_query; the slow pass all four policies.
         for policy in FORMER_POLICIES:
+            if not (DE.SLOW or policy in ('full', 'goal_query')):
+                continue
             with self.subTest(policy=policy):
                 # play() stubs the startup config (load) itself; config.load has its own
                 # comparison below.
@@ -227,21 +254,27 @@ class StageBEquivalenceTests(unittest.TestCase):
                 for key in ('outputs', 'identities', 'trace', 'prepared', 'receipts', 'allocations', 'views',
                             'forwards'):
                     self.assertEqual(before[key], after[key], key)
-                self.assertEqual(sorted(after['files']), sorted(before['files']))
-                for name, raw in after['files'].items():
+                # The goal_query Goal-text recording came later (goal-text branch).
+                files = HT.without_goal_text(after['files'])
+                self.assertEqual(sorted(files), sorted(before['files']))
+                for name, raw in files.items():
                     self.assertEqual(raw, before['files'][name], name)
 
     def test_matrix_script_sends_and_writes_the_same(self):
+        # Default suite: full and goal_query on both cases; the slow pass all four policies.
         for case in (DE.CASES[0], DE.CASES[2]):
             for policy in FORMER_POLICIES:
+                if not (DE.SLOW or policy in ('full', 'goal_query')):
+                    continue
                 with self.subTest(case=case.name, policy=policy):
                     before = run(lambda: DE.play(policy, case), True)
                     after = run(lambda: DE.play(policy, case), False)
                     self.assertGreater(len(before['trace']), 20)
                     for key in ('semantics', 'trace', 'allocations'):
                         self.assertEqual(before[key], after[key], key)
-                    self.assertEqual(sorted(after['files']), sorted(before['files']))
-                    for name, raw in after['files'].items():
+                    files = HT.without_goal_text(after['files'])    # recorded later (goal-text)
+                    self.assertEqual(sorted(files), sorted(before['files']))
+                    for name, raw in files.items():
                         self.assertEqual(raw, before['files'][name], name)
 
 

@@ -1,0 +1,15 @@
+{
+  "files": {
+    "instruction.md": "d25c0ed6d4697c2b2e6fe047b6cd7317f640dc84d7457ccc9d3d1b4cf8021ffd",
+    "solution/solve.sh": "94063278c36e848006bcc3381d347af4dea066d3eff4da3ba29538922f6c22a1",
+    "environment/Dockerfile": "7fe6814c68c28d907e72ac05176ba8f9f493d7eb6693bef96c97126462b8fedf",
+    "tests/test.sh": "25809a2ebcb714b1c4e55563b0db16add23e2fd9b68d03e51b1734f8dbb392e1",
+    "tests/reference.jpg": "d1909be8f3266a72686c3945029a553b82e5b46acd624eda65f3fdd5eb339574",
+    "tests/test_outputs.py": "f1748ff20bfd670af1e1cb935647503eb176a4a14dd15f20935264ad7e4a98f6",
+    "environment/task-deps/mips.patch": "63d84570d9c94fb2b82bf745c827656211a7cfb2d8b31c9191cad7c61e19b559"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "4b3356a0e251ea92beb95710f5a972a3c1c1abc46d86eb7956d88b11076f9d33"
+}

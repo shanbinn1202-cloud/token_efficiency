@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "mcmc-sampling-stan"
+  ],
+  "cause": "Original script explicitly pins StanHeaders2.32.10, but subsequent remotes::install_version(rstan2.32.7) silently upgrades it to2.39.1. Log says Stan2.39.0 and rejects original array syntax.",
+  "change": "R_REMOTES_UPGRADE=never preserves explicitly installed original dependencies; CMake generic compiler tool retained; no reference code/test/data modification.",
+  "status": "candidate unpromoted"
+}

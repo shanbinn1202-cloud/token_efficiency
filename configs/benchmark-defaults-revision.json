@@ -4,5 +4,8 @@
   "date": "2026-10-08",
   "scope": "All future benchmark runs and methods unless explicitly overridden; current SWE-bench and MemAgentBench Qwen/Gemma profiles",
   "revision": "/projects/bcjw/ssun4/vllm024_triton_six_20261008/revisions/default-kv25g-20261008/revision.json",
-  "historical_results_keep_original_configuration": true
+  "historical_results_keep_original_configuration": true,
+  "default_max_num_batched_tokens": 4096,
+  "batch_revision": "/projects/bcjw/ssun4/benchmark_batch4k_20261017/revision.json",
+  "batch_revision_date": "2026-10-17"
 }

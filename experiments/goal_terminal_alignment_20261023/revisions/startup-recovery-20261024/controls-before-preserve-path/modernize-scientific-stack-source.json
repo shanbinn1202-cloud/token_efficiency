@@ -1,0 +1,18 @@
+{
+  "files": {
+    "instruction.md": "666b8ac370ae81b0e3780a36e722c91b0f986fccbdc6ed36ab3bd17e6943da0f",
+    "solution/solve.sh": "8f92baa6d2f2318e3059f094faa9ba0c94f939239b3f93ab2803a20f8e84fcd7",
+    "environment/Dockerfile": "cde5acd6f59b6680c32d8faa6a753a806ef69bfc1d9b60e7dd6a4ef63503f0e4",
+    "environment/pyproject.toml": "61af7819ffd0080a50f642018b889092b52006995429f3c19cd394b8af86f755",
+    "tests/test.sh": "e868c85466ebf4815e2e4efbd252bf50ad979bceb14325a9377b1bbf852f0281",
+    "tests/test_outputs.py": "0c24195ff46527764c7f8ceda9c608a189ab4a01619282942fcd27a2ea02a977",
+    "environment/climate_analyzer/analyze_climate.py": "112e26265c2b7a579403c9690f5d58cbc1bf59468bfcb7496e4fdbec9a565dd0",
+    "environment/climate_analyzer/config.ini": "6ae640937b468eea85f75a4c2e4583a0f474f71d3fd323672a2e665ec37bb8c9",
+    "environment/climate_analyzer/requirements_old.txt": "64dbcdcfaef03141a6ad0da4551c841cb75b2fc38e500eee205137d69e0ea759",
+    "environment/climate_analyzer/sample_data/climate_data.csv": "97c2b98ec5506c1d31580ab95ae24588c1badb85a07a69b52500cb5b662e3e0a"
+  },
+  "task_config_changes": [
+    "environment.docker_image only"
+  ],
+  "original_task_toml_sha256": "73e171f42ee5631d5e45ab48149934b98c9952ade191a0bf786047fd28ac7c52"
+}

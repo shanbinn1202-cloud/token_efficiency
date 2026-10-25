@@ -628,6 +628,10 @@ class Platform:
         # (may override user settings).
         if model_config.is_hybrid:
             cls._align_hybrid_block_size(vllm_config, backend_cls)
+        else:
+            # remote-ra window layout (gemma-s1): checked only when the
+            # layout key is set; nothing is imported or changed otherwise.
+            _check_decoupled_window_block_size(vllm_config, backend_cls)
 
     @classmethod
     def _align_hybrid_block_size(
@@ -1181,6 +1185,11 @@ def _check_decoupled_block_sizes(
     from vllm.config.vllm import set_current_vllm_config
     from vllm.v1.attention.backend import MultipleOf
 
+    if getattr(layout, "state", None) == "sliding":
+        raise ValueError(
+            "decoupled window layout is for sliding-window models without "
+            "Mamba layers; a hybrid model needs the Mamba form"
+        )
     cache_config = vllm_config.cache_config
     P, M = layout.page_tokens, layout.mamba_tokens
     if not (cache_config.user_specified_block_size and cache_config.block_size == P):
@@ -1216,4 +1225,54 @@ def _check_decoupled_block_sizes(
         P,
         M,
         layout.mamba_slots,
+    )
+
+
+def _check_decoupled_window_block_size(
+    vllm_config: "VllmConfig",
+    backend_cls: "type[AttentionBackend]",
+) -> None:
+    """remote-ra window layout (gemma-s1): an attention-only model with the
+    sliding-window decoupled layout keeps the user-set `--block-size P` for
+    its full-attention and sliding-window groups. Without the layout key
+    nothing is imported or checked (the upstream path)."""
+    from vllm.config.vllm import set_current_vllm_config
+    from vllm.v1.attention.backend import MultipleOf
+    from vllm.v1.kv_cache_interface import decoupled_kv_layout
+
+    layout = decoupled_kv_layout(vllm_config)
+    if layout is None:
+        return
+    if getattr(layout, "state", None) != "sliding":
+        raise ValueError(
+            "decoupled Mamba layout needs a hybrid (Mamba) model; a "
+            "sliding-window model needs the window form"
+        )
+    cache_config = vllm_config.cache_config
+    P = layout.page_tokens
+    if not (cache_config.user_specified_block_size and cache_config.block_size == P):
+        raise ValueError(
+            f"decoupled window layout requires --block-size {P}, got "
+            f"{cache_config.block_size} (user specified: "
+            f"{cache_config.user_specified_block_size})"
+        )
+    if getattr(cache_config, "user_specified_mamba_block_size", False):
+        raise ValueError("decoupled window layout takes no --mamba-block-size")
+    with set_current_vllm_config(vllm_config):
+        kernel_sizes = [
+            s.base if isinstance(s, MultipleOf) else s
+            for s in backend_cls.get_supported_kernel_block_sizes()
+        ]
+    if not any(P % size == 0 for size in kernel_sizes):
+        raise ValueError(
+            f"decoupled window layout: block size {P} is not a multiple of any "
+            f"kernel block size {kernel_sizes} of {backend_cls.get_name()}"
+        )
+    logger.info(
+        "Decoupled KV layout: full-attention and sliding-window blocks of %d "
+        "tokens, window %d tokens, %d window slots, %d-token forwards.",
+        P,
+        layout.window_tokens,
+        layout.window_slots,
+        layout.forward_tokens,
     )

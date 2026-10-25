@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "make-doom-for-mips",
+    "make-mips-interpreter"
+  ],
+  "scope": "capture actual hidden Node stdout on unchanged failing references before environment cleanup",
+  "changes_to_task_or_assertions": false
+}

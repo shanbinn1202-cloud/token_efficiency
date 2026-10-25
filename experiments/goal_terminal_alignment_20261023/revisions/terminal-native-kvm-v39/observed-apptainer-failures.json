@@ -1,0 +1,69 @@
+{
+  "time": 1792851349.3561985,
+  "observations": [
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/count-dataset-tokens-oracle.json",
+      "task": "count-dataset-tokens",
+      "agent": "oracle",
+      "exception": null,
+      "verifier_evidence": [
+        "/tests/test.sh: line 8: curl: command not found",
+        "/tests/test.sh: line 19: uvx: command not found"
+      ]
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/install-windows-3.11-oracle.json",
+      "task": "install-windows-3.11",
+      "agent": "oracle",
+      "exception": null,
+      "verifier_evidence": [
+        "/tests/test.sh: line 8: curl: command not found",
+        "/tests/test.sh: line 22: uvx: command not found"
+      ]
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/model-extraction-relu-logits-oracle.json",
+      "task": "model-extraction-relu-logits",
+      "agent": "oracle",
+      "exception": null,
+      "verifier_evidence": [
+        " loading files list file for package 'libbrotli1:arm64': /var/lib/dpkg/info/libbrotli1:arm64.list is not a regular file",
+        "/tests/test.sh: line 8: curl: command not found",
+        "/tests/test.sh: line 19: uvx: command not found"
+      ]
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/caffe-cifar-10-oracle.json",
+      "task": "caffe-cifar-10",
+      "agent": "oracle",
+      "exception": "Environment start timed out after 600.0 seconds",
+      "verifier_evidence": []
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/db-wal-recovery-oracle.json",
+      "task": "db-wal-recovery",
+      "agent": "oracle",
+      "exception": null,
+      "verifier_evidence": [
+        " loading files list file for package 'krb5-locales': /var/lib/dpkg/info/krb5-locales.list is not a regular file",
+        "/tests/test.sh: line 8: curl: command not found",
+        "/tests/test.sh: line 19: uvx: command not found"
+      ]
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-merged-runtime-v30/controls/qemu-startup-nop.json",
+      "task": "qemu-startup",
+      "agent": "nop",
+      "exception": "Failed to download verifier directory from environment",
+      "verifier_evidence": []
+    },
+    {
+      "source": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-final-runtime-v38/controls/cobol-modernization-oracle.json",
+      "task": "cobol-modernization",
+      "agent": "oracle",
+      "exception": "Failed to download verifier directory from environment",
+      "verifier_evidence": []
+    }
+  ],
+  "interpretation": "Repeated environment-level command/file-type failures across tasks and nodes. Specific stale metadata root cause remains unproven; do not call these model failures. Native KVM avoids runtime fakeroot metadata emulation and is undergoing all-task controls."
+}

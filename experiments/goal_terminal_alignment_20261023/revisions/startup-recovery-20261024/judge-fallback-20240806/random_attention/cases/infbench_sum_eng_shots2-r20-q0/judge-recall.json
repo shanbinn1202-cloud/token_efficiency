@@ -1,0 +1,39 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383863.097016,
+  "prompt_sha256": "3e376dbe250a1b18a075d050f4fb20ca79e0fe489eef5c4b4cf0365cb3b15fc8",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **The narrator first meets Alfred's wife at literary parties.**\n   - The summary does not mention any initial meeting between the narrator and Alfred's wife at literary parties.\n   - **Not supported.**\n\n2. **The narrator later meets Alfred, who seems to be an unremarkable businessman.**\n   - The summary does not mention the narrator meeting Alfred or describing him as an unremarkable businessman.\n   - **Not supported.**\n\n3. **Alfred is a well-off, middle-class stockbroker in London.**\n   - The summary mentions that Alfred began his adult life as a successful stockbroker in London.\n   - **Supported.**\n\n4. **The story is set in the late 19th or early 20th century.**\n   - The summary does not specify the time period in which the story is set.\n   - **Not supported.**\n\n5. **Alfred leaves his wife and children to go to Malaysia.**\n   - The summary mentions that Alfred abandoned his family to pursue art but does not specify Malaysia.\n   - **Partially supported.**\n\n6. **Mrs. Alfred asks the narrator to go to Malaysia and talk with her husband.**\n   - The summary does not mention Mrs. Alfred asking the narrator to go to Malaysia.\n   - **Not supported.**\n\n7. **In Malaysia, Alfred lives a destitute but content life as a painter.**\n   - The summary does not mention Malaysia or Alfred's life there.\n   - **Not supported.**\n\n8. **Alfred lodges in run-down hotels and suffers from illness and hunger.**\n   - The summary mentions Alfred living in shelters and experiencing poverty in Marseilles but does not mention run-down hotels, illness, or hunger specifically.\n   - **Partially supported.**\n\n9. **Alfred is indifferent to physical discomfort and his surroundings.**\n   - The summary describes Alfred as indifferent to social norms and the feelings of others, which can be interpreted as indifference to physical discomfort and surroundings.\n   - **Supported.**\n\n10. **Kristian Carlton, a commercially successful Dutch painter, helps Alfred.**\n    - The summary does not mention Kristian Carlton or any help from a Dutch painter.\n    - **Not supported.**\n\n11. **Carlton recognizes Alfred's genius as a painter.**\n    - The summary does not mention Carlton or any recognition of Alfred's genius by him.\n    - **Not supported.**\n\n12. **Carlton helps Alfred recover from a life-threatening illness.**\n    - The summary does not mention Carlton or any help with illness.\n    - **Not supported.**\n\n13. **Carlton's wife, Lavinia, abandons him for Alfred.**\n    - The summary does not mention Carlton, his wife, or any abandonment.\n    - **Not supported.**\n\n14. **Alfred discards Lavinia after using her as a model for his paintings.**\n    - The summary does not mention Lavinia or Alfred discarding her.\n    - **Not supported.**\n\n15. **Lavinia dies by suicide.**\n    - The summary does not mention Lavinia or her death.\n    - **Not supported.**\n\n16. **Alfred's pursuit of art causes casualties, including his own family.**\n    - The summary mentions Alfred's pursuit of art leading to the abandonment of his family and his callous personality, implying casualties.\n    - **Supported.**\n\n17. **The story continues in Tahiti after Alfred's death.**\n    - The summary mentions Alfred's life in Tahiti but does not specify the story continuing there after his death.\n    - **Partially supported.**\n\n18. **The narrator pieces together Alfred's life in Tahiti from others' recollections.**\n    - The summary does not mention the narrator piecing together Alfred's life from others' recollections.\n    - **Not supported.**\n\n19. **Alfred had taken up with a native woman in Tahiti.**\n    - The summary mentions Alfred marrying a native woman named Camron in Tahiti.\n    - **Supported.**\n\n20. **Alfred had two children with the native woman, one of whom died.**\n    - The summary does not mention Alfred having children with the native woman.\n    - **Not supported.**\n\n21. **Alfred painted profusely in Tahiti.**\n    - The summary mentions Alfred painting in Tahiti.\n    - **Supported.**\n\n22. **Alfred settled briefly in Marseilles before traveling to Tahiti.**\n    - The summary mentions Alfred living in Marseilles before moving to Tahiti.\n    - **Supported.**\n\n23. **Alfred lived in Tahiti for a few years before dying of leprosy.**\n    - The summary mentions Alfred being diagnosed with leprosy and living in Tahiti.\n    - **Supported.**\n\n24. **Alfred left behind numerous paintings.**\n    - The summary mentions Alfred creating a massive, visionary masterpiece but does not specify numerous paintings.\n    - **Partially supported.**\n\n25. **Alfred's magnum opus, painted on the walls of his hut, was burnt by his wife after his death.**\n    - The summary mentions Alfred's final masterpiece being burnt by his wife after his death.\n    - **Supported.**\n\nBased on the evaluation, the supported key points are 3, 5, 8, 9, 16, 17, 19, 21, 22, 23, 24, and 25. The recall score is 12.\n\nOutput: {\"supported_key_points\": [3, 5, 8, 9, 16, 17, 19, 21, 22, 23, 24, 25], \"recall\": 12}",
+  "parsed": {
+    "supported_key_points": [
+      3,
+      5,
+      8,
+      9,
+      16,
+      17,
+      19,
+      21,
+      22,
+      23,
+      24,
+      25
+    ],
+    "recall": 12
+  },
+  "usage": {
+    "completion_tokens": 1195,
+    "prompt_tokens": 3629,
+    "total_tokens": 4824,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

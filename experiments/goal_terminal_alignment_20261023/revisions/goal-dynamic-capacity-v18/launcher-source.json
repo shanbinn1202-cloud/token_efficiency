@@ -1,0 +1,13 @@
+{
+  "time": 1792848393.2978508,
+  "files": {
+    "goal_server.py": "5394e75b9d3aeede096e880be9f2e1464c98a4d91b52c9445e51f5644fa43015",
+    "validate32.py": "b5c5fb647290cf7fae32a10975732d5616df02f5adcad555e4238d247c9db864",
+    "gpu.sh": "de717fc09f6ca9c8d22c0edb88e3bced78e851e72a263021d849ba742dff1dca",
+    "allocation.sh": "cf7848cbff165e0e56074d418ecdb034b0be3b81d696e82f4670fd5c367dc4d6",
+    "controller.py": "4aa1d77f6cf58c710254b73b82a1f2c22a3dd0b70b6b55adc8f3b4364f7cfdae"
+  },
+  "admission_permits": 16,
+  "main_async": true,
+  "not_yet_GPU_qualified": true
+}

@@ -1,0 +1,48 @@
+{
+  "model": "gpt-4o-2024-05-13",
+  "time": 1792383915.0532389,
+  "prompt_sha256": "7e84bd6984e1702efae793e827e91884fd72e84bc2e7392713da6448cf1775ec",
+  "output": "Let's evaluate the provided summary against the key points step-by-step:\n\n1. **Shreya Lillie, the captain of a ship bound for the North Pole, recounts his mission in letters to his sister.**\n   - The summary mentions Lillie as part of an expedition and that Kiran recounts his history to Lillie, but it does not specify that Lillie is the captain or that the mission is recounted in letters to his sister.\n   - **Not supported.**\n\n2. **Lillie's mission is interrupted by impassable ice.**\n   - The summary does not mention any interruption due to impassable ice.\n   - **Not supported.**\n\n3. **Lillie encounters Kiran Joey, who is traveling by dog-drawn sledge and is weakened by the cold.**\n   - The summary mentions that Kiran is rescued by Lillie's expedition but does not specify the mode of travel or his weakened state.\n   - **Partially supported.**\n\n4. **Lillie takes Joey aboard and nurses him back to health.**\n   - The summary mentions that Kiran is rescued by Lillie's expedition but does not specify nursing him back to health.\n   - **Partially supported.**\n\n5. **Joey tells Lillie about the monster he created.**\n   - The summary mentions that Kiran recounts his entire harrowing history to Lillie, which includes the creation of the monster.\n   - **Supported.**\n\n6. **Kiran Joey describes his early life in Geneva.**\n   - The summary does not mention Kiran's early life in Geneva.\n   - **Not supported.**\n\n7. **Joey enters the University of Ingolstadt to study natural philosophy and chemistry.**\n   - The summary mentions Kiran studying natural philosophy in Ingolstadt.\n   - **Supported.**\n\n8. **Joey becomes obsessed with discovering the secret of life.**\n   - The summary mentions Kiran becoming obsessed with the secret of life.\n   - **Supported.**\n\n9. **Joey spends months creating a creature out of old body parts.**\n   - The summary mentions Kiran creating a sentient being from scavenged body parts.\n   - **Supported.**\n\n10. **Joey brings his creation to life but is horrified by its appearance.**\n    - The summary mentions Kiran bringing the creature to life and being horrified by its appearance.\n    - **Supported.**\n\n11. **Joey falls ill after creating the monster.**\n    - The summary does not mention Joey falling ill after creating the monster.\n    - **Not supported.**\n\n12. **Joey receives a letter informing him of his brother Rosetta's murder.**\n    - The summary mentions the murder of Kiran's brother, but the name is Ernest, not Rosetta.\n    - **Partially supported.**\n\n13. **Joey returns to Geneva and suspects the monster killed his brother.**\n    - The summary does not mention Joey returning to Geneva or suspecting the monster.\n    - **Not supported.**\n\n14. **Allyson Kalia is wrongly accused and executed for Rosetta's murder.**\n    - The summary mentions an innocent girl named Allyson being framed and executed for the murder.\n    - **Supported.**\n\n15. **Joey becomes despondent and guilty.**\n    - The summary does not explicitly mention Joey becoming despondent and guilty.\n    - **Not supported.**\n\n16. **Joey meets the monster on a glacier, who admits to killing Rosetta.**\n    - The summary does not mention a meeting on a glacier or the monster admitting to the murder.\n    - **Not supported.**\n\n17. **The monster begs Joey to create a mate for him.**\n    - The summary mentions the monster demanding Kiran create a female companion.\n    - **Supported.**\n\n18. **Joey reluctantly agrees to create a female monster.**\n    - The summary mentions Kiran initially agreeing to create the second creature.\n    - **Supported.**\n\n19. **Joey travels to England with his friend Brennan to gather information.**\n    - The summary does not mention traveling to England or a friend named Brennan.\n    - **Not supported.**\n\n20. **Joey begins creating the female monster on a desolate island.**\n    - The summary mentions Kiran traveling to the Orkney Islands to build the second creature.\n    - **Supported.**\n\n21. **Joey destroys the female monster after having doubts.**\n    - The summary mentions Kiran destroying the unfinished female.\n    - **Supported.**\n\n22. **The monster vows revenge on Joey's wedding night.**\n    - The summary mentions the monster vowing revenge on Kiran's wedding night.\n    - **Supported.**\n\n23. **Joey is arrested for a murder and finds Brennan dead.**\n    - The summary does not mention Joey being arrested or finding Brennan dead.\n    - **Not supported.**\n\n24. **Joey is acquitted and returns to Geneva.**\n    - The summary does not mention Joey being acquitted or returning to Geneva.\n    - **Not supported.**\n\n25. **Joey marries Raiden and fears the monster's warning.**\n    - The summary mentions Kiran marrying Raiden and fearing the monster's warning.\n    - **Supported.**\n\n26. **The monster kills Raiden on Joey's wedding night.**\n    - The summary mentions the monster killing Raiden on Kiran's wedding night.\n    - **Supported.**\n\n27. **Joey's father dies of grief.**\n    - The summary mentions Kiran's father dying of a broken heart.\n    - **Supported.**\n\n28. **Joey vows to find and destroy the monster.**\n    - The summary mentions Kiran pursuing the monster.\n    - **Supported.**\n\n29. **Joey tracks the monster northward into the ice.**\n    - The summary mentions Kiran pursuing the monster into the Arctic.\n    - **Supported.**\n\n30. **Lillie encounters Joey during his pursuit of the monster.**\n    - The summary mentions Lillie encountering Kiran during his pursuit.\n    - **Supported.**\n\n31. **Joey dies shortly after meeting Lillie.**\n    - The summary mentions Kiran eventually succumbing to exhaustion and grief.\n    - **Supported.**\n\n32. **The monster weeps over Joey's body and expresses his suffering.**\n    - The summary mentions the monster expressing profound remorse and self-loathing over Kiran's body.\n    - **Supported.**\n\n33. **The monster departs to die in the northernmost ice.**\n    - The summary mentions the monster intending to travel to the furthest north to die.\n    - **Supported.**\n\nBased on the evaluation, the supported key points are: 5, 7, 8, 9, 10, 12, 14, 17, 18, 20, 21, 22, 25, 26, 27, 28, 29, 30, 31, 32, 33.\n\nTherefore, the recall score is 21.\n\nOutput: {\"supported_key_points\": [5, 7, 8, 9, 10, 12, 14, 17, 18, 20, 21, 22, 25, 26, 27, 28, 29, 30, 31, 32, 33], \"recall\": 21}",
+  "parsed": {
+    "supported_key_points": [
+      5,
+      7,
+      8,
+      9,
+      10,
+      12,
+      14,
+      17,
+      18,
+      20,
+      21,
+      22,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33
+    ],
+    "recall": 21
+  },
+  "usage": {
+    "completion_tokens": 1549,
+    "prompt_tokens": 3807,
+    "total_tokens": 5356,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": null,
+      "cached_tokens": 0
+    }
+  }
+}

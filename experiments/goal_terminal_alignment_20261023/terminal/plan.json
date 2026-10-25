@@ -1,0 +1,138 @@
+{
+  "runs": [
+    {
+      "model": "qwen",
+      "method": "vanilla",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/vanilla/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "qwen",
+      "method": "random_attention",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/random_attention/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "qwen",
+      "method": "sliding_window",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/sliding_window/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "qwen",
+      "method": "intentkv",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/intentkv/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "qwen",
+      "method": "agentkv",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/agentkv/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "qwen",
+      "method": "goal",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/goal/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "vanilla",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/vanilla/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "random_attention",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/random_attention/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "sliding_window",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/sliding_window/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "intentkv",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/intentkv/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "agentkv",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/agentkv/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    },
+    {
+      "model": "gemma",
+      "method": "goal",
+      "config": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/gemma/goal/config.yaml",
+      "partition": "ghx4",
+      "hours": 5,
+      "tasks": 89,
+      "budget": 8192,
+      "status": "awaiting_validation"
+    }
+  ],
+  "agent": "officialHarborTerminus-2",
+  "task_files": "pinned official terminal-bench-2",
+  "context_summary": false,
+  "reason": "Keep the append-only transcript; KV reduction belongs exclusively to the evaluated method.",
+  "output_tokens": 4096,
+  "turn_limit": 120,
+  "seed": 42,
+  "full_task_count": 89,
+  "formal_submission_requires": [
+    "all ARM64 environments qualified",
+    "one baseline Terminus-2 real task passed",
+    "Goal Qwen/Gemma GPU transport and real benchmark validation passed"
+  ],
+  "continuation": "Existing predictions retained; first-allocation throughput immutable; infrastructure exceptions require review."
+}

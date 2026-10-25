@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "time": 1792223336.6447043,
+  "methods": [
+    "vanilla",
+    "random_attention",
+    "sliding_window",
+    "intentkv",
+    "agentkv"
+  ],
+  "swe_tasks": 500,
+  "memory_tasks": 200,
+  "history_text_and_chunks_unchanged": true,
+  "gemma_context_max": 184176,
+  "gemma_context_mean": 79827.17,
+  "budget_infeasible": {
+    "random_attention": 1,
+    "sliding_window": 1
+  }
+}

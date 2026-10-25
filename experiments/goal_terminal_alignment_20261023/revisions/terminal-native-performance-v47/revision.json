@@ -1,0 +1,7 @@
+{
+  "time": 1792854610.1788201,
+  "diagnostic_only": true,
+  "change": "For portfolio-optimization only, test native ARM64 root-mapped Apptainer without metadata-emulation or KVM. Same original image/files/tests and one-CPU affinity; existing memory watchdog retained. Other 88 KVM paths byte-identical to v46.",
+  "purpose": "Distinguish original relative-performance threshold failure from virtualization overhead; do not alter code, thresholds or resources.",
+  "integrated": false
+}

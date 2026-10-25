@@ -1,0 +1,41 @@
+{
+  "created": 1792748885.0423162,
+  "source": "/projects/bcjw/ssun4/token_efficiency/baselines/vllm-0.24.0-selective-prefix-policies",
+  "source_commit": "b25ba108024eb87089c9e4835909a731e098c8ec",
+  "scope": "Goal async/config alignment and separate vLLM rewriter: Qwen and Gemma SWE500/MemAgent200 (4 runs); TerminalBench2 Terminus2 six methods/two models (12 runs)",
+  "configuration": {
+    "qwen_batch_tokens": 16384,
+    "gemma_batch_tokens": 4096,
+    "kv_pool_bytes": 26843545600,
+    "context": 262144,
+    "attention": "TRITON_ATTN",
+    "async_scheduling": true,
+    "cuda_graph": true,
+    "compile": true,
+    "thinking": true,
+    "max_tokens": 4096,
+    "concurrency": 16,
+    "seed": 42
+  },
+  "validation_partition": "ghx4-interactive",
+  "validation_hours": 2,
+  "goal_formal_hours": 10,
+  "terminal_formal_hours": 5,
+  "preserve_existing_jobs": true,
+  "models": [
+    "qwen",
+    "gemma"
+  ],
+  "goal_runs": 4,
+  "terminal_runs": 12,
+  "terminal_methods": [
+    "vanilla",
+    "random_attention",
+    "sliding_window",
+    "intentkv",
+    "agentkv",
+    "goal"
+  ],
+  "swe_tasks": 500,
+  "memagent_tasks": 200
+}

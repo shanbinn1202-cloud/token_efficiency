@@ -1,0 +1,37 @@
+diff a/vllm/model_executor/models/qwen3_next.py b/vllm/model_executor/models/qwen3_next.py	(rejected hunks)
+@@ -19,7 +19,6 @@ from vllm.distributed import (
+     tensor_model_parallel_reduce_scatter,
+ )
+ from vllm.logger import init_logger
+-from vllm.model_executor.layers.attention import Attention
+ from vllm.model_executor.layers.fused_moe import FusedMoEFactory
+ from vllm.model_executor.layers.fused_qk_norm_rope import fused_qk_rmsnorm_rope_gate
+ from vllm.model_executor.layers.layernorm import (
+@@ -389,7 +434,27 @@ class Qwen3NextAttention(nn.Module):
+     ) -> torch.Tensor:
+         qkv, _ = self.qkv_proj(hidden_states)
+         q, k, v, gate = self._project_qkv_gate(qkv, positions)
++        if self.intentkv_enabled:
++            from vllm.tebench.intentkv import capture_q as intent_capture_q
++
++            intent_capture_q(q, self.intentkv_layer_id)
++        if self.repairkv_enabled:
++            from vllm.tebench.repairkv import capture_q as repair_capture_q
++
++            repair_capture_q(q, self.repairkv_layer_id)
++        if self.agentkv_enabled:
++            from vllm.tebench.agentkv import capture_q
++
++            capture_q(q, self.agentkv_layer_id)
++        if self.agentkv_audit_enabled:
++            from vllm.tebench.audit import capture
++
++            capture("q", q, self.agentkv_layer_id)
++            capture("k", k, self.agentkv_layer_id)
++            capture("v", v, self.agentkv_layer_id)
+         attn_output = self.attn(q, k, v)
++        if self.agentkv_audit_enabled:
++            capture("o", attn_output, self.agentkv_layer_id)
+         if gate is not None:
+             attn_output = attn_output * torch.sigmoid(gate)
+         output, _ = self.o_proj(attn_output)

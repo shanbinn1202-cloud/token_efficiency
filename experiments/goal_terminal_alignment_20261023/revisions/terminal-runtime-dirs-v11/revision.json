@@ -1,0 +1,9 @@
+{
+  "task_ids": [
+    "mailman"
+  ],
+  "scope": "isolated KVM candidate",
+  "cause": "fresh VM startup mounted empty tmpfs over image /run, hiding /run/lock and leaving /var/lock dangling",
+  "fix": "preserve the fresh task image /run as Docker does",
+  "task_solution_tests_limits_changed": false
+}

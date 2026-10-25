@@ -1,0 +1,34 @@
+{
+  "time": 1792855614.3107824,
+  "purpose": "Dependency review only; does not release evaluation or approve reference exceptions.",
+  "completed_gpu_trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/vanilla/allocations/3448478-terminal-native-kvm-v42/passed.json",
+  "completed_gpu_trial_sha256": "c02a9ba3ab3ff98f3369285e77c0400c6af45daaf80f3d1be094ba8d98217be0",
+  "changed_files": {
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal_qualification_policy.py": {
+      "before": "d70a74a1f66aaf51f9120a5417803fae73ca20a2bed6ac4f9c64be567be27436",
+      "after": "92d9bb639bec80051be8c4fd27c3845e409f59d80da77433d537412baf536b64"
+    },
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-runtime/kvm_environment.py": {
+      "before": "750c843571b949af9213f0e2ef12b9badc92b2a6d12b318a3b07afaa16056db6",
+      "after": "4f125574d3566d11c11e9e53761068d2c0855466bcf4a6d2f6a279a6e19304a2"
+    },
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal_stage.py": {
+      "before": "459aef91e67704c84037a74aeba5439bba6afb01b98ab3f824aa40e984ed3ea7",
+      "after": "5b41bf8b587b123fd68af9943e987e8641d3df8befdb2080711966d24ef3bcd3"
+    }
+  },
+  "scopes": {
+    "terminal-runtime/kvm_environment.py": "Exactly four standard /dev fd/stdin/stdout/stderr symlinks; verified original reference and negative controls.",
+    "terminal_stage.py": "Validation task selector only; formal still runs all original tasks. No serving/proxy/model configuration changes.",
+    "terminal_qualification_policy.py": "Explicit original-reference approval registry; no model, task, or verifier behavior change. Missing approvals still rejected, covered by policy tests."
+  },
+  "regression_evidence_sha256": {
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/log-summary-date-ranges-oracle.json": "a51cfd7adc3b0c3308e09b6905c807534f3d4b31acce4e3d31e261fa4468f769",
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/log-summary-date-ranges-nop.json": "c51e3ed40d52684099819148875fa69d732f041e18f65d48ae189f9cbcbd49e6",
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/qemu-alpine-ssh-oracle.json": "efee9f7214f09cb55b80ac7c67503aea38095076c04df478d301fc067b03dcab",
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/qemu-alpine-ssh-nop.json": "ac87c612232e1ba18c7b3c94c8929e0ad89ba3ae150ab6c55b5e01201be5b742",
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/db-wal-recovery-oracle.json": "695c1fa2ff66fbc42f3c0f03df6b73afb9f9c7dec4cc796ad6a0f9d966223c37",
+    "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/db-wal-recovery-nop.json": "ff47df3b77bea35d4e252efe3c6f57248a84905fcd5dc76682721adfc336526d"
+  },
+  "formal_release_authorized": false
+}

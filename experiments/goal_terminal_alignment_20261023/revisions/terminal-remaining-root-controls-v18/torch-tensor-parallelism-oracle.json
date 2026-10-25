@@ -1,0 +1,120 @@
+{
+  "id": "4acf833b-4c3e-46e4-a89d-d8fd4afea1dd",
+  "task_name": "torch-tensor-parallelism",
+  "trial_name": "torch-tensor-parallelism-native-control-oracle-1792842894",
+  "trial_uri": "file:///projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/torch-tensor-parallelism-native-control-oracle-1792842894",
+  "task_id": {
+    "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/torch-tensor-parallelism"
+  },
+  "source": null,
+  "task_checksum": "ef44d4d7b088a83662d4c2fecd513461c3f16ed06f0ba239a223b32c7387f43a",
+  "config": {
+    "task": {
+      "path": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-arm64-tasks/torch-tensor-parallelism",
+      "git_url": null,
+      "git_commit_id": null,
+      "name": null,
+      "ref": null,
+      "overwrite": false,
+      "download_dir": null,
+      "source": null
+    },
+    "trial_name": "torch-tensor-parallelism-native-control-oracle-1792842894",
+    "trials_dir": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation",
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent_timeout_multiplier": null,
+    "verifier_timeout_multiplier": null,
+    "agent_setup_timeout_multiplier": null,
+    "environment_build_timeout_multiplier": null,
+    "agent": {
+      "name": "oracle",
+      "import_path": null,
+      "model_name": null,
+      "base_url": null,
+      "model_api_key_name": null,
+      "model_api_format": null,
+      "skip_model_parsing": false,
+      "n_concurrent": null,
+      "concurrency_group": null,
+      "skills": [],
+      "override_timeout_sec": null,
+      "override_setup_timeout_sec": null,
+      "max_timeout_sec": null,
+      "resume_trajectory": false,
+      "load_trajectory": null,
+      "extra_allowed_hosts": [],
+      "kwargs": {},
+      "mcp_servers": []
+    },
+    "user_agent": null,
+    "environment": {
+      "type": null,
+      "import_path": "native_environment:Arm64ApptainerEnvironment",
+      "force_build": false,
+      "delete": true,
+      "stream": false,
+      "cpu_enforcement_policy": "auto",
+      "memory_enforcement_policy": "auto",
+      "override_cpus": null,
+      "override_memory_mb": null,
+      "override_storage_mb": null,
+      "override_gpus": null,
+      "override_tpu": null,
+      "mounts": null,
+      "extra_docker_compose": [],
+      "kwargs": {},
+      "extra_allowed_hosts": []
+    },
+    "verifier": {
+      "override_timeout_sec": null,
+      "max_timeout_sec": null,
+      "disable": false
+    },
+    "artifacts": [],
+    "extra_instruction_paths": [],
+    "extra_instructions": [],
+    "job_id": null,
+    "source_trial": null
+  },
+  "agent_info": {
+    "name": "oracle",
+    "version": "1.0.0",
+    "model_info": null
+  },
+  "agent_result": {
+    "n_input_tokens": null,
+    "n_cache_tokens": null,
+    "n_output_tokens": null,
+    "cost_usd": null,
+    "model_usage": null,
+    "rollout_details": null,
+    "metadata": null
+  },
+  "verifier_result": {
+    "rewards": {
+      "reward": 1.0
+    }
+  },
+  "verifier_environment_mode": "shared",
+  "exception_info": null,
+  "started_at": "2026-10-24T11:54:54.914517Z",
+  "finished_at": "2026-10-24T11:56:44.235832Z",
+  "environment_setup": {
+    "started_at": "2026-10-24T11:54:54.926209Z",
+    "finished_at": "2026-10-24T11:55:46.528687Z"
+  },
+  "agent_setup": {
+    "started_at": "2026-10-24T11:55:46.528744Z",
+    "finished_at": "2026-10-24T11:55:46.530394Z"
+  },
+  "agent_execution": {
+    "started_at": "2026-10-24T11:55:46.531522Z",
+    "finished_at": "2026-10-24T11:55:46.573034Z"
+  },
+  "verifier": {
+    "started_at": "2026-10-24T11:55:46.667043Z",
+    "finished_at": "2026-10-24T11:56:38.997323Z"
+  },
+  "step_results": null
+}

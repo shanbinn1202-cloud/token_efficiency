@@ -1,0 +1,118 @@
+{
+  "time": 1792845571.2252667,
+  "production_original_passed": 62,
+  "checked": 89,
+  "candidate_paired_passes": {
+    "qemu-alpine-ssh": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-bullseye-archive-v20/qemu-alpine-ssh-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-bullseye-archive-v20/qemu-alpine-ssh-nop.json"
+    },
+    "qemu-startup": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-bullseye-archive-v20/qemu-startup-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-bullseye-archive-v20/qemu-startup-nop.json"
+    },
+    "nginx-request-logging": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-extra-root-controls-v17/nginx-request-logging-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-extra-root-controls-v17/nginx-request-logging-nop.json"
+    },
+    "polyglot-rust-c": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-extra-root-controls-v17/polyglot-rust-c-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-extra-root-controls-v17/polyglot-rust-c-nop.json"
+    },
+    "feal-differential-cryptanalysis": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/feal-differential-cryptanalysis-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/feal-differential-cryptanalysis-nop.json"
+    },
+    "feal-linear-cryptanalysis": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/feal-linear-cryptanalysis-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/feal-linear-cryptanalysis-nop.json"
+    },
+    "gcode-to-text": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/gcode-to-text-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/gcode-to-text-nop.json"
+    },
+    "git-multibranch": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/git-multibranch-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-fakeroot-controls-v7/git-multibranch-nop.json"
+    },
+    "gpt2-codegolf": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-kvm-virtual-memory-v9/gpt2-codegolf-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-kvm-virtual-memory-v9/gpt2-codegolf-nop.json"
+    },
+    "mteb-leaderboard": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-mteb-container-v23/mteb-leaderboard-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-mteb-container-v23/mteb-leaderboard-nop.json"
+    },
+    "mteb-retrieve": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-mteb-retrieve-container-v24/mteb-retrieve-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-mteb-retrieve-container-v24/mteb-retrieve-nop.json"
+    },
+    "mailman": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-postfix-ownership-v14/mailman-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-postfix-ownership-v14/mailman-nop.json"
+    },
+    "raman-fitting": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/raman-fitting-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/raman-fitting-nop.json"
+    },
+    "sanitize-git-repo": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/sanitize-git-repo-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/sanitize-git-repo-nop.json"
+    },
+    "sparql-university": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/sparql-university-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/sparql-university-nop.json"
+    },
+    "torch-pipeline-parallelism": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/torch-pipeline-parallelism-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/torch-pipeline-parallelism-nop.json"
+    },
+    "torch-tensor-parallelism": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/torch-tensor-parallelism-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-remaining-root-controls-v18/torch-tensor-parallelism-nop.json"
+    },
+    "headless-terminal": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-shell-startup-v8/headless-terminal-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-shell-startup-v8/headless-terminal-nop.json"
+    },
+    "make-doom-for-mips": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-wad-input-v13/make-doom-for-mips-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-wad-input-v13/make-doom-for-mips-nop.json"
+    },
+    "make-mips-interpreter": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-wad-input-v13/make-mips-interpreter-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-wad-input-v13/make-mips-interpreter-nop.json"
+    },
+    "constraints-scheduling": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-root-controls-v4/oracle-result.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-root-controls-v4/nop-result.json"
+    },
+    "dna-assembly": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-dna-root-controls-v6/oracle-result.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-dna-root-controls-v6/nop-result.json"
+    },
+    "caffe-cifar-10": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-public-input-cache-v5/oracle-result.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-public-input-cache-v5/nop-result.json"
+    },
+    "mcmc-sampling-stan": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-stan-original-pins-v22/mcmc-sampling-stan-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-stan-original-pins-v22/mcmc-sampling-stan-nop.json"
+    },
+    "query-optimize": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-http-timeout-v26/query-optimize-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-http-timeout-v26/query-optimize-nop.json"
+    },
+    "rstan-to-pystan": {
+      "oracle": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-stanc-arm64-v29/rstan-to-pystan-oracle.json",
+      "nop": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-stanc-arm64-v29/rstan-to-pystan-nop.json"
+    }
+  },
+  "remaining": [
+    "protein-assembly"
+  ],
+  "combined_diagnostic_coverage": 88,
+  "promoted": false,
+  "note": "Candidate results do not constitute final production qualification; merge and exact-source revalidation still required.",
+  "formal_qualification": "UNCHANGED; candidate sources not merged or promoted"
+}

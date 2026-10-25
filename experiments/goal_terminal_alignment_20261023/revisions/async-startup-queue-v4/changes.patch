@@ -1,0 +1,23 @@
+--- before/startup_runtime.py
++++ after/startup_runtime.py
+@@ -7,6 +7,7 @@
+ from dataclasses import dataclass
+ import os
+ import threading
++from collections import deque
+ 
+ 
+ class StartupRejected(RuntimeError):
+@@ -70,7 +71,11 @@
+                 "startup ownership changed")
+         require(not getattr(core, "engines_running", False), "engine is already running")
+         require(not hasattr(core, "output_thread"), "engine IO already started")
+-        require(getattr(core, "batch_queue", None) is None, "batch queue unsupported")
++        batch_queue = getattr(core, "batch_queue", None)
++        require(batch_queue is None or (
++                    isinstance(batch_queue, deque) and not batch_queue
++                    and core.scheduler.scheduler_config.async_scheduling),
++                "pre-serving native async batch queue must be empty")
+         scheduler = core.scheduler
+         for name in ("requests", "waiting", "running"):
+             require(hasattr(scheduler, name) and len(getattr(scheduler, name)) == 0,

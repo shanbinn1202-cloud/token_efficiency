@@ -1,0 +1,6 @@
+{
+  "time": 1792853610.5412734,
+  "base": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42",
+  "change": "Provide standard Linux /dev/fd and stdin/out/err symlinks after devtmpfs mount. Fixes Bash process substitution. Original task, reference, tests, resource limits unchanged. Candidate not integrated.",
+  "validation": "Exact original Oracle/NOP for log-summary-date-ranges, qemu-alpine-ssh, db-wal-recovery"
+}

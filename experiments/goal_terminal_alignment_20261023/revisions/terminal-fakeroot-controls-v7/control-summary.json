@@ -1,0 +1,56 @@
+[
+  {
+    "task": "git-multibranch",
+    "oracle": {
+      "reward": 1.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  },
+  {
+    "task": "feal-differential-cryptanalysis",
+    "oracle": {
+      "reward": 1.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  },
+  {
+    "task": "headless-terminal",
+    "oracle": {
+      "reward": 0.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  },
+  {
+    "task": "gcode-to-text",
+    "oracle": {
+      "reward": 1.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  },
+  {
+    "task": "gpt2-codegolf",
+    "oracle": {
+      "reward": 0.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  },
+  {
+    "task": "feal-linear-cryptanalysis",
+    "oracle": {
+      "reward": 1.0
+    },
+    "nop": {
+      "reward": 0.0
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "task_ids": [
+    "make-doom-for-mips",
+    "make-mips-interpreter"
+  ],
+  "scope": "isolated replacement of corrupt initial public data asset with checksum-verified original shareware data",
+  "task_solution_tests_limits_changed": false,
+  "source": {
+    "url": "https://raw.githubusercontent.com/Thurbeen/thurbox-doom/main/wad/doom1.wad",
+    "size": 4196020,
+    "md5": "f0cefca49926d00903cf57551d901abe",
+    "sha256": "1d7d43be501e67d927e415e0b8f3e29c3bf33075e859721816f652a526cac771",
+    "checksum_reference": "https://sources.debian.org/src/game-data-packager/67/data/doom.yaml/",
+    "original_url": "https://distro.ibiblio.org/slitaz/sources/packages/d/doom1.wad",
+    "original_url_failure": "404 XML downloaded by upstream Dockerfile curl without -f"
+  }
+}

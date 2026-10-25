@@ -1,0 +1,11 @@
+{
+  "admission": {
+    "admission_overlap": {
+      "permits": 16,
+      "admission_seconds": 2100,
+      "lease_seconds": 2160
+    }
+  },
+  "async_scheduling": true,
+  "scope": "prepare-only using prior validated metadata, current GPU candidate still pending"
+}

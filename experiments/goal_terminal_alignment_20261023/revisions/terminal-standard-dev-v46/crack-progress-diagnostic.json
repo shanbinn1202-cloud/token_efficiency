@@ -1,0 +1,8 @@
+{
+  "time": 1792854331.8244207,
+  "diagnostic": {
+    "stdout": "PID     ELAPSED     TIME %CPU NLWP COMMAND\n  848       06:54 00:06:53 99.8    1 john\nacc\n0\n0\nacc\n0\nacc\n0\n0\n1\n32\n0\n557\n-rw------- 1 root root 57918 Oct 24 15:04 /app/john/run/john.log",
+    "stderr": null,
+    "return_code": 0
+  }
+}

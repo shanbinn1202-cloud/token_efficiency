@@ -26,6 +26,17 @@ def _json(value):
     return json.dumps(value, ensure_ascii=False, allow_nan=False)
 
 
+def _trusted_renderer(value):
+    """The engine source renderer of the Qwen profile, or (gemma-mab) of the Gemma 4
+    profile, ``gemma4_renderer.Gemma4SourceRenderer`` (the loaded module's own class):
+    remote_ra_linux.live_renderer binds one of the two, never another type."""
+    if type(value) is EngineSourceRenderer:
+        return True
+    import sys
+    gemma = sys.modules.get("gemma4_renderer")
+    return gemma is not None and type(value) is gemma.Gemma4SourceRenderer
+
+
 @dataclass(frozen=True)
 class _Capture:
     conversation_json: str
@@ -47,7 +58,7 @@ class TrustedFrontendCapture:
     """
     def __init__(self, *, renderer, source_renderer, verify_identity, goal_probe_text=None, max_pending=128,
                  ttl_seconds=60, clock=time.monotonic, transcripts=()):
-        require(type(source_renderer) is EngineSourceRenderer and callable(verify_identity),
+        require(_trusted_renderer(source_renderer) and callable(verify_identity),
                 "trusted source renderer and loaded identity check required")
         require(type(max_pending) is int and max_pending > 0
                 and type(ttl_seconds) in (int, float) and math.isfinite(ttl_seconds)
@@ -94,6 +105,10 @@ class TrustedFrontendCapture:
                 transcript = self.transcripts[0]
             require(any(transcript is owned for owned in self.transcripts),
                     "capture requires its session's server-owned transcript")
+            if getattr(transcript, "protocol", None) == "kv_session_v1":
+                return await self._capture_kv(transcript, tok_params, skip_mm_cache)
+            if getattr(transcript, "protocol", None) == "chat_text_v1":
+                return await self._capture_chat(transcript, messages, tok_params, skip_mm_cache)
             return await self._capture_xml(transcript, messages, tok_params, skip_mm_cache)
         require(transcript is None, "transcripts apply to the XML protocol only")
         require(chat_params.chat_template == self.source_renderer.template
@@ -175,6 +190,75 @@ class TrustedFrontendCapture:
                                                                         skip_mm_cache=skip_mm_cache)
             require(_engine_tokens(engine_input, text) == tuple(tokens),
                     "engine input differs from the XML transcript tokens")
+            self._identity()
+            capture = _Capture(_json(source["messages"]), _json(source), text, tuple(tokens),
+                engine_input, _json(engine_input), self.clock() + self.ttl)
+            require(id(capture) not in self._captures, "capture identity collision")
+            self._captures[id(capture)] = capture
+            return capture
+        except BaseException:
+            transcript.abandon()
+            raise
+        finally:
+            self._inflight -= 1
+
+    async def _capture_chat(self, transcript, messages, tok_params, skip_mm_cache):
+        """chat-text protocol: the session's transcript renders the request (the template
+        for a fresh or rebuilt session, exact reply ids otherwise); the source carries the
+        role/content messages, from which the engine re-derives the same tokens."""
+        from runtime_renderer import CHAT_SOURCE_SCHEMA, validate_chat_source
+        options = {name: getattr(tok_params, name) for name in TOKEN_OPTION_NAMES}
+        validate_tokenization_options(options)
+        require(type(messages) is list and all(type(m) is dict and type(m.get("content")) is str
+                for m in messages), "chat-text protocol requires text messages")
+        plain = [dict(role=m.get("role"), content=m["content"]) for m in messages]
+        source = validate_chat_source(dict(schema=CHAT_SOURCE_SCHEMA, messages=plain))
+        self._inflight += 1
+        try:
+            tokens, _stable, _span = transcript.render(source["messages"])
+            text = self.source_renderer.tokenizer.decode(list(tokens))
+            tokenized = await self.renderer.tokenize_prompts_async(
+                [{"prompt_token_ids": list(tokens), "prompt": text}], tok_params)
+            require(type(tokenized) is list and len(tokenized) == 1, "one token prompt required")
+            engine_input = await self.renderer.process_for_engine_async(tokenized[0], time.time(),
+                                                                        skip_mm_cache=skip_mm_cache)
+            require(_engine_tokens(engine_input, text) == tuple(tokens),
+                    "engine input differs from the chat-text transcript tokens")
+            self._identity()
+            capture = _Capture(_json(source["messages"]), _json(source), text, tuple(tokens),
+                engine_input, _json(engine_input), self.clock() + self.ttl)
+            require(id(capture) not in self._captures, "capture identity collision")
+            self._captures[id(capture)] = capture
+            return capture
+        except BaseException:
+            transcript.abandon()
+            raise
+        finally:
+            self._inflight -= 1
+
+    async def _capture_kv(self, transcript, tok_params, skip_mm_cache):
+        """kv-session protocol: the session's token stream plus the staged request's
+        tail; the source carries that tail and the new messages to the engine, which
+        re-derives the same tokens from its own stream (no template on either side)."""
+        from remote_ra_live_v2 import kv_session_protocol as kv
+        options = {name: getattr(tok_params, name) for name in TOKEN_OPTION_NAMES}
+        validate_tokenization_options(options)
+        request = transcript.staged
+        require(type(request) is kv.KvRequest, "kv-session capture without a staged request")
+        self._inflight += 1
+        try:
+            first = transcript.turn == 0
+            source = kv.source(request, kv.new_messages(request, transcript.history, first),
+                               kv.objective_of(request.messages) if first else None)
+            tokens, _stable, _span = transcript.render(request)
+            text = self.source_renderer.tokenizer.decode(list(tokens))
+            tokenized = await self.renderer.tokenize_prompts_async(
+                [{"prompt_token_ids": list(tokens), "prompt": text}], tok_params)
+            require(type(tokenized) is list and len(tokenized) == 1, "one token prompt required")
+            engine_input = await self.renderer.process_for_engine_async(tokenized[0], time.time(),
+                                                                        skip_mm_cache=skip_mm_cache)
+            require(_engine_tokens(engine_input, text) == tuple(tokens),
+                    "engine input differs from the kv-session transcript tokens")
             self._identity()
             capture = _Capture(_json(source["messages"]), _json(source), text, tuple(tokens),
                 engine_input, _json(engine_input), self.clock() + self.ttl)

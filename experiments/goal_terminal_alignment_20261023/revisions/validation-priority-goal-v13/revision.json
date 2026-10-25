@@ -1,0 +1,11 @@
+{
+  "time": 1792837439.901363,
+  "reason": "Prioritize current Goal async repair in pending job3448149; previousjob3447727finished before change",
+  "algorithm_changed": false,
+  "configs_changed": false,
+  "order": [
+    "goal-qwen",
+    "goal-gemma",
+    "terminal-qwen-vanilla"
+  ]
+}

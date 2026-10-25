@@ -107,6 +107,11 @@ HYBRID = BYTES['hybrid'] * len(E.MAMBA)
 QUERY = ('goal_query', 'observation_query')
 POLICIES = ('full', 'random50', 'goal_query', 'observation_query')
 EPOCH, SOURCE = S.EPOCH, S.SOURCE
+# The slow pass (REMOTE_RA_SLOW_TESTS=1, README section 2.3) runs every (case, policy) of
+# the matrices here and in the modules that reuse them; the default suite, which
+# check_git_release.py runs, keeps a short variant of each.
+SLOW = os.environ.get('REMOTE_RA_SLOW_TESTS') == '1'
+SLOW_REASON = 'set REMOTE_RA_SLOW_TESTS=1 (the slow pass, README section 2.3; not in the archive suite)'
 
 
 class Case(NS):
@@ -942,9 +947,14 @@ class MatrixEndToEndTests(MatrixChecks, unittest.TestCase):
         return h, infos, cancel, files
 
     def test_every_case_and_policy(self):
+        # Default suite: every policy on legacy-784 and the query policies at P = 16; the
+        # legacy/decoupled-784 comparison then runs in the slow pass (goal_query's is
+        # test_decoupled_784_evidence_differs_only_in_documented_fields).
         results = {}
         for case in CASES:
             for policy in POLICIES:
+                if not (SLOW or case.name == 'legacy-784' or (case.name == '16-784' and policy in QUERY)):
+                    continue
                 with self.subTest(case=case.name, policy=policy):
                     h, infos, cancel, files = self.run_case(policy, case)
                     results[(case.name, policy)] = semantics(h, infos, cancel)
@@ -1039,6 +1049,14 @@ TASKS = (TASK, dict(instance_id='e2e-pm-b', problem_statement='Parse ISO week da
          dict(instance_id='e2e-pm-c', problem_statement='Add a dry run flag to src/cli.py.'))
 
 
+class CapacityStall(RuntimeError):
+    """MultiHarness.serve: every lane with work was refused with CAPACITY_WAIT while nothing
+    runs. No completion can free a block; only a session close or --release-idle-pages
+    could (capacity.pinned_elsewhere). Before the fix of tb16 job 3398129 the gate
+    admitted such a turn unchecked and it failed for lack of blocks (on the GPU, a fatal
+    preemption)."""
+
+
 class MultiHarness(Harness):
     """One engine and one worker serving a session per task, as compose_engine wires
     them (startup task list, RegisteredRouteBridge with the capacity gate,
@@ -1052,6 +1070,9 @@ class MultiHarness(Harness):
     def __init__(self, policy, output, case, tasks=None):
         tasks = TASKS if tasks is None else tasks
         super().__init__(policy, output, case, tasks=tasks)
+        # compose_engine sizes the lifecycle's request bound from the task list.
+        from remote_ra_live_v2.composition import engine_lifecycle
+        self.lifecycle = self.core._remote_ra_live_v2_lifecycle = engine_lifecycle(self.core, self.live)
         from registered_add_protocol import RegisteredAddDispatcher
         from remote_ra_live_v2.registered_route import RegisteredRouteBridge
         self.route = RegisteredRouteBridge(self.lifecycle)
@@ -1191,14 +1212,19 @@ class MultiHarness(Harness):
 
     def serve(self, check=None):
         """Admit one turn per pass (round robin over the lanes with work and no request
-        in flight), then one batched step, until every lane's script is done."""
-        k = 0
+        in flight), then one batched step, until every lane's script is done. Every lane
+        with work refused (CAPACITY_WAIT) in a row while nothing runs: CapacityStall."""
+        k = refused = 0
         while any(lane.script for lane in self.lanes) or self.running:
             busy = {info['lane'].index for info in self.running}
             ready = [lane for lane in self.lanes if lane.script and lane.index not in busy]
             if ready:
-                self.admit(ready[k % len(ready)])
+                admitted = self.admit(ready[k % len(ready)]) is not None
                 k += 1
+                refused = 0 if admitted or self.running else refused + 1
+                if refused >= len(ready):
+                    raise CapacityStall('every lane with work was refused (CAPACITY_WAIT) while nothing runs; '
+                                        'free blocks by pool %s' % list(self.kv.get_num_free_blocks_by_pool()))
             if self.running:
                 before = len(self.done)
                 self.batch_step()
@@ -1257,8 +1283,11 @@ class MultiSessionMatrixTests(unittest.TestCase):
         h.restores += len(plan['restore'])
 
     def test_three_sessions_over_the_matrix(self):
+        # Default suite: random50 on legacy-784, goal_query at P = 16; the slow pass all six.
         for case in CASES:
             for policy in ('random50', 'goal_query'):
+                if not (SLOW or (case.name, policy) in (('legacy-784', 'random50'), ('16-784', 'goal_query'))):
+                    continue
                 with self.subTest(case=case.name, policy=policy):
                     multi = Case(**dict(vars(case), sessions=len(TASKS)))
                     with ExitStack() as stack:

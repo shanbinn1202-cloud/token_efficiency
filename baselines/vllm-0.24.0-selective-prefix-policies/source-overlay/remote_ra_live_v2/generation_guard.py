@@ -10,7 +10,7 @@ from .contract import require
 def guarded_execute(runner, execute):
     @wraps(execute)
     def invoke(output, *args, **kwargs):
-        from .native_probe import active_probe
+        from .native_probe import active_probe, mixed_ids
         if active_probe(runner) is not None:
             return execute(output, *args, **kwargs)
         owner = runner._remote_ra_live_v2_allocation_owner
@@ -21,8 +21,10 @@ def guarded_execute(runner, execute):
         owned = tuple(rid for rid in scheduled if rid in owner.records)
         if not owned:
             return execute(output, *args, **kwargs)
-        # Batched decode: every scheduled request must be an owned generation.
-        require(len(owned) == len(scheduled),
+        # Batched decode: every scheduled request must be an owned generation
+        # (--phase1-in-step: or the one armed probe row).
+        probes = tuple(rid for rid in mixed_ids(runner) if rid in scheduled)
+        require(len(owned) + len(probes) == len(scheduled),
                 'generation guard requires owned requests only')
         identities = tuple(owner.records[rid]['identity'] for rid in owned)
         bridge.qwen.enter_execute(*identities)
@@ -30,10 +32,18 @@ def guarded_execute(runner, execute):
             if owner.startup.get('source_closure_verified'):
                 from .connector_guard import empty_scheduler_metadata
                 empty_scheduler_metadata(output)
-                owner.io.drain()
+                if getattr(owner.io, 'handoff', False):
+                    owner.io.check_connector()   # --gdn-device-handoff: no device drain
+                else:
+                    owner.io.drain()
             result = execute(output, *args, **kwargs)
+            if getattr(bridge, 'decode_fastpath2', False):
+                # --decode-fastpath2: the step's after-forward work, after the logits launch.
+                bridge.finish_step()
             bridge.qwen.leave_execute(*identities)
         except BaseException as original:
+            if getattr(bridge, 'decode_fastpath2', False):
+                bridge.discard_step()
             # Original call has returned, but queued device work may remain.
             bridge.qwen.leave_failed_execute(*identities)
             try:

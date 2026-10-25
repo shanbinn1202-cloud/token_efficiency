@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "cases": {
+    "success": "accepted",
+    "original_bounded_candidate": "counted separately",
+    "HTTP500": "rejected",
+    "zero_output": "rejected",
+    "length_truncation": "rejected"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "time": 1792835829.9333944,
+  "reason": "32K probe exposed full Goal query beyond native16K forward, including original rewrite fallback",
+  "changes": "Qwen Goal query uses complete token sequence over aligned native forwards, exact GDN carry and full attention prefix; only final Goal vector used; same cold private lease, no history/Goal truncation",
+  "algorithm_changed": false,
+  "gpu_validation_required": true,
+  "cpu_validation": {
+    "passed": true,
+    "tests": 3,
+    "log": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/qwen-goal-query-chunks-v10/tests.log",
+    "coverage": "Full long Goal query1700tokens, long history2700tokens, native4096 vs512, exact GDN chain/selected pages/replies/pool cleanup and malformed leases"
+  }
+}

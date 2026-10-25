@@ -305,6 +305,33 @@ def plain(value):
     return json.loads(json.dumps(value, default=lambda o: getattr(o, 'block_id', repr(o))))
 
 
+def without_goal_text(files):
+    """Evidence files without goal_query's Goal-text recording (goal-text branch,
+    remote_ra_live_v2.goal_text): goals.jsonl dropped, the native and runtime
+    ``goal_text`` references popped, each runtime row's native_evidence_sha256
+    naming its native file without the reference. The code before that branch
+    wrote exactly these files; other policies' files come back unchanged."""
+    out, natives = {}, {}
+    for name, raw in files.items():
+        if name.startswith('native-'):
+            value = json.loads(raw)
+            value.pop('goal_text', None)
+            out[name] = evidence.encoded(value)
+            natives[value['request_id']] = sha256(out[name]).hexdigest()
+    for name, raw in files.items():
+        if name == 'goals.jsonl' or name in out:
+            continue
+        if name == 'runtime.jsonl':
+            rows = [json.loads(line) for line in raw.splitlines()]
+            for row in rows:
+                if row.get('query'):
+                    row['query'].pop('goal_text', None)
+                row['native_evidence_sha256'] = natives[row['request_id']]
+            raw = b''.join(evidence.encoded(row) + b'\n' for row in rows)
+        out[name] = raw
+    return dict(sorted(out.items()))
+
+
 def deterministic(stack):
     """secrets.token_bytes/token_hex, the evidence clocks (perf_counter_ns,
     monotonic_ns), the payload and identity sequences from counters: runs that make
@@ -456,6 +483,12 @@ def play(policy, *, old=False, aligned=False, count=False):
                     hashing=hashing.calls, decode_steps=decode_steps[0])
 
 
+# The former-code comparisons below: full and goal_query in the default suite,
+# observation_query too in the slow pass (REMOTE_RA_SLOW_TESTS=1, README section 2.3).
+POLICIES_DEFAULT_OR_SLOW = (('full', 'goal_query', 'observation_query')
+                            if os.environ.get('REMOTE_RA_SLOW_TESTS') == '1' else ('full', 'goal_query'))
+
+
 def walk(a, b, path, out):
     """Every path where two JSON values differ: (path, left, right)."""
     if type(a) is not type(b):
@@ -521,8 +554,10 @@ class FormerEquivalenceTests(unittest.TestCase):
         self.assertEqual(before['identities'], after['identities'])
         for key in ('trace', 'prepared', 'receipts', 'allocations', 'views'):
             self.assertEqual(before[key], after[key], key)
-        self.assertEqual(sorted(after['files']), sorted(before['files']))
-        for name, raw in after['files'].items():
+        # The former native terminal records no goal_query Goal text (goal-text branch).
+        files = without_goal_text(after['files'])
+        self.assertEqual(sorted(files), sorted(before['files']))
+        for name, raw in files.items():
             self.assertEqual(raw, before['files'][name], name)
         # The worker forward records, every one in order: equal apart from what they
         # no longer carry (hidden_sha256, identity, mac) and the added sequence.
@@ -539,7 +574,7 @@ class FormerEquivalenceTests(unittest.TestCase):
         self.assertEqual([n['body']['sequence'] for n in new], list(range(1, len(new) + 1)))
 
     def test_former_and_new_code_send_and_write_the_same(self):
-        for policy in ('full', 'goal_query', 'observation_query'):
+        for policy in POLICIES_DEFAULT_OR_SLOW:
             with self.subTest(policy=policy):
                 before = play(policy, old=True)
                 aligned = play(policy, aligned=True)
@@ -550,7 +585,7 @@ class FormerEquivalenceTests(unittest.TestCase):
                 self.assertEqual(set(before['binding_digests'].values()), {3})
 
     def test_minted_identity_changes_only_the_identity_and_what_is_computed_over_it(self):
-        for policy in ('full', 'goal_query', 'observation_query'):
+        for policy in POLICIES_DEFAULT_OR_SLOW:
             with self.subTest(policy=policy):
                 aligned, now = play(policy, aligned=True), play(policy)
                 self.assertEqual(aligned['outputs'], now['outputs'])

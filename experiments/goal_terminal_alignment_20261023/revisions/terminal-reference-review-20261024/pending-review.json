@@ -1,0 +1,86 @@
+{
+  "time": 1792854944.168681,
+  "authorized_by": null,
+  "status": "awaiting_user_decision",
+  "formal_task_count": 89,
+  "proposed_policy": "Original tasks, resources, timeouts and tests unchanged; annotate failed reference controls, never convert failures to reference passes.",
+  "tasks": {
+    "crack-7z-hash": {
+      "original_files_sha256": {
+        "instruction.md": "f5f89400c549eefb2c245caa7770356737b7a12098e6879787e846d9cb5eb822",
+        "task.toml": "431655d1681325e7a768d64f1425fdc3efa7a345cd69d265bcf1bd8811210906",
+        "solution/solve.sh": "2640463e6e14658426f3ea629e0702688e00553eb8006cf31ec3b9cff75c4b19",
+        "environment/Dockerfile": "387c60f7a21d4548c12e1af2453aa8bdd12c45bbe576666c3e48777c5b7c3ecb",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "f18d7565f690727484ac43d012d36a4f386236419501e4a4277134a8e8fcfcc9",
+        "environment/task-deps/secrets.7z": "a2e13fcbb4c2c8e92b1bf9d78ec91376705d1f5631d5bd4de64f82aa0553b773"
+      },
+      "controls": [
+        {
+          "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/crack-7z-hash-oracle.json",
+          "result_sha256": "4797d06217940ec8d271175b2c200be8b808da14248ade05edf5ad57abcbefff",
+          "reward": {
+            "reward": 0.0
+          },
+          "exception_type": "AgentTimeoutError",
+          "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/crack-7z-hash-native-kvm-apt-v42-oracle-1792852584334962509"
+        },
+        {
+          "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/crack-7z-hash-oracle.json",
+          "result_sha256": "eed6d74c380838905c1d877e347b2c31bb356c6fe543749b727d1e9440a364a3",
+          "reward": {
+            "reward": 0.0
+          },
+          "exception_type": "AgentTimeoutError",
+          "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/crack-7z-hash-standard-dev-v46-oracle-1792853786350480026"
+        }
+      ]
+    },
+    "portfolio-optimization": {
+      "original_files_sha256": {
+        "instruction.md": "ffaadcbf9f576b5d5e087d2a06a4b525dd52c6b84d43eb9d85107f0a9aebcb5d",
+        "task.toml": "ec79b1c5712b30dc50c2739a7c19391014d160c270276c0fc6579d33d4d133ed",
+        "solution/solve.sh": "c9291da2bf6d504896b1259bf3d896c7ca29d71630975c49493805f758d138cc",
+        "environment/cvxopt_benchmark.py": "c49315473bef2ebaa7829ccec849b31d964f0a5a00492a515952d1db5ffebdbd",
+        "environment/portfolio_optimized.py": "e289125b4113921152117280a49a0294430bd1dca76f1515c7d79942cb41f5e5",
+        "environment/setup.py": "4712ead66edc6684c45880954e83d8b9a915bdaf0b60ebb0ee895a5b740a4c09",
+        "environment/Dockerfile": "3d0210dedc3a9c0a7956369ba7025fbf6cd4e1bf9eb556bd3a8cbd06092904e6",
+        "environment/portfolio_baseline.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+        "environment/portfolio_optimized.c": "42bd3baf5bdf3c8a8052a0d59ed0e2af72b64adbdb4d6fdf85bbaded36c3da41",
+        "environment/benchmark.py": "64b6e7a40f79ed90a550bc15249ebc09babda14efe04a85a3cf54acd7fb4819f",
+        "tests/test.sh": "25d5d5008edeab93d730b44f723687d2b08978f9f53750f62af8aeb1ecae90c6",
+        "tests/portfolio_baseline_protected.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+        "tests/test_outputs.py": "800fc762b0a107b197d17cc2c094858490f02f09f47af4e3ee84253594f97fa7"
+      },
+      "controls": [
+        {
+          "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-kvm-apt-v42/controls/portfolio-optimization-oracle.json",
+          "result_sha256": "60ff1354ce1e41c863b6829fcc89576c44394593f831cd6e5057351cb4e4031c",
+          "reward": {
+            "reward": 0.0
+          },
+          "exception_type": null,
+          "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/portfolio-optimization-native-kvm-apt-v42-oracle-1792854149515160599"
+        },
+        {
+          "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-standard-dev-v46/controls/portfolio-optimization-oracle.json",
+          "result_sha256": "7e443fba4bce8bb00569043af50253239da45161bb16b4bdb67ab223fcfecb01",
+          "reward": {
+            "reward": 0.0
+          },
+          "exception_type": null,
+          "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/portfolio-optimization-standard-dev-v46-oracle-1792854461874548250"
+        },
+        {
+          "result": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/terminal-native-performance-v47/controls/portfolio-optimization-oracle.json",
+          "result_sha256": "4f4740f59266c6fd74461c53889dcb321c60b0657238181132ae72390fc80a65",
+          "reward": {
+            "reward": 0.0
+          },
+          "exception_type": null,
+          "trial": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal-validation/portfolio-optimization-native-performance-v47-oracle-1792854612345838889"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,611 @@
+--- original/serve.py
++++ adapted/serve.py
+@@ -13,7 +13,7 @@
+ def wire(value):return json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+ def pin(value):return digest(wire(value))
+ 
+-MAX_MODEL_LEN=65536;MAX_BATCHED=16384
++MAX_MODEL_LEN=262144;MAX_BATCHED=16384
+ # Two-phase turns keep only the resident set, the live tail/observation blocks and
+ # one GDN slot per group: at 64k tokens about 45-60 blocks of 51.4 MB for the query
+ # policies and about 90 for Full; 8 GiB holds about 166 usable blocks.
+@@ -21,7 +21,7 @@
+ # Multi-session stage 2: --kv-cache-gib sizes the GPU KV pool (default 8, the
+ # qualified profile). vLLM derives the block count from these bytes; the
+ # capacity gate reads the pool's free blocks, never a fixed count.
+-KV_CACHE_GIB=(8,16,24,32)   # also written out in main()'s --kv-cache-gib choices
++KV_CACHE_GIB=(8,16,24,25,32)   # also written out in main()'s --kv-cache-gib choices
+ # Decoupled KV layout (exp-decouple-pages, interface I0): full-attention Pages of
+ # P tokens in their own block pool, the GDN state in a second pool. 784 without
+ # --kv-layout is the legacy shared pool: no extra flag, config key or pin.
+@@ -472,7 +472,7 @@
+     effective=dict(model=model,revision=revision,host='127.0.0.1',distributed_executor_backend='uni',
+         tensor_parallel_size=1,pipeline_parallel_size=1,max_num_seqs=seqs,max_model_len=max_model_len,
+         max_num_batched_tokens=MAX_BATCHED,kv_cache_memory_bytes=kv_bytes,seed=42,enable_prefix_caching=True,
+-        enforce_eager=True,mamba_cache_mode='align',gdn_prefill_backend='triton',enable_auto_tool_choice=True,
++        enforce_eager=True,async_scheduling=True,attention_backend='TRITON_ATTN',mamba_cache_mode='align',gdn_prefill_backend='triton',enable_auto_tool_choice=True,
+         tool_call_parser='qwen3_xml',chat_template_content_format='string')
+     text_only=[]
+     if language_model_only:
+@@ -537,13 +537,13 @@
+         transfer['kv_connector_extra_config']['cpu_bytes_to_use']=pool
+     argv=['--model',model,'--served-model-name','selective-prefix','--revision',revision,
+         '--host','127.0.0.1','--port',str(port),'--distributed-executor-backend','uni',
+-        '--no-async-scheduling','--tensor-parallel-size','1','--pipeline-parallel-size','1',
++        '--async-scheduling','--tensor-parallel-size','1','--pipeline-parallel-size','1',
+         '--max-num-seqs',str(seqs),'--max-model-len',str(max_model_len),'--max-num-batched-tokens',str(MAX_BATCHED),
+         '--kv-cache-memory-bytes',str(kv_bytes),'--seed','42','--enable-prefix-caching',
+         '--prefix-caching-hash-algo','sha256',*eager,'--mamba-cache-mode','align',
+         '--reasoning-parser','qwen3','--enable-auto-tool-choice','--tool-call-parser','qwen3_xml',
+         '--chat-template',str(template),'--chat-template-content-format','string',
+-        '--kv-transfer-config',json.dumps(transfer,separators=(',',':')),'--gdn-prefill-backend','triton',*extra,
++        '--kv-transfer-config',json.dumps(transfer,separators=(',',':')),'--gdn-prefill-backend','triton','--attention-backend','TRITON_ATTN',*extra,
+         *torch_profile_arguments(),*text_only]
+     program=("import sys,runpy;sys.path[:0]=[sys.argv[1],sys.argv[2]];"
+         "sys.argv=['vllm.entrypoints.openai.api_server']+sys.argv[3:];"
+@@ -594,7 +594,7 @@
+ # memory shares (--mem=227120M) for the arena of 16 long sessions.
+ # False turns --start off again for this profile (dry runs only).
+ GEMMA4_SERVABLE=True
+-GEMMA4_KV_CACHE_GIB=(24,28,32)
++GEMMA4_KV_CACHE_GIB=(24,25,28,32)
+ # full (gemma-goal, the user's decision of 10-16): 16 sessions at 131,072 tokens with
+ # --release-idle-pages run at --kv-cache-gib 32, as Qwen's full. The release rule's minimum
+ # is 30.02 GiB (30,738 MiB); 32 GiB keeps 1,608 global Pages (1.96 GiB) above it.
+@@ -758,7 +758,7 @@
+     effective=dict(model=model,revision=revision,host='127.0.0.1',distributed_executor_backend='uni',
+         tensor_parallel_size=1,pipeline_parallel_size=1,max_num_seqs=seqs,max_model_len=max_model_len,
+         max_num_batched_tokens=forward,kv_cache_memory_bytes=kv_bytes,seed=42,enable_prefix_caching=True,
+-        enforce_eager=True,attention_backend=MP.GEMMA4_ATTENTION_BACKEND,enable_auto_tool_choice=True,
++        enforce_eager=True,async_scheduling=True,attention_backend=MP.GEMMA4_ATTENTION_BACKEND,enable_auto_tool_choice=True,
+         tool_call_parser='gemma4',chat_template_content_format='openai',language_model_only=True,
+         block_size=page_tokens,additional_config=additional)
+     eager=['--enforce-eager']
+@@ -804,7 +804,7 @@
+                   kv_connector_extra_config={'cpu_bytes_to_use':pool})
+     argv=['--model',model,'--served-model-name','selective-prefix','--revision',revision,
+         '--host','127.0.0.1','--port',str(port),'--distributed-executor-backend','uni',
+-        '--no-async-scheduling','--tensor-parallel-size','1','--pipeline-parallel-size','1',
++        '--async-scheduling','--tensor-parallel-size','1','--pipeline-parallel-size','1',
+         '--max-num-seqs',str(seqs),'--max-model-len',str(max_model_len),'--max-num-batched-tokens',str(forward),
+         '--kv-cache-memory-bytes',str(kv_bytes),'--seed','42','--enable-prefix-caching',
+         '--prefix-caching-hash-algo','sha256',*eager,'--attention-backend',MP.GEMMA4_ATTENTION_BACKEND,
+@@ -863,7 +863,7 @@
+     group.add_argument('--goal-query-variant',choices=('full_goal','candidate_entity_cap8'))
+     group.add_argument('--fill-seed',type=int,
+         help='random_fill only: seed of the random fill, an integer in [0, 2^32) (default 42)')
+-    parser.add_argument('--kv-cache-gib',type=int,choices=(8,16,24,28,32),default=8,
++    parser.add_argument('--kv-cache-gib',type=int,choices=(8,16,24,25,28,32),default=25,
+         help='GPU KV cache size in GiB (default 8, the qualified profile; 28 is for the Gemma 4 profile only)')
+     parser.add_argument('--page-tokens',type=int,choices=(784,16,32,64),default=784,
+         help='full-attention Page size in tokens (default 784, the qualified shared-pool layout; '
+@@ -873,14 +873,14 @@
+     parser.add_argument('--max-running-sessions',type=int,metavar='K',
+         help='session pool: --task registers up to 64 tasks, at most K (1-16; 1-24 with --protocol chat-text) '
+              'sessions run at once; a session opens at its first request and closes on POST /v1/sessions/close')
+-    parser.add_argument('--cuda-graphs',choices=('off','piecewise','full','full-decode'),default='off',
++    parser.add_argument('--cuda-graphs',choices=('off','piecewise','full','full-decode'),default='full',
+         help='off (default): eager, the qualified profile; piecewise/full: torch.compile with CUDA graphs; '
+              'full-decode: CUDA graphs of the eager decode steps, no torch.compile (all three GPU-validated; '
+              'outputs can differ from eager, README 4.8)')
+-    parser.add_argument('--max-tokens',type=int,choices=(1536,4096),default=1536,
++    parser.add_argument('--max-tokens',type=int,choices=(1536,4096),default=4096,
+         help='reply bound: new tokens per turn, forced on every request (default 1536, the PoC value; '
+              '4096 is pinned in startup.json; GPU-validated, README 4.9)')
+-    parser.add_argument('--max-model-len',type=int,choices=(65536,131072,262144),default=65536,
++    parser.add_argument('--max-model-len',type=int,choices=(65536,131072,262144),default=262144,
+         help='context limit in tokens, prompt plus reply (default 65536, the qualified profile; '
+              '131072 and 262144 are GPU-validated, README 4.9)')
+     parser.add_argument('--dram-arena-gib',type=int,metavar='GIB',
+--- original/source-overlay/remote_ra_live_v2/model_profile.py
++++ adapted/source-overlay/remote_ra_live_v2/model_profile.py
+@@ -110,7 +110,7 @@
+ 
+ # Launcher choices of the Gemma profile (D-2, D-4, D-7, D-8).
+ GEMMA4_PAGE_TOKENS = (16, 32)      # P = 16 (D-2), P = 32 the fallback
+-GEMMA4_FORWARD_TOKENS = 8192       # one native forward (max_num_batched_tokens, D-4)
++GEMMA4_FORWARD_TOKENS = 4096       # one native forward (max_num_batched_tokens, D-4)
+ # goal_query (gemma-goal): the largest Goal forward, the window layout's Goal transient
+ # (kv_layout.WindowLayout.goal_tokens). The Goal forward is a separate cold forward of the
+ # <retrieval_query> text that runs after phase 1 while phase 1's fresh sliding blocks are
+--- original/source-overlay/remote_ra_live_v2/positions.py
++++ adapted/source-overlay/remote_ra_live_v2/positions.py
+@@ -15,7 +15,7 @@
+     checks=(('mamba_cache_mode',window or runner.cache_config.mamba_cache_mode=='align'),
+             ('num_spec_tokens',runner.num_spec_tokens==0),
+             ('speculative_config',runner.speculative_config is None),
+-            ('use_async_scheduling',not runner.use_async_scheduling),
++            ('use_async_scheduling',not runner.use_async_scheduling or getattr(runner, '_remote_ra_async_ready', False)),
+             ('uses_xdrope_dim',runner.uses_xdrope_dim==0))
+     for field,ok in checks:require(ok,context+': unsupported '+field)
+     if runner.uses_mrope:
+--- original/source-overlay/native_worker_registration.py
++++ adapted/source-overlay/native_worker_registration.py
+@@ -192,8 +192,9 @@
+             and getattr(parallel, "data_parallel_size", 1) == 1
+             and getattr(parallel, "worker_extension_cls", None) in (None, ""),
+             "single worker without class extension required")
+-    require(not executor.scheduler_config.async_scheduling,
+-            "initial slice requires synchronous scheduling")
++    if executor.scheduler_config.async_scheduling:
++        from remote_ra_live_v2.async_support import attach
++        attach(wrapper.worker.model_runner)
+     request = dict(channel_epoch=channel_epoch, coordinator_epoch=coordinator_epoch,
+                    challenge=secrets.token_hex(32), provenance=asdict(provenance),
+                    projection_seed=projection_seed)
+--- original/source-overlay/remote_ra_live_v2/worker_composition.py
++++ adapted/source-overlay/remote_ra_live_v2/worker_composition.py
+@@ -119,6 +119,8 @@
+                 receipts.append(self.qwen.after_forward(state.assignment.identity,
+                     hidden_states[offset:offset + count],
+                     finite=None if finite is None else finite[offset:offset + count], **drained))
++                from .async_support import checkpoint
++                checkpoint(self.owner, state)
+             return receipts[0] if len(receipts) == 1 else tuple(receipts)
+         callback = getattr(scheduler_output, "remote_ra_live_v2_after", None)
+         if callback is not None:
+@@ -181,6 +183,8 @@
+             receipts.append(self.qwen.after_forward(state.assignment.identity,
+                 hidden_states[offset:offset + count],
+                 finite=None if every else host[offset:offset + count], finite_ok=every, **drained))
++            from .async_support import checkpoint
++            checkpoint(self.owner, state)
+         if not handoff:
+             self.qwen.step_joined = True
+         return receipts[0] if len(receipts) == 1 else tuple(receipts)
+@@ -344,6 +348,8 @@
+     bridge = WorkerBridge(qwen, owner)
+     owner.bind_bridge(bridge)
+     runner._remote_ra_live_v2_bridge = bridge
++    from .async_support import attach as attach_async
++    attach_async(runner)
+     if fastpath2:
+         # Before the step profile wraps the bridge (its deferred after-forward names).
+         from .decode_fastpath2 import attach_worker as attach_fastpath2
+--- original/source-overlay/remote_ra_live_v2/allocation_owner.py
++++ adapted/source-overlay/remote_ra_live_v2/allocation_owner.py
+@@ -485,6 +485,8 @@
+             s = self.sessions[ns]
+             state = qwen.requests[identity.request]
+             output = tuple(payload["output_token_ids"])
++            from .async_support import accepted_boundary
++            accepted_boundary(self, state, payload["computed_end"])
+             C2 = state.cursor; Q2 = C2 // P * P
+             require(all(type(t) is int and t >= 0 for t in output) and
+                     C2 == len(rec["tokens"]) + len(output) - 1 == payload["computed_end"] and
+@@ -570,6 +572,8 @@
+         def cancel(backend, qwen):
+             self._drained_probes(rec)
+             identity = rec["identity"]
++            from .async_support import drop
++            drop(self, identity.request)
+             receipt = qwen.finish(identity, "cancel")   # drops phase-1 state and latest
+             self.bridge.assignments.pop(identity.request, None)
+             self.records.pop(identity.request, None)
+--- original/source-overlay/remote_ra_live_v2/allocation_guard.py
++++ adapted/source-overlay/remote_ra_live_v2/allocation_guard.py
+@@ -32,7 +32,7 @@
+         groups = getattr(computed, 'blocks', None)
+         if groups is None or any(groups):
+             reject('new_computed_blocks', computed, 'cannot borrow actual exact-prefix blocks')
+-    for field in ('num_preemptions', 'num_output_placeholders'):
++    for field in ('num_preemptions',):
+         value = getattr(request, field, 0)
+         if type(value) is not int or value != 0:
+             reject(field, value, 'preemption/asynchronous placeholder state unsupported')
+@@ -41,7 +41,10 @@
+     status = getattr(getattr(request, 'status', None), 'name', None)
+     if status not in ('WAITING', 'RUNNING'):
+         reject('request.status', status, 'only fresh WAITING admission or owned RUNNING continuation')
+-    logical, total, count = request.num_computed_tokens, request.num_tokens, values['num_new_tokens']
++    placeholders = getattr(request, 'num_output_placeholders', 0)
++    if type(placeholders) is not int or not 0 <= placeholders <= 2:
++        reject('num_output_placeholders', placeholders, 'non-spec native async depth exceeded')
++    logical, total, count = request.num_computed_tokens, request.num_tokens + placeholders, values['num_new_tokens']
+     for field, value in (('request.num_computed_tokens', logical), ('request.num_tokens', total),
+                          ('num_new_tokens', count)):
+         if type(value) is not int:
+--- original/source-overlay/remote_ra_live_v2/chunk_protocol.py
++++ adapted/source-overlay/remote_ra_live_v2/chunk_protocol.py
+@@ -17,7 +17,7 @@
+             reject('num_new_tokens',count,'prefill crosses the rendered prompt end')
+         phase='prefill'
+     else:
+-        if count!=1 or request.num_tokens!=start+1:
++        if count!=1 or request.num_tokens+getattr(request,'num_output_placeholders',0)!=start+1:
+             reject('num_new_tokens',count,'non-spec decode requires one fresh token')
+         phase='decode'
+     return dict(start=start,end=end,phase=phase,binding=binding.identity,
+--- original/source-overlay/remote_ra_live_v2/native_probe.py
++++ adapted/source-overlay/remote_ra_live_v2/native_probe.py
+@@ -150,6 +150,8 @@
+             rows=None,restored=False,position_evidence=[],state=None,tail=None)
+         self.executing=True
+         try:
++            from .async_support import before_probe
++            before_probe(self.runner)
+             from .positions import runtime_mode
+             runtime_mode(self.runner,'phase-1 probe')
+             require(self.runner.execute_model_state is None,'phase-1 probe: pending execute_model_state')
+--- original/source-overlay/vllm/v1/engine/core.py
++++ adapted/source-overlay/vllm/v1/engine/core.py
+@@ -1366,6 +1366,9 @@
+     def _process_input_queue(self):
+         """Exits when an engine step needs to be performed."""
+ 
++        if getattr(self, "_remote_ra_dynamic_mode", False) and self.batch_queue:
++            from remote_ra_live_v2.async_support import drain_before_admission
++            drain_before_admission(self)
+         authority = getattr(self, "_remote_ra_authority", None)
+         if authority is not None:
+             authority.poll()
+@@ -1440,6 +1443,9 @@
+         if self._remote_ra_registered:
+             self._remote_ra_held = req
+             return True
++        if self.batch_queue:
++            from remote_ra_live_v2.async_support import drain_before_admission
++            drain_before_admission(self, force=True)
+         self._remote_ra_registered = True
+         return False
+ 
+@@ -1459,6 +1465,9 @@
+             # separate pass here, where admissions ran before.
+             phase1.settle()
+         if self.is_running() and self._remote_ra_goal_built():
++            if self.batch_queue:
++                from remote_ra_live_v2.async_support import drain_before_admission
++                drain_before_admission(self, force=True)
+             from registered_add_timing import timed
+             self._remote_ra_registered = True
+             with timed("engine_resume"):
+@@ -1469,6 +1478,9 @@
+ 
+         # Step the engine core.
+         outputs, model_executed = self.step_fn()
++        if getattr(self, "_remote_ra_dynamic_mode", False):
++            from remote_ra_live_v2.async_support import observe_outputs
++            observe_outputs(self, outputs)
+         # Put EngineCoreOutputs into the output queue.
+         for output in outputs.items() if outputs else ():
+             self.output_queue.put_nowait(output)
+--- original/source-overlay/remote_ra_live_v2/async_support.py
++++ adapted/source-overlay/remote_ra_live_v2/async_support.py
+@@ -0,0 +1,222 @@
++"""Async scheduling support without changing the selected history or turn boundary.
++
++Native AsyncScheduler may run one decode step past an EOS/action marker before
++its earlier output reaches EngineCore. Keep bounded device-side GDN checkpoints
++and publish only the accepted output prefix at completion. Attention entries
++beyond that prefix and their page vectors are never committed.
++"""
++from .contract import require
++
++
++def active_memory_tokens(config):
++    """Memory admission for archived history; logical positions stay at max_len.
++
++    A continuing turn needs selected history, at most one native prefill batch,
++    the decode allowance, and two boundary pages. Native capacity checks remain
++    responsible for admitting every actual request and all concurrent sessions.
++    """
++    import os
++    length = config.model_config.max_model_len
++    if os.environ.get('REMOTE_RA_HTTP_RUNTIME') != '1':
++        return length
++    from remote_ra_http.config import load
++    runtime = load()
++    selection = runtime.get('selection_contract')
++    if runtime['policy'] not in ('goal_query', 'observation_query', 'random_fill') or not selection:
++        return length
++    budget = selection.get('active_token_budget')
++    if budget is None:
++        return length
++    require(type(budget) is int and budget > 0, 'fixed positive active history budget required')
++    from .mswea_protocol import MAX_TOKENS
++    return min(length, budget + config.scheduler_config.max_num_batched_tokens + MAX_TOKENS +
++               2 * selection['page_tokens'])
++
++
++def finish_task(core, index):
++    """Host-side task lifecycle only; no changes to any live task's selection."""
++    authority = core._remote_ra_live_session_authority
++    authority.verify()
++    require(type(index) is int and 0 <= index < len(authority.ids), 'registered task index required')
++    if core.batch_queue:
++        drain_before_admission(core, force=True)
++    sid = authority.ids[index]
++    namespace = authority.namespaces[sid]
++    if sid not in authority.adapter.sessions:
++        return dict(closed=True, index=index, already_closed=True)
++    session = authority.adapter.sessions[sid]
++    require(session.pending is None and not any(s.namespace == namespace
++            for s in authority.adapter.requests.values()), 'cannot finish a task with an active request')
++    authority._close(sid, namespace)
++    return dict(closed=True, index=index)
++
++
++def observe_outputs(core, outputs):
++    """Count scheduler-accepted primary tokens, including unfinished requests.
++
++    An optional local-disk counter is measurement only. Private query forwards
++    and the separate Goal rewriter have no EngineCore token output here.
++    """
++    import os
++    target = os.environ.get('SELECTIVE_ACCEPTED_METRICS')
++    if not target or not outputs:
++        return
++    import json
++    import time
++    count = sum(len(item.new_token_ids) for batch in outputs.values() for item in batch.outputs)
++    core._selective_accepted_tokens = getattr(core, '_selective_accepted_tokens', 0) + count
++    temporary = target + '.tmp'
++    with open(temporary, 'w') as stream:
++        json.dump(dict(accepted_output_tokens=core._selective_accepted_tokens, time=time.time()), stream)
++    os.replace(temporary, target)
++
++
++def attach(runner):
++    if not runner.use_async_scheduling:
++        return
++    cfg = runner.vllm_config
++    require(cfg.parallel_config.tensor_parallel_size == 1 and
++            cfg.parallel_config.pipeline_parallel_size == 1 and
++            cfg.parallel_config.distributed_executor_backend == 'uni' and
++            runner.num_spec_tokens == 0 and runner.speculative_config is None,
++            'selective-prefix async supports native UniProc TP1 non-spec decode')
++    runner._remote_ra_async_checkpoints = {}
++    runner._remote_ra_async_depth = max(2, cfg.max_concurrent_batches + 1)
++    runner._remote_ra_async_ready = True
++
++
++def checkpoint(owner, state):
++    runner = owner.runner
++    if not getattr(runner, '_remote_ra_async_ready', False):
++        return
++    # GPU copies run on the forward stream: the next decode cannot overwrite
++    # the source before its checkpoint is captured. No D2H or hash per token.
++    require(not getattr(owner.backend, "window", False), "Gemma async window validation pending")
++    identity = state.assignment.identity
++    groups = owner.backend._groups(state.latest_hybrid)
++    views = owner.io.validate(groups, 'hybrid')
++    snapshots = runner._remote_ra_async_checkpoints.setdefault(identity.request, {})
++    payload = (snapshots.pop(min(snapshots))[2]
++               if len(snapshots) >= runner._remote_ra_async_depth else {})
++    targets, sources = [], []
++    for view in views:
++        if view.name not in payload:
++            payload[view.name] = tuple(tuple(
++                owner.io.torch.empty_like(owner.io._slice(view,tensor,axis,bid))
++                for tensor,axis in zip(view.tensors,view.axes))
++                for bid in groups[view.group])
++        for index,bid in enumerate(groups[view.group]):
++            for target,tensor,axis in zip(payload[view.name][index],view.tensors,view.axes):
++                source=owner.io._slice(view,tensor,axis,bid).detach()
++                require(target.shape==source.shape and target.dtype==source.dtype,
++                        'checkpoint geometry changed')
++                targets.append(target);sources.append(source)
++    # Bounded reusable buffers and PyTorch's batched copy; identical bytes and
++    # accepted-boundary semantics, without per-token tensor allocation churn.
++    owner.io.torch._foreach_copy_(targets,sources)
++    snapshots[state.cursor] = (identity, state.allocation_generation, payload)
++
++
++def accepted_boundary(owner, state, end):
++    runner = owner.runner
++    if not getattr(runner, '_remote_ra_async_ready', False):
++        return
++    identity = state.assignment.identity
++    snapshots = runner._remote_ra_async_checkpoints.get(identity.request, {})
++    require(type(end) is int and end <= state.cursor and state.active is None and
++            not state.host_executing, 'async completion precedes a joined forward')
++    if end < state.cursor:
++        snapshot = snapshots.get(end)
++        require(snapshot is not None and snapshot[:2] ==
++                (identity, state.allocation_generation),
++                'accepted async boundary has no same-generation GDN checkpoint')
++        groups = owner.backend._groups(state.latest_hybrid)
++        views = owner.io.validate(groups, 'hybrid')
++        owner.io.drain()
++        for view in views:
++            for index, bid in enumerate(groups[view.group]):
++                for part, (tensor, axis) in zip(snapshot[2][view.name][index],
++                                                zip(view.tensors, view.axes)):
++                    target = owner.io._slice(view, tensor, axis, bid)
++                    require(target.shape == part.shape and target.dtype == part.dtype,
++                            'async checkpoint tensor geometry changed')
++                    target.copy_(part)
++        owner.io.drain()
++        prior = state.cursor
++        state.cursor = state.latest_state_step = end
++        state.prompt_complete = end >= state.assignment.prompt_tokens
++        state.page_vectors = {p: v for p, v in state.page_vectors.items()
++                              if (p + 1) * state.assignment.page_tokens <= end}
++        state.receipts = [r for r in state.receipts if r['body']['end'] <= end]
++        # The old latest capture may belong to an ahead-of-commit Mamba crossing.
++        # Original finish() now captures the restored state at the accepted end.
++        owner.backend.latest.pop(identity.request, None)
++        runner._remote_ra_async_rollbacks = getattr(runner, '_remote_ra_async_rollbacks', 0) + 1
++        from remote_ra_linux.native_authority import event
++        event('ASYNC_ACCEPTED_BOUNDARY', request=identity.request,
++              forwarded_end=prior, committed_end=end)
++    runner._remote_ra_async_checkpoints.pop(identity.request, None)
++
++
++def drop(owner, request):
++    getattr(owner.runner, '_remote_ra_async_checkpoints', {}).pop(request, None)
++
++
++def before_probe(runner):
++    if not getattr(runner, '_remote_ra_async_ready', False):
++        return
++    # EngineCore drains pending outputs before starting a private observation
++    # forward. Materialize native CPU token bookkeeping, then discard the
++    # previous batch's GPU-to-row map because the probe uses another batch.
++    runner.input_batch.update_async_output_token_ids()
++    # This CPU sample buffer and its row map form one batch identity. Keeping
++    # the buffer after dropping its map makes the next native sampler try to
++    # apply old samples to newly restored rows (and asserts on the missing map).
++    # The scheduler will resend every live request's accepted tokens.
++    runner.input_batch.sampled_token_ids_cpu = None
++    runner.input_batch.prev_sampled_token_ids = None
++    runner.input_batch.prev_req_id_to_index = None
++
++
++def after_probe(core):
++    """Tell native async resume to resend tokens after a private batch ran.
++
++    NativeQueryForward._cleanup_request updates the worker with an empty batch,
++    removing every generation from its persistent batch. Those requests remain
++    running in the scheduler. Invalidate only its previous-batch membership so
++    _make_cached_request_data emits all_token_ids on the next native schedule.
++    This neither preempts a request nor discards its KV or computed cursor.
++    """
++    if not core.scheduler.scheduler_config.async_scheduling:
++        return
++    require(not core.batch_queue, 'private probe must follow a drained native queue')
++    require(not any(r.num_output_placeholders for r in core.scheduler.running),
++            'private probe must follow accepted native output tokens')
++    core.scheduler.prev_step_scheduled_req_ids.clear()
++
++
++def drain_before_admission(core, *, force=False):
++    """Drain only at a multi-turn selection boundary; decode stays pipelined."""
++    queue = core.batch_queue
++    if not queue:
++        return
++    from vllm.v1.engine import EngineCoreRequestType
++    held = getattr(core, '_remote_ra_held', None)
++    with core.input_queue.mutex:
++        pending = tuple(core.input_queue.queue)
++    boundary = bool(held and held[0] == EngineCoreRequestType.REGISTERED_ADD)
++    boundary |= any(r[0] == EngineCoreRequestType.REGISTERED_ADD for r in pending)
++    boundary |= bool(core._remote_ra_goal_built())
++    if not (force or boundary):
++        return
++    while queue:
++        future, scheduled, executed = queue.pop()
++        result = future.result()
++        if result is None:
++            executed.result()
++            raise RuntimeError('async boundary: missing native model output')
++        core._process_aborts_queue()
++        outputs = core.scheduler.update_from_output(scheduled, result)
++        observe_outputs(core, outputs)
++        for client, output in outputs.items():
++            core.output_queue.put_nowait((client, output))
+--- original/source-overlay/remote_ra_live_v2/vllm_rewriter.py
++++ adapted/source-overlay/remote_ra_live_v2/vllm_rewriter.py
+@@ -0,0 +1,97 @@
++"""Concurrent HTTP transport for the unchanged bounded Goal rewrite algorithm."""
++from hashlib import sha256
++import json
++import os
++from pathlib import Path
++import time
++import urllib.request
++import uuid
++
++from dram_kv.goals.rewriter import (RewriteCommandError, RewriteResult,
++                                    validate_rewrite_candidate)
++from dram_kv_scripts.qwen_goal_rewriter import (bounded_model_request,
++                                               candidate_schema, parse_exact_candidate)
++
++SYSTEM = (
++    "Rewrite a selector-side retrieval Goal as exactly one JSON object "
++    "matching the supplied schema. This is not an execution plan. Never "
++    "emit root_goal, commands, steps, actions, next_action, reasoning, or "
++    "unknown fields. Preserve constraints unless their field is present in "
++    "the schema. Prefer concise existing entities and unique array items."
++)
++
++
++def prompt_and_schema(payload, tokenizer):
++    schema = candidate_schema(constraints_allowed=(payload.get('trigger') == 'user_request'
++                              and payload.get('allow_constraint_updates') is True))
++    user = json.dumps({'request': bounded_model_request(payload), 'output_json_schema': schema},
++                      ensure_ascii=False, sort_keys=True, separators=(',', ':'))
++    text = tokenizer.apply_chat_template(
++        [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content': user}],
++        tokenize=False, add_generation_prompt=True, enable_thinking=False)
++    # Match upstream tokenizer(rendered), including its add_special_tokens default.
++    return list(tokenizer(text)['input_ids']), schema
++
++
++class VLLMGoalRewriter:
++    """Each session owns its HTTP request; vLLM batches independent rewrites."""
++    def __init__(self, pin, runtime):
++        from transformers import AutoTokenizer
++        model = Path(pin['model'])
++        if sha256((model/'config.json').read_bytes()).hexdigest() != pin['config_sha256']:
++            raise ValueError('Goal rewriter checkpoint differs from startup pin')
++        if runtime['backend'] != 'vllm-0.24.0-lm-format-enforcer':
++            raise ValueError('Unexpected Goal rewriter backend')
++        self.endpoint = runtime['endpoint']
++        if not self.endpoint.startswith('http://127.0.0.1:'):
++            raise ValueError('Job-local rewriter endpoint required')
++        self.pin, self.runtime = dict(pin), dict(runtime)
++        self.tokenizer = AutoTokenizer.from_pretrained(str(model), local_files_only=True,
++                                                       trust_remote_code=True)
++        self.closed = False
++
++    def close(self):
++        # Service lifetime is owned by the allocation worker, outside main timing.
++        self.closed = True
++
++    def rewrite(self, request):
++        if self.closed:
++            raise RewriteCommandError('Goal rewriter closed')
++        ident = uuid.uuid4().hex
++        started = time.perf_counter()
++        begin_wall = time.time()
++        tokens, schema = prompt_and_schema(request.to_payload(), self.tokenizer)
++        body = dict(model='goal-rewriter', prompt=tokens, max_tokens=self.pin['max_new_tokens'],
++                    temperature=0, top_p=1, top_k=-1, repetition_penalty=1,
++                    presence_penalty=0, frequency_penalty=0, seed=42,
++                    skip_special_tokens=True, stream=False, stop_token_ids=[151645,151643],
++                    structured_outputs={'json': schema})
++        telemetry = dict(id=ident, started_at=begin_wall, input_tokens=len(tokens),
++                         output_tokens=0, backend=self.runtime['backend'],
++                         prompt_sha256=sha256(json.dumps(tokens).encode()).hexdigest())
++        try:
++            req = urllib.request.Request(self.endpoint+'/v1/completions',
++                data=json.dumps(body).encode(), headers={'Content-Type':'application/json'})
++            with urllib.request.urlopen(req, timeout=self.pin['timeout_seconds']) as response:
++                result = json.load(response)
++            telemetry['output_tokens'] = result['usage']['completion_tokens']
++            telemetry['finish_reason'] = result['choices'][0]['finish_reason']
++            raw = parse_exact_candidate(result['choices'][0]['text'])
++            candidate = validate_rewrite_candidate(raw, request.current_goal,
++                trigger=request.trigger, allow_constraint_updates=request.allow_constraint_updates)
++            elapsed = (time.perf_counter()-started)*1000
++            telemetry['succeeded'] = True
++            return RewriteResult(candidate=candidate, latency_ms=elapsed,
++                input_tokens=len(tokens), output_tokens=telemetry['output_tokens'],
++                raw_response={'candidate':raw, 'model_cost':0.0})
++        except Exception as exc:
++            telemetry.update(succeeded=False, error=type(exc).__name__+': '+str(exc)[:1024])
++            raise RewriteCommandError(telemetry['error'],
++                latency_ms=(time.perf_counter()-started)*1000,
++                input_tokens=len(tokens), output_tokens=telemetry['output_tokens']) from exc
++        finally:
++            telemetry.update(ended_at=time.time(), latency_ms=(time.perf_counter()-started)*1000)
++            # One append syscall, no global inference lock. Contains no credentials.
++            fd = os.open(self.runtime['telemetry'], os.O_WRONLY|os.O_CREAT|os.O_APPEND, 0o600)
++            try: os.write(fd, (json.dumps(telemetry)+'\n').encode())
++            finally: os.close(fd)
+--- original/source-overlay/remote_ra_live_v2/query_selection.py
++++ adapted/source-overlay/remote_ra_live_v2/query_selection.py
+@@ -102,6 +102,12 @@
+     """
+     if pin is None:
+         return None
++    from remote_ra_http.config import load
++    runtime = load().get('goal_rewriter_runtime')
++    if runtime is not None:
++        from .vllm_rewriter import VLLMGoalRewriter
++        return VLLMGoalRewriter(pin, runtime)
++    raise RuntimeError('This integration requires the separately served vLLM Goal rewriter')
+     importlib.import_module('dram_kv.goals.maintained')
+     rewriter = importlib.import_module('dram_kv.goals.rewriter')
+     source = Path(__file__).resolve().parents[1]

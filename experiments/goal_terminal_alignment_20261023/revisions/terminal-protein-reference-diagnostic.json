@@ -1,0 +1,12 @@
+{
+  "time": 1792844359.9903789,
+  "task": "protein-assembly",
+  "status": "UNRESOLVED_REFERENCE_DATA_INCOMPATIBILITY_NO_PATCH",
+  "observed": "Unmodified reference downloads RCSB FASTA containing X in chromophore positions, then EnforceTranslation requires exact fusion including X. DNAC reports wrong translation at324-327 and1611-1614. Original verifier requires A/T/C/G-only DNA and fixed full donor/acceptor protein sequences.",
+  "constraint": "Do not replace public data with test answers, modify reference algorithm, change tests, or declare qualification passed.",
+  "official_context": [
+    "https://www.rcsb.org/docs/programmatic-access/file-download-services",
+    "https://cdn.rcsb.org/wwpdb/docs/documentation/annotation/wwPDB-B-2024Jan-V4.4.pdf"
+  ],
+  "next": "Determine whether an authentic historical source snapshot exists or explicitly classify reference-only failure while preserving original task; no final gate exception yet."
+}

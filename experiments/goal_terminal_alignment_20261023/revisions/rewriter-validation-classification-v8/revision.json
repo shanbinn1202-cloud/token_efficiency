@@ -1,0 +1,5 @@
+{
+  "time": 1792833755.6969218,
+  "reason": "GPU v6:41rewrites succeeded;4HTTP200generated candidates rejected by unchanged original512-character bound. These are original algorithm fallbacks, unlike HTTP500 infrastructure failure.",
+  "change": "Validation requires actual successful rewriting, zero infrastructure/parser errors; separately counts original bounded-candidate rejections. Algorithm unchanged."
+}

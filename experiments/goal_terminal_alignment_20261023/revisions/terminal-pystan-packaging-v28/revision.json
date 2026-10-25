@@ -1,0 +1,10 @@
+{
+  "time": 1792844880.960258,
+  "task_ids": [
+    "rstan-to-pystan"
+  ],
+  "cause": "Unbounded original setuptools upgrade installs 84.2.1; original PyStan 3.10.0 imports removed pkg_resources.",
+  "change": "Constrain setuptools to 80.9.0 in isolated environment. Preserve original solution, tests, PyStan/httpstan versions, shared-memory and curl fixes.",
+  "source": "https://setuptools.pypa.io/en/stable/deprecated/pkg_resources.html",
+  "status": "candidate unpromoted"
+}

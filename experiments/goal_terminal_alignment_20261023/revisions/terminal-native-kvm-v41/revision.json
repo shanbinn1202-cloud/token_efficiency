@@ -1,0 +1,14 @@
+{
+  "formal": false,
+  "changes": [
+    "Catch only ProcessLookupError during process-group cleanup race; preserve test result and other errors",
+    "64GiB sparse guest root disk, without enforcing storage_mb as a total rootfs limit: official Harbor Docker backend does not apply storage limits. CPU/memory remain per-task. Task files and tests unchanged.",
+    "Use reviewed per-instance CIFAR cache via KVM host alias"
+  ],
+  "evidence": [
+    "harbor/src/harbor/environments/docker/docker.py does not reference storage_mb; resource_capabilities declares CPU and memory only",
+    "v39 mteb reference exhausted 10GiB root filesystem including installed image; original Docker tasks do not impose that total-disk ceiling",
+    "v39 adaptive reference reward1 but process cleanup raised ProcessLookupError"
+  ],
+  "all_original_tasks": 89
+}

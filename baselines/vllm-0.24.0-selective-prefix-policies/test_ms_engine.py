@@ -35,7 +35,8 @@ from registered_add_protocol import RegisteredAddDispatcher
 from remote_ra_http.evidence import engine_closed
 from remote_ra_live_v2 import sessions as stage1
 from remote_ra_live_v2.allocation_owner import RunnerAllocationOwner
-from remote_ra_live_v2.composition import EngineBridge, EngineWorkerProxy, LiveEndpoint, trusted_tasks
+from remote_ra_live_v2.composition import (EngineBridge, EngineWorkerProxy, LiveEndpoint, engine_lifecycle,
+                                            trusted_tasks)
 from remote_ra_live_v2.contract import LiveV2Error
 from remote_ra_live_v2.engine_boundary import EngineRpcBoundary
 from remote_ra_live_v2.generation_guard import guarded_execute
@@ -130,7 +131,7 @@ class MultiHarness(S.Harness):
         self.core, self.endpoint = core, core._remote_ra_private_v2_endpoint
         self.sessions, self.selection = core._remote_ra_live_session_authority, self.endpoint.selection
         self.live = LiveEndpoint(core, assembly, self.proxy)
-        self.lifecycle = core._remote_ra_live_v2_lifecycle = EngineLifecycle(self.live)
+        self.lifecycle = core._remote_ra_live_v2_lifecycle = engine_lifecycle(core, self.live)
         self.route = RegisteredRouteBridge(self.lifecycle)
         self.dispatcher = RegisteredAddDispatcher(codec=None, boundary=None,
             decode_core=lambda raw: raw, preprocess=lambda request: request)

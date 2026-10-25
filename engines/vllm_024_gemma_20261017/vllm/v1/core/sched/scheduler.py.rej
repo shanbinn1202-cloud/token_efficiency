@@ -1,0 +1,31 @@
+diff a/vllm/v1/core/sched/scheduler.py b/vllm/v1/core/sched/scheduler.py	(rejected hunks)
+@@ -604,6 +604,9 @@ class Scheduler(SchedulerInterface):
+             num_new_tokens = self._reserve_prefill_lookahead(
+                 request, request.num_computed_tokens, num_new_tokens
+             )
++            from vllm.tebench.kv_recompute import limit_tokens
++
++            num_new_tokens = limit_tokens(request, num_new_tokens)
+ 
+             if num_new_tokens == 0:
+                 # The request cannot be scheduled because one of the following
+@@ -1267,6 +1273,9 @@ class Scheduler(SchedulerInterface):
+                 scheduled_encoder_inputs
+             )
+ 
++        from vllm.tebench.kv_session import cleanup_scheduler
++
++        cleanup_scheduler(self.requests)
+         scheduler_output = SchedulerOutput(
+             scheduled_new_reqs=new_reqs_data,
+             scheduled_cached_reqs=cached_reqs_data,
+@@ -1377,6 +1389,9 @@ class Scheduler(SchedulerInterface):
+         self.reset_preempted_req_ids.add(request.request_id)
+ 
+     def _update_after_schedule(self, scheduler_output: SchedulerOutput) -> None:
++        from vllm.tebench.kv_async import needs_commit
++
++        scheduler_output.kv_commit_fence = needs_commit(self, scheduler_output)
+         # Advance the number of computed tokens for the request AFTER
+         # the request is scheduled.
+         # 1. The scheduler_output of the current step has to include the

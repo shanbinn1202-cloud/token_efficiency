@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "query-optimize"
+  ],
+  "cause": "Harbor verifier passes timeout_sec=None and wraps operation in official900s timeout; Apptainer adapter independently cuts HTTP at600s. Observed verifier duration600.137s.",
+  "change": "None command timeout means None HTTP timeout, as official outer trial owns deadline. Explicit command timeout retains +10s HTTP grace. No official timeout/resource/test changes.",
+  "status": "candidate unpromoted"
+}

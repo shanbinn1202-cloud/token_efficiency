@@ -1,0 +1,8 @@
+{
+  "task_ids": [
+    "mailman",
+    "make-doom-for-mips"
+  ],
+  "scope": "isolated native ARM64 service controls with validated shell/virtual allocation fixes",
+  "task_solution_tests_limits_changed": false
+}

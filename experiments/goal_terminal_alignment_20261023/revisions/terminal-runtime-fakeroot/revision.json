@@ -1,0 +1,11 @@
+{
+  "time": 1792763718.296699,
+  "changes": [
+    "Recreate declared Docker WORKDIR before process launch",
+    "Use official Debian ARM64 fakeroot1.25.3 inside container rather than incompatible host GLIBC2.38 fakeroot",
+    "Disable sandbox extraction cache"
+  ],
+  "oracle_required": true,
+  "task_instructions_solutions_tests_changed": false,
+  "initial_probe": "code-from-image.sif: uid0, aarch64 under compatible fakeroot"
+}
