@@ -94,6 +94,13 @@ class Cancel:
 
 
 @dataclass(frozen=True)
+class Status:
+    """Read the authenticated engine state without cancelling an active request."""
+    command_id: str
+    request_id: str
+
+
+@dataclass(frozen=True)
 class CloseSession:
     """Session pool: close one registered session for good (its agent finished).
 
@@ -135,7 +142,7 @@ class ProtocolCodec:
         self._key, self.epoch, self.identity = key, epoch, identity
 
     def encode(self, command):
-        require(type(command) in (RegisteredAdd, Cancel, Ack, CloseSession), "typed command required")
+        require(type(command) in (RegisteredAdd, Cancel, Status, Ack, CloseSession), "typed command required")
         payload = dict(schema=SCHEMA, epoch=self.epoch, identity=self.identity,
                        kind=type(command).__name__, body=asdict(command))
         raw = _json(payload)
@@ -168,9 +175,9 @@ class ProtocolCodec:
         require(payload["schema"] == SCHEMA and payload["epoch"] == self.epoch and
                 payload["identity"] == self.identity, "schema/epoch/identity mismatch")
         kind, body = payload["kind"], payload["body"]
-        require(type(kind) is str and kind in {"RegisteredAdd", "Cancel", "Ack", "CloseSession"},
+        require(type(kind) is str and kind in {"RegisteredAdd", "Cancel", "Status", "Ack", "CloseSession"},
                 "unknown command discriminator")
-        cls = {"RegisteredAdd": RegisteredAdd, "Cancel": Cancel, "Ack": Ack,
+        cls = {"RegisteredAdd": RegisteredAdd, "Cancel": Cancel, "Status": Status, "Ack": Ack,
                "CloseSession": CloseSession}[kind]
         require(type(body) is dict and set(body) == set(cls.__dataclass_fields__),
                 "exact typed command schema required")
@@ -240,11 +247,19 @@ class RegisteredAddDispatcher:
         once (remote_ra_live_v2.goal_async); everything else returns at once."""
         self._on_thread()
         command = self.codec.decode(frame)  # Authenticate before any mutation.
-        require(type(command) in (RegisteredAdd, Cancel, CloseSession),
+        require(type(command) in (RegisteredAdd, Cancel, Status, CloseSession),
                 "engine expects commands, not acknowledgements")
         require(self._connected, "private engine connection is closed")
         self.sweep()
         try:
+            if type(command) is Status:
+                # Read-only: no reservations, cleanup or new tombstones. The
+                # request's original admission owns its complete/cancel receipt.
+                record = self._records.get(command.request_id)
+                state = None if record is None else record['state']
+                require(state in ('accepted', 'complete', 'cancelled'),
+                        'status requires an admitted or terminal request')
+                return self.codec.encode(Ack(command.command_id, command.request_id, state, {}, ''))
             if type(command) is Cancel:
                 return self.codec.encode(self._cancel(command))
             if type(command) is CloseSession:

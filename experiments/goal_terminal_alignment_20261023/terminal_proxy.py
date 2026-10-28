@@ -14,7 +14,8 @@ from experiments.benchmarks32_20261004.telemetry import instrument_backend,LOCAL
 
 class Transport:
     def __init__(self,config,method,log):
-        self.config=config;self.method=method;self.sessions={};self.closed=set()
+        self.config=config;self.method=method;self.sessions={};self.closed=set();self.closing={}
+        self.events=Path(log).with_name('session-lifecycle.jsonl')
         if method=='goal':
             from goal_client import GoalSessionBackend
             release=Path(os.environ['GOAL_RELEASE']);config['goal_runtime']={'release':str(release),'manifest_sha256':hashlib.sha256((release/'runtime-manifest.json').read_bytes()).hexdigest()}
@@ -31,19 +32,54 @@ class Transport:
             return result.model_dump(exclude_none=True)
         finally:LOCAL.case=''
     async def complete(self,sid,body):
-        if sid in self.closed:raise HTTPException(409,'Closed terminal session')
+        if sid in self.closed or sid in self.closing:raise HTTPException(409,'Closing or closed terminal session')
         if sid not in self.sessions:
             if len(self.sessions)>=16:raise HTTPException(429,'All16 agent session slots in use')
             self.sessions[sid]=(concurrent.futures.ThreadPoolExecutor(max_workers=1),asyncio.Lock())
         pool,lock=self.sessions[sid]
         async with lock:
+            if sid in self.closed or sid in self.closing:raise HTTPException(409,'Closing or closed terminal session')
             return await asyncio.get_running_loop().run_in_executor(pool,self._request,sid,body)
-    async def close(self,sid):
-        if sid not in self.sessions:return
+    def event(self,sid,event,**fields):
+        row={'session_id':sid,'event':event,'time':time.time(),**fields}
+        fd=os.open(self.events,os.O_WRONLY|os.O_CREAT|os.O_APPEND,0o600)
+        try:os.write(fd,(json.dumps(row)+'\n').encode())
+        finally:os.close(fd)
+    def request_close(self,sid):
+        # Do not let a polling HTTP client's lifetime own resource cleanup.
+        # Mark closing before yielding, fencing out queued/new model requests.
+        if sid in self.closed:return {'closed':True,'session_id':sid}
+        if sid not in self.sessions:
+            self.closed.add(sid)
+            return {'closed':True,'session_id':sid,'known':False}
+        if sid not in self.closing:
+            self.event(sid,'close_requested')
+            task=asyncio.create_task(self._drain(sid),name='terminal-drain-'+sid)
+            # Retrieve errors even if the polling client goes away. Failed
+            # sessions remain quarantined, occupying their original slot.
+            task.add_done_callback(lambda t: None if t.cancelled() else t.exception())
+            self.closing[sid]=task
+        task=self.closing[sid]
+        if not task.done():return {'closed':False,'status':'draining','session_id':sid}
+        task.result()
+        return {'closed':True,'session_id':sid}
+    async def _drain(self,sid):
         pool,lock=self.sessions[sid]
-        async with lock:
-            await asyncio.get_running_loop().run_in_executor(pool,self.backend.reset)
-            del self.sessions[sid];self.closed.add(sid);pool.shutdown(wait=True)
+        started=time.monotonic()
+        try:
+            async with lock:
+                # Thread cancellation cannot stop a synchronous model request.
+                # The per-session executor queues reset AFTER that request,
+                # preserving thread-local ownership and KV lifetime.
+                await asyncio.get_running_loop().run_in_executor(pool,self.backend.reset)
+                del self.sessions[sid];self.closed.add(sid);pool.shutdown(wait=False)
+                self.event(sid,'closed',seconds=time.monotonic()-started)
+        except BaseException as exc:
+            self.event(sid,'close_failed',seconds=time.monotonic()-started,error_type=type(exc).__name__)
+            raise
+    async def close(self,sid):
+        self.request_close(sid)
+        if sid in self.closing:await asyncio.shield(self.closing[sid])
 
 @asynccontextmanager
 async def lifespan(app):
@@ -66,6 +102,8 @@ async def complete(request:Request):
     if body.get('temperature',0)!=0:raise HTTPException(400,'Aligned greedy temperature is0')
     try:
         return await app.state.transport.complete(sid,body)
+    except HTTPException:
+        raise
     except Exception as exc:
         # Preserve a real model context limit as an agent-budget outcome in
         # Harbor, rather than disguising it as a provider/infrastructure outage.
@@ -77,7 +115,9 @@ async def complete(request:Request):
         raise
 @app.post('/close-session')
 async def close(request:Request):
-    body=await request.json();await app.state.transport.close(body['session_id']);return {'closed':True}
+    from fastapi.responses import JSONResponse
+    body=await request.json();status=app.state.transport.request_close(body['session_id'])
+    return JSONResponse(status_code=200 if status['closed'] else 202,content=status)
 if __name__=='__main__':
     import uvicorn
     uvicorn.run(app,host='127.0.0.1',port=int(os.environ.get('TERMINAL_PROXY_PORT','19842')))

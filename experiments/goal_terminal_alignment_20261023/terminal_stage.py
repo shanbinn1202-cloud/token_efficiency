@@ -1,5 +1,5 @@
 """Allocation lifecycle for the six unchanged policies behind official Terminus-2."""
-import argparse,json,os,re,signal,subprocess,sys,time,traceback
+import argparse,asyncio,json,os,re,signal,subprocess,sys,time,traceback
 from pathlib import Path
 import httpx
 from job_time import deadline as job_deadline
@@ -69,9 +69,19 @@ def main(a):
   with httpx.Client(timeout=120) as c:
    # True model warmup before capture; denominator uses official agent intervals.
    warm=c.post('http://127.0.0.1:19842/v1/chat/completions',headers={'X-Session-ID':'warmup'},json={'model':config['model']['name'],'messages':[{'role':'user','content':'Reply OK.'}],'max_tokens':16});warm.raise_for_status()
-   c.post('http://127.0.0.1:19842/close-session',json={'session_id':'warmup'}).raise_for_status()
+   async def drain_warmup():
+    from terminal_lifecycle import close_session
+    async with httpx.AsyncClient() as cleanup:
+     await close_session(cleanup,'http://127.0.0.1:19842/v1','warmup',timeout=2*config['generation']['request_timeout']+120)
+   asyncio.run(drain_warmup())
+   # Every formal allocation must exercise the fixed lifecycle on its actual
+   # GPU/backend before benchmark-begin. This is additional to source gating.
+   if not a.validation or os.environ.get('TERMINAL_LIFECYCLE_PROBE')=='1':
+    from terminal_lifecycle_probe import probe
+    asyncio.run(probe('http://127.0.0.1:19842/v1',stage))
    r=c.post('http://127.0.0.1:19840/benchmark-begin');r.raise_for_status();write(stage/'measurement-start.json',r.json())
   args=[str(R/'harbor-env/bin/python'),'-B','-u',str(R/'run_terminal.py'),'--output',str(output),'--model',config['model']['name'].split('/')[-1]]
+  args+=['--cleanup-timeout',str(2*config['generation']['request_timeout']+120)]
   if a.validation:
    validation_task=os.environ.get('TERMINAL_VALIDATION_TASK','adaptive-rejection-sampler')
    if not re.fullmatch(r'[a-z0-9][a-z0-9-]*',validation_task) or not (R/'terminal-bench-2'/validation_task/'task.toml').is_file():raise ValueError('Invalid original validation task')

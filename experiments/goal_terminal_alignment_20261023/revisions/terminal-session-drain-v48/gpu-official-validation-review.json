@@ -1,0 +1,14 @@
+{
+  "time": 1793024568.678585,
+  "passed": true,
+  "job_id": "3462292",
+  "node": "gh151",
+  "model": "qwen",
+  "method": "vanilla",
+  "source_identity_matches_qualified": true,
+  "lifecycle_probe_passed": true,
+  "official_trial_complete": true,
+  "official_score": 0.0,
+  "official_exception_type": "AgentTimeoutError",
+  "note": "Official 900-second agent timeout is a scored task failure; no infrastructure or cleanup errors. GPU lifecycle and official execution are validated; no claim of task solution success."
+}

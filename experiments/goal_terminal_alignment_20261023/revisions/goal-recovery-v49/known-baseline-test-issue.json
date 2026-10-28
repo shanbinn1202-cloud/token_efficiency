@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "time": 1793157138.933457,
+  "test": "test_a_rebuild_with_every_window_slot_taken_releases_idle_pages",
+  "same_original_ceiling_failure": true,
+  "same_current_ceiling_failure": true,
+  "failure": "Synthetic boundary expectation free_sliding < cold; actual345==345 with own25",
+  "production_algorithms_or_thresholds_changed_to_pass_test": false,
+  "log": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/revisions/goal-recovery-v49/compatibility-baseline-window.log"
+}

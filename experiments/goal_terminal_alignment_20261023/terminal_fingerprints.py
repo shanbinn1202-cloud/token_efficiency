@@ -4,7 +4,7 @@ from pathlib import Path
 R=Path(__file__).resolve().parent
 T=R.parents[1]
 def identity():
- files=[R/n for n in ['terminal_fingerprints.py','terminal_proxy.py','run_terminal.py','terminal_stage.py','terminal_timing.py','terminal_formal_job.sh','terminal_validation_job.sh','job_time.py','upstream-pins.json','preflight_cuda_libraries.py']]
+ files=[R/n for n in ['terminal_fingerprints.py','terminal_proxy.py','terminal_lifecycle.py','terminal_lifecycle_probe.py','run_terminal.py','terminal_stage.py','terminal_timing.py','terminal_formal_job.sh','terminal_validation_job.sh','job_time.py','upstream-pins.json','preflight_cuda_libraries.py']]
  files+=list((R/'terminal-runtime').glob('*.py'))+[R/'terminal-runtime/bootstrap.sh',R/'terminal_qualification_policy.py']
  files+=list((R/'terminal-runtime').glob('*.json'))
  files+=list((R/'terminal-public-inputs').glob('*'))

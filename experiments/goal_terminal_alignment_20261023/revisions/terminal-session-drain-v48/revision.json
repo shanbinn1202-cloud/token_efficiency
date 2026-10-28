@@ -1,0 +1,70 @@
+{
+  "time": 1793021782.976548,
+  "status": "reviewed_transport_only_repair_requires_per_allocation_gpu_probe",
+  "root_cause": "Official agent timeout ends caller while synchronous backend thread remains in flight. Cleanup HTTP timeout60s shorter than remaining generation; unhandled cleanup exception cancels TaskGroup siblings. EngineDeadError appears after orchestrator teardown, not an initial engine failure.",
+  "observed_seconds_after_trial_end": {
+    "qwen_vanilla_chess-best-move": 60.72,
+    "qwen_sliding_window_chess-best-move": 89.7
+  },
+  "changed_files": {
+    "terminal_proxy.py": {
+      "before": "e4e310273d1a4c2aca922f3eb0f5001ca5b3306113ae33c4a803e226343268ad",
+      "after": "bc72fa7153650914d0cec7fa83b15addeb9ba1a23aa3c36e9302fb888788ab6c"
+    },
+    "run_terminal.py": {
+      "before": "3f9efe4b244423da8f9e4db8eb116dc2f7396108d75872091834ef9185140d97",
+      "after": "7b88bcb0a22a242b8ced6b430920b9dc7550a4919744ffbc58c945fd352940b9"
+    },
+    "terminal_stage.py": {
+      "before": "5b41bf8b587b123fd68af9943e987e8641d3df8befdb2080711966d24ef3bcd3",
+      "after": "d206a717ffac10a403121c6d02cbe42e371fdf1da29e375bc7bc61760dde27a7"
+    },
+    "terminal_fingerprints.py": {
+      "before": "f152d19d03b12caa0195edd314b69c69bd45b05438494443da0dcad6087fe13d",
+      "after": "dd35d0a92db0e2e639d88edb702f37a0fc9ad276336e4892b8d3d1068b433961"
+    }
+  },
+  "added_files": {
+    "terminal_lifecycle.py": "9889506385b91df9794a32ff0e9154cfad6595be6851c623abc98f090d3e1153",
+    "terminal_lifecycle_probe.py": "cb6bf0b413818eb83a0f85a774ae531bd6da6a52e6f491676593e2ce3780ebd3",
+    "test_terminal_lifecycle.py": "b0ccc9961136c1ef7be2d74c74a1828a4bab3b971db0aebcedfdd51c1a5abb8e",
+    "test_terminal_runner_lifecycle.py": "2b59e44cc5a7df36600f65c187bb622e4790fe64b4d7a2499e65de4481dd546c"
+  },
+  "algorithm_model_and_evaluation_configs_changed": false,
+  "original_89_tasks_and_limits_changed": false,
+  "upstream_reference": {
+    "repository": "https://github.com/CFXM/vllm-0.24.0-selective-prefix-policies",
+    "commit": "4f5f4e7a30b9007341348c7ec54a1ec680222260",
+    "files": [
+      "source-overlay/remote_ra_http/kv_session_route.py",
+      "source-overlay/remote_ra_http/shutdown.py"
+    ],
+    "principle": "close admission first; busy/closing distinct from closed; idempotent cleanup ownership; release only after drain"
+  },
+  "checks": [
+    "16 regression tests including complete GPU-probe control flow against actual ASGI routes",
+    "65.29s ASGI cancelled-request drain passed",
+    "unchanged configure-git-webserver ARM64 oracle and NOP controls passed"
+  ],
+  "results_policy": "119 scored predictions preserved, no rerun of valid task-timeout outcomes; first-allocation throughput unchanged",
+  "recovery_policy": "exactly one in-allocation retry for environment startup failures before agent execution; cleanup failures stop new admissions and let active peers finish; genuine errors stay review-required",
+  "pending_validation_job": "3462292",
+  "pending_terminal_jobs_held": [
+    "3448992",
+    "3448993",
+    "3448994",
+    "3448995",
+    "3448996",
+    "3448997",
+    "3448998"
+  ],
+  "regression_evidence_sha256": {
+    "unit-tests.log": "edc7fae51b5b68663d77a0c3a64bfd8fb96334c4d723dd3483bd90d7cf417f45",
+    "long-drain-control.json": "e324585620ffed88b828dfd3a2f57ccba006ece1cb485bc674038ca84a1706df",
+    "configure-git-webserver-oracle.json": "f30dda4fd45b2d641266c4e1caf7affdf292dbb12f68a718380951b195177ce3",
+    "configure-git-webserver-nop.json": "651cdefdc6816a7eb5163b9f6691365fcec8b447d1c26f34d862afaba9ec962b",
+    "retained-results-audit.json": "a9e346a452a0f9a2e9f7fa5d54da4f7e5dfa1cd5016aac5928959638072bf7c4"
+  },
+  "cleanup_timeout_policy": "2 * configured model request_timeout +120seconds; current12configs request_timeout3600 =>7320; Slurm deadline still bounds allocation, individual HTTP polls10s, connection failures stop after3",
+  "readiness_policy": "Reuse existing GPU model evidence ONLY after exact non-model source delta audit and regression evidence; require live GPU cancel/drain/peer probe before every formal allocation measurement. Independent2h interactive validation remains pending, not claimed passed."
+}

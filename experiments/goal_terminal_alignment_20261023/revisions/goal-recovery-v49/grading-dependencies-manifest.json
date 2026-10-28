@@ -1,0 +1,27 @@
+{
+  "layout": "grading-bundle",
+  "packages": {
+    "nltk": "3.9.2",
+    "joblib": "1.5.2",
+    "absl-py": "2.3.1",
+    "editdistance": "0.8.1",
+    "rouge-score": "0.1.2"
+  },
+  "files": {
+    "tebench_goal_grading.pth": "757166e3f87342d7c653b71e6c1dafd77237456fe4ba7a893ef4363b3b4eaee0",
+    "editdistance/bycython.pyx": "13df82a8556443f15663cdd101ca4063ff491b3efacffee1f39411dfd2e66dc8",
+    "editdistance/__init__.pxd": "aba146d77878515fd5c49b7bb29c74606c73d1ba74c288051aa5db68858962e7",
+    "editdistance/_editdistance.cpp": "d1d5b743ca2b889fb7a2bfc20631ea93078773617fe2b6073e2478411e5ad596",
+    "editdistance/def.h": "8dca467a4c0901bbb9cb6c7a714027c048b72b76d99511c689e3bb835de7ec21",
+    "editdistance/__init__.py": "dd4231bc3fa63234856d9ad29eeea7605f8a79ae264fddd22d599aaf1e749206",
+    "editdistance/bycython.pxd": "898cc5f17899fe457afaccf706452a68b5abdafdaec7a5af97a90c9897128c93",
+    "editdistance/_editdistance.h": "5e8e9198d7eef614a1b1ad0d7f3646381309b2b3039417047cfed15cc851ba1d",
+    "editdistance/bycython.cpython-312-aarch64-linux-gnu.so": "b137056f62d8c0fcf3c200b16ea9073f653e5293857bc24e530da91998a7819c",
+    "editdistance/bycython.cpp": "0979a6a128978a0b08880473d92b8f0d4369b822b8b1d3a79392802bef6bc47e",
+    "_tebench_goal_grading/rouge_score-0.1.2-py3-none-any.whl": "d9a8e8cf5e50e95d78cb3b35dfaffccf60abaec75d363c12fed37bfb5deae66b",
+    "_tebench_goal_grading/joblib-1.5.2-py3-none-any.whl": "4e1f0bdbb987e6d843c70cf43714cb276623def372df3c22fe5266b2670bc241",
+    "_tebench_goal_grading/nltk-3.9.2-py3-none-any.whl": "1e209d2b3009110635ed9709a67a1a3e33a10f799490fa71cf4bec218c11c88a",
+    "_tebench_goal_grading/editdistance-0.8.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "24b5f9c9673c823d91b5973d0af8b39f883f414a55ade2b9d097138acd10f31e",
+    "_tebench_goal_grading/absl_py-2.3.1-py3-none-any.whl": "eeecf07f0c2a93ace0772c92e596ace6d3d3996c042b2128459aaae2a76de11d"
+  }
+}

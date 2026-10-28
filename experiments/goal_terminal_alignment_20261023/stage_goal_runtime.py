@@ -1,6 +1,6 @@
 """Copy the pinned original wheel environment to this allocation only."""
 from concurrent.futures import ThreadPoolExecutor
-import os,subprocess,json,time
+import os,subprocess,json,time,hashlib
 from pathlib import Path
 R=Path(__file__).resolve().parent
 source=Path('/projects/bcjw/ssun4/selective_prefix_first32_20261006/environment/venv')
@@ -19,4 +19,11 @@ with ThreadPoolExecutor(max_workers=12) as pool:
 deps=R/'harness-dependencies'
 assert (R/'harness-dependencies-manifest.json').exists()
 subprocess.run(['rsync','-a','--whole-file',str(deps)+'/',str(target/site)+'/'],check=True)
+grading=R/'revisions/goal-recovery-v49/grading-bundle'
+assert (grading/'tebench_goal_grading.pth').is_file()
+pins=json.loads((grading.parent/'grading-dependencies-manifest.json').read_text())['files']
+for name,expected in pins.items():
+    if hashlib.sha256((grading/name).read_bytes()).hexdigest()!=expected:
+        raise RuntimeError('Pinned grading dependency changed: '+name)
+subprocess.run(['rsync','-a','--whole-file',str(grading)+'/',str(target/site)+'/'],check=True)
 subprocess.run([str(target/'bin/python'),'-B',str(R/'preflight_imports.py')],check=True)

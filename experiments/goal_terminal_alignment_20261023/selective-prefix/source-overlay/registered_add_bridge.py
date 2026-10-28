@@ -41,6 +41,13 @@ class FrontendBridge:
                 "admission timeout and lease must be a pair pinned from --admission-overlap")
         self.admission_timeout, self.lease_seconds = admission_timeout, lease_seconds
 
+    @property
+    def control_timeout(self):
+        # With overlapping admissions, another session's bounded phase-1 work
+        # can hold the engine thread longer than the ordinary 60-second RPC.
+        return (max(self.timeout, self.admission_timeout)
+                if self.admission_timeout > ADMISSION_SECONDS else self.timeout)
+
     @staticmethod
     def handles(request):
         params = getattr(request, "sampling_params", None)
@@ -79,8 +86,8 @@ class FrontendBridge:
         command_id = "close-" + sha256(session_id.encode()).hexdigest()
         rid = CLOSE_PREFIX + session_id
         frame = self.codec.encode(CloseSession(command_id, rid, session_id))
-        with timed("frontend_session_close", request_sha256=command_id[6:], timeout_seconds=self.timeout):
-            reply = await client.registered_add_async(frame, self.timeout)
+        with timed("frontend_session_close", request_sha256=command_id[6:], timeout_seconds=self.control_timeout):
+            reply = await client.registered_add_async(frame, self.control_timeout)
         ack = self.codec.decode(reply)
         require(type(ack) is Ack and ack.command_id == command_id and ack.request_id == rid,
                 "session close acknowledgement correlation mismatch")
@@ -125,7 +132,7 @@ class FrontendBridge:
             try:
                 with timed("frontend_compensation", request_sha256=command_id[4:],
                            timeout_seconds=self.timeout):
-                    reply = await asyncio.shield(client.registered_add_async(cancel, self.timeout))
+                    reply = await asyncio.shield(client.registered_add_async(cancel, self.control_timeout))
                 self._ack(reply, cancel_id, assignment.internal_id, {"cancelled", "complete"})
             except BaseException as cleanup:
                 raise BaseExceptionGroup("registered-add submission and cancellation failed",

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "time": 1793023665.2735543,
+  "job": "3462292",
+  "node": "gh151",
+  "probe": "/projects/bcjw/ssun4/token_efficiency/experiments/goal_terminal_alignment_20261023/terminal/qwen/vanilla/allocations/3462292-terminal-session-drain-v48/lifecycle-probe.json",
+  "probe_sha256": "81526dbd04fd4b94bb896765cd242297b380c37614d1799ef6e4328165e70521",
+  "source_at_start_sha256": "03714e3d07de3ba0bffaa4e89e8ee4b61c02a1758a8f9c25c1b6d3c48acaeb71",
+  "total_probe_seconds": 73.21291446685791,
+  "cleanup_seconds": 69.97496327897534,
+  "full_official_trial_complete": false
+}

@@ -1,0 +1,32 @@
+{
+  "time": 1793156731.5325131,
+  "changes": [
+    {
+      "file": "serving_controller.py",
+      "before": "9982dd9b03548a8df29696f612db8dd74d9d53f1f5eef56666188bc0fb1a03f5",
+      "after": "2d603c88776192a0071887c5c06a8ac0374752d2dbafeba62d8d41517b97fe56"
+    },
+    {
+      "file": "registered_add_bridge.py",
+      "before": "91d9536dcdb6567f614308e236cd5a5a5d5b7f117517fbecfc20b81e9931c306",
+      "after": "0d30806e79357f9bf455ca3f6db5caa2461903139ce62acbff7c83d3d8831afe"
+    },
+    {
+      "file": "registered_add_protocol.py",
+      "before": "83203d6078f8b145236e4a750c02f80cf5c407354dbeed55dd3843331ae93ccd",
+      "after": "2834557e41c0c7d01977b86685545cce560ebb9f7603dc3f0b21a6bf9bee4de4"
+    },
+    {
+      "file": "remote_ra_linux/native_authority.py",
+      "before": "b6cb1eabb4562bd55271fd9ab86ac48afcd9fd3194f9c18aa30efd2a7c1006ba",
+      "after": "a6bbf01a7894d2b51a220c20685e70f04e8e27f0e2d21021bde1895eac9e853b"
+    },
+    {
+      "file": "remote_ra_live_v2/idle_release.py",
+      "before": "575f4476a75a80ea6608a88c4357501181a8b4adf8574ab0f077ad60b1fffe78",
+      "after": "3c0a4c4fe3565e24385549c74e08e6390e40b14bd01b33c99f3044f406da1041"
+    }
+  ],
+  "algorithm_selection_files_changed": false,
+  "description": "Align bounded heartbeat/control RPC waits to admission lease; authenticated read-only terminal status; wait for other-session close without poisoning feasible requests"
+}

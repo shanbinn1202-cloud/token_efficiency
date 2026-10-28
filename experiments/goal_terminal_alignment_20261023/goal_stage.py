@@ -19,7 +19,13 @@ def main(a):
  runner=None
  try:
   server.start()
+  from goal_recovery_probe import probe
+  probe(server,stage)
   env=dict(os.environ,GOAL_RELEASE=a.release,GOAL_STARTUP=str(server.output/'main/startup.json'))
+  judge_check=R/'revisions/goal-recovery-v49/judge-preflight.json'
+  if judge_check.exists():
+   judge=json.loads(judge_check.read_text())
+   if judge.get('passed'):env['MEMAGENT_JUDGE_MODEL']=judge['model']
   env['PYTHONPATH']=os.pathsep.join([str(G/'harness'),str(R.parents[1]/'mini-swe-agent/src'),str(R.parents[1]/'external/SWE-bench')])
   cmd=[sys.executable,str(R/'run_goal_harness.py'),a.benchmark,'--bundle',str(bundle),'--output',str(out),'--stage',str(stage),'--method','dram_backed_kv','--budget','8k' if a.benchmark=='swebench' else '32k']
   with (stage/'runner.log').open('w') as log:

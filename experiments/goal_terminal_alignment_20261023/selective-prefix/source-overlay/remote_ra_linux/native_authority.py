@@ -21,6 +21,23 @@ from remote_ra_http.diagnostics import failure, phase
 _authority = None
 
 
+def monitor_grace_seconds():
+    """Allow an engine-owned admission to finish before declaring its heartbeat lost.
+
+    The engine polls this channel on its scheduler thread, which also executes
+    bounded phase-1 KV work. Its existing admission lease can exceed 90 seconds.
+    Startup and shutdown retain their separate deadlines; monitoring stays finite.
+    """
+    if os.environ.get('REMOTE_RA_HTTP_RUNTIME', '0') != '1':
+        return 90
+    from remote_ra_http.config import load
+    overlap = load().get('admission', {}).get('admission_overlap', {})
+    lease = overlap.get('lease_seconds', 360)
+    require(type(lease) is int and 360 <= lease <= 2160,
+            'invalid pinned admission lease for heartbeat monitoring')
+    return max(90, lease + 60)
+
+
 def current():
     require(type(_authority) in (NativeManager, NativeEngine),
             'native authority is not installed in this process')
@@ -201,7 +218,7 @@ class NativeManager(Common):
             channel.handoff_to_monitor(); self.b0.set()
             event('B0_NATIVE_WORKER_ACK', epoch=self.identity.epoch,
                   worker_nonce=prepared['worker_nonce'], capability_only=True)
-            self.deadline = time.monotonic() + 90
+            self.deadline = time.monotonic() + monitor_grace_seconds()
             f1_deadline = time.monotonic() + 120
             bound = False
             phase(self, "parent-monitor-await-f1")
@@ -236,7 +253,7 @@ class NativeManager(Common):
                         from remote_ra_http.shutdown import accept_closed
                         self.closing=True;accept_closed(self,reply);break
                     require(reply == payload, 'heartbeat differs')
-                self.deadline = time.monotonic() + 90
+                self.deadline = time.monotonic() + monitor_grace_seconds()
         except BaseException as exc:
             self._fail(type(exc).__name__ + ': ' + str(exc))
             failure('PARENT_AUTHORITY_REFUSED', exc, self)
@@ -358,7 +375,7 @@ class NativeEngine(Common):
         self.channel.send('COMMIT_ACK', receipt)
         require(self.channel.receive({'RELEASE'}, self.deadline)[1] == receipt, 'release differs')
         self.fence.capable(); self.channel.send('RELEASE_ACK', receipt)
-        self.channel.handoff_to_monitor(); self.deadline = time.monotonic() + 90
+        self.channel.handoff_to_monitor(); self.deadline = time.monotonic() + monitor_grace_seconds()
         phase(self, 'engine-b0-released')
         event('ENGINE_B0_RELEASED', epoch=self.identity.epoch, worker_nonce=self.worker_nonce,
               physical_capture_verified=False)
@@ -381,7 +398,7 @@ class NativeEngine(Common):
         self.fence.check()
         if not self.channel.pipe.poll(0):return
         kind, payload = self.channel.receive({'PING', 'FRONTEND_BOUND', 'CLOSE'}, self.deadline)
-        self.deadline = time.monotonic() + 90
+        self.deadline = time.monotonic() + monitor_grace_seconds()
         if kind == 'PING':self.channel.send('PONG', payload)
         elif kind == 'FRONTEND_BOUND':
             require(payload['worker_nonce'] == self.worker_nonce, 'frontend worker nonce mismatch')

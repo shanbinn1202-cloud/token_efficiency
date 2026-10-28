@@ -1,0 +1,19 @@
+{
+  "time": 1793155829.319254,
+  "passed": true,
+  "configured_model": "gpt-4o-2024-05-13",
+  "model": "gpt-4o",
+  "attempts": [
+    {
+      "model": "gpt-4o-2024-05-13",
+      "http_status": 404,
+      "error_code": "model_not_found"
+    },
+    {
+      "model": "gpt-4o",
+      "http_status": 200
+    }
+  ],
+  "credentials_not_logged": true,
+  "fallback_previously_authorized": true
+}

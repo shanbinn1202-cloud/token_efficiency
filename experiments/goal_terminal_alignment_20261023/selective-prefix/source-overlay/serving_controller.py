@@ -11,9 +11,10 @@ from dataclasses import dataclass
 from hashlib import sha256
 import json
 import threading
+import time
 from frontend_registry import FrontendRegistry
 from dynamic_runtime import require
-from registered_add_protocol import Ack, Cancel
+from registered_add_protocol import Ack, Cancel, Status
 
 _CURRENT = ContextVar("remote_ra_trusted_serving_call", default=None)
 
@@ -252,17 +253,26 @@ class ServingController:
         record = self.registry._submitted.get(call.internal_id)
         require(record is not None and record["assigned"].external_id == call.external_id,
                 "generation close lost submitted ownership")
-        # Native OutputProcessor may emit finished on a stop string BEFORE its
-        # deferred engine abort. Existing authenticated Cancel is idempotent and
-        # returns the engine's actual terminal state. ONLY complete proves success;
-        # cancelled proves cleanup but must fail this nonstreaming response.
+        # Frontend output can arrive before async scheduler finalization. A
+        # Cancel used as a status query would destroy that valid in-flight turn.
+        # Poll read-only engine state; only the native complete receipt succeeds.
         rid = call.internal_id
-        command_id = "cancel-" + sha256(rid.encode()).hexdigest()
-        frame = self.registry.codec.encode(Cancel(command_id, rid))
-        reply = await llm.engine_core.registered_add_async(frame, self.registry.bridge.timeout)
-        ack = self.registry.codec.decode(reply)
-        require(type(ack) is Ack and ack.command_id == command_id and ack.request_id == rid
-                and ack.state == "complete", "terminal engine completion unproven (cancelled is not success)")
+        command_id = "status-" + sha256(rid.encode()).hexdigest()
+        frame = self.registry.codec.encode(Status(command_id, rid))
+        deadline = time.monotonic() + getattr(self.registry.bridge, 'control_timeout',
+                                             self.registry.bridge.timeout)
+        while True:
+            remaining = deadline - time.monotonic()
+            require(remaining > 0, "native terminal confirmation timed out")
+            reply = await llm.engine_core.registered_add_async(frame, remaining)
+            ack = self.registry.codec.decode(reply)
+            require(type(ack) is Ack and ack.command_id == command_id and ack.request_id == rid
+                    and ack.state in ("accepted", "complete"),
+                    "terminal engine completion unproven (cancelled is not success)")
+            self.current()
+            if ack.state == "complete":
+                break
+            await asyncio.sleep(0.01)
         self.current()  # Revalidate owner/connection after authenticated await.
         self.registry._submitted.pop(call.internal_id)
         call.engine_complete = True

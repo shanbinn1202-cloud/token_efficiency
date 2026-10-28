@@ -6,3 +6,6 @@ sys.path[:0]=[str(D),str(G/'harness'),str(T/'mini-swe-agent/src'),str(T/'externa
 for name in ['litellm','datasets','pandas','docker','tenacity','goal_client','goal_server','experiments.benchmarks32_20261004.telemetry','baselines.common.environment','baselines.common.runner','experiments.memagent20_20261003.run']:
  importlib.import_module(name)
  print(json.dumps({'import':name,'passed':True}),flush=True)
+from experiments.memagent20_20261003.run import scorer
+official = scorer()
+print(json.dumps({'import':'official_MemoryAgentBench_scorer','passed':True}),flush=True)

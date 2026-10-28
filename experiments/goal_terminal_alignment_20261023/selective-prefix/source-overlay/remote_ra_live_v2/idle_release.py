@@ -268,6 +268,14 @@ class IdleRelease:
         peak = max(pair(need['phase1'])[0], pair(need['phase2'])[0] + pair(need['watermark'])[0])
         most = pool.num_gpu_blocks - 1 - floor
         if own + peak > most:
+            if own + peak <= pool.num_gpu_blocks - 1:
+                # Another session's tail/poisoned Pages disappear on its explicit
+                # close. Refuse this admission temporarily; do not poison another
+                # otherwise feasible session while that cleanup is in flight.
+                from .capacity import CapacityWait, CAPACITY_WAIT
+                raise CapacityWait('%s: turn needs %d global Pages; %d other-session '
+                                   'pins await session close (%d total usable)'
+                                   % (CAPACITY_WAIT, own + peak, floor, pool.num_gpu_blocks - 1))
             raise CapacityExceeded('%s: the turn needs %d global Pages with its own %d pinned; at most %d can '
                                    'ever be free (pool 0 holds %d, other sessions pin %d that no release frees)'
                                    % (CAPACITY_EXCEEDED, own + peak, own, most, pool.num_gpu_blocks - 1, floor))
