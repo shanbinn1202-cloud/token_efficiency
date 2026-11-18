@@ -1,0 +1,328 @@
+{
+ "cases": [
+  {
+   "chunks": 14,
+   "context_tokens_qwen": 54852,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r342-q0",
+   "max_tail_tokens": 4104,
+   "prompt_tokens": 54752,
+   "reply_tokens": 210,
+   "stream_tokens": 54962
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q53",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39340,
+   "reply_tokens": 150,
+   "stream_tokens": 39490
+  },
+  {
+   "chunks": 17,
+   "context_tokens_qwen": 67635,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r58-q0",
+   "max_tail_tokens": 4172,
+   "prompt_tokens": 68380,
+   "reply_tokens": 255,
+   "stream_tokens": 68635
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r337-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113757,
+   "reply_tokens": 420,
+   "stream_tokens": 114177
+  },
+  {
+   "chunks": 14,
+   "context_tokens_qwen": 55215,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r341-q0",
+   "max_tail_tokens": 4096,
+   "prompt_tokens": 54953,
+   "reply_tokens": 210,
+   "stream_tokens": 55163
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q37",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39333,
+   "reply_tokens": 150,
+   "stream_tokens": 39483
+  },
+  {
+   "chunks": 18,
+   "context_tokens_qwen": 70981,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r91-q0",
+   "max_tail_tokens": 4122,
+   "prompt_tokens": 70566,
+   "reply_tokens": 270,
+   "stream_tokens": 70836
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r324-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113758,
+   "reply_tokens": 420,
+   "stream_tokens": 114178
+  },
+  {
+   "chunks": 14,
+   "context_tokens_qwen": 56571,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r391-q0",
+   "max_tail_tokens": 4098,
+   "prompt_tokens": 56433,
+   "reply_tokens": 210,
+   "stream_tokens": 56643
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q60",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39334,
+   "reply_tokens": 150,
+   "stream_tokens": 39484
+  },
+  {
+   "chunks": 19,
+   "context_tokens_qwen": 77050,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r84-q0",
+   "max_tail_tokens": 4127,
+   "prompt_tokens": 77256,
+   "reply_tokens": 285,
+   "stream_tokens": 77541
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r375-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113764,
+   "reply_tokens": 420,
+   "stream_tokens": 114184
+  },
+  {
+   "chunks": 14,
+   "context_tokens_qwen": 53296,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r309-q0",
+   "max_tail_tokens": 4084,
+   "prompt_tokens": 53047,
+   "reply_tokens": 210,
+   "stream_tokens": 53257
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q22",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39333,
+   "reply_tokens": 150,
+   "stream_tokens": 39483
+  },
+  {
+   "chunks": 18,
+   "context_tokens_qwen": 70375,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r77-q0",
+   "max_tail_tokens": 4156,
+   "prompt_tokens": 70916,
+   "reply_tokens": 270,
+   "stream_tokens": 71186
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r350-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113760,
+   "reply_tokens": 420,
+   "stream_tokens": 114180
+  },
+  {
+   "chunks": 15,
+   "context_tokens_qwen": 58405,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r365-q0",
+   "max_tail_tokens": 4104,
+   "prompt_tokens": 58219,
+   "reply_tokens": 225,
+   "stream_tokens": 58444
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q5",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39336,
+   "reply_tokens": 150,
+   "stream_tokens": 39486
+  },
+  {
+   "chunks": 18,
+   "context_tokens_qwen": 73699,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r90-q0",
+   "max_tail_tokens": 4157,
+   "prompt_tokens": 74505,
+   "reply_tokens": 270,
+   "stream_tokens": 74775
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r396-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113759,
+   "reply_tokens": 420,
+   "stream_tokens": 114179
+  },
+  {
+   "chunks": 15,
+   "context_tokens_qwen": 57636,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r350-q0",
+   "max_tail_tokens": 4092,
+   "prompt_tokens": 57458,
+   "reply_tokens": 225,
+   "stream_tokens": 57683
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q4",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39334,
+   "reply_tokens": 150,
+   "stream_tokens": 39484
+  },
+  {
+   "chunks": 20,
+   "context_tokens_qwen": 78885,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r52-q0",
+   "max_tail_tokens": 4117,
+   "prompt_tokens": 79012,
+   "reply_tokens": 300,
+   "stream_tokens": 79312
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r393-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113763,
+   "reply_tokens": 420,
+   "stream_tokens": 114183
+  },
+  {
+   "chunks": 13,
+   "context_tokens_qwen": 53051,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r301-q0",
+   "max_tail_tokens": 4093,
+   "prompt_tokens": 52834,
+   "reply_tokens": 195,
+   "stream_tokens": 53029
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q70",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39335,
+   "reply_tokens": 150,
+   "stream_tokens": 39485
+  },
+  {
+   "chunks": 19,
+   "context_tokens_qwen": 75767,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r56-q0",
+   "max_tail_tokens": 4133,
+   "prompt_tokens": 75806,
+   "reply_tokens": 285,
+   "stream_tokens": 76091
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r311-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113759,
+   "reply_tokens": 420,
+   "stream_tokens": 114179
+  },
+  {
+   "chunks": 14,
+   "context_tokens_qwen": 55876,
+   "first_prompt_tokens": 219,
+   "id": "ruler_qa2_validation_65536-r370-q0",
+   "max_tail_tokens": 4084,
+   "prompt_tokens": 55684,
+   "reply_tokens": 210,
+   "stream_tokens": 55894
+  },
+  {
+   "chunks": 10,
+   "context_tokens_qwen": 39409,
+   "first_prompt_tokens": 219,
+   "id": "factconsolidation_sh_32k-r5-q93",
+   "max_tail_tokens": 4056,
+   "prompt_tokens": 39334,
+   "reply_tokens": 150,
+   "stream_tokens": 39484
+  },
+  {
+   "chunks": 18,
+   "context_tokens_qwen": 73658,
+   "first_prompt_tokens": 219,
+   "id": "infbench_sum_eng_shots2-r29-q0",
+   "max_tail_tokens": 4128,
+   "prompt_tokens": 73609,
+   "reply_tokens": 270,
+   "stream_tokens": 73879
+  },
+  {
+   "chunks": 28,
+   "context_tokens_qwen": 113458,
+   "first_prompt_tokens": 219,
+   "id": "icl_trec_coarse_6600shot_balance-r373-q0",
+   "max_tail_tokens": 4115,
+   "prompt_tokens": 113758,
+   "reply_tokens": 420,
+   "stream_tokens": 114178
+  }
+ ],
+ "manifest_sha256": "010fd10971905e7611ff639c81230f12bad58acd688143cf7b6eb94e30151edf",
+ "reply_text": "<|tool_call>call:bash{command:<|\"|>read_next<|\"|>}<tool_call|>",
+ "schema": "pmab-gemma-real-tokens-v1",
+ "tokenizer_template_sha256": "6a1015c47ccfcfa67c3b772385bccee357a4d37c3cda37bd202e9047f391ab82"
+}

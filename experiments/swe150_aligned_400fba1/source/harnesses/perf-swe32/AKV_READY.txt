@@ -1,0 +1,328 @@
+SUPERSEDED (2026-11-09): frozen in ..\perf-swe32-3ca7f1c2\; akvs 3549065 was cancelled before it started; current READY file: PHASEB_READY.txt.
+AKV_READY (2026-11-07) - perf-swe32: AKV small-scale first (plan akvs), the AKV rule at 16 sessions (plan akvt: does not fit), and goalt from the new state
+===================================================================================================================================================
+
+STATUS: akvs READY to submit (the user's decision of 11-07: AKV small-scale first). It runs akv_rule with thinking ON
+and async OFF on the FIRST 8 of the 32 instances, 4 sessions, 120 steps, -AfterJob 3540110. By the estimate (section
+1b) it fits the pool and finishes in ~4,900-6,300 s (R = 600), inside its 2.48-h limit. akvt (16 sessions) is kept as
+it is and DOES NOT FIT (section 3: a stall from about local turn 11-14); do not submit it as is. goalt: only after
+recentt (3539242) is verified. Nothing was submitted; nothing connected to DeltaAI or tbench. Jobs 3539242 / 3539260
+/ 3540110 were not touched. The runtime did not change for akvs (f4ccd4b); the harness payload did (a plan's own
+session count).
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32   (re-pinned to f4ccd4b)
+Frozen     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-20a5d68f\   (FIRST, before the re-pin: payload 20a5d68f..., runtime d72745c = the state of
+           job 3540110 rtoolst; 92 files + FROZEN-20a5d68f.md; list D:\Remote-RA-temp\scratch\perf-swe32-20a5d68f.sha256;
+           FREEZE_VERIFY PASS: hashes, payload.json = 20a5d68f, its 18 members = the files, the source equalled the copy)
+           earlier: perf-swe32-fbd644ce\ (3539242 recentt, 3539260 obst), perf-swe32-bcb702e6\ (plan smoke)
+Runtime    recent-fill-1103 f4ccd4bce7af10f3e143a835d49b61b731ba0542 (pushed d72745c..f4ccd4b, a new commit on d72745c; no amend, no force; main
+           untouched at 2dcd018; CPU-tested only)
+           receipt D:\Remote-RA-temp\scratch\recent-fill\release-receipt-f4ccd4b.json (GIT_ARCHIVE_TESTS_PASS, 1,763 tests,
+           126 skipped, 455.172 s parallel, result line 130c15e4..., log d1257356...)
+Payload    3ca7f1c2561f6d72d7b7e7fc9d5eb83f83a90b96b652e2f7e299c3bdcb9db648   (dist\payload.json; was 20a5d68f...)
+Entry      edbbf52a85c3157b9850cfeb4718a469dadb7563c7d67f0bdddd406714453c87   (run_one_connection.ps1)
+Pins       2f8053c6679e60862981aae55672b4adb8900c36a73dba2c4007631dade78e57   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 goal_text=goals.jsonl payload=3ca7f1c2561f6d72d7b7e7fc9d5eb83f83a90b96b652e2f7e299c3bdcb9db648 (16 steps, exit 0 each: build-1, build-2, deterministic, unit-tests, release-parity, real-tokenizer, goal-text-probe, gate-checks, repin, synthetic-stages, pipeline-compat, entry, transport, deploy-selftest, fetch-selftest, cleanup)
+           logs I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\validation\20261107T183618
+
+MIXED COMMITS (on purpose): recentt 3539242 / obst 3539260 run 60c5d21 (payload fbd644ce), rtoolst 3540110 d72745c
+(20a5d68f), akvt and goalt f4ccd4b (3ca7f1c2). Each later commit changes only its new policy: the 144 default
+contracts, random_fill, recent_fill (60c5d21) and recent_tools (d72745c) are byte-identical and pinned in
+test_recent_fill.py, so goalt's goal_query (like obst's observation_query) is unchanged. Every earlier plan has the same
+fingerprint (PLAN_FINGERPRINT SAME 22 against d72745c's record) and the same DryRun line (DRYRUN_LINES SAME 22, commit
+masked); akvt is the one new plan.
+
+Which folder fetches each job:
+  3539242 recentt  stage /u/ycao11/swe32-db3beb480814436588e3808862143d05  -> perf-swe32-fbd644ce
+  3539260 obst     stage /u/ycao11/swe32-c16cfa82062f4098b88a508dbfc13443  -> perf-swe32-fbd644ce
+  3540110 rtoolst  stage /u/ycao11/swe32-656ca993da3c455ebb37f4e476c43dc0  -> perf-swe32-20a5d68f
+  akvs / akvt / goalt  stage from the submission's JSON line                -> perf-swe32 (this)
+(the verifier requires the delivered helpers to equal its own harness's sealed payload).
+
+
+1. AKV'S RULE (arXiv 2610.28577, the HTML page) AND akv_rule
+------------------------------------------------------------
+The paper: its tool-response rolling-drop policy "retains the KV states of the latest 12 tool responses" (section 5.1);
+section 3.2 keeps the cache of all reasoning and drops older tool-response cache; appendix A.4.2 starts the drop once
+the tool responses exceed those 12 rounds; there is no token threshold for the drop. The paper names no rule for the
+system prompt and task (only tool responses are dropped), drops at message granularity (message indices), and evaluates
+mini-SWE-agent on SWE-bench Verified with 250 steps, on MoE models (MiniMax-M2.7, GPT-OSS-120B, MiroThinker-1.7-Mini).
+akv_rule (f4ccd4b): attended = the mandatory Pages (system + task), every Page holding a token of any agent reply
+(60c5d21's reply spans: generation header, reasoning, </think>, content, closing boundary; cover) and the Pages of the
+latest 12 tool responses, the current observation counted as the newest (it is the live tail, always attended), so the
+latest 11 sealed observation spans are kept whole; nothing else. A Page is dropped only when it lies wholly inside the
+older tool responses. No budget (capacity = the rule's selection; --active-token-budget refused), no token threshold
+(switch_threshold_tokens 0: the rule applies from local turn 1; until a 12th tool response it keeps every Page). A
+rebuilt first request's history (no span splits it by role) is kept (the paper never drops reasoning). Per active turn
+query.selection.window records selected_page_count, selected_tokens, reply_pages, kept_tool_responses (min(11, sealed);
+the current one is the 12th), dropped_tool_responses, dropped_pages, first_tool_page / first_tool_position (the oldest
+kept tool response), and the window fields (covered turns / tool responses).
+Points where we deviate or had to choose (also in the runtime README section 5):
+  (a) "the latest 12" includes the newest tool response (the paper does not say so explicitly); 12 sealed + the current
+      one would be another pin value (one constant), if you prefer it;
+  (b) positions: retained Pages keep their original positions (AKV's repos is not implemented);
+  (c) dropped Pages stay in DRAM and the rule never selects them again (AKV prefers evicting dropped cache);
+  (d) Qwen3.6's GDN layers keep a state of the whole history, the dropped tool responses included: the drop applies to
+      the 16 full-attention layers only (the paper's models are MoE transformers with no such state described; not the
+      dense models the brief mentions);
+  (e) the server applies the rule itself; AKV's agent harness issues the cache operations with each request;
+  (f) granularity: 16-token Pages by cover (a dropped tool response's tokens on a Page shared with a kept token stay
+      attended; AKV drops whole messages);
+  (g) our runs keep 120 steps (the paper's SWE-bench runs allow 250).
+
+
+1b. PLAN akvs (AKV SMALL-SCALE FIRST) - FIT AND TIME (an ESTIMATE, UNAUDITED; akv\akvs_estimate.py)
+-----------------------------------------------------------------------------------------------
+akvs262t = akvt's server and rule on the FIRST 8 instances of the sealed list. The list order is the same as in every
+run: astropy-12907, -13033, -13236, -13398, -13453, -13579, -13977, -14096.
+- Sessions: 4, the plan's own max_running_sessions (--max-running-sessions 4, max_num_seqs 4, the agents' cap 4). The
+  decoupled layout at 4 has 9 Mamba slots, so the 25-GiB FA pool holds 24,229 Pages = 387,664 tokens.
+- Limits: thinking on, async off, 120 steps, cap 7,200 s, minimum 4,500 s, --time 02:29:00, E 6,600 s, 2.48 / 1.83
+  GPU-h, ghx4 batch, --mem=113560M, mail BEGIN,END,FAIL.
+- One difference from akvt, the arena: serve.py refuses a 70-GiB --dram-arena-gib for 4 sessions (an arena must hold
+  less than every session at the context limit: 4 x 16,385 Pages = 64 GiB). akvs runs --dram-arena-gib 60 (61,440
+  Pages; the harness's floor is 58.32 GiB; pinned host 61.57 GiB, need 93.57 of 110.90 GiB).
+Replay: obs262 (3461703, thinking OFF) restricted to these 8 instances (37-118 requests; thinking-off walls 396-1,698 s
+at K = 16). Thinking ON adds R reasoning tokens per turn, decoded at 30-45 ms. The instances refill the K sessions in
+list order, and the pool is walked every 10 s with each open session's AKV set (uniform turn times within an
+instance):
+first 8: ['astropy__astropy-12907', 'astropy__astropy-13033', 'astropy__astropy-13236', 'astropy__astropy-13398', 'astropy__astropy-13453', 'astropy__astropy-13579', 'astropy__astropy-13977', 'astropy__astropy-14096']
+N=8 K=4 R=600 step=45 ms: wall  6279 s | peak attended 269980 of 387664 (fits, at 5050 s) | max one session 112849 | peak arena  345734 (ok)
+N=8 K=4 R=600 step=30 ms: wall  4884 s | peak attended 265287 of 387664 (fits, at 3790 s) | max one session 112849 | peak arena  340368 (ok)
+N=8 K=4 R=900 step=45 ms: wall  8371 s | peak attended 366940 of 387664 (fits, at 6940 s) | max one session 147949 | peak arena  444153 (ok)
+N=8 K=4 R=900 step=30 ms: wall  6279 s | peak attended 362680 of 387664 (fits, at 5050 s) | max one session 147949 | peak arena  438434 (ok)
+N=8 K=3 R=600 step=45 ms: wall  8028 s | peak attended 172650 of 392368 (fits, at 7910 s) | max one session 112849 | peak arena  213221 (ok)
+N=8 K=3 R=600 step=30 ms: wall  6165 s | peak attended 168742 of 392368 (fits, at 5970 s) | max one session 112849 | peak arena  212127 (ok)
+N=8 K=3 R=900 step=45 ms: wall 10902 s | peak attended 228940 of 392368 (fits, at 10800 s) | max one session 147949 | peak arena  276540 (ok)
+N=8 K=3 R=900 step=30 ms: wall  8028 s | peak attended 227850 of 392368 (fits, at 7910 s) | max one session 147949 | peak arena  268421 (ok)
+N=6 K=4 R=600 step=45 ms: wall  6279 s | peak attended 194586 of 387664 (fits, at 2720 s) | max one session 112849 | peak arena  256284 (ok)
+N=6 K=4 R=600 step=30 ms: wall  4884 s | peak attended 193694 of 387664 (fits, at 2030 s) | max one session 112849 | peak arena  254525 (ok)
+N=6 K=4 R=900 step=45 ms: wall  8371 s | peak attended 264179 of 387664 (fits, at 3730 s) | max one session 147949 | peak arena  326231 (ok)
+N=6 K=4 R=900 step=30 ms: wall  6279 s | peak attended 261786 of 387664 (fits, at 2720 s) | max one session 147949 | peak arena  323484 (ok)
+N=6 K=3 R=600 step=45 ms: wall  8028 s | peak attended 159206 of 392368 (fits, at 3140 s) | max one session 112849 | peak arena  209646 (ok)
+N=6 K=3 R=600 step=30 ms: wall  6165 s | peak attended 157143 of 392368 (fits, at 2340 s) | max one session 112849 | peak arena  212127 (ok)
+N=6 K=3 R=900 step=45 ms: wall 10822 s | peak attended 218173 of 392368 (fits, at 4330 s) | max one session 147949 | peak arena  268654 (ok)
+N=6 K=3 R=900 step=30 ms: wall  8028 s | peak attended 216206 of 392368 (fits, at 3140 s) | max one session 147949 | peak arena  266646 (ok)
+first 8: requests per instance [37, 34, 89, 75, 112, 118, 64, 70] thinking-off walls (s, at K = 16) [396, 417, 741, 697, 749, 1698, 616, 888]
+Choice: 8 tasks on 4 sessions, no --release-idle-pages.
+- At R = 600 (central) the 4 open sessions peak at ~270K of 387,664 tokens and the wall is ~4,900-6,300 s, inside the
+  7,200-s cap.
+- At R = 900 they peak at ~367K. That is tight (about 5 % headroom before the running requests' decode rows), and the
+  wall of ~6,300-8,400 s may cut the longest instance (13579, 118 steps) at the cap.
+The alternatives all keep AKV's rule unchanged:
+- 3 sessions: more headroom (~229K at R = 900), but ~8,000-10,900 s, above 2.5 h.
+- 6 tasks: the same wall (the 118-step instance stays), and 2 fewer of the 8 compared tasks.
+- --release-idle-pages: not needed by this estimate; it would add a runtime path no other run uses, and a harness
+  switch.
+Read recentt's measured reasoning before submitting: if 3539242's check block shows reasoning_mean well above ~800
+tokens, akvs is in the R = 900 regime.
+Comparison on the same tasks (UNAUDITED; postrun\repetition_swe32.py --instances <a run's instances.txt> --first 8).
+Thinking-OFF baselines on these 8 (out-baseline-first8):
+  obs262:   3/8 resolved, steps 74.9, dup (a) 0.104, (b) file 0.265, (b) content 0.124
+  goal262:  2/8 resolved, steps 78.6, dup (a) 0.126, (b) file 0.280, (b) content 0.146
+  goalvllm: 3/8 resolved, steps 71.1, dup (a) 0.138, (b) file 0.308, (b) content 0.163
+
+
+2. WHAT CHANGED
+---------------
+akvs (11-07, harness only):
+- A plan may set its own max_running_sessions (PLAN_SERVER_KEYS; at most config.server's 16; its tasks at least its
+  K). controller.plan_running drives the task bound, the admission-overlap bound, the host / memory / attention fits,
+  the dry-run gate (--max-num-seqs, the layout), the agents' pool (pool_spec max_running; tbench's run_pool.sh takes
+  1-16, no redeploy) and the offline verifier.
+- Every other plan keeps config.server's K: PLAN_FINGERPRINT SAME 22 against d72745c's record, akvt unchanged.
+- Gate checks refuse a K above 16, a zero K and fewer tasks than K.
+- e2e scenario akvs: PASS (8 sessions, 4 running, 152 rule turns).
+- postrun\repetition_swe32.py --instances / --first / --allow-missing: the same task subset for every run.
+Runtime: selection_contract (AKV_RULE, akv_pin, akv_kept, the contract without budget and with threshold 0, window_order
+/ window_record for it), query_selection (the rule's capacity; both paths check that the recent Pages are kept and
+exactly the rule fills), capacity.selected_max (every Page), serve.py (the policy, the refused budget, the
+rewriter-unused reason) and every policy registry; test_akv_rule.py (23; mutation checks in the suite; source
+mutations 12 -> 11 and reply Pages dropped fail 32 / 34 subtests, restored byte for byte); test_recent_fill.py now
+pins recent_tools as committed in d72745c too; docs.
+Harness: controller (akv_feature, AKV_PIN, plan checks: akv_rule takes no flag; the dry-run rewriter record),
+smoke_checks (akv_kept, window_order / window_record for akv_rule, check_akv: the kept Pages from the session's own
+stable ends and observation spans, the capacity, the order, the signed ranking, the record), swe_checks (the rule's
+branch, no budget), fake_server (the rule's plan), e2e scenario akvt (PASS: 608 active rule turns, 224 with dropped
+tool responses), build.py (AKV_RULE= line), swe32-config.json (policies.akv_rule, plans.akvt), tests (test_swe32,
+test_release_parity, test_repin: d72745c refused for lacking akv_rule), the receipt pins.
+Plan akvt: akv262t = rtoolst's server with akv_rule (no flag), thinking on, async off, 16 sessions, 120 steps, 25 GiB,
+262,144, arena 70 GiB, ghx4 batch, --mem=113560M, mail BEGIN,END,FAIL to cao58@illinois.edu, --time 02:29:00 (cap
+7,200 s, minimum 4,500 s), E 7,800 s (x1.15), 2.48 / 2.17 GPU-h (limit / expected). The repetition script ran on the
+e2e akvt output (postrun\repetition_swe32.py --run akv262t=...).
+
+
+3. RESOURCES (an ESTIMATE, UNAUDITED; D:\Remote-RA-temp\scratch\recent-fill\akv\akv_estimate.py)
+-------------------------------------------------------------------------------------------------
+I replayed obs262's runtime rows (job 3461703, thinking OFF) and modelled thinking ON as R extra reasoning tokens per
+turn, with the history extrapolated to 120 turns from each session's own means. Pool: 25 GiB = 20,706 Pages of 16
+tokens = 331,296 tokens at 65,536 B per token. Arena: 70 GiB = 1,146,880 tokens.
+obs262 sessions 32 turns mean 58.5 median 52.5 reply mean 215 (header 7 incl.) observation mean 280 p90 629 initial mean 5904
+pool 331296 tokens, arena 1146880 tokens
+R=0
+  t= 12 attended mean   12289 p90   28028 | fit 26 sessions | 16 x attended   196618 | 16 x history   196506 arena ok
+  t= 20 attended mean   13165 p90   28851 | fit 25 sessions | 16 x attended   210640 | 16 x history   266490 arena ok
+  t= 40 attended mean   17005 p90   31871 | fit 19 sessions | 16 x attended   272088 | 16 x history   418662 arena ok
+  t= 64 attended mean   22727 p90   35165 | fit 14 sessions | 16 x attended   363624 | 16 x history   606910 arena ok
+  t= 90 attended mean   28922 p90   42615 | fit 11 sessions | 16 x attended   462749 | 16 x history   821125 arena ok
+  t=120 attended mean   35472 p90   48982 | fit  9 sessions | 16 x attended   567546 | 16 x history  1062681 arena ok
+R=600
+  t= 12 attended mean   19463 p90   35202 | fit 17 sessions | 16 x attended   311402 | 16 x history   311706 arena ok
+  t= 20 attended mean   25123 p90   40809 | fit 13 sessions | 16 x attended   401968 | 16 x history   458490 arena ok
+  t= 40 attended mean   40923 p90   55789 | fit  8 sessions | 16 x attended   654776 | 16 x history   802662 arena ok
+  t= 64 attended mean   60997 p90   73435 | fit  5 sessions | 16 x attended   975944 | 16 x history  1221310 arena OVER
+  t= 90 attended mean   82740 p90   96433 | fit  4 sessions | 16 x attended  1323837 | 16 x history  1685125 arena OVER
+  t=120 attended mean  107230 p90  120740 | fit  3 sessions | 16 x attended  1715674 | 16 x history  2214681 arena OVER
+R=900
+  t= 12 attended mean   23063 p90   38802 | fit 14 sessions | 16 x attended   369002 | 16 x history   369306 arena ok
+  t= 20 attended mean   31123 p90   46809 | fit 10 sessions | 16 x attended   497968 | 16 x history   554490 arena ok
+  t= 40 attended mean   52923 p90   67789 | fit  6 sessions | 16 x attended   846776 | 16 x history   994662 arena ok
+  t= 64 attended mean   80197 p90   92635 | fit  4 sessions | 16 x attended  1283144 | 16 x history  1528510 arena OVER
+  t= 90 attended mean  109740 p90  123433 | fit  3 sessions | 16 x attended  1755837 | 16 x history  2117125 arena OVER
+  t=120 attended mean  143230 p90  156740 | fit  2 sessions | 16 x attended  2291674 | 16 x history  2790681 arena OVER
+R=0: 16 sessions stop fitting the pool at local turn ~57
+R=600: 16 sessions stop fitting the pool at local turn ~14
+R=900: 16 sessions stop fitting the pool at local turn ~11
+R=600: wall factor g = 2.08 (own attended set per session) -> ~11357 s against the thinking-on obs estimate 5450 s
+R=900: wall factor g = 2.77 (own attended set per session) -> ~20226 s against the thinking-on obs estimate 7290 s
+Reading:
+- GPU pool: the attended set grows with every reply. Thinking on, 16 sessions' sets pass the pool at about local turn
+  14 (R = 600) or 11 (R = 900); by turn 64 only about 5 / 4 sessions fit at once. Between turns an open session keeps
+  its Pages pinned, so with all 16 sessions open nothing frees blocks until a session closes: a STALL, not a slowdown
+  (capacity.py: an admission waits while other open sessions pin the pool). So 16 sessions do not fit. Even thinking
+  OFF the set passes the pool at about turn 57.
+- DRAM arena: policy-independent (every open session's sealed history, as for recentt / obst / rtoolst). With R = 600,
+  16 open sessions at turn 64 would hold 1.22M tokens, more than the 70-GiB arena. That needs 16 sessions that deep at
+  once, which the K = 16 refill makes less likely. The check block's DRAM_ARENA_EXHAUSTED count shows it, first for
+  the running thinking-on jobs.
+- Decode: a step reads the weights (~54 GB, bf16) plus the running sessions' KV. A full pool is 331K tokens x 64 KiB =
+  21.7 GB per step against ~12.6 GB at obs262's 8K budget, so steps are about 14 % longer in a bandwidth model. The
+  bigger effect is concurrency. With --release-idle-pages (only running sessions hold Pages) the wall is about 2.1x
+  (R = 600: ~11,400 s) or 2.8x (R = 900: ~20,200 s) the thinking-on obs estimate (5,450 / 7,290 s).
+- Time: akvt as configured keeps rtoolst's limit (02:29:00, cap 7,200 s) so a stalled job costs at most 2.48 GPU-h.
+  Running AKV to completion needs a decision (section 7) and then a longer limit, e.g. cap 14,400 s for R = 600 (one
+  server per job either way).
+
+
+4. LOCAL CHECKS (no connection)
+--------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvs -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvs -RunLabel r1 -AfterJob 3540110 -Authorize -Authorization 'AUTHORIZE_SWE32_AKVS_8TASKS_4SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvt -RunLabel r1 -AfterJob 3540110 -Authorize -Authorization 'AUTHORIZE_SWE32_AKVT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOALT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+Seen (this validation; DryRun without -AfterJob):
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=3ca7f1c2561f6d72d7b7e7fc9d5eb83f83a90b96b652e2f7e299c3bdcb9db648 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=goalt role=validation variant_of=- servers=goalvllmt:goal_query:32tasks:120steps:7200s:vllm3gib:overlap:thinking partition=ghx4 time=02:34:00 expected_seconds=6700 billing_factor=1 gpu_hours_limit=2.57 gpu_hours_expected=1.86 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-goalt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 goal_rewriter_engine=goalvllmt:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllmt thinking=goalvllmt:on
+  DRY_RUN connections=0 stage=/u/ycao11/swe32-f86b6bdc2d5c486fbb19d84301a126fb payload_bytes=12193721 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=goalt role=validation variant_of=- servers=goalvllmt:goal_query:32tasks:120steps:7200s:vllm3gib:overlap:thinking partition=ghx4 time=02:34:00 expected_seconds=6700 billing_factor=1 gpu_hours_limit=2.57 gpu_hours_expected=1.86 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-goalt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 goal_rewriter_engine=goalvllmt:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllmt thinking=goalvllmt:on
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=3ca7f1c2561f6d72d7b7e7fc9d5eb83f83a90b96b652e2f7e299c3bdcb9db648 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=akvt role=validation variant_of=- servers=akv262t:akv_rule:32tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=7800 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=2.17 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-akvt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 thinking=akv262t:on
+  DRY_RUN connections=0 stage=/u/ycao11/swe32-211d6b7979a941208ffea76d4d67710c payload_bytes=12193701 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=akvt role=validation variant_of=- servers=akv262t:akv_rule:32tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=7800 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=2.17 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-akvt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 thinking=akv262t:on
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=3ca7f1c2561f6d72d7b7e7fc9d5eb83f83a90b96b652e2f7e299c3bdcb9db648 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=akvs role=validation variant_of=- servers=akvs262t:akv_rule:8tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=6600 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=1.83 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=93.57 memory_spare_gib=17.33 startup_spike=ELIMINATED job_name=swe32-akvs run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=60 qwen_kv_cache_gib=8,16,24,25,32 thinking=akvs262t:on
+  DRY_RUN connections=0 stage=/u/ycao11/swe32-40d5eb2dcd434cd4a3c6ff15b8a71af0 payload_bytes=12193699 commit=f4ccd4bce7af10f3e143a835d49b61b731ba0542 plan=akvs role=validation variant_of=- servers=akvs262t:akv_rule:8tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=6600 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=1.83 release_check=PINNED receipt_result_sha256=130c15e41d1c22748101aa78507cc242716dd585e862965c77e1fa602e239b95 receipt_log_sha256=d1257356fb9268d1a0c08f5c2e95ac4e390775d32affcbb5921cfc375c2fd9c9 worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=93.57 memory_spare_gib=17.33 startup_spike=ELIMINATED job_name=swe32-akvs run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=60 qwen_kv_cache_gib=8,16,24,25,32 thinking=akvs262t:on
+
+
+5. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First, in your DeltaAI shell (read-only): squeue -h -u ycao11 -o '%i|%T|%P|%j|%E'
+akvs (AKV small-scale; ready), chained behind rtoolst 3540110:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvs -RunLabel r1 -AfterJob 3540110 -Authorize -Authorization 'AUTHORIZE_SWE32_AKVS_8TASKS_4SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY'
+akvt (16 sessions) DOES NOT FIT (section 3); it is kept for reference only. Do not submit it as is:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvt -RunLabel r1 -AfterJob <J> -Authorize -Authorization 'AUTHORIZE_SWE32_AKVT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY'
+goalt - ONLY AFTER recentt (3539242) is verified (thinking on works); chain it behind the last queued / running job of
+yours that shares tbench (swe32-*, swe10-*, swe16-*, gswe32-*, tb16-*, gem0-*; e.g. akvs's or 3540110), or drop
+-AfterJob if none is queued:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -RunLabel r1 -AfterJob <J of the last such job> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+Exit 86 = a pre-claim gate failed, nothing claimed (read QUALIFY_ERROR= / ERROR=, fix, new -RunLabel). The last JSON
+line prints stage and job_id.
+
+
+6. AFTER THE END MAIL: read-only check block (your DeltaAI shell; system python only), then the fetch
+-----------------------------------------------------------------------------------------------------
+Replace S and J (3539242 / 3539260 / 3540110: the stages above; akvs / goalt: the submission's JSON line):
+
+bash <<'EOF'
+S=/u/ycao11/swe32-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'receipt', (r.get('release_receipt') or {}).get('result_line_sha256', '')[:8])
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-10s %-17s %-16s cap=%s rows=%s selective=%s lock=%s goal_text=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], s.get('agent_timeout_seconds'), s.get('rows'), s.get('active_selection_turns'), (s.get('lock_wait') or {}).get('status'), (s.get('goal_text') or {}).get('status'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+for path in sorted(glob.glob('job-output/*/ready.json')):
+    ready = json.load(open(path)); start = json.load(open(path.replace('ready.json', 'startup.json')))
+    print('ready', path.split('/')[1], 'fast', ready.get('decode_fastpath'), 'fast2', ready.get('decode_fastpath2'), 'fast3', ready.get('decode_fastpath3'), 'deferred_io', ready.get('deferred_completion_io'), 'lmo', bool(ready.get('language_model_only')), 'pool_bytes', start.get('connector_pool_bytes'), 'arena_pages', start.get('dram_arena_pages'), 'thinking_header', repr((start.get('thinking') or {}).get('header_text')), 'ready_thinking', ready.get('thinking') == start.get('thinking'), 'async', start.get('async_scheduling'))
+for name in ('archives.json', 'eval-launch.json'):
+    v = json.load(open('fetch/' + name))
+    print(name, json.dumps({k: (x.get('bytes'), x.get('sha256')) if isinstance(x, dict) and 'sha256' in x else x for k, x in v.items() if k in ('core', 'bulk', 'status', 'labels', 'reason', 'elapsed_s')}))
+PY
+else echo RESULT_ABSENT; fi
+echo "== thinking and windows (expect every row a thinking record, fresh = sessions, the rest append; active windows on recent_fill / recent_tools; the calls_* / tools_kept / reasoning_kept fields only on recent_tools, the akv_* fields only on akv_rule; capacity_waits: the admissions that waited for KV blocks)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/runtime.jsonl')):
+    rows = [json.loads(l) for l in open(p) if l.strip()]
+    t = [r.get('thinking') for r in rows]
+    hist = {}
+    for x in t:
+        if x: hist[x['history']] = hist.get(x['history'], 0) + 1
+    win = [r['query']['selection'].get('window') for r in rows if r.get('query')]
+    on = [x for x in t if x]
+    print(p.split('/')[1], 'rows', len(rows), 'thinking', len(on), hist, 'unclosed', sum(1 for x in on if not x['closed']), 'reasoning_mean', round(sum(x['reasoning_tokens'] for x in on) / max(1, len(on)), 1), 'reasoning_max', max([x['reasoning_tokens'] for x in on] or [0]), 'active_windows', sum(1 for w in win if w), 'calls_truncated', sum(1 for w in win if w and w.get('calls_truncated')), 'reasoning_kept_turns', sum(1 for w in win if w and w.get('reasoning_kept')), 'calls_kept_mean', round(sum(w.get('calls_kept', 0) for w in win if w) / max(1, sum(1 for w in win if w)), 1), 'tools_kept_mean', round(sum(w.get('tools_kept', 0) for w in win if w) / max(1, sum(1 for w in win if w)), 1), 'akv_kept_max', max([w.get('kept_tool_responses') or 0 for w in win if w] or [0]), 'akv_selected_tokens_max', max([w.get('selected_tokens') or 0 for w in win if w] or [0]), 'akv_dropped_turns', sum(1 for w in win if w and w.get('dropped_tool_responses')), 'capacity_waits', sum(r.get('capacity_waits') or 0 for r in rows), 'covered_turns_mean', round(sum(w['covered_turns'] for w in win if w) / max(1, sum(1 for w in win if w)), 2))
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    for row in s.get('checks') or ():
+        if row.get('check') == 'thinking':
+            print(p, 'thinking', row.get('status'), row.get('finding') or '', {k: (row.get('detail') or {}).get(k) for k in ('histories', 'unclosed', 'mean_reasoning_tokens')})
+PY
+echo "== goal texts"; wc -l job-output/*/goals.jsonl 2>/dev/null || echo "no goals.jsonl (not a goal_query plan)"
+echo "== kernels"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|GDN prefill kernel \(requested=[a-z]+|sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== completion writer (expect 0)"; grep -c "COMPLETION_WRITE_FAILED\|remote-ra completion writer" server-*.log
+echo "== text-only (expect mm=0 and text_only>=1; encoder_backend is information only)"; for f in server-*.log; do echo "$f mm=$(grep -cE 'Encoder cache will be initialized|Multi-modal warmup completed' "$f") text_only=$(grep -c 'text-only mode' "$f") encoder_backend=$(grep -c 'for MMEncoderAttention' "$f")"; done
+echo "== arena (expect 0)"; grep -c DRAM_ARENA_EXHAUSTED server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== host peak"; for f in host-samples-*.log; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1], 'rss_peak_gib=%.2f cgroup_peak_gib=%.2f' % (max(x.get('vmrss_kb') or 0 for x in r)/2**20, max(x.get('cgroup_current_bytes') or 0 for x in r)/2**30))" "$f"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/swe32-core.tar.xz fetch/swe32-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the two sha256sum lines and the sacct job row are needed by the fetch). Then, locally:
+3539242 (recentt) and 3539260 (obst): the fbd644ce copy's fetch:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-fbd644ce\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-db3beb480814436588e3808862143d05' -JobId '3539242' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-fbd644ce\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-c16cfa82062f4098b88a508dbfc13443' -JobId '3539260' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+3540110 (rtoolst): the 20a5d68f copy's fetch:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-20a5d68f\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-656ca993da3c455ebb37f4e476c43dc0' -JobId '3540110' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+akvs 3549065 / goalt 3554749 (payload 3ca7f1c2): the 3ca7f1c2 copy's fetch (frozen 2026-11-09 before the re-pin to
+main ba4d1ba; this folder no longer verifies them):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-3ca7f1c2\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-346d6bf0206c4ff7bfa7a65842c6c898' -JobId '3549065' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-3ca7f1c2\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-778cee104c90476fab3b983516393674' -JobId '3554749' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+(-CoreOnly first on a slow link; TBENCH_EVALUATION_RUNNING exit 3: run it again later.) Expected VERDICT=
+SWE32_PASS_VERIFIED (SWE32_PARTIAL_VERIFIED if the 7,200-s cap cut instances).
+Repetition (local only, UNAUDITED): akvs against the other runs on its 8 tasks:
+& 'D:\Anaconda\python.exe' -I -B 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\repetition_swe32.py' --run akvs262t='<akvs fetch>\akvs262t' --run recent262t='<3539242 fetch>\recent262t' --run obs262t='<3539260 fetch>\obs262t' --run rtools262t='<3540110 fetch>\rtools262t' --instances '<one of these fetches>\instances.txt' --first 8 --out '<out dir>'
+- Add goalvllmt once goalt has run.
+- A fetch dir is D:\Remote-RA-temp\scratch\perf-swe32\fetch\job<J>\tbench-done-<stamp>\swe32-<J>-r1.
+- The thinking-off baselines on the same 8 tasks are in section 1b; on all 32 tasks, in RECENT_FILL_READY.txt
+  section 6.
+
+
+7. DECISIONS FOR YOU
+--------------------
+0. akvs (section 1b): submit it now, or first read recentt's reasoning_mean. It fits at R = 600; at R = 900 it is
+   tight and the longest instance may hit the cap. Fallbacks within ~2.5 h: 6 tasks (one config line) or
+   --release-idle-pages (a harness switch).
+1. akvt's fit (section 3): 16 sessions do not fit the 25-GiB pool once thinking is on. Options:
+   (a) --release-idle-pages (the runtime's idle release: least recently used idle sessions' Pages back to DRAM,
+       restored at their next turn). The harness has no plan switch for it yet; that would be a harness change, and
+       the wall grows to ~11,400-20,200 s;
+   (b) fewer sessions (at 25 GiB and R = 600: 3 stay within the pool to about turn 120, 4 to about turn 90);
+   (c) a larger pool (32 GiB is the next pinned size, 424K tokens: still not 16 sessions);
+   (d) submit as is, to see AKV's early turns (expected SWE32_PARTIAL).
+2. "Latest 12" = the current observation plus 11 sealed ones (our reading of the paper); 12 sealed + the current would
+   be a new pin value.
+3. The DRAM arena risk for every thinking-on run (section 3): watch DRAM_ARENA_EXHAUSTED in 3539242 / 3539260 / 3540110.
+4. Not GPU-validated: akv_rule (CPU tests only).

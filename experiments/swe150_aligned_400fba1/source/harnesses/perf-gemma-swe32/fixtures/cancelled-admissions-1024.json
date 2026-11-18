@@ -1,0 +1,520 @@
+{
+ "3429830": {
+  "admitted_without_row": [
+   "chatcmpl-95df3b0e4260b5a1-bad83d2c",
+   "chatcmpl-a0ee41a95496e40a-843dd21f",
+   "chatcmpl-a2a80afcaaeced4d-910143eb",
+   "chatcmpl-b3a3d350a3ccc6c0-9de1bb08"
+  ],
+  "cancelled": [
+   "d842baaa746f6ab5897ec3b64715b4d4126250ae221b32f683e7c0f1b501c4ba"
+  ],
+  "engine_errors": [],
+  "events": 35,
+  "failures": [
+   {
+    "capacity_waits": null,
+    "chain": [
+     {
+      "message": "",
+      "type": "CancelledError"
+     }
+    ],
+    "detail": "",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "CancelledError",
+    "ordinal": 51,
+    "queue_wait_s": null,
+    "request_id": null,
+    "request_index": null,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s14",
+    "session_index": 14,
+    "traceback": "f.admission.acquire()\n  File \"/u/ycao11/.local/share/uv/python/cpython-3.12.13-linux-aarch64-gnu/lib/python3.12/asyncio/locks.py\", line 113, in acquire\n    await fut\nasyncio.exceptions.CancelledError\n",
+    "turn": 50
+   },
+   {
+    "capacity_waits": 0,
+    "chain": [
+     {
+      "message": "",
+      "type": "CancelledError"
+     }
+    ],
+    "detail": "",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "CancelledError",
+    "ordinal": 36,
+    "queue_wait_s": 4.488873757072724,
+    "request_id": null,
+    "request_index": 735,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s4",
+    "session_index": 4,
+    "traceback": "f.admission.acquire()\n  File \"/u/ycao11/.local/share/uv/python/cpython-3.12.13-linux-aarch64-gnu/lib/python3.12/asyncio/locks.py\", line 113, in acquire\n    await fut\nasyncio.exceptions.CancelledError\n",
+    "turn": 35
+   },
+   {
+    "capacity_waits": 3,
+    "chain": [
+     {
+      "message": "",
+      "type": "CancelledError"
+     }
+    ],
+    "detail": "",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "CancelledError",
+    "ordinal": 18,
+    "queue_wait_s": 8.922159374924377,
+    "request_id": null,
+    "request_index": 734,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s29",
+    "session_index": 29,
+    "traceback": "f.admission.acquire()\n  File \"/u/ycao11/.local/share/uv/python/cpython-3.12.13-linux-aarch64-gnu/lib/python3.12/asyncio/locks.py\", line 113, in acquire\n    await fut\nasyncio.exceptions.CancelledError\n",
+    "turn": 17
+   },
+   {
+    "capacity_waits": 203,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "RuntimeError",
+    "ordinal": 20,
+    "queue_wait_s": 343.5715054968605,
+    "request_id": "chatcmpl-95df3b0e4260b5a1-bad83d2c",
+    "request_index": 637,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s5",
+    "session_index": 5,
+    "traceback": "client disconnected\")\n  File \"/u/ycao11/gswe32-92fa3aedf26443ab8a0e7f6b6bbe825d/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 19
+   },
+   {
+    "capacity_waits": 7,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "RuntimeError",
+    "ordinal": 34,
+    "queue_wait_s": 18.26417728094384,
+    "request_id": "chatcmpl-b3a3d350a3ccc6c0-9de1bb08",
+    "request_index": 731,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s11",
+    "session_index": 11,
+    "traceback": "client disconnected\")\n  File \"/u/ycao11/gswe32-92fa3aedf26443ab8a0e7f6b6bbe825d/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 33
+   },
+   {
+    "capacity_waits": 8,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "RuntimeError",
+    "ordinal": 53,
+    "queue_wait_s": 17.488098163041286,
+    "request_id": "chatcmpl-a0ee41a95496e40a-843dd21f",
+    "request_index": 729,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s20",
+    "session_index": 20,
+    "traceback": "client disconnected\")\n  File \"/u/ycao11/gswe32-92fa3aedf26443ab8a0e7f6b6bbe825d/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 52
+   },
+   {
+    "capacity_waits": 7,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "error": "RuntimeError",
+    "ordinal": 32,
+    "queue_wait_s": 10.364746223203838,
+    "request_id": null,
+    "request_index": 733,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s23",
+    "session_index": 23,
+    "traceback": "client disconnected\")\n  File \"/u/ycao11/gswe32-92fa3aedf26443ab8a0e7f6b6bbe825d/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 31
+   }
+  ],
+  "goal_rows": [],
+  "label": "obs",
+  "natives": {
+   "d842baaa746f6ab5897ec3b64715b4d4126250ae221b32f683e7c0f1b501c4ba": {
+    "epoch": "423277ddf62eb5413fa6a8d595ae7bffcff41d19f858733674bfc8815e7f7036",
+    "request_id": "chatcmpl-a2a80afcaaeced4d-910143eb",
+    "session_id": "http-423277ddf62eb5413fa6a8d595ae7bff-s23",
+    "session_index": 23,
+    "terminal_state": "cancelled",
+    "turn": 31
+   }
+  },
+  "overlaps": [],
+  "server_log_sha256": "db70c4346abcb36bdca7aa80d5230625eb6f7de6fc41dfb4316cb6b9a88b7852",
+  "window": [
+   136012,
+   136046
+  ]
+ },
+ "3433706": {
+  "admitted_without_row": [
+   "chatcmpl-8090faa3d4506550-8f74ea21",
+   "chatcmpl-a0e063337e4b95bf-b6da1453",
+   "chatcmpl-a69ff66af61ea885-83cf138f",
+   "chatcmpl-aea8adf09bc51adf-b8bd0b18",
+   "chatcmpl-b5377af803c7088c-bb4eb17a"
+  ],
+  "cancelled": [
+   "029a82225ed276f22f907974b38879b835f6c8671cf658524abee78bb1912ba3"
+  ],
+  "engine_errors": [],
+  "events": 25,
+  "failures": [
+   {
+    "capacity_waits": 12,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "error": "RuntimeError",
+    "ordinal": 23,
+    "queue_wait_s": 9.479478820227087,
+    "request_id": null,
+    "request_index": 254,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s1",
+    "session_index": 1,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 22
+   },
+   {
+    "capacity_waits": 13,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "error": "RuntimeError",
+    "ordinal": 23,
+    "queue_wait_s": 13.539838283322752,
+    "request_id": "chatcmpl-a69ff66af61ea885-83cf138f",
+    "request_index": 247,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s5",
+    "session_index": 5,
+    "traceback": " 'client disconnected')\n  File \"/u/ycao11/tb16-b9071ce733d547ed8d4326cfcaa6a030/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 22
+   },
+   {
+    "capacity_waits": 73,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "error": "RuntimeError",
+    "ordinal": 16,
+    "queue_wait_s": 91.71109890658408,
+    "request_id": "chatcmpl-aea8adf09bc51adf-b8bd0b18",
+    "request_index": 241,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s7",
+    "session_index": 7,
+    "traceback": " 'client disconnected')\n  File \"/u/ycao11/tb16-b9071ce733d547ed8d4326cfcaa6a030/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 15
+   },
+   {
+    "capacity_waits": 44,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "error": "RuntimeError",
+    "ordinal": 12,
+    "queue_wait_s": 65.31281181238592,
+    "request_id": "chatcmpl-a0e063337e4b95bf-b6da1453",
+    "request_index": 234,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s12",
+    "session_index": 12,
+    "traceback": " 'client disconnected')\n  File \"/u/ycao11/tb16-b9071ce733d547ed8d4326cfcaa6a030/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 11
+   },
+   {
+    "capacity_waits": 44,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "error": "RuntimeError",
+    "ordinal": 21,
+    "queue_wait_s": 49.54532065521926,
+    "request_id": null,
+    "request_index": 249,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s11",
+    "session_index": 11,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 20
+   }
+  ],
+  "goal_rows": [],
+  "label": "gdryobs",
+  "natives": {
+   "029a82225ed276f22f907974b38879b835f6c8671cf658524abee78bb1912ba3": {
+    "epoch": "59441597afe67dfab35ede8b96bc757527fc78d219b077c4954372962f5d83c6",
+    "request_id": "chatcmpl-8090faa3d4506550-8f74ea21",
+    "session_id": "http-59441597afe67dfab35ede8b96bc7575-s1",
+    "session_index": 1,
+    "terminal_state": "cancelled",
+    "turn": 22
+   }
+  },
+  "overlaps": [],
+  "server_log_sha256": "ec73ba342d2f2bbb70b7f55882ea6db2b46da1df737474bd8d7e2f51aa521557",
+  "window": [
+   51524,
+   51548
+  ]
+ },
+ "3434544": {
+  "admitted_without_row": [
+   "chatcmpl-8bf03753d07e1762-a2e4df31",
+   "chatcmpl-8f3f9bc460f98e88-b1c010a8",
+   "chatcmpl-974b440f23b933f8-b39a7539",
+   "chatcmpl-a1e29ae43d838b49-b7ab3d80"
+  ],
+  "cancelled": [
+   "07a350f2d26e3b73cccc69e9eb2b9b6ea00cce752dbecbe52a6bc9baf927bdaf",
+   "290c75eb3c5c081046227d9dc23b78cdad30149a4ef3487e2205a74db2f0ab00",
+   "96b04723cf9e037858d25a332c3a877d0eee4b362507da90a44d0b6f3d268423",
+   "aac1fcb1990e84bf07dc6bfa306e4610569bebcb93d2e4d9ed98d216af41d87c"
+  ],
+  "engine_errors": [],
+  "events": 610,
+  "failures": [
+   {
+    "capacity_waits": 39,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 17,
+    "queue_wait_s": 19.51928778551519,
+    "request_id": "chatcmpl-a1e29ae43d838b49-b7ab3d80",
+    "request_index": 218,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf",
+    "session_index": 0,
+    "traceback": " 'client disconnected')\n  File \"/u/ycao11/tb16-ce480bd4f4dd4102ab4803c5af651ea1/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 16
+   },
+   {
+    "capacity_waits": 111,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 19,
+    "queue_wait_s": 53.95682439347729,
+    "request_id": null,
+    "request_index": 204,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s4",
+    "session_index": 4,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 18
+   },
+   {
+    "capacity_waits": 0,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 15,
+    "queue_wait_s": 2.3990869522094727e-06,
+    "request_id": null,
+    "request_index": 223,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s7",
+    "session_index": 7,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 14
+   },
+   {
+    "capacity_waits": 15,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 18,
+    "queue_wait_s": 7.134505549445748,
+    "request_id": null,
+    "request_index": 221,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s8",
+    "session_index": 8,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 17
+   },
+   {
+    "capacity_waits": 9,
+    "chain": [
+     {
+      "message": "Client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "Client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 24,
+    "queue_wait_s": 4.075470048934221,
+    "request_id": null,
+    "request_index": 222,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s11",
+    "session_index": 11,
+    "traceback": "RuntimeError: Client disconnected\n",
+    "turn": 23
+   },
+   {
+    "capacity_waits": 0,
+    "chain": [
+     {
+      "message": "client disconnected",
+      "type": "RuntimeError"
+     }
+    ],
+    "detail": "client disconnected",
+    "drained": null,
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "error": "RuntimeError",
+    "ordinal": 27,
+    "queue_wait_s": 1.3117678463459015e-06,
+    "request_id": "chatcmpl-974b440f23b933f8-b39a7539",
+    "request_index": 220,
+    "schema": "remote-ra-http-failure-v1",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s15",
+    "session_index": 15,
+    "traceback": " 'client disconnected')\n  File \"/u/ycao11/tb16-ce480bd4f4dd4102ab4803c5af651ea1/release/source/route_runtime.py\", line 14, in require\n    raise RuntimeError(message)\nRuntimeError: client disconnected\n",
+    "turn": 26
+   }
+  ],
+  "goal_rows": [
+   {
+    "request_id": "chatcmpl-8bf03753d07e1762-a2e4df31",
+    "session_index": 4,
+    "turn": 18
+   },
+   {
+    "request_id": "chatcmpl-8f3f9bc460f98e88-b1c010a8",
+    "session_index": 11,
+    "turn": 23
+   }
+  ],
+  "label": "gdrygoal",
+  "natives": {
+   "07a350f2d26e3b73cccc69e9eb2b9b6ea00cce752dbecbe52a6bc9baf927bdaf": {
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "request_id": "chatcmpl-8bf03753d07e1762-a2e4df31",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s4",
+    "session_index": 4,
+    "terminal_state": "cancelled",
+    "turn": 18
+   },
+   "290c75eb3c5c081046227d9dc23b78cdad30149a4ef3487e2205a74db2f0ab00": {
+    "epoch": "fd670d7f3894aa5ccca7701cce3771cfecb77f1cb4d47894722fefd765e992c0",
+    "request_id": "chatcmpl-8f3f9bc460f98e88-b1c010a8",
+    "session_id": "http-fd670d7f3894aa5ccca7701cce3771cf-s11",
+    "session_index": 11,
+    "terminal_state": "cancelled",
+    "turn": 23
+   }
+  },
+  "overlaps": [],
+  "server_log_sha256": "20950718b8452ed154828d56759238f87d4c3e9101ddbf33bdd80c70b1874a9b",
+  "window": [
+   56030,
+   56639
+  ]
+ }
+}

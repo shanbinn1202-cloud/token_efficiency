@@ -1,0 +1,3 @@
+# sync_from_live.py selects what the snapshot holds; the root .gitignore's *.log would hide the log excerpts
+# under fixtures/ that the harness tests read.
+!*.log

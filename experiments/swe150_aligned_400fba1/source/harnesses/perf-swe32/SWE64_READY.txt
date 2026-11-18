@@ -1,0 +1,129 @@
+SUPERSEDED (2026-11-12, later): this folder is re-pinned to integrate-1112 4ebff97 (new payload); the current submit
+lines are in INTEGRATE1112_READY.txt (fulltr / fulltri / full64 re-fitted from fulltri 3583081). This file's
+payload 67c55f26 on main ba4d1ba is frozen, with this file, in ..\perf-swe32-67c55f26\.
+
+SWE64_READY (2026-11-12) - perf-swe32: the 64-instance proxy (obs64 / obs64i / goal64 / full64) and the full baseline
+with idle release (fulltr / fulltri), thinking ON
+=====================================================================================================================
+
+STATUS: READY, nothing submitted. Every plan here: Qwen3.6-27B on our runtime main ba4d1ba, thinking ON (keep history),
+16 sessions refilled in list order, 120 steps, 25 GiB KV, 262,144 tokens, arena 70 GiB, one GH200, --mem=113560M, mail
+BEGIN,END,FAIL to cao58@illinois.edu, no retry. The job pushes its evidence to tbench at its end and is verified there
+(as 5ea4bdfc's jobs); Claude pulls the result after the END mail.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32
+Runtime    main ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 (unchanged pin)
+Payload    67c55f26843f5588af195055122b6ee8c7433cf3f9baf59b007e47a0ab0ea806   (dist\payload.json; was 5ea4bdfc..., frozen in ..\perf-swe32-5ea4bdfc\)
+Entry      592dbc49430899801025d172f8bc1a538853d977831527e0ee6c9f1dd4ca673e   (run_one_connection.ps1)
+Pins       67ed19437c0206156f738e58264aa299246289a946aac0d0b505b08b300de71a   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=ba4d1ba (I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\validation\20261112T131144\, -Jobs 6)
+tbench     half unchanged (manifest 58245387..., no redeploy); 64 images present (32 pulled 11-12); verification code
+           deployed for this payload: /home/ubuntu/swe32-verify/code/568856e6b2503957 (pointer code/by-payload/d52d41a02c0e79eb795adb1cbde3a0b99c51b75ab432864791f7bce97463391a)
+Earlier    PLAN_FINGERPRINT SAME 30 / DRYRUN_LINES SAME 30 (every plan through fullti; the 11-11 records)
+
+The time of every plan below is an ESTIMATE (README "Since 2026-11-12": list-order refill with the measured per-instance
+walls; full64 additionally fullt's pool-limited factor; idle release has no measurement at this scale).
+
+
+1. THE PLANS
+------------
+
+| Plan | Role / partition | Tasks | Server (policy) | --time | E (s) | Agent cap / min (s) | W used (s) | cap / W | GPU-h limit / expected |
+| --- | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| obs64 | validation / ghx4 | 64 | obs64t (observation_query) | 02:13:00 | 5,343 | 5,640 / 3,450 | 4,067 | 1.39 | 2.22 / 1.48 |
+| obs64i | interactive (of obs64) / ghx4-interactive | 64 | obs64t | 02:00:00 | 5,343 | 4,860 / 3,450 | 4,067 | 1.19 | 4.00 / 2.97 (2x) |
+| goal64 | validation / ghx4 | 64 | goalvllm64t (goal_query, vLLM Goal engine, --goal-overlap) | 02:34:00 | 7,458 | 6,900 / 4,900 | 5,768 | 1.20 | 2.57 / 2.07 |
+| full64 | validation / ghx4 | 64 | full64tr (full, --release-idle-pages) | 03:02:00 | 8,393 | 8,580 / 6,000 | 7,117 | 1.21 | 3.03 / 2.33 |
+| fulltr | validation / ghx4 | 32 | full262tr (full, --release-idle-pages) | 02:08:00 | 5,140 | 5,940 / 3,700 | 4,387 | 1.35 | 2.13 / 1.43 |
+| fulltri | interactive (of fulltr) / ghx4-interactive | 32 | full262tr | 02:00:00 | 5,140 | 5,460 / 3,700 | 4,387 | 1.24 | 4.00 / 2.86 (2x) |
+
+- W = the p90 of the 64-instance replay (obs: obst 3539260's walls; goal: goalti 3576565's); straggler allowance: the
+  cap also holds the last refill (p90) + the run's longest wall: obs64 4,348 s, goal64 6,102 s (goal64's cap 6,900 s
+  is above the bootstrap maximum 6,480 s). full64: obs64's W x 1.75 (fullt's pool-limited factor; central x 1.41 =
+  5,734 s). fulltr: fullt's (obst 2,503 x 1.75; central 3,530 s).
+- 64-task plans: an extra 600-s spare above the reserves (stop, checks and archives of 64 sessions), and a 1,200-s
+  wait for a previous 64-instance evaluation (about 2 x the 509-584 s of a 32-instance one).
+- No goal64i / full64i: 02:00:00 leaves a cap of 4,860 s, below their W.
+- Do not submit fullt / fullti (full WITHOUT idle release) for the baseline: fullti 3579273 deadlocked there
+  (CAPACITY_STALL, 55.6 min; 16 idle sessions pinned 20,492 of 20,706 FullAttention blocks).
+- fulltr / fulltri are the same run (idle release at 32: the GPU validation of the idle-release path and the full
+  baseline at 32): submit ONE. Run it BEFORE full64.
+- Suggested order for the proxy (each after the previous END mail; interactive needs no other job of yours on
+  ghx4-interactive): fulltri (or fulltr) -> obs64i (or obs64) -> goal64 -> full64 (only if fulltr verified PASS with
+  evictions / readmissions and no CAPACITY_STALL). A 32-task plan right after a 64-task job: wait ~20 min after the
+  END mail (its 600-s evaluation wait may run out: SWE32_REFUSED, nothing lost).
+- Expected GPU-h for the proxy set (ESTIMATE): fulltri 2.86 + obs64i 2.97 + goal64 2.07 + full64 2.33 = 10.23
+  (limits 13.60); with the batch forms instead (fulltr, obs64): 1.43 + 1.48 + 2.07 + 2.33 = 7.31 (limits 9.95).
+
+
+2. BEFORE EACH SUBMISSION (your DeltaAI shell, read-only)
+---------------------------------------------------------
+squeue -h -u ycao11 -o '%i|%T|%P|%j|%E|%r'
+Interactive plans: no job of yours on ghx4-interactive (held tbench jobs and those pending only on them are allowed).
+Batch plans: if a tbench job of yours is queued or running, add -AfterJob <that job id> (the queue gate says so).
+
+
+3. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First SelfTest and DryRun (no connection; Claude ran both for every plan: exit 0), then the submit line.
+
+a) fulltri (ghx4-interactive; first; or fulltr instead)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltri -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltri -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTRI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltri -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTRI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+b) or fulltr (ghx4 batch; add -AfterJob <id> when the queue gate asks for it)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTR_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_128MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTR_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_128MIN_NO_RETRY'
+
+c) obs64i (ghx4-interactive; after the previous interactive job ENDED)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64i -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64i -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64I_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64i -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64I_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+d) or obs64 (ghx4 batch; -AfterJob <id> if a tbench job of yours is queued)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+
+e) goal64 (ghx4 batch; -AfterJob <id> if a tbench job of yours is queued)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+
+f) full64 (ghx4 batch; only after fulltr / fulltri verified PASS with evictions and readmissions)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_182MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_182MIN_NO_RETRY'
+
+
+4. AFTER THE END MAIL: Claude pulls the result (no DeltaAI step)
+-----------------------------------------------------------------
+Tell Claude the job id and the END mail's state and exit code; Claude runs (tok venv, local + tbench only):
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\verify_on_tbench.py --pull --job-id <J> --slurm-state <State> --slurm-exit-code <ExitCode>
+A 64-instance job's evaluation takes about 2 x a 32-instance one (~20 min) and its niced verification about 2 x
+(~25-30 min): TBENCH_VERIFY_PENDING (exit 3) until then. The tables have the Goal-wait columns (goal64) and the join's
+servers.csv the idle evictions / readmissions (fulltr, full64). What to look for on fulltr: release-idle-pages PASS with
+evictions > 0 and readmissions > 0, capacity-stall PASS, no Timeout exit.
+
+
+5. WHAT CHANGED (harness only; the runtime is untouched)
+--------------------------------------------------------
+- tasks\swe64-tasks.json, tasks\tasks-pool-64.json (payload member); pins task_sets."64"; the plan key `tasks`.
+- the plan server key `release_idle_pages` (serve.py --release-idle-pages) and its checks; e2e fake support.
+- server checks `release-idle-pages` (every runtime server, both ways) and `capacity-stall` (CAPACITY_STALL, fail
+  closed); "client timeout during CAPACITY_WAIT" in the session / failure messages.
+- join / tables: the Goal-wait columns; servers.csv: idle evictions / readmissions / readmitted Pages.
+- plans obs64, obs64i, goal64, full64, fulltr, fulltri. Every earlier plan unchanged (fingerprints and DryRun lines).
+
+
+6. NOT GPU-VALIDATED / UNCERTAIN
+--------------------------------
+- --release-idle-pages has never run with real agents on this harness (fulltr / fulltri are its validation). The
+  readmit frame order and its H2D accounting follow the runtime source; if the GPU evidence differs, the checks fail
+  closed and the evidence can be re-verified after a check fix.
+- Every 64-instance time is an ESTIMATE from 32-instance walls; instances 33-64 are all django.
+- full64: the 1.75 factor is fullt's estimate; DRAM restores at this scale are unmeasured.
+- The protocol (thinking, temperature, the full-context baseline) is not aligned yet: these plans are thinking ON,
+  temperature 0, our runtime's `full` as the baseline.

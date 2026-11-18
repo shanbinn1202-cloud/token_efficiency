@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.log
+*.tar.gz
+results/
+artifacts/
+workloads/
+*.key
+*.pem
+
+# Local historical reference, not part of the public core release.
+experimental/
+dist/

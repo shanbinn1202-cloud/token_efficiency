@@ -2,6 +2,10 @@
 
 SWE-bench 与 MemoryAgentBench 的 KV 策略实验代码和共享依赖。
 
+## SWE-bench Verified 150
+
+Qwen3.6-27B 的 Random、Sliding Window、AgentKV 和 Claude Code 压缩配置基于 vLLM 0.24.0、仓库提交 `400fba1`。版本锁定、配置和交互验证状态见 [SWE-150 四方法快照](experiments/swe150_aligned_400fba1/README.md)。
+
 ## 当前主实验
 
 当前队列使用已冻结的 vLLM 0.24 实验包。**各任务的配置文件是实际运行配置的依据**；本目录保留的历史通用入口和 `configs/default.yaml` 不代表当前队列。

@@ -1,0 +1,41 @@
+# Fast CPU tests (run_tests.py, tests/FAST_MODULES.txt): modelled on the release repository's CI.
+# Triggers kept narrow for the private repository's Actions minutes: pushes to main and integrate-*, pull
+# requests, and a manual run.
+name: tests
+on:
+  push:
+    branches:
+      - main
+      - 'integrate-*'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fast-cpu:
+    # A fixed image (ubuntu-latest moves to a new Ubuntu release); checkout v5 and setup-python v6
+    # run on Node.js 24.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: CPU dependencies
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch
+          python -m pip install transformers==5.13.0 tokenizers==0.22.2 jinja2 numpy
+      - name: Pins of the delivered sources and the third-party files
+        # This repository has no external components to place (the release's scripts/place_external.py
+        # --check): the DRAM-KV prototype's files are in source-overlay/, which install.verify_package checks
+        # source by source against INSTALL_RELEASE.json and SOURCE_SHA256SUMS.txt; the prototype's SWE-bench
+        # runner and prompt are pinned by examples/swebench/upstream/SHA256SUMS.
+        run: |
+          python -B -c "import install; d = install.verify_package(install.ROOT); print('PINS_OK', len(d['source_files']))"
+          (cd examples/swebench/upstream && sha256sum --check --strict SHA256SUMS)
+      - name: Fast tests
+        run: python -B run_tests.py

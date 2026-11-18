@@ -1,0 +1,14 @@
+{
+  "kind": "check_git_release receipt",
+  "commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+  "status": "GIT_ARCHIVE_TESTS_PASS",
+  "tests_run": 2059,
+  "seconds": 504.406,
+  "skipped": 139,
+  "result_line_sha256": "308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f",
+  "log_sha256": "7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c",
+  "log": "D:\\Remote-RA-temp\\scratch\\integrate-1112\\receipt\\release-check-4ebff97-20261112T064427Z.txt",
+  "command": "python -I -B check_git_release.py --repo <integrate-1112 worktree> --ref 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (in-repo script, parallel, 10 workers; under HEAVY_FULL.lock 2026-11-12T06:36:00Z-2026-11-12T06:44:26Z)",
+  "date": "2026-11-12",
+  "outcomes": "D:\\Remote-RA-temp\\scratch\\integrate-1112\\receipt\\outcomes-4ebff97.json"
+}

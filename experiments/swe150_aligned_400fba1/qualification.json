@@ -1,0 +1,46 @@
+{
+  "job": "3622451",
+  "partition": "ghx4-interactive",
+  "cluster_manifest_sha256": "4139e25a9e1dfd0dbd174d9cfd37e8d4ce221bec11d457aaa283057dbb220dcc",
+  "completed": true,
+  "all_passed": false,
+  "is_full_150_task_result": false,
+  "methods": {
+    "random": {
+      "passed": false,
+      "short_tasks_completed": 24,
+      "short_tasks_expected": 24,
+      "native_eviction_probe": "passed",
+      "failed_stage": "parallel grading",
+      "error": "zipfile.BadZipFile: Truncated file header"
+    },
+    "sliding_window": {
+      "passed": true,
+      "short_tasks_completed": 1,
+      "short_tasks_expected": 1,
+      "native_eviction_probe": "passed"
+    },
+    "agentkv": {
+      "passed": false,
+      "failed_stage": "forced compaction probe input length check before generation",
+      "probe_input_tokens": 16647,
+      "probe_asserted_upper_bound_exclusive": 16384
+    },
+    "claude_compression": {
+      "passed": false,
+      "failed_stage": "thinking-history smoke check before official /compact probe",
+      "measured_prompt_token_deltas": [
+        0,
+        18
+      ],
+      "expected_prompt_token_deltas": [
+        14,
+        4
+      ]
+    }
+  },
+  "gold_control": {
+    "graded": 1,
+    "resolved": 1
+  }
+}

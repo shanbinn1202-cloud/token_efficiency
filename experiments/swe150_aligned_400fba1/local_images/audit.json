@@ -1,0 +1,16 @@
+{
+  "expected": 150,
+  "passed": 150,
+  "failed": [],
+  "head_differs_before_private_reset": [
+    "astropy__astropy-7166",
+    "astropy__astropy-7336",
+    "astropy__astropy-7606",
+    "astropy__astropy-7671",
+    "django__django-10097"
+  ],
+  "shell": "bash -lc",
+  "checkout_policy": "validate base object, runner resets the private writable worktree at task start",
+  "architecture": "arm64",
+  "time": 1794975936.5277138
+}

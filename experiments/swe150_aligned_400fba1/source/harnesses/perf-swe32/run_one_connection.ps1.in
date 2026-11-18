@@ -1,0 +1,291 @@
+[CmdletBinding()]
+param(
+    [switch]$Authorize,
+    [string]$Authorization = '',
+    # One sealed plan per submission (README "Plans"): the Table 1 five full, goalb4 (Ours (Goal): goal_query +
+    # --goal-rewriter-batch 4), obs, rfill, stock - one ghx4 batch job each (32 tasks, 16 running, --mem=113560M);
+    # goal (optional: goal_query unbatched); <plan>i = the ghx4-interactive variant of each (2x billing, one job per
+    # user, first in a tbench chain only). -AfterJob <J> queues after job J (afterany): the queue gate allows the other
+    # tbench jobs of yours only when they are J or J's own chain, so a whole chain can be queued at once.
+    # smoke (role release-smoke, 2026-11-03): the release smoke, observation_query, random_fill and goal_query (the
+    # vLLM rewriter, --goal-overlap) back to back on the release runtime, 32 tasks, 16 running, 20 steps.
+    [string]$Plan = '',
+    [string]$RewriterModel = '',
+    [string]$RunLabel = 'r1',
+    [string]$AfterJob = '',
+    [switch]$SelfTest,
+    [switch]$DryRun
+)
+$ErrorActionPreference = 'Stop'
+$PinnedPayload = '__PAYLOAD_SHA256__'
+$ExpectedCommit = '__COMMIT__'
+$ExpectedConfig = '__CONFIG_SHA256__'
+$ReceiptResult = '__RECEIPT_RESULT__'
+$ReceiptLog = '__RECEIPT_LOG__'
+$StatementsSealed = '__STATEMENTS__'
+$ExpectedCleanEnv = '/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env'
+$StagePrefix = '/u/ycao11/swe32-'
+# The pinned plans (build.py writes them from pins.json config): phrase, partition, Slurm time, time fit, servers.
+$Plans = __PLANS__
+# The user's rule for every DeltaAI job: mail BEGIN, END and FAIL to this address; pinned, not a parameter.
+$MailUser = 'cao58@illinois.edu'
+$MailType = 'BEGIN,END,FAIL'
+$PayloadPath = Join-Path $PSScriptRoot 'dist\payload.json'
+if ((Get-FileHash -LiteralPath $PayloadPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $PinnedPayload) { throw 'sealed payload hash mismatch' }
+$Bundle = [IO.File]::ReadAllText($PayloadPath) | ConvertFrom-Json
+foreach ($Property in $Bundle.files.PSObject.Properties) {
+    $Source = $Property.Name
+    if ($Source -ceq 'tasks-pool.json') { $Source = 'tasks\tasks-pool.json' }
+    if ($Source -ceq 'tasks-pool-64.json') { $Source = 'tasks\tasks-pool-64.json' }
+    if ($Source -ceq 'tasks-pool-h2.json') { $Source = 'tasks\tasks-pool-h2.json' }
+    if ($Source -ceq 'tasks-pool-150.json') { $Source = 'tasks\tasks-pool-150.json' }
+    $Path = Join-Path $PSScriptRoot $Source
+    if ((Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $Property.Value.sha256) { throw ('helper hash mismatch: '+$Property.Name) }
+}
+. (Join-Path $PSScriptRoot 'transport.ps1')
+$Pins = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($Bundle.files.'pins.json'.base64)) | ConvertFrom-Json
+if ($Pins.commit -cne $ExpectedCommit -or $Pins.package_sha256 -cne '__PACKAGE_SHA256__' -or $Pins.config_sha256 -cne $ExpectedConfig -or $Pins.clean_env.prefix -cne $ExpectedCleanEnv) { throw 'sealed pins differ from this entry point' }
+if ($Pins.slurm.mail_user -cne $MailUser -or $Pins.slurm.mail_type -cne $MailType -or $Pins.slurm.job_name_prefix -cne 'swe32-') { throw 'sealed Slurm pins differ from the mail rule' }
+# The pinned local release-check receipt (light login gates, the user's rule of 2026-10-18: no runtime test suite on the login node).
+$Receipt = $Pins.release_receipt
+if (-not $Receipt -or $Receipt.commit -cne $ExpectedCommit -or $Receipt.status -cne 'GIT_ARCHIVE_TESTS_PASS' -or $Receipt.result_line_sha256 -cne $ReceiptResult -or $Receipt.log_sha256 -cne $ReceiptLog -or [int]$Receipt.tests_run -lt 1000) { throw 'the sealed pins lack the pinned release-check receipt of this commit (light login gates): rebuild with build.py --receipt' }
+$Features = $Pins.runtime_features
+if ($Features.stage2 -ne $true -or $Features.goal_async -ne $true -or $Features.decoupled_layout -ne $true -or @($Features.page_tokens_choices) -notcontains 16) { throw 'sealed runtime lacks stage 2, the asynchronous Goal or the decoupled 16-token layout' }
+if (-not $Features.session_pool -or [int]$Features.session_pool.max_tasks -lt 32) { throw 'sealed runtime has no session pool of 32 tasks' }
+if (-not $Features.context_limits -or @($Features.context_limits.max_model_len_choices) -notcontains 131072 -or @($Features.context_limits.max_tokens_choices) -notcontains 4096 -or $Features.context_limits.dram_arena_flag -ne $true) { throw 'sealed runtime has no 131072 / 4096 context limits with --dram-arena-gib' }
+if (-not $Features.admission_flags -or -not $Features.admission_flags.overlap) { throw 'sealed runtime has no admission flags with (f) --admission-overlap' }
+if (-not $Features.cuda_graphs -or ((@($Features.cuda_graphs.modes) -join ',') -cne 'off,piecewise,full,full-decode')) { throw 'sealed runtime has no --cuda-graphs' }
+if (-not $Features.decode_fastpath -or $Features.decode_fastpath.serve_arg -cne '--decode-fastpath') { throw 'sealed runtime has no --decode-fastpath (43fd9c3 or later)' }
+if (-not $Features.language_model_only -or $Features.language_model_only.serve_arg -cne '--language-model-only') { throw 'sealed runtime has no serve.py --language-model-only (4c5b4af or later)' }
+if (-not $Features.connector_pool -or $Features.connector_pool.serve_arg -cne '--connector-pool-gib') { throw 'sealed runtime has no --connector-pool-gib (integrate-1014 63d7225 or later)' }
+if ($Pins.config.server.decode_fastpath2 -eq $true -and (-not $Features.decode_fastpath2 -or $Features.decode_fastpath2.serve_arg -cne '--decode-fastpath2')) { throw 'the decode_fastpath2 switch is on but the sealed runtime has no --decode-fastpath2' }
+if ($Pins.config.server.decode_fastpath3 -eq $true -and ($Pins.config.server.decode_fastpath2 -ne $true -or -not $Features.decode_fastpath3 -or $Features.decode_fastpath3.serve_arg -cne '--decode-fastpath3')) { throw 'the decode_fastpath3 switch is on but the sealed runtime has no --decode-fastpath3 (or decode_fastpath2 is off)' }
+if ($Pins.config.server.deferred_completion_io -eq $true -and (-not $Features.deferred_completion_io -or $Features.deferred_completion_io.serve_arg -cne '--deferred-completion-io')) { throw 'the deferred_completion_io switch is on but the sealed runtime has no --deferred-completion-io' }if ($Pins.config.server.kv_cache_gib -ne 32 -or $Pins.config.server.max_model_len -ne 131072 -or $Pins.config.server.max_tokens -ne 4096 -or $Pins.config.server.dram_arena_gib -ne 70 -or $Pins.config.server.max_running_sessions -ne 16 -or $Pins.config.server.decode_fastpath -ne $true -or $Pins.config.server.language_model_only -ne $true -or $Pins.config.server.connector_pool_gib -ne 1 -or $Pins.config.server.cuda_graphs -cne 'full' -or $Pins.config.stock.language_model_only -ne $true -or $Pins.config.stock.max_num_seqs -ne 16) { throw 'sealed server flags differ from the swe32 decision (32 GiB, 131072, 4096, arena 70 GiB, K 16, --decode-fastpath, --language-model-only, --connector-pool-gib 1, graphs full; stock 16 seqs with --language-model-only)' }
+if (@($Pins.tasks.instances).Count -ne 32) { throw 'the sealed task list must hold the 32 instances' }
+if ($Pins.slurm.mem -cne '113560M') { throw ('sealed sbatch memory '+$Pins.slurm.mem+' differs from --mem=113560M (one GH200''s share, ghx4 DefMemPerGPU)') }
+if ($Pins.config.agent.step_limit -ne 120 -or $Pins.config.agent.max_tokens -ne 4096) { throw 'sealed agent settings differ from STEP_LIMIT 120 / MAX_TOKENS 4096' }
+if (-not $Plan) { throw ('-Plan required: one of '+(@($Plans.Keys) -join ', ')+' (one ghx4 batch job per configuration: Table 1 full, goalb4 = Ours (Goal), obs, rfill, stock; goal = the optional unbatched goal_query; <plan>i = its ghx4-interactive variant)') }
+if (-not $Plans.Contains($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Keys) -join ', ')+')') }
+$Chosen = $Plans[$Plan]
+if ($Chosen.startup_spike -ceq 'RISK') { Write-Warning ('plan '+$Plan+': a server starts without --language-model-only (the sealed runtime lacks it); vLLM''s multi-modal warmup needed up to 152.4 GiB in swe16-era starts, above --mem='+$Pins.slurm.mem+' (README Memory)') }
+$Sealed = $Pins.config.plans.$Plan
+if (-not $Sealed -or $Sealed.authorization -cne $Chosen.authorization -or $Sealed.time -cne $Chosen.time -or $Sealed.partition -cne $Chosen.partition) { throw 'sealed plan differs from this entry point' }
+$PartitionMax = $Pins.slurm.partition_limits.($Chosen.partition).max_time
+if (-not $PartitionMax -or ([TimeSpan]::Parse($Chosen.time) -gt [TimeSpan]::Parse($PartitionMax))) { throw ('plan '+$Plan+' asks --time='+$Chosen.time+', above the '+$Chosen.partition+' maximum '+$PartitionMax) }
+if ([int]$Chosen.worst_case_seconds -gt [TimeSpan]::Parse($Chosen.time).TotalSeconds -or [int]$Chosen.with_eval_wait_seconds -gt [TimeSpan]::Parse($Chosen.time).TotalSeconds) { throw ('plan '+$Plan+' does not fit its Slurm time') }
+# A plan with its own server settings (ctx24 / ctx25, 2026-10-26): 262,144 tokens, 24 or 25 GiB and the 70-GiB arena,
+# sealed and in the plan table alike; a KV size the sealed Qwen launcher lacks (KV_CACHE_GIB, not the argparse choices)
+# must have blocked the plan (controller.kv_block). Every other plan's checks and line are unchanged.
+$Override = $Pins.config.plans.$Plan.server
+# the plan table's block reason (controller.plan_blocked: the Qwen KV size, then the async fixes); checked below against
+# the sealed features (the KV size here, the async fixes after the async switch)
+$Blocked = [string]$Chosen.blocked
+$KvBlocked = $false
+if ($Override) {
+    # akvs (2026-11-07): a plan with its own session count runs 4 sessions with a 60-GiB arena (serve.py refuses an arena
+    # that holds every session at the limit); every other plan with own settings: config.server's K and 70 GiB
+    # 2026-11-16 (phase B, sessions-32-1116): or 24 sessions with a 68-GiB arena (70 leaves less than 5 GiB spare)
+    $ArenaGib = 70
+    if ($null -ne $Override.max_running_sessions) {
+        $OwnK = [int]$Override.max_running_sessions
+        if ($OwnK -eq 4) { $ArenaGib = 60 } elseif ($OwnK -eq 24) { $ArenaGib = 68 } else { throw ('sealed settings of plan '+$Plan+' differ from the 4- / 24-session decision') }
+        if ([int]$Chosen.max_running_sessions -ne $OwnK) { throw ('sealed settings of plan '+$Plan+' differ from the 4- / 24-session decision') }
+    }
+    if ([int]$Override.max_model_len -ne 262144 -or @(24, 25) -notcontains [int]$Override.kv_cache_gib -or [int]$Override.dram_arena_gib -ne $ArenaGib -or @($Features.context_limits.max_model_len_choices) -notcontains 262144 -or [int]$Chosen.max_model_len -ne 262144 -or [int]$Chosen.kv_cache_gib -ne [int]$Override.kv_cache_gib -or [int]$Chosen.dram_arena_gib -ne $ArenaGib) { throw ('sealed settings of plan '+$Plan+' differ from the 262,144-token / 24-25 GiB / '+$ArenaGib+'-GiB-arena decision') }
+    # 2026-11-12: a plan with idle release (release_idle_pages true, the sealed launcher's --release-idle-pages); the
+    # plan table names it on that row only
+    if ($null -ne $Override.release_idle_pages) {
+        if ($Override.release_idle_pages -ne $true -or [string]$Chosen.release_idle_pages -cne 'on' -or -not $Features.release_idle_pages -or $Features.release_idle_pages.serve_arg -cne '--release-idle-pages') { throw ('sealed release_idle_pages of plan '+$Plan+' differs from this entry point or the sealed launcher has no --release-idle-pages') }
+    } elseif ($Chosen.release_idle_pages) { throw ('plan '+$Plan+': the entry point names release_idle_pages the sealed plan lacks') }
+    $Served = @($Features.qwen_kv_cache_gib) -contains [int]$Override.kv_cache_gib
+    $KvBlocked = -not $Served
+    if (-not $Served -and -not $Blocked) { throw ('the sealed Qwen launcher serves no --kv-cache-gib '+$Override.kv_cache_gib+' (KV_CACHE_GIB '+(@($Features.qwen_kv_cache_gib) -join ',')+') but plan '+$Plan+' is not blocked') }
+}
+if (-not $RewriterModel) { $RewriterModel = $Pins.rewriter_default }
+$RewriterModel = $RewriterModel.TrimEnd('/')
+if ($RewriterModel -cnotmatch '^/[A-Za-z0-9._/-]+$') { throw 'RewriterModel must be an absolute DeltaAI path of [A-Za-z0-9._/-]' }
+if ($RunLabel -cnotmatch '^r[0-9]{1,2}$') { throw 'RunLabel must match r[0-9]{1,2} (for example r1, r2)' }
+if ($AfterJob -and $AfterJob -cnotmatch '^[0-9]{1,12}$') { throw 'AfterJob must be a Slurm job id' }
+if ($AfterJob -and $Chosen.partition -ceq 'ghx4-interactive') { throw '-AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user, 2x billing) goes first in a tbench chain, while no other tbench job of yours is queued (a held one, and one pending only on held ones, excepted)' }
+$AfterValue = $null
+if ($AfterJob) { $AfterValue = $AfterJob }
+$Nonce = [Guid]::NewGuid().ToString('N')
+$BootstrapCode = $Bundle.files.'bootstrap.py'.base64
+$PythonCode = 'import base64;exec(compile(base64.b64decode("'+$BootstrapCode+'"),"sealed-bootstrap","exec"))'
+$RemoteCommand = '/work/nvme/bcjw/ycao11/vllm-arm/bin/python -I -S -B -c ' + (ConvertTo-BashLiteral $PythonCode) + ' ' + $Nonce
+$Options = [ordered]@{plan=$Plan; authorization=$Chosen.authorization; mail_user=$MailUser; rewriter_model=$RewriterModel; run_label=$RunLabel; after_job=$AfterValue}
+$Bundle | Add-Member -MemberType NoteProperty -Name options -Value $Options
+$Bytes = [Text.UTF8Encoding]::new($false).GetBytes(($Bundle | ConvertTo-Json -Depth 10 -Compress))
+$TaskCount = @($Pins.tasks.instances).Count
+if ($Pins.tasks.provisional) { $TaskState = 'tasks=PROVISIONAL('+$TaskCount+')' } else { $TaskState = 'tasks=CONFIRMED('+$TaskCount+' = the first 32 SWE-bench Verified instances, as swe16)' }
+# 2026-11-12: a plan with its own task count (64): its sealed list starts with the 32 list, its statements are sealed
+# (tasks\tasks-pool-64.json, a payload member), and the line names it; every other plan's line is unchanged
+if ($Sealed.tasks) {
+    $Set = $Pins.task_sets.([string]$Sealed.tasks)
+    # 2026-11-16: "h2" = instances 33-64 of the sealed 64 list (32 ids, disjoint from the 32 list, together the 64)
+    if ([string]$Sealed.tasks -ceq 'h2') { $SetSize = $TaskCount } else { $SetSize = [int]$Sealed.tasks }
+    if (-not $Set -or @($Set.instances).Count -ne $SetSize -or [string]$Chosen.tasks -cne [string]$Sealed.tasks -or -not $Set.pool -or $Set.pool.sha256 -cne $Chosen.tasks_pool_sha256 -or $Set.list_sha256 -cne $Chosen.tasks_list_sha256) { throw ('the sealed '+$Sealed.tasks+'-task list of plan '+$Plan+' differs from this entry point') }
+    if ([string]$Sealed.tasks -ceq 'h2') {
+        $Whole = @($Pins.task_sets.'64'.instances)
+        if ($Whole.Count -ne 64 -or (@($Set.instances) -join ',') -cne (@($Whole[$TaskCount..63]) -join ',') -or (@($Pins.tasks.instances) -join ',') -cne (@($Whole[0..($TaskCount - 1)]) -join ',')) { throw ('the sealed h2 list of plan '+$Plan+' is not instances 33-64 of the sealed 64 list') }
+    } elseif ((@($Set.instances)[0..($TaskCount - 1)] -join ',') -cne (@($Pins.tasks.instances) -join ',')) { throw ('the sealed '+$Sealed.tasks+'-task list does not start with the 32-task list') }
+    if (-not $Bundle.files.($Set.pool.file) -or $Bundle.files.($Set.pool.file).sha256 -cne $Set.pool.sha256) { throw ('the payload lacks the sealed statements '+$Set.pool.file) }
+    if ($Set.provisional) { $TaskState = 'tasks=PROVISIONAL('+@($Set.instances).Count+')' } else { $TaskState = 'tasks=CONFIRMED('+@($Set.instances).Count+' = the first '+@($Set.instances).Count+' SWE-bench Verified instances in dataset order; the first 32 as swe16)' }
+    if ([string]$Sealed.tasks -ceq 'h2' -and -not $Set.provisional) { $TaskState = 'tasks=CONFIRMED(h2: instances 33-64 of the first 64 SWE-bench Verified instances in dataset order)' }
+} elseif ($Chosen.tasks) { throw ('plan '+$Plan+': the entry point names a task count the sealed plan lacks') }
+if ([string]$Chosen.release_idle_pages -ceq 'on') { $ReleaseIdle = 'on' } else { $ReleaseIdle = 'off' }
+if ($Pins.config.server.decode_fastpath2 -eq $true) { $Fast2 = 'on' } else { $Fast2 = 'off' }
+if ($Pins.config.server.decode_fastpath3 -eq $true) { $Fast3 = 'on' } else { $Fast3 = 'off' }
+if ($Pins.config.server.deferred_completion_io -eq $true) { $Deferred = 'on' } else { $Deferred = 'off' }
+$BatchServer = @($Sealed.servers)[0]
+if ($null -ne $BatchServer.goal_rewriter_batch) { $Batch = 'goal_rewriter_batch='+$BatchServer.goal_rewriter_batch+' goal_rewriter_batch_tokens='+$BatchServer.goal_rewriter_batch_tokens } else { $Batch = 'goal_rewriter_batch=off' }
+if ($Features.goal_text) { $GoalText = 'goal_text=' + (@($Features.goal_text.files) -join ',') } else { $GoalText = 'goal_text=NOT_AVAILABLE' }
+$Provisional = $TaskState+' decode_fastpath=on decode_fastpath2='+$Fast2+' decode_fastpath3='+$Fast3+' deferred_completion_io='+$Deferred+' language_model_only=on connector_pool_gib='+$Pins.config.server.connector_pool_gib+' release_idle_pages='+$ReleaseIdle+' '+$Batch+' '+$GoalText+' still_provisional='+((@($Pins.config.provisional.PSObject.Properties | ForEach-Object { $_.Name }) | Sort-Object) -join ',')+' statements_sealed='+$StatementsSealed
+$Summary = ' plan='+$Plan+' role='+$Chosen.role+' variant_of='+$Chosen.variant_of+' servers='+$Chosen.servers+' partition='+$Chosen.partition+' time='+$Chosen.time+' expected_seconds='+$Chosen.expected_seconds+' billing_factor='+$Chosen.billing_factor+' gpu_hours_limit='+$Chosen.gpu_hours_limit+' gpu_hours_expected='+$Chosen.gpu_hours_expected+' release_check=PINNED receipt_result_sha256='+$ReceiptResult+' receipt_log_sha256='+$ReceiptLog+' worst_case_seconds='+$Chosen.worst_case_seconds+' with_eval_wait_seconds='+$Chosen.with_eval_wait_seconds+' cap_after_wait_fits='+$Chosen.cap_after_wait_fits+' eval_wait_seconds='+$Chosen.eval_wait_seconds+' margin_seconds='+$Chosen.margin_seconds+' spare_seconds='+$Chosen.spare_seconds+' mem='+$Pins.slurm.mem+' dram_arena_gib='+$Pins.config.server.dram_arena_gib+' memory_need_gib='+$Chosen.memory_need_gib+' memory_spare_gib='+$Chosen.memory_spare_gib+' startup_spike='+$Chosen.startup_spike+' job_name='+$Pins.slurm.job_name_prefix+$Plan+' run_label='+$RunLabel+' after_job='+$AfterJob+' mail_user='+$MailUser+' mail_type='+$MailType+' '+$Provisional
+if ($Override) { $Summary += ' plan_server=own kv_cache_gib='+$Chosen.kv_cache_gib+' max_model_len='+$Chosen.max_model_len+' plan_dram_arena_gib='+$Chosen.dram_arena_gib+' qwen_kv_cache_gib='+(@($Features.qwen_kv_cache_gib) -join ',') }
+# integrate-1030 (vllm25): a plan server with the vLLM Goal rewriter or --goal-overlap needs the sealed switch, its
+# sealed settings and the plan table agree, and its line names them; every other plan's checks and line are unchanged.
+$EngineServers = @(@($Sealed.servers) | Where-Object { $null -ne $_.goal_rewriter_engine })
+if ($EngineServers.Count) {
+    if (-not $Features.goal_rewriter_engine -or $Features.goal_rewriter_engine.serve_arg -cne '--goal-rewriter-engine') { throw ('plan '+$Plan+' asks for --goal-rewriter-engine vllm; the sealed runtime has none') }
+    $Seen = (@($EngineServers | ForEach-Object { $_.label+':'+$_.goal_rewriter_engine+':'+$_.goal_rewriter_guided_backend+':'+$_.goal_rewriter_vllm_kv_gib+$(if ($_.goal_rewriter_batch_invariant -eq $true) { ':batch-invariant' } else { '' }) }) -join ',')
+    if ($Seen -cne [string]$Chosen.goal_rewriter_engine -or @($EngineServers | Where-Object { $_.goal_rewriter_engine -cne 'vllm' -or @($Features.goal_rewriter_engine.backends) -notcontains $_.goal_rewriter_guided_backend }).Count) { throw ('sealed vLLM rewriter settings of plan '+$Plan+' ('+$Seen+') differ from this entry point ('+$Chosen.goal_rewriter_engine+')') }
+    $Summary += ' goal_rewriter_engine='+$Chosen.goal_rewriter_engine
+} elseif ($Chosen.goal_rewriter_engine) { throw ('plan '+$Plan+': the entry point names a vLLM rewriter the sealed plan lacks') }
+$OverlapServers = @(@($Sealed.servers) | Where-Object { $null -ne $_.goal_overlap })
+if ($OverlapServers.Count) {
+    if (-not $Features.goal_overlap -or $Features.goal_overlap.serve_arg -cne '--goal-overlap') { throw ('plan '+$Plan+' asks for --goal-overlap; the sealed runtime has none') }
+    if ((@($OverlapServers | ForEach-Object { $_.label }) -join ',') -cne [string]$Chosen.goal_overlap -or @($OverlapServers | Where-Object { $_.goal_overlap -ne $true }).Count) { throw ('sealed --goal-overlap servers of plan '+$Plan+' differ from this entry point') }
+    $Summary += ' goal_overlap='+$Chosen.goal_overlap
+} elseif ($Chosen.goal_overlap) { throw ('plan '+$Plan+': the entry point names --goal-overlap servers the sealed plan lacks') }
+# integrate-1103 (the release smoke, decision D2): a plan that names --async-scheduling (true or false, for all its
+# runtime servers) needs the sealed switch when on, its sealed value and the plan table agree, and its line names it;
+# every other plan's checks and line are unchanged.
+$AsyncValue = $Pins.config.plans.$Plan.async_scheduling
+if ($null -ne $AsyncValue) {
+    if ($AsyncValue -eq $true -and (-not $Features.async_scheduling -or $Features.async_scheduling.serve_arg -cne '--async-scheduling')) { throw ('plan '+$Plan+' asks for --async-scheduling; the sealed runtime has none') }
+    if ($AsyncValue -eq $true) { $AsyncState = 'on' } else { $AsyncState = 'off' }
+    $AsyncSeen = (@(@($Sealed.servers) | Where-Object { $_.policy -cne 'stock' } | ForEach-Object { $_.label+':'+$AsyncState }) -join ',')
+    if ($AsyncSeen -cne [string]$Chosen.async_scheduling) { throw ('sealed --async-scheduling of plan '+$Plan+' ('+$AsyncSeen+') differs from this entry point ('+$Chosen.async_scheduling+')') }
+    $Summary += ' async_scheduling='+$Chosen.async_scheduling
+} elseif ($Chosen.async_scheduling) { throw ('plan '+$Plan+': the entry point names --async-scheduling the sealed plan lacks') }
+# 2026-11-09 (the re-pin to main ba4d1ba, D-G): a plan with --async-scheduling on needs the sealed async fixes (async-fix
+# a0798a8 / async-fix2 4ed1013: runtime_features.async_fix); without them it is blocked (NOT_SUBMITTABLE). The block
+# state equals the sealed features exactly (the KV size or the async fixes); every other plan's checks and line are
+# unchanged.
+$AsyncBlocked = ($AsyncValue -eq $true -and -not $Features.async_fix.resolve)  # 2026-11-16: with the resolve fix 13ee618
+if ($AsyncBlocked -and -not $Blocked) { throw ('the sealed runtime lacks the async fixes (async_fix) but plan '+$Plan+' (--async-scheduling) is not blocked') }
+# 2026-11-16 (keep-rebuild-1116): a plan with a scripted edge-case client (a server `client`) needs the sealed feature
+# keep_rebuild (controller.keep_rebuild_block)
+$KeepBlocked = (@($Pins.config.plans.$Plan.servers | Where-Object { $_.client }).Count -gt 0 -and -not $Features.keep_rebuild)
+if ($KeepBlocked -and -not $Blocked) { throw ('the sealed runtime lacks keep-rebuild-1116 (keep_rebuild) but plan '+$Plan+' (a scripted client) is not blocked') }
+# 2026-11-16 (phase B): a plan that names goal_rollback needs the sealed feature goal_rollback (goal-rollback-1116)
+$GoalRollbackBlocked = ($Pins.config.plans.$Plan.goal_rollback -eq $true -and -not $Features.goal_rollback)
+if ($GoalRollbackBlocked -and -not $Blocked) { throw ('the sealed runtime lacks goal-rollback-1116 (goal_rollback) but plan '+$Plan+' is not blocked') }
+if ($Blocked -and -not $KvBlocked -and -not $AsyncBlocked -and -not $KeepBlocked -and -not $GoalRollbackBlocked) { throw ('plan '+$Plan+' is blocked although the sealed runtime serves its --kv-cache-gib, has the async fixes, keep-rebuild-1116 and goal-rollback-1116') }
+# 2026-11-06 (the thinking-on plans): a plan that names thinking (true or false, for all its runtime servers) needs the
+# sealed --enable-thinking when on, its sealed value and the plan table agree, and its line names it; every other
+# plan's checks and line are unchanged.
+$ThinkingValue = $Pins.config.plans.$Plan.thinking
+if ($null -ne $ThinkingValue) {
+    if ($ThinkingValue -eq $true -and (-not $Features.thinking -or $Features.thinking.serve_arg -cne '--enable-thinking')) { throw ('plan '+$Plan+' asks for --enable-thinking; the sealed runtime has none') }
+    if ($ThinkingValue -eq $true) { $ThinkingState = 'on' } else { $ThinkingState = 'off' }
+    $StockServers = @(@($Sealed.servers) | Where-Object { $_.policy -ceq 'stock' })
+    if ($StockServers.Count -gt 0) {
+        # 2026-11-12: a stock plan with thinking (all its servers stock): the sealed config.stock.thinking contract,
+        # sealed and in the plan table alike; the line names it
+        # (2026-11-17: gate 2's plan, `parity`, names it for our full server and the stock control together)
+        if ($StockServers.Count -ne @($Sealed.servers).Count -and $null -eq $Sealed.parity) { throw ('plan '+$Plan+' names thinking with runtime and stock servers together') }
+        $StockThinking = $Pins.config.stock.thinking
+        if ($ThinkingValue -eq $true -and (-not $StockThinking -or $StockThinking.reasoning_parser -cne 'qwen3' -or $StockThinking.history -cne 'reasoning_dropped' -or $StockThinking.stock_model_kwargs.extra_body.chat_template_kwargs.enable_thinking -ne $true -or $null -ne $StockThinking.stock_model_kwargs.stop)) { throw ('plan '+$Plan+': the sealed stock thinking contract differs from the decision (qwen3 parser, reasoning_dropped, enable_thinking, no stop)') }
+        # 2026-11-16: a plan's own stock history reasoning_kept (the keep-reasoning plans): the sealed kept contract
+        # (preserve_thinking true by default, the agents' keep model class and its pinned module next to the runner)
+        $StockHistory = $StockThinking.history
+        if ($null -ne $Pins.config.plans.$Plan.stock.history) {
+            $StockHistory = [string]$Pins.config.plans.$Plan.stock.history
+            $Kept = $StockThinking.kept
+            if ($ThinkingValue -ne $true -or $StockHistory -cne 'reasoning_kept' -or -not $Kept -or $Kept.history -cne 'reasoning_kept' -or $Kept.default_chat_template_kwargs.preserve_thinking -ne $true -or @($Kept.default_chat_template_kwargs.PSObject.Properties).Count -ne 1 -or $Kept.agent_model_class -cne 'swe32_keep_reasoning.KeepReasoningTextbasedModel' -or $Kept.agent_module.tbench_path -cne ($Pins.tbench.root+'/upstream/swe32_keep_reasoning.py') -or $Kept.agent_module.sha256 -notmatch '^[0-9a-f]{64}$') { throw ('plan '+$Plan+': the sealed stock keep-reasoning contract differs from the decision (reasoning_kept, preserve_thinking true, the keep model class next to the runner)') }
+        }
+        $StockThinkingSeen = 'reasoning_parser:'+$StockThinking.reasoning_parser+',history:'+$StockHistory
+        if ($ThinkingValue -eq $true -and $StockThinkingSeen -cne [string]$Chosen.stock_thinking) { throw ('sealed stock thinking of plan '+$Plan+' ('+$StockThinkingSeen+') differs from this entry point ('+$Chosen.stock_thinking+')') }
+        $ThinkingSeen = (@($StockServers | ForEach-Object { $_.label+':'+$ThinkingState }) -join ',')
+        if ($null -ne $Sealed.parity) { $ThinkingSeen = (@(@($Sealed.servers) | ForEach-Object { $_.label+':'+$ThinkingState }) -join ',') }
+    } else {
+        $ThinkingSeen = (@(@($Sealed.servers) | ForEach-Object { $_.label+':'+$ThinkingState }) -join ',')
+    }
+    if ($ThinkingSeen -cne [string]$Chosen.thinking) { throw ('sealed thinking of plan '+$Plan+' ('+$ThinkingSeen+') differs from this entry point ('+$Chosen.thinking+')') }
+    $Summary += ' thinking='+$Chosen.thinking
+    if ($Chosen.stock_thinking) { $Summary += ' stock_thinking='+$Chosen.stock_thinking }
+} elseif ($Chosen.thinking) { throw ('plan '+$Plan+': the entry point names thinking the sealed plan lacks') }
+# stock25 (2026-11-02): a plan with its own stock-control settings (the runtime servers' 262,144 tokens and 25 GiB of
+# KV, the preemption rule), sealed and in the plan table alike, and its line names them; every other plan's checks
+# and line are unchanged.
+$StockOverride = $Pins.config.plans.$Plan.stock
+if ($StockOverride) {
+    if ($StockOverride.preemption) { $StockPreemption = [string]$StockOverride.preemption } else { $StockPreemption = 'fail' }
+    if ([int]$StockOverride.max_model_len -ne 262144 -or [int]$StockOverride.kv_cache_gib -ne 25 -or @('fail', 'finding') -cnotcontains $StockPreemption -or @($Features.context_limits.max_model_len_choices) -notcontains 262144 -or [string]$Chosen.stock_max_model_len -cne [string]$StockOverride.max_model_len -or [string]$Chosen.stock_kv_cache_gib -cne [string]$StockOverride.kv_cache_gib -or [string]$Chosen.stock_preemption -cne $StockPreemption -or (@(@($Sealed.servers) | Where-Object { $_.policy -cne 'stock' }).Count -and $null -eq $Sealed.parity)) { throw ('sealed stock settings of plan '+$Plan+' differ from the 262,144-token / 25-GiB stock-control decision') }
+    $Summary += ' plan_stock=own stock_kv_cache_gib='+$Chosen.stock_kv_cache_gib+' stock_max_model_len='+$Chosen.stock_max_model_len+' stock_preemption='+$Chosen.stock_preemption
+    # 2026-11-16: the stock async switch of a plan that names it (stockkeepsync32t: off), sealed and in the plan
+    # table alike; every other plan's line is unchanged
+    if ($null -ne $StockOverride.async_scheduling) {
+        if ($StockOverride.async_scheduling -eq $true) { $StockAsync = 'on' } else { $StockAsync = 'off' }
+        if ($StockAsync -cne [string]$Chosen.stock_async_scheduling) { throw ('sealed stock async scheduling of plan '+$Plan+' ('+$StockAsync+') differs from this entry point ('+$Chosen.stock_async_scheduling+')') }
+        $Summary += ' stock_async_scheduling='+$Chosen.stock_async_scheduling
+    } elseif ($Chosen.stock_async_scheduling) { throw ('plan '+$Plan+': the entry point names a stock async switch the sealed plan lacks') }
+} elseif ($Chosen.stock_kv_cache_gib) { throw ('plan '+$Plan+': the entry point names stock settings the sealed plan lacks') }
+# 2026-11-17: release gate 2 (`parity`: our full server, then the stock control, the job's own probe; parity.py and the
+# sealed prompts parity-prompts.json in the payload), sealed and in the plan table alike; the line names it
+if ($null -ne $Sealed.parity) {
+    $ParitySeen = 'prompts:'+$Sealed.parity.prompts+',window:'+$Sealed.parity.window+',logprobs:'+$Sealed.parity.logprobs+',near_tie_nats:'+$Sealed.parity.near_tie_nats+',resyncs:'+$Sealed.parity.resyncs+',prompts_sha256:'+$Sealed.parity.prompts_sha256
+    if ($ParitySeen -cne [string]$Chosen.parity -or $Sealed.role -cne 'release-gate' -or @(@($Sealed.servers) | Where-Object { $_.client -cne 'parity_probe' }).Count) { throw ('sealed gate-2 settings of plan '+$Plan+' ('+$ParitySeen+') differ from this entry point ('+$Chosen.parity+')') }
+    $Summary += ' gate2='+$Chosen.parity
+} elseif ($Chosen.parity) { throw ('plan '+$Plan+': the entry point names gate-2 settings the sealed plan lacks') }
+# 2026-11-11 (config.tbench_verify): every plan's job pushes its two archives to tbench and starts the verification there
+# at its end (best effort, bounded); the line names it (the only new field: recorded lines compare with it masked).
+$TbenchPush = 'off'
+if ($Pins.config.tbench_verify -and $Pins.config.tbench_verify.push) {
+    if ($Pins.config.tbench_verify.root -cne '/home/ubuntu/swe32-verify' -or [int]$Pins.config.tbench_verify.total_seconds -gt 300) { throw 'sealed tbench_verify settings differ from the evidence-push decision' }
+    $TbenchPush = $Pins.config.tbench_verify.root+':'+$Pins.config.tbench_verify.total_seconds+'s'
+}
+$Summary += ' tbench_push='+$TbenchPush
+if ($SelfTest) {
+    $Tokens=$null; $Errors=$null
+    [void][Management.Automation.Language.Parser]::ParseFile($PSCommandPath,[ref]$Tokens,[ref]$Errors)
+    if ($Errors.Count) { throw 'PowerShell syntax invalid' }
+    $Info = New-OneConnectionStartInfo -Executable 'ssh' -RemoteCommand $RemoteCommand
+    if ($Info.CreateNoWindow -or $Info.RedirectStandardOutput -or $Info.RedirectStandardError -or -not $Info.RedirectStandardInput) { throw 'visible SSH console contract broken' }
+    if (-not $Info.Arguments.Contains('ConnectionAttempts=1')) { throw 'single connection contract broken' }
+    $RoundTrip = [Text.Encoding]::UTF8.GetString($Bytes) | ConvertFrom-Json
+    if ($RoundTrip.files.'bootstrap.py'.base64 -cne $BootstrapCode -or $RoundTrip.options.plan -cne $Plan -or $RoundTrip.options.run_label -cne $RunLabel -or $RoundTrip.options.rewriter_model -cne $RewriterModel -or $RoundTrip.options.mail_user -cne $MailUser -or $RoundTrip.options.authorization -cne $Chosen.authorization) { throw 'sealed JSON binary transport failed' }
+    foreach ($Name in 'job.py','controller.py','swe_checks.py','smoke_checks.py','measure.py','resources.py','tbench_link.py','stock.py','goal_text.py','tbench_known_hosts') { if (-not $RoundTrip.files.$Name.sha256) { throw ('sealed file missing: '+$Name) } }
+    if ($null -ne $Sealed.parity -and (-not $RoundTrip.files.'parity.py'.sha256 -or $RoundTrip.files.'parity-prompts.json'.sha256 -cne $Sealed.parity.prompts_sha256)) { throw 'sealed gate-2 files missing or the prompts differ from the plan' }
+    if ($Pins.slurm.account -cne 'bcjw-dtai-gh' -or $Pins.slurm.partition_limits.'ghx4-interactive'.max_submitted_jobs_per_user -ne 1) { throw 'Slurm pin changed' }
+    if ($Pins.clean_env.snapshot_sha256 -cne 'cbfab91650bfbeffb149a2df8ead3787a07b91a2cf332edd7efd0b5b0a07e5f0' -or $Pins.clean_env.release_manifest_sha256 -cne 'b23b5f20e7c85f8f8e3ab93fe51d8519dfd465aa50fecf0cda27c95d18e9af93') { throw 'reused v9 environment pin changed' }
+    if ($Pins.wheel_sha256 -cne '700db71c3cf14697d42583521f38b12fac38db1e7a8ad062e8e4d63a5dadebd5' -or -not $Pins.wheel_url.EndsWith('/vllm-0.24.0-cp38-abi3-manylinux_2_28_aarch64.whl')) { throw 'official vLLM wheel pin changed' }
+    if ($TaskCount -lt [int]$Pins.config.server.max_running_sessions -or $TaskCount -gt 64) { throw ('the task list holds '+$TaskCount+' instances: at least K and at most 64') }
+    if (([Text.Encoding]::UTF8.GetByteCount($StagePrefix+$Nonce+'/tmp')+1+36) -gt 99) { throw 'stage path exceeds IPC budget' }
+    Write-Output ('LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256='+$PinnedPayload+' commit='+$ExpectedCommit+$Summary)
+    if ($Blocked) { Write-Output ('NOT_SUBMITTABLE blocked_plan='+$Plan+' reason='+$Blocked) }
+    return
+}
+if (-not $Authorize) {
+    if ($Authorization) { throw 'explicit -Authorize switch also required' }
+    Write-Output ('LOCAL_ONLY_PASS connections=0 install=0 submit=0 plan='+$Plan+' '+$Provisional)
+    return
+}
+if ($Authorization -cne $Chosen.authorization) { throw ('exact authorization phrase of plan '+$Plan+' required') }
+if ($DryRun) {
+    Write-Output ('DRY_RUN connections=0 stage='+$StagePrefix+$Nonce+' payload_bytes='+$Bytes.Length+' commit='+$ExpectedCommit+$Summary)
+    if ($Blocked) { Write-Output ('NOT_SUBMITTABLE blocked_plan='+$Plan+' reason='+$Blocked) }
+    return
+}
+if ($Blocked) { throw ('plan '+$Plan+' is blocked: '+$Blocked+'. Nothing was submitted (no connection).') }
+if ($StatementsSealed -cne 'yes') { throw 'the task statements are not sealed yet (tasks\tasks-pool.json): run tbench bin/build_tasks.sh, then build.py --tasks <file> (README "Task statements"); nothing was submitted' }
+Write-Output ('PLANNED_STAGE='+$StagePrefix+$Nonce+' PLAN='+$Plan)
+Write-Output ('One visible SSH/Duo connection: reuse the v9 clean env read-only, private release and the light pre-claim gates (about 3-5 min: no runtime test suite on the login node, the pinned release-check receipt of '+$ExpectedCommit.Substring(0,7)+' stands for it; bundle, fsck, S0/S1, RECORD, the zero-GPU probes, a serve.py dry run, the tbench preflight, the queue gate), then exactly one '+$Chosen.partition+' GH200 sbatch of plan '+$Plan+' (--time='+$Chosen.time+', mail on BEGIN, END, FAIL to '+$MailUser+'). Any unknown outcome must not be retried.')
+if ($Chosen.partition -ceq 'ghx4-interactive') { Write-Output ('ghx4-interactive (2x billing: at most '+$Chosen.gpu_hours_limit+' billed GPU-hours for this plan) allows 1 submitted job per user: the run stops before its claim (exit 86, nothing burned) while squeue lists one of yours there, or while any other tbench job of yours (swe32 / swe10 / swe16 / gswe32 / tb16 / gem0) is queued or running, except one held with scontrol hold (JobHeldUser / JobHeldAdmin) or pending only on held ones (keep the hold until this job ended; the runtime tbench lock guards every start): an interactive plan goes first in a chain.') }
+if ($Chosen.partition -ceq 'ghx4') { Write-Output ('ghx4 batch (1 GPU at --mem=113560M: one GPU-hour per hour, at most '+$Chosen.gpu_hours_limit+' for this plan): the job waits in the queue by fairshare priority (possibly hours; the BEGIN mail says when it starts). The queue gate stops before the claim (exit 86) while another tbench job of yours (swe32 / swe10 / swe16 / gswe32 / tb16 / gem0) is queued or running that -AfterJob neither names nor waits for (afterany chain).') }
+$Code = Invoke-OneConnectionTransport -Executable (Get-Command ssh -CommandType Application | Select-Object -First 1).Source -RemoteCommand $RemoteCommand -PayloadBytes $Bytes
+if ($Code -eq 86) { throw 'Pre-claim setup failed: remote confirmed NO_SUBMISSION_CLAIM. No sbatch was reached. Read the printed QUALIFY_ERROR/ERROR line, fix it, then start a separately authorized run with a new -RunLabel; no automatic retry.' }
+if ($Code -ne 0) { throw ('Setup failed or submission outcome unknown; consult the printed FAILURE_STATUS/CLAIM_STATE. Without confirmed NO_SUBMISSION_CLAIM, keep the stage and claim and reconcile read-only before any replacement. No automatic retry. SSH exit='+$Code) }
+Write-Output 'SUBMITTED: the last JSON line above holds stage, job_id and run_id. After the END mail: the README check block, then postrun\fetch_run.ps1 (both sides, verify, join, tables).'

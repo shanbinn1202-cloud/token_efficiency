@@ -1,0 +1,234 @@
+perf-mab (pmab) on integrate-1112 4ebff97: smqc r1 = job 3604146 and smga r1 = job 3601174 both passed (PMAB_PASS_VERIFIED, verified 2026-11-15, verifier only, not audited)
+============================================================================
+2026-11-15: plan smqc (section "smqc" right below) - the case of the async fix (async-maxtok-1112) with certainty.
+The live payload is now bd816111e5a9efd05d0b19229df93da2e98d507539cccbe5185046ff0e417a7b (smqc added; the other 17 plans unchanged: plan, launch, sealed dry run and DryRun
+line SAME). Jobs of payload 89d65f99 (smqt r1 = 3584105, smga r1 = 3601174) verify with ..\perf-mab-89d65f99 (section
+"Verify on tbench" at the end).
+2026-11-15 (later): smqc r1 = job 3604146 ran payload bd816111, frozen as ..\perf-mab-bd816111 (FROZEN-bd816111.md).
+--print-copy fixed for several bulk archives (README "Copy-line fix (11-15)"; the copy line at the end is the new
+output); payload bd816111 unchanged. Take the copy line from the live script for every job (frozen copies keep the old
+--print-copy); verify with --candidate-dir the job's payload copy.
+
+smqc (the async-maxtok-1112 case; ghx4 batch, one GH200, one memory share)
+--------------------------------------------------------------------------
+Why      smqt r1 = job 3584105 passed but never reached the fix's case: each server's one reply cut at max_tokens had
+         no other request in flight. The case: async_sched.py:520-555 (resolve) at 4ebff97: a request cut at its
+         max_tokens in step N, which vLLM's async scheduler leaves out of N+1 (scheduler.py:490-504), next to another
+         request scheduled in N+1, no pass boundary between (job 3568311 died there before the fix, async_sched.py:539).
+server   smqco = smqot's settings (observation_query 32K budget, kv-session thinking on, --async-scheduling, CUDA graphs
+         full, the three fast paths, --deferred-completion-io, --release-idle-pages, KV 32 GiB, 262,144) on 4 sessions
+         (arena 32 GiB) with smq's 4 FactConsolidation cases (q22 / q4 / q5 / q60), then the cut cell: a carrier session
+         (a long novel) decodes up to 3,072 tokens while 8 probe sessions run one at a time alone on the server, turn
+         0 cut at 24 / 40 / 56 / 72 / 88 / 104 / 120 / 136 tokens and turn 1 at 32 (16 cuts while the carrier decodes)
+must     async-cut: >= 12 hits (a probe turn ending `length` at its bound with the carrier sent >= 4 s before, admitted
+         before the probe was sent, returned >= 1 s after it, completed after it, nothing else in flight); else FAIL
+         (PMAB_FAIL: smqco is the reference). Plus every request 200, tokens / geometry of every cut and its turn 1,
+         no engine-fatal / LiveV2Error, cleanup.
+--time   00:30:00 (expected 1,169 s, 1.54 x; required minimum 1,200 s)
+--mem    113560M (need 72,268 MiB)
+GPU-h    0.50 limit / 0.32 expected
+phrase   AUTHORIZE_PMAB_SMQC_ASYNC_MAXTOK_CASE_QWEN_THINKING_OBS_CUT_CELL_4SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_30MIN_NO_RETRY
+local    LOCAL_SELFTEST_PASS and DRY_RUN exit 0 (connections=0; plan=smqc partition=ghx4 time=00:30:00 expected_seconds=1169 factor=1.54 --mem=113560M mail BEGIN,END,FAIL cao58@illinois.edu gpu_hours_limit=0.50 switches=smqco:kv32,fastpath1-3,deferred_io,async,thinking_on)
+         DRY_RUN connections=0 ... plan=smqc partition=ghx4 time=00:30:00 ... job_name=pmab-smqc run_label=r1 (exit 0)
+
+Submit smqc (Windows PowerShell 5.1; Claude ran the SelfTest / DryRun above; this is the one submission, one visible
+SSH/Duo connection, exactly one sbatch; run label r1):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smqc -Authorize -Authorization 'AUTHORIZE_PMAB_SMQC_ASYNC_MAXTOK_CASE_QWEN_THINKING_OBS_CUT_CELL_4SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_30MIN_NO_RETRY'
+
+After its END mail: the check block below (its output now also prints each server's cut-cell lines: the runner's
+cut_cell summary) and then "Verify on tbench" with --candidate-dir the live perf-mab (or its frozen copy if this
+folder is rebuilt before then: freeze it first). The verdict's `async-cut` row has the hits (hit_rows, misses).
+
+Q1 / E (2026-11-12, payload 89d65f99)
+-------------------------------------
+2026-11-14: smqt r1 = job 3584105 (PMAB_PASS_VERIFIED) and smga r1 = job 3601174 (queued) (ran: PMAB_PASS_VERIFIED) ran / run this payload;
+frozen as ..\perf-mab-89d65f99. Verify on tbench (section "Verify on tbench" at the end), not by the local fetch.
+
+Harness  I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab
+Runtime  integrate-1112 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (4bf2c40 + policy-registry-1112 755550e +
+         async-maxtok-1112 13ee618; receipt release-receipt.json =
+         D:\Remote-RA-temp\scratch\integrate-1112\receipt\release-receipt-4ebff97.json: GIT_ARCHIVE_TESTS_PASS,
+         2,059 tests, 139 skipped, LOG_VERIFIED by build.py)
+Payload  89d65f999c667fa0febb14b6b4789198f756acf3ced195444e937de4c3fd1038 (the 11-12 build, jobs 3584105 / 3601174; frozen
+         as ..\perf-mab-89d65f99; the live payload is now bd816111)
+Entry    run_one_connection.ps1 dee30855e146b85fdf7bc6666f4f1a92220fd82e8014873172697f17d15682eb
+Local    LOCAL_VALIDATION_PASS commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82, validation\20261112T160102\
+         (40 steps exit 0: two builds identical, unit 76, entry points 6, release parity 12, re-pin 3, real
+         tokenizer 16, postrun 3, grade 4, GATE_CHECKS_PASS (73 refusals), ENTRY_CHECKS bad=0 (17 plans, 27
+         refusals), 24 synthetic stages as expected incl. smoket (smqt) / gmsmokea (smga) PMAB_PASS_VERIFIED,
+         fetch-local, CLEANUP bad=0, private text 0)
+Frozen   ..\perf-mab-36eaf3a7 (the 11-09 state on main ba4d1ba, which job 3568311 ran: verify / re-judge 3568311
+         there; DO NOT SUBMIT any async plan from it)
+Plan     D:\Remote-RA-temp\scratch\integrate-1112\GPU-VALIDATION-PLAN.md: Q1 = smqt, E = smga
+
+Q1 (MAB-Qwen) and E (MAB-Gemma). MAB jobs do not use tbench and are NOT in the tbench chain: no predecessor, no
+-AfterJob (plain ghx4 batch, the job waits by fairshare). Q1 and E are independent; each submission is one visible
+SSH/Duo connection. Mail BEGIN,END,FAIL to cao58@illinois.edu (pinned). No retry: a refused / failed / cut run needs
+a new -RunLabel and a new decision. Run label r1 (the first run on 4ebff97: 3568311's claim is ba4d1ba's).
+
+Plans
+-----
+Q1  smqt  (the direct GPU check of async-maxtok-1112: the same plan that crashed as job 3568311)
+    servers  smqot observation_query -> smqrt random_fill -> smqgt goal_query (vLLM Goal rewriter: lm-format-enforcer,
+             child KV 3 GiB, batch-invariant, --goal-overlap, --admission-overlap 16)
+    every server: Qwen3.6-27B kv-session, 16 sessions, KV 32 GiB, 262,144 tokens, 32K budget, 124-GiB arena,
+             CUDA graphs full, the three decode fast paths, --deferred-completion-io, --language-model-only,
+             --release-idle-pages, --connector-pool-gib 1, --async-scheduling, --kv-session-thinking on
+    subset   smq's 16 MemAgent32 cases: ICL r311 / r324 / r337 / r373, InfBench r58 / r77 / r91 / r90,
+             RULER r301 / r309 / r342 / r341, FactConsolidation q5 / q60 / q4 / q22
+    --time   01:50:00 (expected 5,093 s, 1.296 x; required minimum 5,040 s)
+    --mem    227120M = two memory shares (need 168,237 MiB), billed as two GPUs. One share does not fit by the
+             harness's own model: 113560M leaves at most a 70-GiB arena (65 GiB with 5 GiB more to spare); 16 sessions
+             on these cases need 92.67 GiB (arena_fit). 3568311's 79 GiB MaxRSS came from servers that died ~400 s
+             into their agent time, before the streams reached their last turns.
+    GPU-h    3.67 limit / 2.83 expected (billed 2x)
+    phrase   AUTHORIZE_PMAB_SMQT_RELEASE_SMOKE_QWEN_THINKING_OBS_RFILL_GOAL_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_110MIN_NO_RETRY
+    must show  no engine-fatal check failure, no LiveV2Error, every request answered, and `length` finishes next to
+             a decoding request (thinking on makes 4,096-token reasoning loops likely: 3568311 reached that state on
+             all three servers). Without a concurrent length stop the fix's state was not reached and Q1 says only
+             that nothing regressed. kv-session thinking on has never completed a GPU run (3568311 died first).
+E   smga  (Gemma async) - only if the Gemma gate is accepted (g1g r3 3560784 is a partial pass: the user's call)
+    servers  smgoa observation_query -> smgra random_fill -> smgga goal_query (vLLM Goal rewriter, child KV 3 GiB,
+             --goal-overlap, --admission-overlap 8)
+    every server: Gemma 4 31B IT kv-session, --kv-session-thinking off (written out: 4ebff97's Gemma kv-session
+             default is on), 8 sessions, KV 25 GiB, 262,144 tokens, 32K budget, 60-GiB arena, CUDA graphs full, the
+             three fast paths, --deferred-completion-io, --language-model-only, --release-idle-pages,
+             --connector-pool-gib 1, --async-scheduling (the changed resolve runs on every async step)
+    subset   smg's 8 cases: ICL r324 / r337, InfBench r91 / r58, RULER r309 / r301, FactConsolidation q22 / q37
+    --time   02:00:00 (expected 5,533 s, 1.301 x; required minimum 5,390 s)
+    --mem    113560M (one share; need 100,367 MiB)
+    GPU-h    2.00 limit / 1.54 expected
+    phrase   AUTHORIZE_PMAB_SMGA_RELEASE_SMOKE_GEMMA4_ASYNC_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY
+E   smg   (Gemma async off) - if the Gemma gate is not accepted; does not exercise the async fix
+    servers  smgo -> smgr -> smgg (as smga without --async-scheduling); the same subset, time, memory, cost
+    phrase   AUTHORIZE_PMAB_SMG_RELEASE_SMOKE_GEMMA4_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY
+
+Total: Q1 + E = 5.67 GPU-h at the limits, 4.37 expected (smqt billed 2x).
+smq (Qwen, thinking off, async; smqo / smqr / smqg) stays sealed and valid on 4ebff97 (3.67 / 2.83), not part of Q1.
+
+Submit (Windows PowerShell 5.1; one command per line; local checks first, then the one submission)
+------------------------------------------------------------------------------------------------
+Q1 (smqt):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smqt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smqt -Authorize -Authorization 'AUTHORIZE_PMAB_SMQT_RELEASE_SMOKE_QWEN_THINKING_OBS_RFILL_GOAL_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_110MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smqt -Authorize -Authorization 'AUTHORIZE_PMAB_SMQT_RELEASE_SMOKE_QWEN_THINKING_OBS_RFILL_GOAL_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_110MIN_NO_RETRY'
+
+E after the Gemma gate is accepted (smga):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smga -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smga -Authorize -Authorization 'AUTHORIZE_PMAB_SMGA_RELEASE_SMOKE_GEMMA4_ASYNC_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smga -Authorize -Authorization 'AUTHORIZE_PMAB_SMGA_RELEASE_SMOKE_GEMMA4_ASYNC_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+E fallback (smg, async off; instead of smga, never both):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smg -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smg -Authorize -Authorization 'AUTHORIZE_PMAB_SMG_RELEASE_SMOKE_GEMMA4_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\run_one_connection.ps1' -Plan smg -Authorize -Authorization 'AUTHORIZE_PMAB_SMG_RELEASE_SMOKE_GEMMA4_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+Expected local lines (run by Claude before handing over): LOCAL_SELFTEST_PASS ... commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82
+plan=<plan> ...; DRY_RUN connections=0 ... (smqt: thinking_on and async on all three, vllm_rewriter3g,goal_overlap on
+smqgt; smga: async on all three). The real submission prints PLANNED_STAGE=/u/ycao11/pmab-<32 hex> and, at the end, a
+JSON line with stage and job_id. Exit 86 = a pre-claim gate failed and nothing was claimed.
+
+Check block (after the END mail; read-only, your DeltaAI shell; fill S= / J= at submission)
+---------------------------------------------------------------------------------------
+bash <<'EOF'
+S=/u/ycao11/pmab-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,JobName,Partition,Timelimit,State,ExitCode,Elapsed,Start,End,NodeList,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json, os, re
+r = json.load(open('result.json'))
+m = r.get('summary') or {}
+f = m.get('fit') or {}
+print(r['status'], r['plan'], r.get('run_label'), m.get('partition'), m.get('time'), 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'])
+print('fit: expected %s s, factor %s, required minimum %s s; timing %s' % (f.get('expected_seconds'), f.get('factor'), f.get('required_minimum_seconds'), r.get('timing')))
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-6s %-9s %-20s started=%s startup=%s finished=%s agent_s=%s truncated=%s failed=%s errors=%s' % (s['label'], s.get('role'), s['status'], s.get('started_s'), s.get('startup_s'), s.get('finished_s'), s.get('agent_seconds'), s.get('truncated'), s.get('failed'), [e[:160] for e in s.get('errors') or []][:2]))
+    print('       checks %s' % s.get('checks_summary'))
+for path in sorted(glob.glob('summary-*.json')):
+    v = json.load(open(path))
+    st = v.get('startup') or {}
+    fatal = [c.get('detail') for c in v.get('checks') or () if c.get('check') == 'engine-fatal' and c.get('status') != 'PASS']
+    print('%s tracebacks=%s capacity_wait_records=%s engine_fatal=%s %s' % (path, st.get('tracebacks'), st.get('capacity_wait_records'), len(st.get('engine_fatal') or ()), [str(x)[:300] for x in fatal]))
+for d in sorted(glob.glob('job-output/*')):
+    label = os.path.basename(d)
+    if not os.path.isdir(d): continue
+    st = json.load(open(os.path.join(d, 'startup.json'))) if os.path.exists(os.path.join(d, 'startup.json')) else {}
+    kv = st.get('kv_session') or {}
+    eng = st.get('goal_rewriter_engine') or {}
+    print('%-6s startup: thinking=%s async=%s/%s goal_overlap=%s child_kv_bytes=%s' % (label, kv.get('thinking'), st.get('async_scheduling'), (st.get('effective_server_config') or {}).get('async_scheduling'), (st.get('admission') or {}).get('goal_overlap'), eng.get('kv_cache_memory_bytes')))
+    rows = lambda n: [json.loads(x) for x in open(os.path.join(d, 'client', n))] if os.path.exists(os.path.join(d, 'client', n)) else []
+    run = json.load(open(os.path.join(d, 'client', 'runner.json'))) if os.path.exists(os.path.join(d, 'client', 'runner.json')) else {}
+    statuses, finish = {}, {}
+    for c in rows('cases.jsonl'): statuses[c['status']] = statuses.get(c['status'], 0) + 1
+    for q in rows('requests.jsonl'):
+        k = (q.get('response') or {}).get('finish_reason') if isinstance(q.get('response'), dict) else 'no-response'
+        finish[str(k)] = finish.get(str(k), 0) + 1
+    samples = [json.loads(x) for x in open(os.path.join(d, 'metrics', 'samples.jsonl'))] if os.path.exists(os.path.join(d, 'metrics', 'samples.jsonl')) else []
+    texts = [s['text'] for s in samples if s.get('status') == 200 and s.get('text')]
+    length = re.findall(r'vllm:request_success_total\{[^}]*finished_reason="length"[^}]*\} ([0-9.]+)', texts[-1]) if texts else []
+    print('       runner=%s stop=%s requests=%s cases=%s finish_reason=%s metrics_length_finishes=%s' % (run.get('outcome'), run.get('stop_reason'), run.get('requests'), statuses, finish, length))
+    if run.get('cut_cell'): print('       cut_cell=%s' % run.get('cut_cell'))
+PY
+else echo RESULT_ABSENT; fi
+echo "== gpu peaks (MiB; the D-H estimates: smqgt 93921, smgga 93370, smgg 93302)"; for f in gpu-samples-*.log; do [ -f "$f" ] && echo "$f $(awk -F', ' '{if($2+0>m)m=$2+0} END{print m}' "$f")"; done
+echo "== capacity events"; for f in job-output/*/capacity.jsonl; do [ -f "$f" ] && echo "$f evict=$(grep -c '"evict"' "$f") readmit=$(grep -c '"readmit"' "$f")"; done
+echo "== failures.jsonl"; wc -l job-output/*/failures.jsonl 2>&1
+echo "== engine lines"; for f in server-*.log; do echo "$f $(grep -oE 'Asynchronous scheduling is [a-z]+|Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|enforce_eager=(True|False)|Graph capturing finished in [0-9.]+ secs?|startup check passed' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== engine deaths"; for f in server-*.log; do echo "$f fatal=$(grep -c 'EngineCore encountered a fatal error' "$f") LiveV2Error=$(grep -c 'LiveV2Error' "$f") EngineDeadError=$(grep -c 'EngineDeadError' "$f")"; done
+echo "== gates"; for g in runner-gate real-data-gate; do echo "$g: $(head -c 400 $g.json 2>&1 | tr -d '\n')"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/pmab-core.tar.xz 2>&1
+echo "== slurm tail"; tail -n 20 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the sha256sum line and the sacct job row are needed by the fetch). With two engines per
+goal server (the vLLM child) the "engine lines" grep lists both engines; the verdict's checks read the main engine.
+The summaries' tracebacks leave out the CapacityWait records (capacity_wait_records); engine-fatal names the
+exception of any EngineCore death.
+
+Fetch and verify (local, one read-only scp, safe to rerun; -WithBulk also fetches the bulk archives) - since 11-14 the
+fallback only: verify on tbench (next section)
+--------------------------------------------------------------------------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\postrun\fetch_and_verify.ps1' -Stage '<STAGE>' -JobId '<J>' -RemoteArchiveSha256 '<sha256 of pmab-core.tar.xz>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+
+Output Remote-RA\verification\pmab-job<J>-<stamp>\check (local-verification.json, mab-tables\). Verdicts
+PMAB_PASS_VERIFIED (0), PMAB_PARTIAL_PASS_VERIFIED (3), ARCHIVE_VERIFIED_SLURM_EXIT_UNCONFIRMED (2),
+PMAB_FAIL_VERIFIED / NOT_VERIFIED (1). Job 3568311 (ba4d1ba) is verified from ..\perf-mab-36eaf3a7\postrun\ instead.
+Then scoring offline: postrun\mab_predictions.py and postrun\mab_grade.py (README "G4"). The matrix cell of each
+server: its `coverage` check (COVERED / NOT_EXERCISED). Audit every number before it goes to the group.
+
+Verify on tbench (2026-11-14; the user's rule: verify on tbench, bring back only the results) - USE THIS, not the fetch
+--------------------------------------------------------------------------------------------------------------------
+Submitted on payload 89d65f99 (frozen 11-14 as ..\perf-mab-89d65f99 before the tbench edits; the edits changed no
+delivered file): smqt r1 = job 3584105 (PMAB_PASS_VERIFIED locally, 11-14) and smga r1 = job 3601174 (queued) (ran: PMAB_PASS_VERIFIED). The
+user copies the archive(s) DeltaAI -> tbench, Claude runs the fetch step's own commands there (verify_evidence.py -B
+with the same arguments, then mab_tables.py; /home/ubuntu/pmab-verify, system python3, nice 19) and pulls back only the
+results (~50 KB: check\ without check\files / check\bulk, plus tbench-run.log, tbench-extracted.json,
+tbench-verification.json) into Remote-RA\verification\pmab-job<J>-<stamp>\. Same verdicts and exit codes as the fetch.
+README "Verify on tbench" has the details.
+
+smga r1 = job 3601174, after its END mail:
+(a) The user, in the DeltaAI shell (bash). S = 3601174's stage (its submission line: /u/ycao11/pmab-<32 hex>):
+( set -e -o pipefail; S=/u/ycao11/pmab-REPLACE_WITH_32_HEX; J=3601174; D=/home/ubuntu/pmab-verify/evidence/job$J; H=ubuntu@ec2-3-22-234-78.us-east-2.compute.amazonaws.com; K=$(mktemp); trap 'rm -f "$K"' EXIT; printf '%s\n' 'ec2-3-22-234-78.us-east-2.compute.amazonaws.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETFfBzgld0WOns2CR4duoysPGbz3FjxYKId7FHXWlog' > "$K"; O="-i /u/ycao11/.ssh/tunnel_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$K -o GlobalKnownHostsFile=/dev/null -o CheckHostIP=no -o UpdateHostKeys=no -o ConnectTimeout=20"; cd "$S/fetch"; N="pmab-core.tar.xz $(ls pmab-bulk-*.tar.xz | tr '\n' ' ')"; ssh $O $H "mkdir -p $D"; for n in $N; do scp $O "$n" "$H:$D/$n.part"; done; ssh $O $H "cd $D && for n in $N; do mv \$n.part \$n; done && sha256sum $N"; sha256sum $N; sacct -j $J -X -n -o JobID,State,ExitCode )
+    It copies pmab-core.tar.xz and the bulk archives (cheap on that link), prints every archive's sha256sum on tbench
+    and on DeltaAI (equal) and the sacct row. Paste them to Claude. The filled line also comes from
+    D:\Anaconda\python.exe -I -B 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\postrun\verify_on_tbench.py' --print-copy --stage <S> --job-id 3601174 --with-bulk
+    (without --with-bulk: the core only). The check block above stays as it is.
+(b) Claude, local (no DeltaAI connection; ssh tbench only):
+D:\Anaconda\python.exe -I -B 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab\postrun\verify_on_tbench.py' --stage /u/ycao11/pmab-<32 hex> --job-id 3601174 --core-sha256 <sha256 of pmab-core.tar.xz> --slurm-state <State> --slurm-exit-code <ExitCode> --candidate-dir 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-mab-89d65f99'
+    = the fetch step without -WithBulk (core only; how Q1 3584105 was verified). Then the same line + --with-bulk
+    (a second run, new stamp): also the bulk archives against evidence-sha256.json and runtime-rows.jsonl against
+    runtime.jsonl (the fetch's -WithBulk). PMAB_PASS = COMPLETED 0:0, PMAB_PARTIAL_PASS = FAILED 3:0, PMAB_FAIL =
+    FAILED 1:0. Lines: TBENCH_RUN_STARTED stamp=..., VERDICT=..., TBENCH_RESULT, MAB_TABLES_DIR=, EVIDENCE_DIR=,
+    VERIFIED_ON=tbench. A dropped link: the same line + --resume-stamp <stamp>. Fallback: the fetch above.
+    G4 scoring (mab_predictions.py / mab_grade.py) reads check\files\job-output, which stays on tbench (re-extract
+    from evidence/job<J>/ there) - not part of the smoke.
+
+Any other job of this payload: the same two lines with its S / J. Validated (11-14): smqt r1 = job 3584105 on tbench
+with ..\perf-mab-89d65f99: PMAB_PASS_VERIFIED, exit 0 = the local verdict (verification\pmab-job3584105-20261114T140503);
+all 18 check rows equal (also in full), the 9 mab-tables files byte-identical, the 137 extracted files equal by SHA-256
+(verify_on_tbench.py --compare: same=True; only the report's archive path differs); 19 s on tbench, ~2 min end to end,
+46 KB pulled (verification\pmab-job3584105-20261114T190800). Local validation with the tbench steps:
+LOCAL_VALIDATION_PASS validation\20261114T202857\ (42 steps; payload 89d65f99 and entry dee30855 unchanged).

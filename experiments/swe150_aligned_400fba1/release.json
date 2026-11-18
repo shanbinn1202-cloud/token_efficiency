@@ -1,0 +1,127 @@
+{
+  "upstream": {
+    "repository": "https://github.com/CFXM/vllm-0.24.0-selective-prefix-policies",
+    "git_commit": "400fba1ca414904d8a48222de4315ff678e18446",
+    "runtime_commit": "2fb7f6241fe00517a472f8703125de153ec715d2",
+    "source_path": "source",
+    "packages": {
+      "tokenizers": "0.22.2",
+      "transformers": "5.13.0",
+      "vllm": "0.24.0"
+    },
+    "git_tree": "410e68108442f926fb744b339151d8d4dd94cad5",
+    "file_count": 1028
+  },
+  "model": {
+    "name": "Qwen3.6-27B",
+    "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+    "dtype": "bfloat16"
+  },
+  "evaluation": {
+    "benchmark": "SWE-bench Verified",
+    "dataset_revision": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+    "ordered_count": 150,
+    "repo_counts": {
+      "astropy/astropy": 22,
+      "django/django": 128
+    },
+    "scaffold": "Mini-SWE-Agent 2.4.2 with pinned SmartAgent",
+    "protocol": "mswea-xml",
+    "prompt": "source/examples/swebench/swebench_prompt_testbed.yaml",
+    "tool_environment": "ARM64 Apptainer, bash -lc, testbed",
+    "input_roster": "source/examples/swebench/verified-150.txt",
+    "max_turns": 120,
+    "request_timeout_seconds": 4400,
+    "request_retries": 0,
+    "tool_timeout_seconds": 120,
+    "grade_timeout_seconds": 1800,
+    "grade_workers": 8
+  },
+  "serving": {
+    "max_running_sessions": 24,
+    "max_num_seqs": 24,
+    "async_scheduling": true,
+    "context_length": 262144,
+    "max_num_batched_tokens": 16384,
+    "gpu_kv_pool_gib": 25,
+    "max_output_tokens": 4096,
+    "seed": 42,
+    "temperature": 0,
+    "thinking": true,
+    "page_tokens": 16,
+    "mamba_slots": 49,
+    "cuda_graph_mode": "FULL_AND_PIECEWISE",
+    "gdn_prefill_backend": "triton"
+  },
+  "resources": {
+    "gpu": "1 GH200",
+    "physical_cpu_cores": 32,
+    "ram_gib": 145,
+    "service": {
+      "cores": 16,
+      "memory_mib": 113560
+    },
+    "agent": {
+      "cores": 16,
+      "shared_memory_gib": 30,
+      "sandbox": "node-local NVMe /tmp"
+    },
+    "interactive": {
+      "partition": "ghx4-interactive",
+      "walltime": "02:00:00"
+    },
+    "formal": {
+      "partition": "ghx4",
+      "walltime": "05:00:00",
+      "requires_passing_interactive": true
+    }
+  },
+  "methods": {
+    "random": {
+      "policy": "random_fill",
+      "unit": "16-token pages",
+      "active_token_budget": 8192,
+      "fill_seed": 42,
+      "release_idle_pages": true,
+      "dram_arena_gib": 68,
+      "connector_pool_gib": 1
+    },
+    "sliding_window": {
+      "policy": "recent_fill",
+      "unit": "16-token pages",
+      "active_token_budget": 8192,
+      "release_idle_pages": true,
+      "dram_arena_gib": 68,
+      "connector_pool_gib": 1
+    },
+    "agentkv": {
+      "policy": "StageQSnapKV",
+      "granularity": "per KV head",
+      "connector": "AgentKVConnector",
+      "budget_tokens": 8192,
+      "options": {
+        "eviction_interval": 128,
+        "anchor_budget": 32,
+        "observation_window": 32,
+        "sink_tokens": 32,
+        "pooling_kernel_size": 1
+      },
+      "adapter_pin_sha256": "01f488923cd63a254694daf78ad18b6d6118eaf4358d3d08b007960937d59c6e",
+      "prefix_caching": false,
+      "mamba_cache_mode": "none"
+    },
+    "claude_compression": {
+      "policy": "official Claude Code /compact",
+      "version": "2.1.325",
+      "trigger": "at turn start if rendered history token count > 8192",
+      "inference": "same Qwen service",
+      "preserve_thinking": true,
+      "history_reasoning_fields": [
+        "reasoning",
+        "reasoning_content"
+      ],
+      "main_and_summary_token_accounting": "separate"
+    }
+  },
+  "cluster_manifest_sha256": "4139e25a9e1dfd0dbd174d9cfd37e8d4ce221bec11d457aaa283057dbb220dcc"
+}

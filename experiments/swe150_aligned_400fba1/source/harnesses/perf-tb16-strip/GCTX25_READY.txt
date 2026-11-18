@@ -1,0 +1,236 @@
+SUPERSEDED: current READY file: READY_1115.txt.
+GCTX25_READY (2026-11-09) - perf-tb16-strip: Gemma 4 31B IT on Terminal-Bench 2.0 at 262,144 tokens (plan gctx25), the GPU dry run of TERMINALBENCH A.14
+=========================================================================================================================================================
+
+2026-11-09 (later): SUBMITTED as job 3560498 (afterany 3554749; stage /u/ycao11/tb16-e5db771bc6a94a49bc024d99f9003482).
+This folder has since been re-pinned to main ba4d1ba, where gctx25 is NOT_SUBMITTABLE (the client block: ba4d1ba's
+make_job.py has Gemma 65,536). Verify / fetch 3560498 ONLY from the frozen copy
+I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-3acc490a\ (payload 3acc490a; FROZEN-3acc490a.md):
+check block D:\Remote-RA-temp\scratch\gemma-tb-262k\check-gctx25-3560498.sh, then that copy's postrun\fetch_run.ps1
+(section 7 below names it). Sections 5-6 below describe the 3acc490a state (run them only in the frozen copy).
+
+STATUS (as written before the submission): READY to submit (the maintainer). One ghx4 batch job, four servers on the 16-task dry subset at Harbor -n 16:
+observation_query, goal_query, random_fill, then the stock vLLM control, all at 262,144 tokens, 25 GiB of KV and
+4,096-token forwards. Chained behind goalt 3554749 (-AfterJob 3554749). Nothing was submitted; nothing connected to
+DeltaAI or tbench. The tbench half is unchanged (manifest d08ba8d3...7ab1): no redeploy.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip   (re-pinned to f5a5c36; plan gctx25 added)
+Frozen     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-44e60bc5\   (FIRST, before any change: payload 44e60bc5...,
+           integrate-1103 ea18256, the release smoke plans as validated 2026-11-03; 90 files + FROZEN-44e60bc5.md; list
+           D:\Remote-RA-temp\scratch\perf-tb16-strip-44e60bc5.sha256, sha256sum -c OK on copy and source; dist members = the files)
+           earlier: perf-tb16-strip-16803f97\ (strip25, job 3499759), perf-tb16-gemma-9ef0d6d\ (gobsdry, job 3433706),
+           perf-tb16\ (cf2b28d: ggoaldry job 3434544, ctx25 job 3461661)
+Runtime    gemma-tb-262k f5a5c369f7183989d116a6588c91b86c608a1026 (worktree worktrees\gemma-tb-262k, local, not pushed) = main 1684a46 +
+           the Terminal-Bench client's Gemma context 262,144 (make_job.py; --context 65536) and its docs; the runtime bytes are main's
+           receipt D:\Remote-RA-temp\scratch\gemma-tb-262k\receipt\release-receipt-f5a5c36.json (the full in-repo check_git_release,
+           parallel: GIT_ARCHIVE_TESTS_PASS, 1,854 tests, 135 skipped, 597.3 s;
+           result_line_sha256 2b95e454ae77aa13285169435290d7bf154d5337fe0b3199b1d81aab9f3fd278,
+           log_sha256 2307488f2d933279dab5ca4dba2849bc7666cbb82e39197a8ec91c2898f49189)
+           build.py --repo <worktrees\gemma-tb-262k> --commit f5a5c369f7183989d116a6588c91b86c608a1026 --release-receipt <receipt>:
+           BUILD_PASS, RUNTIME_PIN=PINNED
+Payload    3acc490aae813aa3bf35082abc1dde9ffb2847cec0489cdc1aceb662e1bcab1f   (dist\payload.json; was 44e60bc5...)
+Entry      4d479bb307a4dfa0061e2f2df4c536dd435d57242e5c7d9d1a7d6d9312607f10   (run_one_connection.ps1)
+Pins       8df583f2474ee73fc2edf0be4fb30d422252dda88bfc08b18b90fd69b9c6df2f   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=f5a5c369f7183989d116a6588c91b86c608a1026 pin=PINNED payload=3acc490aae813aa3bf35082abc1dde9ffb2847cec0489cdc1aceb662e1bcab1f
+           (17 steps, exit 0 each, 4,940 s: build-1, build-2, deterministic, unit-tests, gate-checks, release-parity,
+           runtime-evidence, real-tokenizer, terminus2-goal, repin, synthetic-stages, eval-pipeline, entry, transport,
+           deploy-selftest, fetch-selftest, cleanup)
+           logs I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\validation\20261109T130936
+
+Which folder fetches each job: gctx25 (3560498) -> perf-tb16-strip-3acc490a (frozen; was "this folder"). 3499759 -> perf-tb16-strip-16803f97; 3433706 ->
+perf-tb16-gemma-9ef0d6d; 3434544 / 3461661 -> perf-tb16. (The verifier requires the delivered helpers to equal its own
+harness's sealed payload.)
+
+
+1. THE PLAN (tb16-config.json plans.gctx25; the maintainer's decisions of 2026-11-08 = TERMINALBENCH A.14 at f5a5c36)
+----------------------------------------------------------------------------------------------------------------------
+Harbor 0.21.0 Terminus 2 unchanged, thinking off, the 16 dry tasks (the client's trial16), -n 16, one attempt; each
+server's Harbor cap 1,260 s, minimum 1,000 s; ghx4 batch, --mem=113560M (one GH200 share), 16 CPUs, mail
+BEGIN,END,FAIL to cao58@illinois.edu, no retry. Servers in run order (a server-FATAL outcome ends the plan):
+  gobs262    observation_query  --active-token-budget 8192
+  ggoal262   goal_query         --active-token-budget 8192 --admission-overlap 16 --goal-rewriter-model <Qwen3-0.6B pin>
+                                --goal-rewriter-batch 4 --goal-rewriter-batch-tokens 20480   (ggoaldry's Goal flags, A.14)
+  grfill262  random_fill        --active-token-budget 8192   (never run on Terminal-Bench before)
+  gstock262  stock vLLM 0.24.0  A.14's command (never run before)
+Shared runtime flags (every runtime server; = A.14's GSHARED):
+  --protocol chat-text --chat-text-slots 512 --chat-text-idle-timeout 600 --chat-text-evict-after 30 --kv-cache-gib 25
+  --max-model-len 262144 --page-tokens 16 --cuda-graphs full --max-running-sessions 20 --max-tokens 4096
+  --max-num-batched-tokens 4096 --dram-arena-gib 72 --connector-pool-gib 1 --decode-fastpath --decode-fastpath2
+  --decode-fastpath3 --deferred-completion-io --language-model-only --release-idle-pages
+Stock control argv (= A.14's stock command; env VLLM_WORKER_MULTIPROC_METHOD=spawn VLLM_USE_V2_MODEL_RUNNER=0
+VLLM_NO_USAGE_STATS=1 from stock.server_env):
+  --model /projects/bcjw/ycao11/models/gemma-4-31b-it --served-model-name selective-prefix --host 127.0.0.1 --port <p>
+  --distributed-executor-backend uni --tensor-parallel-size 1 --max-num-seqs 16 --max-model-len 262144
+  --max-num-batched-tokens 4096 --kv-cache-memory-bytes 26843545600 --seed 42 --enable-prefix-caching
+  --prefix-caching-hash-algo sha256 --attention-backend TRITON_ATTN --language-model-only
+Terminus 2 model_info.max_input_tokens 262,144 on every server; every server's job.json = the client's
+make_job.py --profile gemma4-31b-it --tasks trial16 (default context; --stock for the control), byte for byte.
+Phrase AUTHORIZE_TB16_GCTX25_GEMMA4_16TASKS_4SERVERS_262K_KV25_BATCH_REUSED_V9_ENV_ONE_GH200_163MIN_NO_RETRY
+
+
+2. FIT (the harness's own rules; all checked by validate_plan at build and on the login node)
+---------------------------------------------------------------------------------------------
+GPU, serve.py's selective rule at 4,096-token forwards (controller.gemma_pool_fit = window_capacity):
+  observation_query / random_fill: pools [4,918 global Pages, 7,781 sliding block ids]; 2,119 of 4,917 usable needed
+    (margin 2,798; at most 24 sessions); vLLM's own check 21.58 of 25 GiB.
+  goal_query (Goal transient 2,048): [3,638, 8,421]; 2,106 of 3,637 (margin 1,531; at most 22); 23.13 of 25 GiB.
+  With 8,192-token forwards K = 20 does not fit (at most 19 / 17): the forward is needed.
+  goal server with the batched Goal model at T = 20,480 (gemma_goal_gpu, an estimate; no term for K, context or forward):
+    EngineCore 87,286 + admission 258 + child 2,836 + batch 4,841 = 95,221 of 97,362 MiB, 2,141 free.
+Stock control, vLLM 0.24.0's startup check (gemma_stock_need): one request at 262,144 = 8,192 + 5 x 321 = 9,797 of the
+  10,240 block ids of 25 GiB (23.92 GiB); at 8,192-token forwards 11,077 = 27.04 GiB (refused; job 3364469). It holds
+  one request at the limit; the Gemma dry runs' concurrent trials needed at most 9,104 ids.
+Host (memory_fit): arena 72 GiB = 58,982 Pages (290 chunks of 204 = 72.22 GiB) + connector 1 GiB = 73.22 GiB pinned +
+  the 32-GiB reserve = 105.22 of 110.90 GiB (5.68 spare; 73 GiB leaves 4.69, refused). Arena demand 17.4 GiB (the dry
+  runs replayed at 262,144) x 1.5 = 26.1 and the bound 59.31 GiB: both held. Stock pins nothing.
+Time (plan_fit, the Gemma start reserve 480 s): 840 + 3 x (480 + 60 + 1,260 + 180 + 300) + (480 + 60 + 1,260 + 180 + 120)
+  = 9,780 s = --time 02:43:00; after the full 600-s evaluation wait every server keeps its 1,000-s minimum (8,800 s).
+  Expected 7,440 s (gobsdry 2,520 + ggoaldry 2,580 + grfilldry 2,520 - 2 x 840 job reserves + the stock dry ~1,500;
+  the measured pieces of 3433706 / 3434544 / 3499759 suggest ~6,000 s); limit / expected 1.31 (<= 1.5).
+Cost: 2.72 GPU-hours at the limit, 2.07 expected (ghx4 batch, billing x1). One job, no split.
+
+
+3. WHAT CHANGED IN THE HARNESS (every other plan: PLAN_FINGERPRINT unchanged, below)
+------------------------------------------------------------------------------------
+- controller: a Gemma plan may set kv_cache_gib, max_model_len, dram_arena_gib, max_running_sessions and the forward
+  (GEMMA_PLAN_SERVER_KEYS) over config.gemma.server; its stock control takes the plan's KV size, context and forward;
+  the forward feature read from the sealed source (forward_feature, perf-gemma-swe32's reader); window record, pools,
+  pool-0 rule, expectations, serve.py arguments and the dry-run gate follow the server's forward; vLLM's stock startup
+  check (gemma_stock_need) for every Gemma stock control; a sealed Gemma launcher without the plan's KV size, context,
+  arena flag or forward blocks the plan (gemma_plan_block); INTERFACE_ACCEPTED = f5a5c36's chat module 2b492e67...
+  (only POLICIES changed: recent_fill, recent_tools, akv_rule); async_scheduling_feature reads async-gemma's serve.py.
+- tb_checks: check_forward (the 4,096-token forward pinned in startup / READY / the layout, no CAPACITY_EXCEEDED, every
+  phase 1 one run; chunked runs counted as information) on servers expected with their own forward.
+- entry script: the Gemma plan's settings on the DryRun / SelfTest line; build.py: CONTEXT lines per server.
+- runtime_evidence.py / terminus2_check.py: the runtime's tests in tests/ (82f23e2).
+- tests: test_tb16.Gemma262Plan, gate_checks (gctx25 refusals), test_release_parity.test_the_gemma_262k_plan,
+  test_repin step 10 (ea18256 -> PLACEHOLDER), e2e scenario gctx25, eval_compat g262set.
+
+
+4. VALIDATION (local, no connection)
+-------------------------------------
+- LOCAL_VALIDATION_PASS (validation\20261109T130936): two builds byte-identical; unit tests 98 OK; GATE_CHECKS_PASS 27
+  plans / 139 refusals (gctx25: 73-GiB arena, K = 23, 8,192-token forwards with and without the stock control, the stock
+  at 8,192, forward 2048, K = 25); release parity 11 run, 3 skipped, OK (test_the_gemma_262k_plan: the three runtime servers
+  through the sealed prepare_gemma4 with the job's exact arguments, the launcher's own pools and pinned host 73.22 GiB,
+  A.14's commands and the release page's "### Gemma 4 31B IT" block, the stock argv, the four job files = the sealed
+  make_job.py, serve.py's refusals at K = 23 and at 8,192); RUNTIME_EVIDENCE_PASS 76 servers / 3,059 requests / 29 of
+  29 tampered copies refused (f5a5c36's own chat-text evidence: the new chat module accepted); REALTOK_CHECK_PASS 14;
+  TERMINUS2_GOAL_CHECK_PASS 12 tests; REPIN_PASS (10 steps); synthetic stages 36 / 36 PASS, gctx25 TB16_PASS,
+  TB16_PASS_VERIFIED, JOIN_PASS 16 / 16 per server, model_info 262,144 on all four, the forward check (4,096 pinned; 80
+  of 96 phase-1 runs chunked, largest 5,397), goal batches up to 4, releases / readmissions; EVAL_COMPAT_PASS (g262set);
+  ENTRY_CHECKS bad=0 (QWEN_DRYRUN_IDENTICAL 20, 68d19b4 switches-only 14); transport, deploy (manifest = pin) and fetch
+  self-tests; CLEANUP bad=0.
+- PLAN_FINGERPRINT: every value of the 26 earlier plans, the frozen copy (44e60bc5) against the final build (3acc490a):
+  DIFFERENCES 0 (the pin apart: commit ea18256 -> f5a5c36; runtime_features chat_text, gemma, policies, thinking).
+  (D:\Remote-RA-temp\scratch\gemma-tb-262k\harness\fp-before-44e60bc5.json / fp-final-3acc490a.json, fp_compare.py)
+- Release parity against the worktree's docs and client (D:\Remote-RA-temp\scratch\gemma-tb-262k\harness\gctx25_parity.py
+  -> gctx25_parity-final.txt): PARITY_PASS, 12 EQUAL (each runtime server's arguments vs TERMINALBENCH A.14 and
+  docs/benchmarks/terminal-bench.md; the stock argv vs both; the four job.json files vs make_job.py).
+
+
+5. LOCAL CHECKS (no connection)
+-------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan gctx25 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan gctx25 -RunLabel r1 -AfterJob 3554749 -Authorize -Authorization 'AUTHORIZE_TB16_GCTX25_GEMMA4_16TASKS_4SERVERS_262K_KV25_BATCH_REUSED_V9_ENV_ONE_GH200_163MIN_NO_RETRY' -DryRun
+Seen (2026-11-09, final build; no NOT_SUBMITTABLE; full lines in D:\Remote-RA-temp\scratch\gemma-tb-262k\harness\entry-final.txt):
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=3acc490aae813aa3bf35082abc1dde9ffb2847cec0489cdc1aceb662e1bcab1f commit=f5a5c369f7183989d116a6588c91b86c608a1026 plan=gctx25 model=gemma4-31b-it ...
+  DRY_RUN connections=0 stage=/u/ycao11/tb16-<nonce> payload_bytes=13681108 commit=f5a5c369f7183989d116a6588c91b86c608a1026 plan=gctx25 model=gemma4-31b-it servers=gobs262:observation_query:16tasks:1260s,ggoal262:goal_query:16tasks:1260s,grfill262:random_fill:16tasks:1260s,gstock262:stock:16tasks:1260s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=72 max_input_tokens=262144 max_running_sessions=20 max_num_batched_tokens=4096 partition=ghx4 time=02:43:00 expected_seconds=7440 gpu_hours_limit=2.72 gpu_hours_expected=2.07 ... mem=113560M ... after_job=3554749 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED ...
+  RELEASE_RECEIPT commit=f5a5c369f7183989d116a6588c91b86c608a1026 status=GIT_ARCHIVE_TESTS_PASS tests=1854 skipped=135 result_line_sha256=2b95e454ae77aa13285169435290d7bf154d5337fe0b3199b1d81aab9f3fd278 log_sha256=2307488f2d933279dab5ca4dba2849bc7666cbb82e39197a8ec91c2898f49189 login_test_runs=0
+
+
+6. SUBMIT (Windows PowerShell 5.1; one command; one visible SSH/Duo connection to gh-login03)
+--------------------------------------------------------------------------------------------
+First, in your DeltaAI shell (read-only): squeue -h -u ycao11 -o '%i|%T|%P|%r|%j|%E'
+The queue gate refuses any queued or running job of yours that shares tbench (tb16- / swe32- / swe10- / swe16- / gem0- /
+gswe32-) unless it is the -AfterJob job or in that job's afterany chain (or PENDING on your hold). The chain on 11-09:
+obst 3539260 -> rtoolst 3540110 -> akvs 3549065 -> goalt 3554749 (afterany each), so name goalt. If goalt is gone and
+another tbench-sharing job is last, name that one; with none queued or running, leave -AfterJob out.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan gctx25 -RunLabel r1 -AfterJob 3554749 -Authorize -Authorization 'AUTHORIZE_TB16_GCTX25_GEMMA4_16TASKS_4SERVERS_262K_KV25_BATCH_REUSED_V9_ENV_ONE_GH200_163MIN_NO_RETRY'
+The light login gates take ~4-6 min (the Goal model probe of the goal server); exit 86 = a pre-claim gate failed,
+nothing claimed (read QUALIFY_ERROR= / ERROR=, fix, new -RunLabel). The last JSON line prints stage and job_id.
+After goalt's SWE evaluation on tbench the job waits up to 600 s for the shared lock (32-instance evaluations took
+~570 s); past that it refuses cleanly (TB16_REFUSED).
+
+
+7. AFTER THE END MAIL: read-only check block (your DeltaAI shell; system python only), then the fetch
+-----------------------------------------------------------------------------------------------------
+Replace S and J (the submission's JSON line):
+
+bash <<'EOF'
+S=/u/ycao11/tb16-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -X -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'timing', r.get('timing'))
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    a, res = s.get('agent') or {}, s.get('resources') or {}
+    print('%-10s %-17s %-18s outcome=%s acc=%s rows=%s selective=%s gpu_max_mib=%s ready_s=%s finished_s=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], a.get('outcome'), s.get('accuracy'), s.get('rows'), s.get('active_selection_turns'), res.get('gpu_memory_used_mib_max'), s.get('ready_s'), s.get('finished_s'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+PY
+else echo RESULT_ABSENT; fi
+echo "== startup (expect ctx 262144, batched 4096, layout forward_tokens 4096, request_pages 2119 / 2106 (goal), arena 58982, K 20, pools [4918,7781] / [3638,8421], T 20480 on the goal server)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/startup.json')):
+    st = json.load(open(p)); rd = json.load(open(p.replace('startup.json', 'ready.json')))
+    e = st.get('effective_server_config') or {}
+    print(p.split('/')[1], 'ctx', e.get('max_model_len'), 'batched', e.get('max_num_batched_tokens'), 'kv_bytes', e.get('kv_cache_memory_bytes'), 'K', st.get('max_running_sessions'), 'layout', json.dumps(st.get('kv_layout'), sort_keys=True), 'arena_pages', st.get('dram_arena_pages'), 'pools', rd.get('num_blocks_by_pool'), 'T', st.get('goal_rewriter_batch_tokens'))
+PY
+echo "== stock argv gate (expect STOCK_ARGV_GATE_PASS, 262144 / 4096 / 26843545600 / 16)"; for f in stock-argv-gate-*.json; do /usr/bin/python3 -B -c "import json,sys; v=json.load(open(sys.argv[1])); a=(v.get('probe') or {}).get('serve_args') or {}; print(sys.argv[1], v.get('status'), {k: a.get(k) for k in ('max_model_len','max_num_batched_tokens','kv_cache_memory_bytes','max_num_seqs','attention_backend')}, v.get('differ'))" "$f"; done
+echo "== checks of note (forward: chunked phase-1 runs; context-limits; no-preemption; any non-PASS)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    for row in s.get('checks') or ():
+        if row.get('check') in ('forward', 'context-limits', 'no-preemption', 'kv-layout', 'ready') or row.get('status') != 'PASS':
+            d = row.get('detail')
+            print(p, row.get('check'), row.get('status'), json.dumps(d)[:300] if d is not None else '')
+PY
+echo "== arena high-water (GiB; the 72-GiB arena; model 17.4, bound 59.31)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/sessions.jsonl')):
+    m = 0
+    for line in open(p):
+        if line.strip():
+            e = json.loads(line)
+            m = max(m, ((((e.get('released') or {}).get('worker') or {}).get('arena') or {}).get('pinned_bytes') or 0))
+    print(p.split('/')[1], 'arena_pinned_high_water_gib=%.2f' % (m / 2**30))
+PY
+echo "== prompt sizes (max prompt tokens per server)"; for f in job-output/*/runtime.jsonl; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1].split('/')[1], 'rows', len(r), 'max_prompt', max([(x.get('chat_text') or {}).get('prompt_tokens') or 0 for x in r] or [0]))" "$f"; done
+echo "== kernels"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== stock startup (expect no 'KV cache is needed')"; grep -h "KV cache is needed\|Maximum concurrency" server-gstock262.log 2>/dev/null | cut -c1-300 | head -5
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== arena / capacity (expect 0)"; grep -c "DRAM_ARENA_EXHAUSTED\|CAPACITY_EXCEEDED\|CAPACITY_STALL" server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/tb16-core.tar.xz fetch/tb16-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the two sha256sum lines and the sacct row are needed by the fetch). Then, locally (no -AfterJob,
+no Duo beyond the fetch's own connections):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-3acc490a\postrun\fetch_run.ps1' -Stage '<STAGE>' -JobId '<J>' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+(fetch read-only from DeltaAI and tbench (package_run.sh: exit 3 while Harbor still runs, run it again later),
+verify_evidence, join_tb16, tb16_tables; safe to rerun). Expected VERDICT=TB16_PASS_VERIFIED with JOIN_PASS 16 / 16 per
+server (TB16_PARTIAL_VERIFIED if a check failed but every server ran). The cache goes to
+D:\Remote-RA-temp\scratch\perf-tb16-strip\fetch\job<J>.
+
+
+8. OPEN / FOR THE MAINTAINER
+----------------------------
+- Nothing of this configuration has run on a GPU: Gemma at 262,144 tokens, K = 20 with 4,096-token forwards on
+  chat-text, random_fill on Terminal-Bench and the Gemma stock control are all new; the goal server's 2,141 MiB of GPU
+  headroom is an estimate; the arena model is an assumption (no Gemma trial came within 8,000 tokens of 65,536).
+- The dry subset's 900-s agent windows keep Gemma's histories below ~25K tokens: the run checks startup, flags, the
+  arena, the 4,096-token forward, the stock control and the job file at 262,144, not long histories.
+- Server order: obs, goal, rfill, stock as given. A server-FATAL outcome (engine death, CAPACITY_STALL, ...) of the goal
+  server would skip random_fill and the stock control; reorder (goal after rfill) only on request (a config change and
+  a rebuild + validation).
+- The runtime branch gemma-tb-262k is local, not pushed (the docs say "not yet run"); push to main only after this GPU
+  run and with approval. The release repository (release-src, rules.json, export) is the maintainer's.
+- The harness's build ran as its recipe does (python -B build.py, not -I: build.py imports its own folder).

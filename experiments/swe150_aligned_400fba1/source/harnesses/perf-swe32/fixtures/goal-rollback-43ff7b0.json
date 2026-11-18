@@ -1,0 +1,18 @@
+{
+ "commit": "43ff7b0",
+ "branch": "goal-rollback-1116",
+ "note": "goal_rollback_feature of the branch worktree at 43ff7b0 (2026-11-16; not merged; the same as a39dd08's): the e2e scenarios keepgoal / keepgoaloff and the tests pin it in their synthetic pins only",
+ "feature": {
+  "module": "source-overlay/remote_ra_live_v2/query_selection.py",
+  "record": "query.goal.carry",
+  "goals_key": "carry",
+  "keys": [
+   "carried",
+   "reason",
+   "from_turn",
+   "goal_turn"
+  ],
+  "trigger": "rollback",
+  "query_vector": "goal"
+ }
+}

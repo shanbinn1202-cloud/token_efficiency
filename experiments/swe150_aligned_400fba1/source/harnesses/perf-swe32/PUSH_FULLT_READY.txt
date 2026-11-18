@@ -1,0 +1,171 @@
+NOTE 2026-11-12: superseded by SWE64_READY.txt. This folder's payload is now 67c55f26... (the 64-instance proxy and
+idle release); the plans below are unchanged there (fingerprints and DryRun lines SAME), but fullt / fullti
+(full WITHOUT idle release) deadlocked in job 3579273 (CAPACITY_STALL, 55.6 min): use fulltr / fulltri instead.
+The 5ea4bdfc state is frozen in ..\perf-swe32-5ea4bdfc\.
+
+PUSH_FULLT_READY (2026-11-11 evening) - perf-swe32 on the pushing payload: rtoolsti, fullt, fullti
+==================================================================================================
+
+STATUS: READY, nothing submitted. Every job of this payload pushes its two archives to tbench at its end and starts
+the verification there (niced, after the tbench evaluation); after the END mail Claude pulls only the small result
+(section 4). goalti 3576565 / akvsi 3577833 ran the previous payload: they are verified with ..\perf-swe32-1582d0d9\.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32
+Runtime    main ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 (unchanged pin)
+Payload    5ea4bdfc538caa4e12d4eacdf0b001c4f82f4864e5272525eaa0725f2f450cfc   (dist\payload.json; was 1582d0d9..., frozen in ..\perf-swe32-1582d0d9\)
+Entry      21313ab30fe02a279e17b3b5f32a92099ffb62ee75782e7bb397334d888465e5   (run_one_connection.ps1)
+Pins       e3b5a6b5efd8e05b0063a4290b5efbba08abcb2e45ca1ad03f91df3b01ee2a8d   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=ba4d1ba (I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\validation\20261111T211634\, -Jobs 6)
+tbench     half unchanged (manifest 58245387..., no redeploy); verification code deployed for this payload:
+           /home/ubuntu/swe32-verify/code/d55fb39e0c0a5ee4 (pointer code/by-payload/15db8b4ad20f3f88aa3d8a73e80e2b1bfa735673edd0b2d335e3537bbdafa544)
+DryRun     every line carries the new field tbench_push=/home/ubuntu/swe32-verify:120s (the only change for the
+           earlier plans besides the hashes: PLAN_FINGERPRINT SAME 28, DRYRUN_LINES SAME 28 with it masked)
+
+
+1. THE PLANS (one GH200, --mem=113560M, mail BEGIN,END,FAIL to cao58@illinois.edu, no retry; thinking ON, 25 GiB,
+   262,144 tokens, arena 70, 32 tasks, K = 16, 120 steps)
+-------------------------------------------------------------------------------------------------------------------
+
+a) rtoolsti  (ghx4-interactive, variant_of rtoolst; recent_tools, server rtools262t)
+   --time 01:22:00 (4920 s) | E 3,300 s | cap 3,180 s / min 2,100 s | after the 600-s evaluation wait the agents get 3000 s
+   pool W used: 2,525 s (recentt 3539242); cap / W 1.26 x
+   GPU-h at 2x billing: limit 2.73, expected 1.83
+   phrase AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY
+
+b) fullt  (ghx4, role validation; full, server full262t)
+   --time 02:00:00 (7200 s) | E 5,140 s | cap 5,460 s / min 3,700 s | after the 600-s evaluation wait the agents get 5280 s
+   pool W used: 4,387 s conservative (obst 2,503 s x 1.75 pool-limited wall factor at R = 200), 3,530 s central (x 1.41); cap / W 1.24 x (1.55 x)
+   GPU-h at 1x billing: limit 2.00, expected 1.43
+   phrase AUTHORIZE_SWE32_FULLT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY
+
+c) fullti  (ghx4-interactive, variant_of fullt; full, server full262t; fullt on ghx4-interactive)
+   --time 02:00:00 (7200 s) | E 5,140 s | cap 5,460 s / min 3,700 s | after the 600-s evaluation wait the agents get 5280 s
+   pool W used: as fullt
+   GPU-h at 2x billing: limit 4.00, expected 2.86
+   phrase AUTHORIZE_SWE32_FULLTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY
+
+fullt / fullti are the same run (policy full, no Pages dropped, Goal machinery off; server full262t): submit ONE of
+them (fullt = ghx4 batch 1x billing, usually a longer queue; fullti = ghx4-interactive 2x, one job per user, so only
+after rtoolsti ENDED). Their time is an ESTIMATE (no run of our full policy at 25 GiB / 262,144): full keeps every
+Page, so from about local turn 21 the 25-GiB pool holds fewer sessions at once (more capacity waits and DRAM
+restores); if that is worse than the estimate, the cap cuts it (SWE32_PARTIAL; rerun with a new -RunLabel).
+
+
+2. BEFORE EACH SUBMISSION (your DeltaAI shell, read-only)
+---------------------------------------------------------
+squeue -h -u ycao11 -o '%i|%T|%P|%j|%E|%r'
+Interactive (rtoolsti, fullti): no job of yours on ghx4-interactive; gctx25 3560498 held and smokeqt 3568310 pending
+on it are allowed (parked). fullt (batch): if a tbench job of yours is queued or running, chain it with -AfterJob
+<that job id> as the batch plans always did (the queue gate says so).
+
+
+3. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First SelfTest and DryRun (no connection), then the submit line; 3-5 min of light login gates, then one sbatch.
+Keep the last JSON line (stage, job_id).
+
+a) rtoolsti (after akvsi 3577833 ENDED)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+b) fullt (ghx4 batch; add -AfterJob <id> when the queue gate asks for it)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullt -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullt -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+c) or fullti (instead of fullt; after rtoolsti ENDED)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+After the last interactive job you submit ENDED: scontrol release 3560498
+
+
+4. AFTER THE END MAIL: Claude pulls the result (no DeltaAI step needed)
+-----------------------------------------------------------------------
+The job's last line (slurm-<J>.out tail, or the check block below) shows tbench_push=PUSH_OK when the push worked.
+Tell Claude the job id and the END mail's state and exit code; Claude runs (tok venv, local + tbench only):
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\verify_on_tbench.py --pull --job-id <J> --slurm-state <State> --slurm-exit-code <ExitCode>
+TBENCH_VERIFY_PENDING (exit 3): the evaluation (~10 min) or the verification (~15 min, niced) is still running: run
+it again later. VERDICT=SWE32_PASS_VERIFIED with SLURM=CONFIRMED_BY_END_MAIL is the goal (SWE32_PARTIAL_VERIFIED if
+the cap cut instances). Without the END mail's values it says SLURM=FROM_JOB_UNCONFIRMED (exit 2).
+If the push failed (tbench_push=PUSH_FAILED / PUSHED_NO_WAITER in the job's last line): run the check block below,
+then the phase-1 path (verify_on_tbench.py --print-copy ... , or fetch_run.ps1) as before.
+
+Optional read-only check block (your DeltaAI shell; the same as for goalti / akvsi). Fill S= / J=:
+
+bash <<'EOF'
+S=/u/ycao11/swe32-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'receipt', (r.get('release_receipt') or {}).get('result_line_sha256', '')[:8])
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-10s %-17s %-16s cap=%s capacity_waits=%s rows=%s selective=%s lock=%s goal_text=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], s.get('agent_timeout_seconds'), (s.get('measurements') or {}).get('capacity_waits'), s.get('rows'), s.get('active_selection_turns'), (s.get('lock_wait') or {}).get('status'), (s.get('goal_text') or {}).get('status'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+for path in sorted(glob.glob('job-output/*/ready.json')):
+    ready = json.load(open(path)); start = json.load(open(path.replace('ready.json', 'startup.json')))
+    print('ready', path.split('/')[1], 'fast', ready.get('decode_fastpath'), 'fast2', ready.get('decode_fastpath2'), 'fast3', ready.get('decode_fastpath3'), 'deferred_io', ready.get('deferred_completion_io'), 'lmo', bool(ready.get('language_model_only')), 'pool_bytes', start.get('connector_pool_bytes'), 'arena_pages', start.get('dram_arena_pages'), 'thinking_header', repr((start.get('thinking') or {}).get('header_text')), 'ready_thinking', ready.get('thinking') == start.get('thinking'), 'async', start.get('async_scheduling'), 'effective_async', (start.get('effective_server_config') or {}).get('async_scheduling'), 'engine', (start.get('goal_rewriter_engine') or {}).get('engine'), 'overlap', (start.get('admission') or {}).get('goal_overlap'))
+for name in ('archives.json', 'eval-launch.json'):
+    v = json.load(open('fetch/' + name))
+    print(name, json.dumps({k: (x.get('bytes'), x.get('sha256')) if isinstance(x, dict) and 'sha256' in x else x for k, x in v.items() if k in ('core', 'bulk', 'status', 'labels', 'reason', 'elapsed_s')}))
+PY
+else echo RESULT_ABSENT; fi
+echo "== thinking (expect every row a thinking record, fresh = sessions, the rest append), capacity waits (akvsi: CAPACITY_WAIT stalls show here) and every check of the server"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/runtime.jsonl')):
+    rows = [json.loads(l) for l in open(p) if l.strip()]
+    t = [r.get('thinking') for r in rows]
+    hist = {}
+    for x in t:
+        if x: hist[x['history']] = hist.get(x['history'], 0) + 1
+    on = [x for x in t if x]
+    turns = {}
+    for r in rows: turns[r.get('session_index')] = turns.get(r.get('session_index'), 0) + 1
+    print(p.split('/')[1], 'rows', len(rows), 'sessions', len(turns), 'max_turns', max(turns.values() or [0]), 'thinking', len(on), hist, 'unclosed', sum(1 for x in on if not x['closed']), 'reasoning_mean', round(sum(x['reasoning_tokens'] for x in on) / max(1, len(on)), 1), 'reasoning_max', max([x['reasoning_tokens'] for x in on] or [0]), 'capacity_waits', sum(r.get('capacity_waits') or 0 for r in rows))
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    print(p, ' '.join('%s=%s' % (row.get('check'), row.get('status')) for row in s.get('checks') or ()))
+    for row in s.get('checks') or ():
+        if row.get('check') in ('thinking', 'goal-rewriter-engine', 'goal-overlap') or row.get('finding'):
+            d = row.get('detail') or {}
+            print('  ', row.get('check'), row.get('status'), row.get('finding') or '', {k: d.get(k) for k in ('histories', 'unclosed', 'mean_reasoning_tokens', 'rewriter', 'turns', 'goal_forwards') if k in d})
+PY
+echo "== goal texts"; wc -l job-output/*/goals.jsonl 2>/dev/null || echo "no goals.jsonl"
+echo "== kernels"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|GDN prefill kernel \(requested=[a-z]+|sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== completion writer (expect 0)"; grep -c "COMPLETION_WRITE_FAILED\|remote-ra completion writer" server-*.log
+echo "== text-only (expect mm=0 and text_only>=1; encoder_backend is information only)"; for f in server-*.log; do echo "$f mm=$(grep -cE 'Encoder cache will be initialized|Multi-modal warmup completed' "$f") text_only=$(grep -c 'text-only mode' "$f") encoder_backend=$(grep -c 'for MMEncoderAttention' "$f")"; done
+echo "== arena (expect 0)"; grep -c DRAM_ARENA_EXHAUSTED server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== host peak"; for f in host-samples-*.log; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1], 'rss_peak_gib=%.2f cgroup_peak_gib=%.2f' % (max(x.get('vmrss_kb') or 0 for x in r)/2**20, max(x.get('cgroup_current_bytes') or 0 for x in r)/2**30))" "$f"; done
+echo "== gpu peak (memory.used MiB; the vLLM child beside the 25-GiB server on goalvllmt)"; for f in gpu-samples-*.log; do echo "$f used_mib_max=$(awk -F', ' '{ if ($2 + 0 > m) m = $2 + 0 } END { print m + 0 }' "$f")"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/swe32-core.tar.xz fetch/swe32-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+
+5. WHAT CHANGED (harness only; the runtime is untouched)
+--------------------------------------------------------
+- job.py / tbench_link.py (payload): after the archives and the evaluation launch, the push of both archives
+  (ssh, stdin to .part, SHA-256 against archives.json on arrival, never over a different file) and the trigger of
+  the verification on tbench; best effort, at most 120 s, never within 120 s of the Slurm limit; recorded in
+  fetch/tbench-push.json and the last line; never changes the status. config.tbench_verify; DryRun field tbench_push.
+- postrun\tbench_verify\remote_verify.py: trigger (request.json, the detached niced waiter) and wait (evidence +
+  evaluation complete, then phase 1's run, RESULT.json, work/ removed after a verified run).
+- postrun\verify_on_tbench.py: --deploy (code tree + pointer) and --pull (RESULT -> the verification folder).
+- swe32-config.json: plans fullt / fullti (policy full, thinking on, obst's settings).
+- tbench READMEs (EN + zh, /home/ubuntu/): swe32-verify in the directory list.
+
+
+6. NOT GPU-VALIDATED / UNCERTAIN
+--------------------------------
+- The push runs on the compute node for the first time (the tunnel key reached tbench in every job; scp-sized
+  transfers of ~15 + ~150 MB within 120 s are assumed, not measured: a slow link ends the bulk push at the bound and
+  the waiter then waits for the phase-1 copy). The tbench side was run on the real host with job 3539260's evidence.
+- fullt / fullti: time an estimate (section 1).

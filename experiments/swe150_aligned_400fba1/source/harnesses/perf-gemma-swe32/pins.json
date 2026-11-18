@@ -1,0 +1,1307 @@
+{
+  "bundle_bytes": 11730032,
+  "bundle_file": "public-release.bundle",
+  "bundle_ref": "refs/heads/sealed-release",
+  "bundle_sha256": "18b480bc709b6976d8af2d1a95cb444c094c721a6a663d27aa3d31e8784d59ac",
+  "clean_env": {
+    "base_prefix": "/u/ycao11/.local/share/uv/python/cpython-3.12.13-linux-aarch64-gnu",
+    "dependencies": {
+      "lm-format-enforcer": "0.11.3",
+      "tokenizers": "0.22.2",
+      "torch": "2.11.0",
+      "transformers": "5.13.0",
+      "vllm": "0.24.0"
+    },
+    "environment_identity": {
+      "executable": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env/bin/python",
+      "executable_sha256": "001718d5edf61e6fbc3642c9668def38d2bf28cc320e75196e6a95d49614cca8",
+      "implementation": "cpython",
+      "machine": "aarch64",
+      "prefix": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env",
+      "python_version": [
+        3,
+        12,
+        13
+      ],
+      "site": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env/lib/python3.12/site-packages"
+    },
+    "job_id": "3270721",
+    "official_record": {
+      "extra": 0,
+      "files": 4404,
+      "mismatched": 0,
+      "missing": 0,
+      "record_sha256": "cea34f29ed8f7a3b4f8f435817bdff55cb42c13479adf3edff415760a2244ff5",
+      "wheel_sha256": "700db71c3cf14697d42583521f38b12fac38db1e7a8ad062e8e4d63a5dadebd5"
+    },
+    "prefix": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env",
+    "python": "3.12.13 (main, Jun 23 2026, 15:19:07) [Clang 22.1.3 ]",
+    "release_manifest_sha256": "b23b5f20e7c85f8f8e3ab93fe51d8519dfd465aa50fecf0cda27c95d18e9af93",
+    "snapshot_files": 66550,
+    "snapshot_sha256": "cbfab91650bfbeffb149a2df8ead3787a07b91a2cf332edd7efd0b5b0a07e5f0",
+    "stage": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d"
+  },
+  "commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+  "config": {
+    "about": "The decisions of the Gemma 4 SWE-bench Verified run (perf-gemma-swe32, 2026-10-17): perf-swe32's configuration (the first 32 instances, Mini-SWE-Agent 2.4.2, 16 concurrent sessions in a session pool over 32 tasks, 131072-token context, 4096-token replies, 120 steps, active budget 8192 for the three selective policies, CUDA graphs full, --decode-fastpath and --decode-fastpath2, --language-model-only, --connector-pool-gib 1, admission overlap 16 for goal_query only, the Goal rewriter unbatched, thinking off, the same prompt, runner and evaluation) with google/gemma-4-31B-it on runtime integrate-1021 9ef0d6d (wave 2, re-pinned 2026-10-21 from integrate-1019-tbgoal 120bc3c, before that integrate-1016 0d37346; README 4.14: the Gemma 4 profile, protocol mswea_xml_gemma4_v1, TRITON_ATTN, the window layout, goal_query with <bos>, full with --release-idle-pages at 32 GiB, chunked phase 1). Differences from the Qwen runs, all forced by the model or by the user's rule: --release-idle-pages on every runtime server (16 Gemma sessions at 131072 tokens need it); --kv-cache-gib 25 for observation_query, random_fill and goal_query and 32 for full (the user's decision of 2026-10-21 after perf-gemma1 g1b job 3410948 (the same Gemma serving configuration at 32 GiB, 16 sessions at 131,072, graphs, both fast paths): goal_query hit CUDA OOM in the EngineCore during admissions (tried to allocate ~250 MiB; EngineCore 92.22 GiB + the Qwen3-0.6B rewriter process 2.74 GiB of 95.08 GiB CUDA-allocatable, 96 MiB free); observation_query and full passed TIGHT (nvidia-smi peaks 97,331 / 97,121 of 97,871 MiB); 120bc3c's Gemma launcher takes 25 GiB, its selective rule pins request_pages so vLLM's startup check needs 22.15 / 23.70 GiB, and full's release rule needs at least 30,738 MiB; policies.about, gpu.about); the Page arena 72 GiB (1.25-MiB Gemma Pages; the largest arena that keeps 5 GiB spare); goal runs the batched Goal rewriter (--goal-rewriter-batch 4, the Gemma profile's cap T for 25 GiB, 25,600 tokens) and every runtime server --decode-fastpath3 and --deferred-completion-io (wave 2); the stock control on vLLM's defaults with TRITON_ATTN as stage 0 (KV 26.41 GiB by vLLM's own profile). Hand-edited; build.py copies it into pins.json (`config`) and re-validates every plan, so a change here is a rebuild, never a code change. The instance list is tasks/gswe32-tasks.json (one file).",
+    "agent": {
+      "about": "Mini-SWE-Agent 2.4.2 on tbench, one runner (--workers 1) per instance, at most max_running = K = 16 at once, refilled in list order as runners end (run_pool.sh), as swe32. step_limit / max_tokens fill the model override (controller.model_override_text). Thinking off (the runtime renders Gemma's thinking-off header <|turn>model\\n<|channel>thought\\n<channel|>; the stock control gets the chat template's enable_thinking false from the client, as stage 0's agent smoke). No client retry anywhere: mini's MSWEA_MODEL_RETRY_STOP_AFTER_ATTEMPT=1 and litellm max_retries / num_retries 0; timeout 3600 s (above the 2,100-s (f) admission wait at K = 16 plus a 4096-token reply). The same prompt, runner and settings as swe32.",
+      "max_retries": 0,
+      "max_running": 16,
+      "max_tokens": 4096,
+      "mini_retry_attempts": 1,
+      "prompt": {
+        "about": "THE ONE PLACE for the agents' prompt: the runtime repository's PoC prompt examples/swebench/upstream/swebench_prompt_override.yaml (as swe16, swe10 and swe32). To switch: put the file in tbench/upstream/, set file / sha256 / source here (source 'runtime:<path>' makes build.py compare it with the sealed commit's file; 'external:<who, date>' for another), rebuild, re-deploy the tbench half (its manifest changes).",
+        "file": "swebench_prompt_override.yaml",
+        "sha256": "1b6a48666ad528775bd11225fa4d5c002721c25c0cdbc05b99cc15b2de31336a",
+        "source": "runtime:examples/swebench/upstream/swebench_prompt_override.yaml"
+      },
+      "provisional": [
+        "runner_sha256",
+        "prompt",
+        "timeout_seconds",
+        "max_retries",
+        "mini_retry_attempts"
+      ],
+      "runner_file": "swebench_runner.py",
+      "runner_sha256": "34ca6d9288c72830e61bd00ad8b15790cab4c29515db24b8df30775cfc0880a7",
+      "step_limit": 120,
+      "timeout_seconds": 3600
+    },
+    "budget": {
+      "about": "Seconds reserved per job and per server (sealed fit: build.py, controller.plan_fit; at run time the agent cap is min(plan cap, what the deadline leaves)), from the five verified swe16 jobs (perf-swe32's budget) with a longer start for Gemma: job checks 33-39 s (reserve 60); server start to READY 540 (Qwen's runtime servers 279-303 s with the 51-GiB checkpoint on /work/nvme; Gemma's 62.6-GB checkpoint is read cold from /projects Lustre: stage 0 read it in 59.5 s with 8 readers before a 174-216-s stock start, the runtime adds its startup checks and CUDA-graph capture at 16 sessions); tunnel under 1 s (60; its verification is bounded by tunnel_verify_seconds); pool end to the server's checks done 151-299 s for our runtime (stop 180 + checks 300) and 26 s for stock (stop 180 + stock checks 120); server done to the job's end 337-399 s for our runtime (finish 480) and 72 s for stock (stock_finish_seconds 180); margin 300. The 32-instance evaluations took 565-574 s: eval_wait_seconds 600 from the job start (it overlaps the server start).",
+      "check_seconds": 300,
+      "close_retry_seconds": 60,
+      "finish_seconds": 480,
+      "job_checks_seconds": 60,
+      "lock_poll_seconds": 30,
+      "margin_seconds": 300,
+      "remote_grace_seconds": 300,
+      "sample_interval_seconds": 0.25,
+      "server_start_seconds": 540,
+      "stock_check_seconds": 120,
+      "stock_finish_seconds": 180,
+      "stop_pool_timeout_seconds": 150,
+      "stop_reserve_seconds": 180,
+      "tunnel_seconds": 60,
+      "tunnel_verify_seconds": 60
+    },
+    "confirmed": {
+      "tasks": "tasks/gswe32-tasks.json: the first 32 SWE-bench Verified instances, the same list and order as perf-swe16 / perf-swe32; statements = perf-swe16's tbench-built tasks-pool.json"
+    },
+    "evaluation": {
+      "about": "swebench 5.0.2 on tbench (README 7.5), launched by the job after its evidence is archived, detached, holding the shared tbench locks (never beside agents). max_workers 4 as swe16 / swe32: the five swe16 evaluations of 32 instances took 565-574 s, inside the next job's 600-s eval_wait. The pinned evaluator never removes an image.",
+      "dataset": "SWE-bench/SWE-bench_Verified",
+      "max_workers": 4,
+      "overall_timeout_seconds": 14400,
+      "split": "test",
+      "timeout": 1800
+    },
+    "gpu": {
+      "about": "GPU memory per server (controller.gpu_fit). THE KV sizes: decided_kv_cache_gib (the user's decision of 2026-10-21): validate_plan refuses a runtime server at another size or at a size that does not start (serve.py's pool-0 rule and vLLM's startup check, controller.window_fit); the estimate and its status (LEAVES_MIN_FREE / BELOW_MIN_FREE / ESTIMATED_OOM against min_free_mib) are reported, largest_step (the largest supported step that would leave min_free_mib, the 2026-10-17 rule) is information. Estimate, README 4.14's method (D:/Remote-RA-temp/scratch/perf-gemma-swe32/gswe32_sizing.py): the stock Gemma server's measured peak at its KV (stage 0: 90,099 MiB in servei job 3364469, 90,873 MiB in agenti job 3364911 with real agents, both at 26.41 GiB; the larger is used) moved to the server's KV, plus runtime_extra_mib (phase-1 rows of one 8,192-token forward at layer 59 in fp32, 168 MiB, and readmission staging, 128 MiB), plus calibration, from perf-gemma1 g1b job 3410948 (the same Gemma serving configuration at 32 GiB, 16 sessions at 131,072, graphs, both fast paths: goal_query hit CUDA OOM in the EngineCore during admissions, ~250 MiB, with the EngineCore at 92.22 GiB and the Qwen3-0.6B rewriter process at 2.74 GiB of 95.08 GiB CUDA-allocatable; observation_query and full passed TIGHT, nvidia-smi peaks 97,331 / 97,121 of 97,871 MiB): offset_mib 438 = 3410948's observation_query peak above this estimate at 32 GiB (96,893), added to every runtime server; rewriter_process_mib 2,806 = the measured rewriter process (2.74 GiB; it replaces the earlier 2,048-MiB figure), for goal_query. With --goal-rewriter-batch, plus the batch its cap T allows (controller.rewriter_batch_mib; rewriter_batch_model = the Qwen3-0.6B model of 9ef0d6d serve.py's GOAL_REWRITER_BATCH_TOKENS comment: 152 KiB per padded prompt token, 112 KiB per generated token x 384 new tokens per row, a mask of 3 B x L^2 per row, worst as 2 rows of T/2: 16,384 -> 2,900 MiB, 25,600 -> 4,822, 15,360 -> 2,702; allocator_slack 1.3 = serve.py's, reported as free_slack_mib, not the criterion). A batched server must leave min_free_mib (validate_plan; largest_batch_tokens = the largest multiple of 1,024 that does). At 25 GiB: observation_query / random_fill 90,163 MiB, 7,708 free; goal_query with T = 15,360 (2026-10-22 follow-up: the profile's 25,600 left 805 MiB at the uncalibrated estimate) 90,163 + 2,806 + 2,702 = 95,671 MiB, 2,200 free (1,390 with the 1.3x slack; 16,384 would leave 2,002); unbatched goal_query 92,969 MiB (4,902 free). full at 32 GiB: 97,331 MiB, 540 free (BELOW_MIN_FREE, pinned by the runtime; 3410948 measured 97,121). Not measured on this harness: real SWE-bench agents at 16 sessions on Gemma's runtime. --decode-fastpath3 and --deferred-completion-io are host-side (no GPU memory modelled). vllm_rewriter_child_mib (the release smoke, 2026-11-03; recalibrated at the 2026-11-09 re-pin): a server with the vLLM Goal rewriter (--goal-rewriter-engine vllm, 3 GiB of child KV) counts it in place of calibration.rewriter_process_mib (the Hugging Face child) and has no batch term. Measured on Gemma in cg r2 (job 3538523, vllm_rewriter_child_calibration; Remote-RA/verification/cmg1-job3538523-20261108T195313 gpu-samples): the vLLM-child server gvll peaked at 92,500 MiB against 89,874 MiB for the same server with the Hugging Face child (govl), both goal_query at 25 GiB / 65,536 / 8,192-token forwards with --goal-overlap: +2,626 MiB, so the child term is 2,806 + 2,626 = 5,432 MiB (was 5,632, the 11-03 estimate from Qwen jobs 3488202 / 3500565). goalvllm4ks: 90,163 + 5,432 = 95,595 MiB, 2,276 free (LEAVES_MIN_FREE, 228 MiB above min_free_mib); from the measured Gemma 4,096-token server instead (job 3462014 obs4k peak 87,059 MiB) 92,491 MiB, 5,380 free; cg r2's gvll itself (at 65,536 and 8,192-token forwards) 92,500 MiB, 5,371 free.",
+      "calibration": {
+        "job": 3410948,
+        "offset_mib": 438,
+        "rewriter_process_mib": 2806
+      },
+      "decided_kv_cache_gib": {
+        "full": 32,
+        "goal_query": 25,
+        "observation_query": 25,
+        "random_fill": 25
+      },
+      "min_free_mib": 2048,
+      "pinned_by_runtime": [
+        "full"
+      ],
+      "rewriter_batch_model": {
+        "allocator_slack": 1.3,
+        "generated_kib_per_token": 112,
+        "mask_bytes_per_token_squared": 3,
+        "new_tokens_per_row": 384,
+        "prompt_kib_per_token": 152,
+        "worst_rows": 2
+      },
+      "runtime_extra_mib": 296,
+      "stock_kv_gib": 26.41,
+      "stock_peak_mib": 90873,
+      "total_mib": 97871,
+      "vllm_rewriter_child_calibration": {
+        "hf_child_mib": 2806,
+        "hf_peak_mib": 89874,
+        "hf_server": "govl",
+        "increment_mib": 2626,
+        "job": 3538523,
+        "run": "cg r2 (perf-compose-g1, CMG1_PASS_VERIFIED 2026-11-08)",
+        "setting": "Gemma goal_query, KV 25 GiB, max_model_len 65536, 8192-token forwards, --goal-overlap, child KV 3 GiB",
+        "vllm_peak_mib": 92500,
+        "vllm_server": "gvll"
+      },
+      "vllm_rewriter_child_mib": 5432
+    },
+    "memory": {
+      "about": "Host memory of every job: sbatch --mem=113560M = ghx4's DefMemPerGPU, one GH200's share (110.90 GiB; billing max(CPU 16 x 13.89, Mem 110.9 x 9.017, GPU 1000) = 1000 = one GPU-hour per hour). controller.memory_fit (build.py, gate_checks.py, qualify) refuses --mem above max_mem_mib, a server whose worst case leaves less than min_spare_gib of --mem, an arena below arena_min_ratio x arena_demand_gib or below arena_bound_gib, and (on_risk refuse) any server without --language-model-only. A Gemma runtime server's worst case = serve.py's pinned host memory (window_capacity.pinned_host_bytes: the connector pool 1 GiB + the 72-GiB arena in whole 204-Page chunks, 72.22 GiB; Gemma has no Gated-DeltaNet carries) = 73.22 GiB + process_overhead_gib 32 (perf-swe32's reserve; the runtime's own Gemma allowance is 30 GiB; Gemma's host memory beside the arena has not been measured) = 105.22 GiB: 5.68 GiB spare. The stock server pins nothing: need 32, spare 78.9. Arena sizing (D:/Remote-RA-temp/scratch/perf-gemma-swe32/gswe32_sizing.py -> gswe32-sizing.json, from gemma-s1's host plan: the five verified swe16 runs with every history re-tokenized by Gemma's tokenizer, 3.7-16.4 % more tokens than Qwen, replayed 16 open at a time): the replayed concurrent peak of the 16 open sessions' Pages 28.0 (full), 37.0 (obs), 36.75 (rfill), 37.75 (goal), 26.5 GiB (stock) -> arena_demand_gib 37.75 (x 1.5 = 56.6); the 16 largest sessions of one run at once 44.75 / 57.75 / 65.25 / 63.5 / 47.5 GiB -> arena_bound_gib 65.25 (README 4.14's figure). HONEST BOUND: the cross-run worst case perf-swe32 used (the 16 largest per-instance sessions over all five runs, each with the 4096-token reply bound; longest history 96,336 Gemma tokens) is 79.19 GiB here and does NOT fit one share with the 5-GiB spare (72 is the largest arena that does); a history beyond the arena fails its request (DRAM_ARENA_EXHAUSTED), visible in the server check.",
+      "arena_bound_gib": 65.25,
+      "arena_demand_gib": 37.75,
+      "arena_min_ratio": 1.5,
+      "max_mem_mib": 113560,
+      "min_spare_gib": 5,
+      "multimodal_warmup": {
+        "about": "vLLM's multi-modal warmup (vllm/renderers/base.py _warmup_mm_processor: a dummy image and video at seq_len = max_model_len) in the API server: the job cgroup jumped 25-110 GiB for under a second with Qwen (perf-swe10-m110). memory_fit: ELIMINATED when every server of a plan starts with --language-model-only (required by the Gemma profile; stage 0's stock Gemma server ran with it and logged the text-only line); otherwise RISK, refused (on_risk refuse).",
+        "need_gib": 152.4,
+        "on_risk": "refuse"
+      },
+      "process_overhead_gib": 32
+    },
+    "model": {
+      "about": "THE model of every server: google/gemma-4-31B-it at the revision perf-gemma0 downloaded and confirmed (the user's receipt, 2026-10-12: shards 49,784,788,364 + 12,761,549,884 B, SHA-256 equal to the Hub LFS values) in /projects/bcjw/ycao11/models/gemma-4-31b-it; installed with install.py --model-profile gemma4-31b-it, which checks the five pinned metadata files (INSTALL_RELEASE.json model_profiles). The login gate re-checks the same five SHA-256 (model_pins, equal to the sealed runtime's GEMMA4_MODEL_PINS, checked by build.py) and the two shard sizes (never re-hashes 58 GiB).",
+      "dir": "/projects/bcjw/ycao11/models/gemma-4-31b-it",
+      "profile": "gemma4-31b-it",
+      "repository": "google/gemma-4-31B-it",
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "shards": {
+        "model-00001-of-00002.safetensors": 49784788364,
+        "model-00002-of-00002.safetensors": 12761549884
+      }
+    },
+    "plan_order": [
+      "full",
+      "goal",
+      "obs",
+      "obs4k",
+      "rfill",
+      "stock",
+      "fulli",
+      "obsi",
+      "rfilli",
+      "stocki",
+      "smoke",
+      "smokehf",
+      "smokea"
+    ],
+    "plans": {
+      "full": {
+        "about": "full (no selection) at --kv-cache-gib 32 (pinned by the runtime) with --release-idle-pages; swe16 job 3357655: elapsed 2,618 s, agents 1,800 s -> E_g 3,120 s, W_g 2,143 s.",
+        "authorization": "AUTHORIZE_GSWE32_FULL_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_70MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3120,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 2280,
+            "agent_min_seconds": 1800,
+            "label": "full",
+            "policy": "full",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:10:00"
+      },
+      "fulli": {
+        "about": "ghx4-interactive variant of plan full (same servers, time and checks; urgent runs only: billed 2x ghx4, one submitted job per user; the batch plan full stays the default). full (no selection) at --kv-cache-gib 32 (pinned by the runtime) with --release-idle-pages; swe16 job 3357655: elapsed 2,618 s, agents 1,800 s -> E_g 3,120 s, W_g 2,143 s.",
+        "authorization": "AUTHORIZE_GSWE32_FULLI_GEMMA4_32TASKS_16SESSIONS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_70MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3120,
+        "partition": "ghx4-interactive",
+        "servers": [
+          {
+            "agent_cap_seconds": 2280,
+            "agent_min_seconds": 1800,
+            "label": "full",
+            "policy": "full",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:10:00"
+      },
+      "goal": {
+        "about": "goal_query with the 0.6B Goal rewriter BATCHED (wave 2, 9ef0d6d: --goal-rewriter-batch 4 with the explicit cap --goal-rewriter-batch-tokens 15360, 2026-10-22: the largest multiple of 1,024 that leaves config.gpu.min_free_mib at the 3410948-calibrated estimate; the profile's default 25,600 at 25 GiB left 805 MiB. On perf-swe32's real SWE-bench rewriter prompts, 569-6,249 tokens, 15,360 keeps 95-99 % of the rewriter busy time batching saves at 25,600: replay, README), --admission-overlap 16, fast paths 1-3 and --deferred-completion-io at --kv-cache-gib 25 (user decision 2026-10-21) with --release-idle-pages; swe16 job 3363871: elapsed 4,960 s, agents 3,925 s (rewriter-bound: median Goal wait of a rewriter turn 81 s) -> E_g 5,580 s, W_g 4,406 s. The limit stays the unbatched estimate (the harness does not model the batch: conservative); 02:01:00 is above ghx4-interactive's 02:00:00, so goal has no interactive variant.",
+        "authorization": "AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 5580,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 5340,
+            "agent_min_seconds": 3700,
+            "goal_rewriter_batch": 4,
+            "goal_rewriter_batch_tokens": 15360,
+            "label": "goal",
+            "policy": "goal_query",
+            "step_limit": 120
+          }
+        ],
+        "time": "02:01:00"
+      },
+      "obs": {
+        "about": "observation_query at --kv-cache-gib 25 (user decision 2026-10-21), fast paths 1-3 and --deferred-completion-io (wave 2), with --release-idle-pages; swe16 job 3357977: elapsed 3,065 s, agents 2,135 s -> E_g 3,600 s, W_g 2,542 s.",
+        "authorization": "AUTHORIZE_GSWE32_OBS_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3600,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 2760,
+            "agent_min_seconds": 2150,
+            "label": "obs",
+            "policy": "observation_query",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:18:00"
+      },
+      "obs4k": {
+        "about": "observation_query with 4,096-token native forwards (gemma-forward4k: serve.py --max-num-batched-tokens 4096, the group's max_num_batched_tokens; README 4.14 \"4,096-token forwards\"; merged in integrate-1026, not yet GPU-validated): otherwise plan obs exactly (--kv-cache-gib 25, 16 sessions over the 32 tasks, --active-token-budget 8192, fast paths 1-3, --deferred-completion-io, --release-idle-pages). The window layout pins forward_tokens 4096 and request_pages 2,141 (pool 1 6,481 block ids, 15.82 GiB; pool 0 7,518 global Pages, against obs's 7,761 / 4,958); a phase 1 longer than 4,096 tokens runs in forwards of 3,056 tokens. The end-to-end dry run of the 4,096 layout: SWE-bench obs at 25 GiB is its most memory-tight benchmark setting. Time, caps and the expected seconds are obs's (swe16 job 3357977: E_g 3,600 s, W_g 2,542 s; the harness does not model the smaller forward: its larger pool 0 means fewer releases and capacity waits, its chunked phase 1 a few more forwards).",
+        "authorization": "AUTHORIZE_GSWE32_OBS4K_GEMMA4_32TASKS_16SESSIONS_FORWARD4096_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3600,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 2760,
+            "agent_min_seconds": 2150,
+            "label": "obs4k",
+            "max_num_batched_tokens": 4096,
+            "policy": "observation_query",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:18:00"
+      },
+      "obsi": {
+        "about": "ghx4-interactive variant of plan obs (same servers, time and checks; urgent runs only: billed 2x ghx4, one submitted job per user; the batch plan obs stays the default). observation_query at --kv-cache-gib 25 (user decision 2026-10-21), fast paths 1-3 and --deferred-completion-io (wave 2), with --release-idle-pages; swe16 job 3357977: elapsed 3,065 s, agents 2,135 s -> E_g 3,600 s, W_g 2,542 s.",
+        "authorization": "AUTHORIZE_GSWE32_OBSI_GEMMA4_32TASKS_16SESSIONS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3600,
+        "partition": "ghx4-interactive",
+        "servers": [
+          {
+            "agent_cap_seconds": 2760,
+            "agent_min_seconds": 2150,
+            "label": "obs",
+            "policy": "observation_query",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:18:00"
+      },
+      "rfill": {
+        "about": "random_fill (optional) at --kv-cache-gib 25 (user decision 2026-10-21), the same flags as obs (fast paths 1-3, --deferred-completion-io), with --release-idle-pages; swe16 job 3360287: elapsed 3,118 s, agents 2,255 s -> E_g 3,720 s, W_g 2,684 s.",
+        "authorization": "AUTHORIZE_GSWE32_RFILL_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_81MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3720,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 2940,
+            "agent_min_seconds": 2250,
+            "label": "rfill",
+            "policy": "random_fill",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:21:00"
+      },
+      "rfilli": {
+        "about": "ghx4-interactive variant of plan rfill (same servers, time and checks; urgent runs only: billed 2x ghx4, one submitted job per user; the batch plan rfill stays the default). random_fill (optional) at --kv-cache-gib 25 (user decision 2026-10-21), the same flags as obs (fast paths 1-3, --deferred-completion-io), with --release-idle-pages; swe16 job 3360287: elapsed 3,118 s, agents 2,255 s -> E_g 3,720 s, W_g 2,684 s.",
+        "authorization": "AUTHORIZE_GSWE32_RFILLI_GEMMA4_32TASKS_16SESSIONS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_81MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 3720,
+        "partition": "ghx4-interactive",
+        "servers": [
+          {
+            "agent_cap_seconds": 2940,
+            "agent_min_seconds": 2250,
+            "label": "rfill",
+            "policy": "random_fill",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:21:00"
+      },
+      "smoke": {
+        "about": "Release smoke matrix J2 (SWE-Gemma; D:/Remote-RA-temp/scratch/release-matrix/PLAN.md 2.2, decisions D1-D4 of 2026-11-03; workload of the user, 11-03: the first 32 tasks at 16 sessions so the session pool closes and refills): the three policies' servers back to back in one ghx4 batch job, observation_query (obs4ks) -> random_fill (rfill4ks) -> goal_query, each on the 32 registered tasks (K = 16, the documented Gemma SWE concurrency, SWEBENCH_BENCHMARK.md A.14), step limit 10, --max-num-batched-tokens 4096 (the docs' Gemma servers), the shared config.server flags (131,072 tokens, 72-GiB arena, --release-idle-pages, the three fast paths, --deferred-completion-io, --language-model-only, --connector-pool-gib 1, CUDA graphs full, 4,096-token replies, thinking off), KV 25 GiB, no --async-scheduling (Gemma refuses it, D2). Role release-smoke (D4): limit / expected at most 2.25. Time: caps about 1.3 x each pool's estimate (step10_times.py replay of the first 32 tasks at 16 slots, 10 steps: obs4k job 3462014 1,138 s, obs job 3429830 1,125 s, goal HF batch 4 job 3429808 1,186 s; rfill x 1.056 as swe16's rfill / obs agent walls; the vLLM rewriter goal x 1.14 as Qwen's goalvllm / obs262 to step 20); limit = the fit rule's worst case (840 s of job reserves + 3 x (600 start + 480 stop and checks) + the three caps) + 300 s for the vLLM child's start before READY (perf-swe32 vllm25's allowance) = 9,180 s (02:33:00); E ~5,200 s = 41 job start + (257 READY + 1,140 pool + 150 stop / checks) + (200 + 1,200 + 150) + (290 READY with the child + 1,300 + 150) + 300 finish (x1.77). goal_query = goalvllm4ks: decision D1, the vLLM Goal rewriter (--goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer --goal-rewriter-vllm-kv-gib 3 --goal-rewriter-batch-invariant) and --goal-overlap with the policy's --admission-overlap 16; no --goal-rewriter-batch. Conditional on cg 3508345; fallback plan smokehf.",
+        "authorization": "AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY",
+        "condition": "goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 5200,
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          {
+            "agent_cap_seconds": 1500,
+            "agent_min_seconds": 950,
+            "label": "obs4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "observation_query",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1600,
+            "agent_min_seconds": 1000,
+            "label": "rfill4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "random_fill",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1700,
+            "agent_min_seconds": 1100,
+            "goal_overlap": true,
+            "goal_rewriter_batch_invariant": true,
+            "goal_rewriter_engine": "vllm",
+            "goal_rewriter_guided_backend": "lm-format-enforcer",
+            "goal_rewriter_vllm_kv_gib": 3,
+            "label": "goalvllm4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "goal_query",
+            "step_limit": 10
+          }
+        ],
+        "time": "02:33:00"
+      },
+      "smokea": {
+        "about": "Release smoke matrix J2 (SWE-Gemma), the async-on variant (re-pin to main ba4d1ba, 2026-11-09; D:/Remote-RA-temp/scratch/release-matrix/repin-1109/PLAN-REPIN.md 4.3, decision D-C): plan smoke's three servers (obs4ks -> rfill4ks -> goalvllm4ks: the first 32 tasks at K = 16, step limit 10, 4,096-token forwards, the vLLM Goal rewriter with --goal-overlap on goal_query, the same caps / minimums 1,500 / 950, 1,600 / 1,000, 1,700 / 1,100 s) with the plan switch async_scheduling true: every runtime server runs serve.py --async-scheduling (async-gemma: the Gemma 4 profile takes it as for Qwen, with --decode-fastpath2; CPU-tested only), so vLLM runs --async-scheduling, startup.json / the effective config / the worker receipt pin async_scheduling true, and the check async-scheduling reads the main engine's scheduling lines (the vLLM child's are information). Thinking off. Time as smoke (the fit rule's 8,880 s + 300 s for the vLLM child's start = 9,180 s, 02:33:00; E ~5,200 s, x1.77; async is not modelled). Needs the async fixes (a0798a8, 4ed1013; decision D-G). Submit only after g1g r3 3560784 is verified; if it does not pass, submit plan smoke (async off) instead.",
+        "async_scheduling": true,
+        "authorization": "AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY",
+        "condition": "the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 5200,
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          {
+            "agent_cap_seconds": 1500,
+            "agent_min_seconds": 950,
+            "label": "obs4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "observation_query",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1600,
+            "agent_min_seconds": 1000,
+            "label": "rfill4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "random_fill",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1700,
+            "agent_min_seconds": 1100,
+            "goal_overlap": true,
+            "goal_rewriter_batch_invariant": true,
+            "goal_rewriter_engine": "vllm",
+            "goal_rewriter_guided_backend": "lm-format-enforcer",
+            "goal_rewriter_vllm_kv_gib": 3,
+            "label": "goalvllm4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "goal_query",
+            "step_limit": 10
+          }
+        ],
+        "time": "02:33:00"
+      },
+      "smokehf": {
+        "about": "Release smoke matrix J2 (SWE-Gemma; D:/Remote-RA-temp/scratch/release-matrix/PLAN.md 2.2, decisions D1-D4 of 2026-11-03; workload of the user, 11-03: the first 32 tasks at 16 sessions so the session pool closes and refills): the three policies' servers back to back in one ghx4 batch job, observation_query (obs4ks) -> random_fill (rfill4ks) -> goal_query, each on the 32 registered tasks (K = 16, the documented Gemma SWE concurrency, SWEBENCH_BENCHMARK.md A.14), step limit 10, --max-num-batched-tokens 4096 (the docs' Gemma servers), the shared config.server flags (131,072 tokens, 72-GiB arena, --release-idle-pages, the three fast paths, --deferred-completion-io, --language-model-only, --connector-pool-gib 1, CUDA graphs full, 4,096-token replies, thinking off), KV 25 GiB, no --async-scheduling (Gemma refuses it, D2). Role release-smoke (D4): limit / expected at most 2.25. Time: caps about 1.3 x each pool's estimate (step10_times.py replay of the first 32 tasks at 16 slots, 10 steps: obs4k job 3462014 1,138 s, obs job 3429830 1,125 s, goal HF batch 4 job 3429808 1,186 s; rfill x 1.056 as swe16's rfill / obs agent walls; the vLLM rewriter goal x 1.14 as Qwen's goalvllm / obs262 to step 20); limit = the fit rule's worst case (840 s of job reserves + 3 x (600 start + 480 stop and checks) + the three caps) = 8,880 s (02:28:00); E ~5,000 s (the goal server: 200 READY + 1,190 + 150; x1.78). The fallback of plan smoke when cg 3508345 fails on the vLLM child (D1: the docs then keep the Hugging Face rewriter for Gemma): plan smoke with goal_query = goalhf4ks, the docs' current Gemma command (--goal-rewriter-batch 4 --goal-rewriter-batch-tokens 15360, no --goal-overlap); obs4ks and rfill4ks unchanged.",
+        "authorization": "AUTHORIZE_GSWE32_SMOKEHF_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_HF_REWRITER_BATCH4_BATCH_REUSED_V9_ENV_ONE_GH200_148MIN_NO_RETRY",
+        "condition": "the fallback of plan smoke: submit only if cg 3508345 failed on the vLLM Goal rewriter child",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 5000,
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          {
+            "agent_cap_seconds": 1500,
+            "agent_min_seconds": 950,
+            "label": "obs4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "observation_query",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1600,
+            "agent_min_seconds": 1000,
+            "label": "rfill4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "random_fill",
+            "step_limit": 10
+          },
+          {
+            "agent_cap_seconds": 1700,
+            "agent_min_seconds": 1100,
+            "goal_rewriter_batch": 4,
+            "goal_rewriter_batch_tokens": 15360,
+            "label": "goalhf4ks",
+            "max_num_batched_tokens": 4096,
+            "policy": "goal_query",
+            "step_limit": 10
+          }
+        ],
+        "time": "02:28:00"
+      },
+      "stock": {
+        "about": "Same-node stock vLLM 0.24.0 control (stage 0's Gemma flags); swe16 job 3364292: elapsed 2,118 s, agents 1,700 s -> E_g 2,760 s, W_g 2,290 s.",
+        "authorization": "AUTHORIZE_GSWE32_STOCK_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_65MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 2760,
+        "partition": "ghx4",
+        "servers": [
+          {
+            "agent_cap_seconds": 2460,
+            "agent_min_seconds": 1900,
+            "label": "stock",
+            "policy": "stock",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:05:00"
+      },
+      "stocki": {
+        "about": "ghx4-interactive variant of plan stock (same servers, time and checks; urgent runs only: billed 2x ghx4, one submitted job per user; the batch plan stock stays the default). Same-node stock vLLM 0.24.0 control (stage 0's Gemma flags); swe16 job 3364292: elapsed 2,118 s, agents 1,700 s -> E_g 2,760 s, W_g 2,290 s.",
+        "authorization": "AUTHORIZE_GSWE32_STOCKI_GEMMA4_32TASKS_16SESSIONS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_65MIN_NO_RETRY",
+        "eval_wait_seconds": 600,
+        "expected_seconds": 2760,
+        "partition": "ghx4-interactive",
+        "servers": [
+          {
+            "agent_cap_seconds": 2460,
+            "agent_min_seconds": 1900,
+            "label": "stock",
+            "policy": "stock",
+            "step_limit": 120
+          }
+        ],
+        "time": "01:05:00"
+      }
+    },
+    "plans_about": "One ghx4 batch job per configuration (1 GPU, --mem=113560M, billing 1000 = one GPU-hour per hour), the same 32 instances, 120 steps, 16 running. expected_seconds = E_g, an estimate (D:/Remote-RA-temp/scratch/perf-gemma-swe32/gswe32_sizing.py -> gswe32-sizing.json): the verified swe16 job's elapsed E with its agent wall W scaled by k = m x f + (1 - m) (m the model-bound share of the agents' wall: 0.7 for full / obs / rfill, 0.45 for goal, whose wall is mostly the 0.6B rewriter's queue, 0.75 for stock; f = 1.27, Gemma's decode step at 16 running against Qwen's: stage 0's stock b16 step 27.0 ms at 2K tokens x 1.3 for the SWE histories' lengths (its b1 step grows 25 % from 2K to 32K tokens) over Qwen stock's 27.6 ms (job 3366128); stock x 1.15 more: 26.41 GiB of KV holds 203,132 tokens while the 16 open histories peak at 26.5-37.6 GiB of global Pages, so stock preempts and re-prefills), plus 120 s more start for the runtime servers. Time limit = max(1.3 x E_g, R + 1.05 x W_g) rounded up to the minute, R = every reserve of the budget (runtime 1,920 s, stock 1,440 s); agent cap = limit - R (>= 1.05 x W_g); agent minimum = 0.85 x W_g rounded down to 50 s (the job refuses cleanly before any agent when less is left after the evaluation wait). Gemma took 14 calls on each of stage 0's two smoke instances where Qwen's swe16 stock took 30 and 27, so the estimate is more likely high than low; a pool cut at its cap is GSWE32_PARTIAL. Interactive variants (2026-10-21): fulli, obsi, rfilli, stocki are the ghx4-interactive copies of the plans that fit its 02:00:00 maximum (goal, 02:01:00, has none); urgent runs only (billed 2x, one submitted job per user). tbench chain (2026-10-21, perf-swe32's rule): tbench serves one job at a time, so every tbench job of the user (gswe32-, swe32-, swe10-, swe16-, tb16-, gem0-) runs in one afterany chain: a batch plan names the last queued job of that chain with -AfterJob (the queue gate refuses a tbench job it would not wait for); an interactive variant takes no -AfterJob and can only head a chain while no other tbench job is queued. Wave 2 (integrate-1021 9ef0d6d, 2026-10-21): the user needs goal and obs (end-to-end validation of Goal and of Obs.), rfill is optional; full and stock stay buildable and validated but get no submit commands now. Role release-smoke (2026-11-03, decision D4): plans smoke and smokehf (the release smoke matrix J2) may set `role` release-smoke, whose limit may reach 2.25 x expected (controller.max_limit_over_expected); every other plan has no role and keeps 1.5. A plan may name `condition` (shown by the entry script as a warning; it blocks nothing). Plan-server keys of the smoke: max_num_batched_tokens 4096 (as obs4k), goal_rewriter_engine / goal_rewriter_guided_backend / goal_rewriter_vllm_kv_gib (all three or none) with goal_rewriter_batch_invariant and goal_overlap (true or absent; perf-swe32's keys, controller.ENGINE_SERVER_KEYS); no earlier plan names them; async_scheduling is never a server key. Re-pin to main ba4d1ba (2026-11-09, decision D-C): a plan may name `async_scheduling` (true or false, ONE plan switch for its runtime servers, perf-swe32's rule; not on a plan with the stock control); plan smokea = smoke with async_scheduling true (the Gemma 4 profile takes --async-scheduling since async-gemma; refused NOT_SUBMITTABLE on a runtime without the async fixes a0798a8 / 4ed1013, decision D-G); every other plan names none and runs --no-async-scheduling as before.",
+    "policies": {
+      "about": "THE ONE PLACE for per-policy flags. policy_args go to serve.py as given. kv_cache_gib: --kv-cache-gib of the policy's server (120bc3c's Gemma profile takes 24, 25, 28 or 32). The user's decision of 2026-10-21 (after perf-gemma1 g1b job 3410948 (the same Gemma serving configuration at 32 GiB, 16 sessions at 131,072, graphs, both fast paths): goal_query hit CUDA OOM in the EngineCore during admissions (tried to allocate ~250 MiB; EngineCore 92.22 GiB + the Qwen3-0.6B rewriter process 2.74 GiB of 95.08 GiB CUDA-allocatable, 96 MiB free); observation_query and full passed TIGHT (nvidia-smi peaks 97,331 / 97,121 of 97,871 MiB)): observation_query, random_fill and goal_query at 25 GiB (the group's Gemma baselines' KV cache), full at 32 (serve.GEMMA4_FULL_KV_CACHE_GIB: its release rule at 16 x 131,072 needs at least 30,738 MiB of pool 0; it passed in 3410948). Supported (controller.window_fit, gpu_fit): serve.py's pool-0 rule AND vLLM's own startup check of the window layout (the overlay's kv_cache_utils._max_memory_usage_bytes_from_groups: pool 1 of 16 window slots and the forward transient, 18.95 GiB, goal_query with the Goal transient 20.51 GiB, plus one request in pool 0). Under the selective rule (--release-idle-pages and a fixed --active-token-budget) the launcher pins its pool-0 figure as the layout's request_pages (316a1b4 / gemma-mab and later), which caps vLLM's one-request figure: at 25 GiB observation_query / random_fill 2,627 Pages (vLLM needs 22.15 GiB; launcher margin 2,330 of 4,957 usable), goal_query 2,614 (23.70 GiB; margin 1,063 of 3,677); full has no selective rule: one request at 131,072 tokens, 28.95 GiB (pinned at 32 GiB, margin 1,608 Pages). The 2026-10-17 rule (the largest step that leaves 2 GiB) is superseded; gpu_fit reports the estimate and its status. admission lists the admission flags: 'admission_overlap=K' ((f), --admission-overlap K, 2 <= K <= the running sessions; the Gemma profile refuses --gdn-device-handoff and --phase1-in-step); an empty list is every flag off. rewriter: start goal_query with the pinned 0.6B Goal rewriter (-RewriterModel overrides the path); batched on the goal plan (plans.goal.servers[0].goal_rewriter_batch 4; wave 2, integrate-1021 9ef0d6d: the Gemma profile's cap T defaults by --kv-cache-gib, 25,600 tokens at 25 GiB, sized from job 3410948 to leave 1 GiB of the GPU; not passed, pinned and checked as goal_rewriter_batch_tokens). The Goal construction itself (rewriter, prompts, fallbacks, Gemma's <bos> Goal forward) is the runtime's: this harness pins and verifies it, never changes it.",
+      "full": {
+        "admission": [],
+        "kv_cache_gib": 32,
+        "policy_args": [],
+        "rewriter": false
+      },
+      "goal_query": {
+        "admission": [
+          "admission_overlap=16"
+        ],
+        "kv_cache_gib": 25,
+        "policy_args": [
+          "--active-token-budget",
+          "8192"
+        ],
+        "rewriter": true
+      },
+      "observation_query": {
+        "admission": [],
+        "kv_cache_gib": 25,
+        "policy_args": [
+          "--active-token-budget",
+          "8192"
+        ],
+        "rewriter": false
+      },
+      "random_fill": {
+        "admission": [],
+        "kv_cache_gib": 25,
+        "policy_args": [
+          "--active-token-budget",
+          "8192"
+        ],
+        "rewriter": false
+      }
+    },
+    "provisional": {
+      "evaluation": "evaluation.max_workers / timeout (as swe16 / swe32)",
+      "fast_paths": "--decode-fastpath3 and --deferred-completion-io on Gemma: CPU-tested in the runtime (9ef0d6d), not GPU-validated for Gemma yet",
+      "goal_rewriter_batch": "goal runs the batched Goal rewriter (--goal-rewriter-batch 4 with the explicit --goal-rewriter-batch-tokens 15360: the 3410948-calibrated estimate's 2-GiB rule, not GPU-validated); the time limit is the unbatched estimate",
+      "kv_pool": "policies.<p>.kv_cache_gib: 25 GiB for observation_query / random_fill / goal_query and 32 for full (the user's decision of 2026-10-21 after perf-gemma1 g1b job 3410948); the 3410948-calibrated GPU estimate leaves 7.5 GiB for observation_query / random_fill and 2.1 GiB for goal_query (T 15,360) at 25 GiB, 540 MiB for full at 32 until a GPU run measures Gemma's runtime peak with real agents",
+      "prompt_and_runner": "agent.prompt: the repository's PoC prompt (examples/swebench/upstream/swebench_prompt_override.yaml); agent.runner_sha256: the PoC runner (as swe16 / swe32)",
+      "throughput": "throughput: our proposed definition (as swe16 / swe32)",
+      "time": "plans.<p>.expected_seconds and the limits: estimates from swe16's times and stage 0's ITL (no Gemma agent run at 16 sessions yet)",
+      "vanilla": "stock: stage 0's Gemma flags (TRITON_ATTN, vLLM's default memory profile: 26.41 GiB of KV), prefix caching on, client-side generation contract"
+    },
+    "schema": "gswe32-config-v1",
+    "server": {
+      "about": "Shared by every server of our runtime (full, observation_query, random_fill, goal_query): serve.py flags (the KV size is per policy: policies.<p>.kv_cache_gib). K = max_running_sessions = 16 running sessions over the 32 registered tasks (as swe32). release_idle_pages true: serve.py --release-idle-pages (README 4.13/4.14): sixteen Gemma sessions at 131072 tokens need it; under GPU pressure the capacity gate releases idle sessions' global Pages (least recently used) and readmits them before the session's next phase 1, the sliding windows stay on the GPU; with a query policy and a fixed --active-token-budget the launcher sizes pool 0 by the selective rule, for full by the release rule (one session at the context limit and the other sessions' tails). dram_arena_gib 72: one pinned arena of 58,982 1.25-MiB Gemma Pages (16 tokens x 81,920 B) for all sixteen sessions, pinned in whole 255-MiB chunks of 204 Pages as sessions grow (72.22 GiB at most); serve.py refuses an arena below one session at the 131072-token limit (8,193 Pages) or holding every session at the limit (131,088 Pages), and a connector pool + arena above 80.9 GiB (its own 30-GiB process allowance in --mem=113560M); a capture beyond the arena fails that request (DRAM_ARENA_EXHAUSTED, no spill). Sizing (memory below). page_tokens 16 (the Gemma profile's P; P = 32 is its fallback). kv_layout decoupled (the Gemma profile's window layout: pool 0 the global Pages, pool 1 the sliding windows, one window slot per running session plus one forward's transient and, for goal_query, the Goal forward's). connector_pool_gib 1 (the Gemma profile's default; pinned as startup.json connector_pool_bytes). decode_fastpath / decode_fastpath2 true and cuda_graphs full: Gemma's serving configuration (README 4.14, not GPU-validated; the Qwen runs use the same). language_model_only true (required by the Gemma profile). decode_fastpath3 / deferred_completion_io true (wave 2, integrate-1021 9ef0d6d: the Gemma 4 profile takes --decode-fastpath3 and --deferred-completion-io; the user wants the goal and obs runs on the optimized runtime: fast paths 1-3 and the completion files off the engine thread; shared by every runtime server, so full and rfill run them too).",
+      "connector_pool_gib": 1,
+      "cuda_graphs": "full",
+      "decode_fastpath": true,
+      "decode_fastpath2": true,
+      "decode_fastpath3": true,
+      "deferred_completion_io": true,
+      "dram_arena_gib": 72,
+      "kv_layout": "decoupled",
+      "language_model_only": true,
+      "max_model_len": 131072,
+      "max_running_sessions": 16,
+      "max_tokens": 4096,
+      "page_tokens": 16,
+      "protocol": "mswea-xml",
+      "release_idle_pages": true
+    },
+    "stock": {
+      "about": "Same-node stock vLLM 0.24.0 control with stage 0's Gemma flags (perf-gemma0 t1-triton / a1-agent, jobs 3364469 / 3364911, GEM0_PASS_VERIFIED): plain vllm.entrypoints.openai.api_server from the reused clean env, no runtime source; --attention-backend TRITON_ATTN (the runtime's Gemma backend; FA4, vLLM's default for this model, is not used), BF16, vLLM's default memory profile (kv_cache_gib null: no --kv-cache-memory-bytes, no --gpu-memory-utilization; stage 0: 26.41 GiB of KV, 203,132 tokens, max concurrency 1.55 at 131072), CUDA graphs and async scheduling as vLLM's defaults (mode default; async_scheduling true: no flag, the log must say enabled), 16 seqs, 131072 / 8192 batched tokens, prefix caching (sha256) with VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0, prompt-token details, the gemma4 reasoning and tool-call parsers with auto tool choice, VLLM_USE_FLASHINFER_SAMPLER=0, vLLM's --language-model-only; served under the same model name as our servers so the agents' config stays the same apart from the generation contract, which stock takes from the client (stock_model_kwargs, = stage 0's agent smoke override): greedy, thinking off (chat_template_kwargs enable_thinking false), stop at the action marker with the marker kept in the output, 4096 tokens. The job's argv gate reads every value back from vLLM's parser.",
+      "async_scheduling": true,
+      "attention_backend": "TRITON_ATTN",
+      "distributed_executor_backend": "uni",
+      "dtype": "bfloat16",
+      "enable_auto_tool_choice": true,
+      "enable_prefix_caching": true,
+      "enable_prompt_tokens_details": true,
+      "env": {
+        "VLLM_PREFIX_CACHE_RETENTION_INTERVAL": "0"
+      },
+      "extra_serve_args": [],
+      "kv_cache_gib": null,
+      "language_model_only": true,
+      "max_model_len": 131072,
+      "max_num_batched_tokens": 8192,
+      "max_num_seqs": 16,
+      "mode": "default",
+      "prefix_caching_hash_algo": "sha256",
+      "provisional": [
+        "mode",
+        "async_scheduling",
+        "max_num_batched_tokens",
+        "enable_prefix_caching",
+        "kv_cache_gib",
+        "stock_model_kwargs"
+      ],
+      "reasoning_parser": "gemma4",
+      "seed": 42,
+      "served_model_name": "selective-prefix",
+      "stock_model_kwargs": {
+        "extra_body": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          },
+          "include_stop_str_in_output": true
+        },
+        "max_tokens": 4096,
+        "stop": [
+          "</mswea_bash_command>"
+        ],
+        "temperature": 0.0
+      },
+      "tool_call_parser": "gemma4"
+    },
+    "tbench_host": {
+      "about": "Light host check before agents start (tbench/bin/host_check.py; the login-node preflight, and run_pool.sh itself after taking the shared tbench locks): refuses only for leftover containers of OUR previous runs (names our pools' logs recorded, or our evaluator's sweb.eval.*.gswe32-* containers when no evaluation of ours holds the lock) and for MemAvailable / free disk below these limits. Other containers on the host (Terminal-Bench / Harbor work, the swe16, swe10 and swe32 halves) and the load are reported, never refused; nothing that is not ours is ever stopped, pruned or removed. Written into tbench/gswe32.env by build.py. tbench: 16 vCPU, 30 GB RAM.",
+      "min_free_disk_gb": 50,
+      "min_mem_available_gb": 12
+    },
+    "tbench_verify": {
+      "about": "2026-11-12 (perf-swe32's evidence push of 2026-11-11, ported): after the archives and the evaluation launch the job pushes fetch/gswe32-core.tar.xz and gswe32-bulk.tar.xz to <root>/evidence/<run_id>/ over its tbench SSH link (one ssh per archive, stdin to a .part file, SHA-256 checked against archives.json on arrival before the rename, never over a different file) and calls <root>/code/by-payload/<payload members id> -> code/<tag>/tbench_verify/remote_verify.py trigger (the code tree postrun/verify_on_tbench.py --deploy installed; checked against its SHA256SUMS): it records the job's archive SHA-256 values and end record (status, the Slurm state it implies: from the job, confirmed by the END mail) and starts a detached niced waiter that verifies once the evidence is complete and the run's evaluation ended (at most wait_seconds), writing out/<run_id>/RESULT.json; postrun/verify_on_tbench.py --pull (with the END mail's Slurm state and exit code) brings the small result home. Best effort: at most total_seconds (and never closer than slurm_margin_seconds to the plan's Slurm limit), every ssh with a timeout; any failure is recorded in fetch/tbench-push.json and the job's last line, never in its status; fetch_run.ps1 still works.",
+      "min_push_seconds": 10,
+      "poll_seconds": 60,
+      "push": true,
+      "python": "/usr/bin/python3",
+      "root": "/home/ubuntu/gswe32-verify",
+      "slurm_margin_seconds": 120,
+      "total_seconds": 120,
+      "trigger_seconds": 30,
+      "wait_seconds": 28800
+    },
+    "throughput": {
+      "about": "As swe16 / swe32 (PROVISIONAL definition): main-agent completion tokens of all instances / span, span = first runner start to last runner end (close included) on the tbench clock (timeline.jsonl), server READY and evaluation excluded; numerator cross-checked against the server's generated tokens and vLLM's generation_tokens delta.",
+      "numerator": "client_usage_completion_tokens",
+      "span": "first_runner_start_to_last_runner_end"
+    }
+  },
+  "config_sha256": "b8ab63573b51f26b879d16bd29bce1172849c5508bffb042a8ef62fe73156342",
+  "job_system_path": "/usr/local/bin:/usr/bin:/bin",
+  "layouts": {
+    "gswe32": {
+      "cuda_graphs": "full",
+      "decoupled": true,
+      "mamba_tokens": null,
+      "page_tokens": 16,
+      "serve_args": [
+        "--page-tokens",
+        "16",
+        "--cuda-graphs",
+        "full"
+      ],
+      "window": true,
+      "window_tokens": 1024
+    }
+  },
+  "model": "/projects/bcjw/ycao11/models/gemma-4-31b-it",
+  "package_sha256": "f151fd29a2d58cb6aa3de27cfdd876ab5e00cd023a284015c84b440d5ea90e4e",
+  "release_receipt": {
+    "commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+    "date": "2026-11-12",
+    "kind": "check_git_release receipt",
+    "log_sha256": "7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c",
+    "result_line_sha256": "308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f",
+    "seconds": 504.406,
+    "skipped": 139,
+    "status": "GIT_ARCHIVE_TESTS_PASS",
+    "tests_run": 2059
+  },
+  "repository": "https://github.com/CFXM/vllm-0.24.0-selective-prefix-policies",
+  "required_dependencies": {
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.0",
+    "vllm": "0.24.0"
+  },
+  "rewriter_default": "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca",
+  "runtime_features": {
+    "admission_flags": {
+      "config_key": "admission",
+      "flags": [
+        "gdn_device_handoff",
+        "phase1_in_step"
+      ],
+      "overlap": {
+        "admission_seconds": 300,
+        "evidence": "lease_wait_ms",
+        "lease_seconds": 360,
+        "max_permits": 16,
+        "record_key": "admission_overlap",
+        "rewrite_seconds": 120,
+        "serve_arg": "--admission-overlap"
+      },
+      "serve_args": [
+        "--gdn-device-handoff",
+        "--phase1-in-step"
+      ]
+    },
+    "async_fix": {
+      "native_probe": "source-overlay/remote_ra_live_v2/native_probe.py with 'def _runner_pass(' (async-fix2 4ed1013)",
+      "resolve": "source-overlay/remote_ra_live_v2/async_sched.py with 'if i.request in scheduled and i.request in qwen.requests' (async-maxtok-1112 13ee618)",
+      "scheduler": "source-overlay/vllm/v1/core/sched/scheduler.py without 'decoupled KV layout does not support deferred block frees' (async-fix a0798a8)"
+    },
+    "async_scheduling": {
+      "config_key": "async_scheduling",
+      "echo": [
+        "startup",
+        "effective",
+        "worker"
+      ],
+      "module": "source-overlay/remote_ra_live_v2/async_sched.py",
+      "requires": "--decode-fastpath2",
+      "serve_arg": "--async-scheduling",
+      "sync_vllm_arg": "--no-async-scheduling",
+      "vllm_arg": "--async-scheduling"
+    },
+    "connector_pool": {
+      "config_key": "connector_pool_bytes",
+      "max_gib": 31,
+      "min_gib": 1,
+      "serve_arg": "--connector-pool-gib"
+    },
+    "context_limits": {
+      "dram_arena_flag": true,
+      "max_model_len_choices": [
+        65536,
+        131072,
+        262144
+      ],
+      "max_tokens_choices": [
+        1536,
+        4096
+      ],
+      "pinned_host_gib": 128,
+      "requests_per_session": 256
+    },
+    "cuda_graphs": {
+      "compilation": {
+        "full": {
+          "cudagraph_mode": "FULL_AND_PIECEWISE",
+          "mode": "VLLM_COMPILE"
+        },
+        "full-decode": {
+          "cudagraph_mode": "FULL_DECODE_ONLY",
+          "mode": "NONE"
+        },
+        "piecewise": {
+          "cudagraph_mode": "PIECEWISE",
+          "mode": "VLLM_COMPILE"
+        }
+      },
+      "modes": [
+        "off",
+        "piecewise",
+        "full",
+        "full-decode"
+      ]
+    },
+    "decode_fastpath": {
+      "config_key": "decode_fastpath",
+      "serve_arg": "--decode-fastpath"
+    },
+    "decode_fastpath2": {
+      "config_key": "decode_fastpath2",
+      "module": "source-overlay/remote_ra_live_v2/decode_fastpath2.py",
+      "requires": "--decode-fastpath",
+      "serve_arg": "--decode-fastpath2"
+    },
+    "decode_fastpath3": {
+      "config_key": "decode_fastpath3",
+      "module": "source-overlay/remote_ra_live_v2/decode_fastpath3.py",
+      "requires": "--decode-fastpath2",
+      "serve_arg": "--decode-fastpath3"
+    },
+    "decoupled_layout": true,
+    "deferred_completion_io": {
+      "config_key": "deferred_completion_io",
+      "echo": [
+        "startup",
+        "ready"
+      ],
+      "module": "source-overlay/remote_ra_live_v2/deferred_completion.py",
+      "serve_arg": "--deferred-completion-io"
+    },
+    "digest_once": true,
+    "fast_selection": true,
+    "gemma4": {
+      "attention_backend": "TRITON_ATTN",
+      "connector_gib": 1,
+      "decode_fastpath3": true,
+      "deferred_completion_io": true,
+      "forward_tokens": 8192,
+      "forward_tokens_choices": [
+        4096,
+        8192
+      ],
+      "full_kv_cache_gib": 32,
+      "global_token_bytes": 81920,
+      "goal_rewriter_batch": true,
+      "goal_rewriter_batch_tokens": {
+        "24": 28672,
+        "25": 25600,
+        "28": 13312,
+        "32": null
+      },
+      "goal_tokens": 2048,
+      "group_layers": 10,
+      "hidden_size": 5376,
+      "host_memory_mib": 113560,
+      "kv_cache_gib_choices": [
+        24,
+        25,
+        28,
+        32
+      ],
+      "max_model_lens": [
+        65536,
+        131072,
+        262144
+      ],
+      "max_num_batched_tokens": {
+        "choices": [
+          4096,
+          8192
+        ],
+        "chunk_rule": "N - W - P",
+        "default": 8192,
+        "serve_arg": "--max-num-batched-tokens"
+      },
+      "model_pins": {
+        "chat_template.jinja": "ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4",
+        "config.json": "e967dd38bc5cfd38bd09a995a7bf4a754075df2b46aba68f7fbb5a791e6d8dd1",
+        "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+      },
+      "page_tokens_choices": [
+        16,
+        32
+      ],
+      "phase1_chunk_tokens": 4096,
+      "process_overhead_gib": 30,
+      "profile": "gemma4-31b-it",
+      "protocol": "mswea_xml_gemma4_v1",
+      "repository": "google/gemma-4-31B-it",
+      "request_pages": true,
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "sliding_groups": 5,
+      "sliding_layer_token_bytes": 16384,
+      "stop_ids": [
+        0,
+        1,
+        50,
+        106
+      ],
+      "watermark": 0.01,
+      "window_tokens": 1024
+    },
+    "gemma4_goal": {
+      "async_scheduling": true,
+      "goal_overlap": true,
+      "goal_rewriter_engine": true
+    },
+    "goal_async": true,
+    "goal_overlap": {
+      "flag": "goal_overlap",
+      "frame": "goal_forward",
+      "native": [
+        "goal_overlap_ms",
+        "goal_forward_ms"
+      ],
+      "record_key": "admission",
+      "serve_arg": "--goal-overlap"
+    },
+    "goal_rewriter_batch": {
+      "config_key": "goal_rewriter_batch",
+      "max": 16,
+      "min": 2,
+      "serve_arg": "--goal-rewriter-batch",
+      "tokens_arg": "--goal-rewriter-batch-tokens",
+      "tokens_default": 16384,
+      "tokens_key": "goal_rewriter_batch_tokens",
+      "tokens_limit": 4194304
+    },
+    "goal_rewriter_engine": {
+      "backend_arg": "--goal-rewriter-guided-backend",
+      "backends": [
+        "lm-format-enforcer",
+        "xgrammar"
+      ],
+      "batch_invariant_arg": "--goal-rewriter-batch-invariant",
+      "config_key": "goal_rewriter_engine",
+      "default_backend": "lm-format-enforcer",
+      "default_kv_gib": 3,
+      "engine": "vllm",
+      "gpu_memory_utilization": 0.05,
+      "kv_arg": "--goal-rewriter-vllm-kv-gib",
+      "kv_gib": [
+        2,
+        16
+      ],
+      "serve_arg": "--goal-rewriter-engine",
+      "startup_check": "goal rewriter vllm child: startup check passed: the guided reply in ",
+      "startup_key": "startup_ms",
+      "without_unique_items": [
+        "xgrammar"
+      ]
+    },
+    "goal_rewriter_timing": {
+      "batch": [
+        "batch_id",
+        "batch_size"
+      ],
+      "exchange": [
+        "wait_ms",
+        "start_ms",
+        "call_ms",
+        "input_tokens",
+        "output_tokens",
+        "generation_latency_ms"
+      ],
+      "native": [
+        "goal_rewrite_wait_ms",
+        "goal_rewrite_call_ms"
+      ]
+    },
+    "goal_text": {
+      "files": [
+        "goals.jsonl"
+      ],
+      "modules": [
+        "source-overlay/remote_ra_live_v2/goal_text.py"
+      ]
+    },
+    "host_trim": true,
+    "identity_cache": true,
+    "kv_cache_gib_choices": [
+      8,
+      16,
+      24,
+      25,
+      28,
+      32
+    ],
+    "kv_cache_gib_flag": true,
+    "kv_refusal": true,
+    "language_model_only": {
+      "config_key": "language_model_only",
+      "record": {
+        "mm_limits": {
+          "image": 0,
+          "video": 0
+        },
+        "vision_tower_tensors": 0
+      },
+      "serve_arg": "--language-model-only",
+      "stock_arg": "--language-model-only",
+      "vllm_arg": "--language-model-only"
+    },
+    "max_sessions": 16,
+    "observation_query_rewriter": false,
+    "page_tokens_choices": [
+      16,
+      32,
+      64,
+      784
+    ],
+    "plain_copy": true,
+    "policies": [
+      "full",
+      "random50",
+      "goal_query",
+      "observation_query",
+      "random_fill",
+      "recent_fill",
+      "recent_tools",
+      "akv_rule"
+    ],
+    "policy_registry": [
+      {
+        "budget": "none",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "full",
+        "name": "full",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": false
+      },
+      {
+        "budget": "half",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "random",
+        "name": "random50",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": false
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": true,
+        "goal_text": true,
+        "kind": "query",
+        "name": "goal_query",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": "goal",
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "query",
+        "name": "observation_query",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": "observation",
+        "reply_roles": false,
+        "rewriter_unused": "observation_query ranks Pages by the observation vector only",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "random_fill",
+        "evidence_key": "fill",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "random",
+        "name": "random_fill",
+        "order_id": "splitmix64_fisher_yates_v1",
+        "pin": {
+          "rng": "splitmix64_fisher_yates_v1",
+          "seed": 42
+        },
+        "pin_options": [
+          "fill_seed"
+        ],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": "random_fill fills the remaining Pages at random and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "recent_fill",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "window",
+        "name": "recent_fill",
+        "order_id": "newest_first_v1",
+        "pin": {
+          "order": "newest_first_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": "recent_fill fills the remaining Pages newest first and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "recent_tools",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "window",
+        "name": "recent_tools",
+        "order_id": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1",
+        "pin": {
+          "order": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": true,
+        "rewriter_unused": "recent_tools fills the remaining Pages with tool calls, then tool responses, then reasoning, each newest first, and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "rule",
+        "builtin": true,
+        "contract_key": "akv_rule",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "rule",
+        "name": "akv_rule",
+        "order_id": "replies_and_latest_tool_responses_v1",
+        "pin": {
+          "latest_tool_responses": 12,
+          "rule": "replies_and_latest_tool_responses_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": true,
+        "rewriter_unused": "akv_rule keeps every reply and the latest 12 tool responses and ranks nothing",
+        "selector_v2": true
+      }
+    ],
+    "random_fill": {
+      "rng": "splitmix64_fisher_yates_v1",
+      "seed": 42
+    },
+    "release_idle_pages": {
+      "config_key": "release_idle_pages",
+      "module": "source-overlay/remote_ra_live_v2/idle_release.py",
+      "serve_arg": "--release-idle-pages"
+    },
+    "request_limit": true,
+    "selection_switch_tokens": 8192,
+    "session_pool": {
+      "close_route": "/v1/sessions/close",
+      "max_tasks": 64
+    },
+    "speed_defaults": {
+      "all_off": "--no-speed-defaults",
+      "connector_off": "--no-connector-pool-gib",
+      "off_args": [
+        "--no-decode-fastpath",
+        "--no-decode-fastpath2",
+        "--no-decode-fastpath3",
+        "--no-deferred-completion-io",
+        "--no-language-model-only"
+      ],
+      "switches": [
+        "decode_fastpath",
+        "decode_fastpath2",
+        "decode_fastpath3",
+        "deferred_completion_io",
+        "language_model_only"
+      ]
+    },
+    "stage2": true
+  },
+  "slurm": {
+    "account": "bcjw-dtai-gh",
+    "cpus_per_task": 16,
+    "job_name_prefix": "gswe32-",
+    "mail_type": "BEGIN,END,FAIL",
+    "mail_user": "cao58@illinois.edu",
+    "mem": "113560M",
+    "partition_limits": {
+      "ghx4": {
+        "billing_factor": 1,
+        "max_time": "48:00:00",
+        "phrase_tag": "BATCH"
+      },
+      "ghx4-interactive": {
+        "billing_factor": 2,
+        "max_submitted_jobs_per_user": 1,
+        "max_time": "02:00:00",
+        "phrase_tag": "INTERACTIVE"
+      }
+    },
+    "tbench_job_prefixes": [
+      "gswe32-",
+      "swe32-",
+      "swe10-",
+      "swe16-",
+      "tb16-",
+      "gem0-"
+    ]
+  },
+  "snapshot_workers": {
+    "job": 16,
+    "login": 8
+  },
+  "source_transport": "SEALED_GIT_BUNDLE_FRESH_CLONE",
+  "tasks": {
+    "confirmed": "CONFIRMED (2026-10-10 14:45): the 32 instance IDs are exactly the first 32 of SWE-bench Verified (test split), identical in order to this list (diffed: identical). Both cached datasets on tbench agree on these 32.",
+    "dataset": "princeton-nlp/SWE-Bench_Verified",
+    "instances": [
+      "astropy__astropy-12907",
+      "astropy__astropy-13033",
+      "astropy__astropy-13236",
+      "astropy__astropy-13398",
+      "astropy__astropy-13453",
+      "astropy__astropy-13579",
+      "astropy__astropy-13977",
+      "astropy__astropy-14096",
+      "astropy__astropy-14182",
+      "astropy__astropy-14309",
+      "astropy__astropy-14365",
+      "astropy__astropy-14369",
+      "astropy__astropy-14508",
+      "astropy__astropy-14539",
+      "astropy__astropy-14598",
+      "astropy__astropy-14995",
+      "astropy__astropy-7166",
+      "astropy__astropy-7336",
+      "astropy__astropy-7606",
+      "astropy__astropy-7671",
+      "astropy__astropy-8707",
+      "astropy__astropy-8872",
+      "django__django-10097",
+      "django__django-10554",
+      "django__django-10880",
+      "django__django-10914",
+      "django__django-10973",
+      "django__django-10999",
+      "django__django-11066",
+      "django__django-11087",
+      "django__django-11095",
+      "django__django-11099"
+    ],
+    "list_sha256": "e006e8ebe2e07d84a81959f9179d9c8a2dbcea3c3203f465258c6876752655e5",
+    "pool": {
+      "bytes": 81312,
+      "file": "tasks-pool.json",
+      "pilot_pins_checked": [
+        "astropy__astropy-12907",
+        "astropy__astropy-13236",
+        "astropy__astropy-14096",
+        "astropy__astropy-14309",
+        "astropy__astropy-14369",
+        "astropy__astropy-14508",
+        "astropy__astropy-14539",
+        "astropy__astropy-14995",
+        "astropy__astropy-7336",
+        "astropy__astropy-7671"
+      ],
+      "sha256": "e483592486260d23f205833c3771e103e6ae300078c2f2dbe710cb43b5c71ade",
+      "statements": {
+        "astropy__astropy-12907": "c01334ec1b21a089c650cf2e7b96ab974469076bf1260d23885799e1f0a7551f",
+        "astropy__astropy-13033": "a295c83e68ff62290947b0796b75659b94621b7f2340d6f0055512d04be3f1d1",
+        "astropy__astropy-13236": "1f01b57c4e17057a2427b8ed897618f91782d22e98804b706826ba936a3d5ec4",
+        "astropy__astropy-13398": "c26c8dc258dc5cb9dd34f30bdbaaed3f19a8ada137e0f19d81d7f57dc5f11bba",
+        "astropy__astropy-13453": "be929904c3062b54da2fa3ad7de338bd7f1f41a5aa48e64bec41f244d6e17c5a",
+        "astropy__astropy-13579": "70a48b6e4c77b5abc12b1e750bbb70110b7215d19c9ea3550f2b7261be84021d",
+        "astropy__astropy-13977": "53b72f8a5aed23f5d11650d7d4ae0e36c820cfade3c8ebcc7b718055a80d1cb2",
+        "astropy__astropy-14096": "938971021e89cd882f6ea33d61202fe7aa0091d7be4748b100ddc7e164db90cd",
+        "astropy__astropy-14182": "2f743a72613ab0e8e063ff7b7f0a233015ad12ba14992625d9f84b315fa885fd",
+        "astropy__astropy-14309": "27b74ed7081579a5f310188d6ed6ac4da1d785c492b00052d605b7ba04d036b9",
+        "astropy__astropy-14365": "615252d5c44819451977588671ce903d3a21c41a8bf011738e2aee39218d56c6",
+        "astropy__astropy-14369": "005d3d61c2ffbfa601f53125a9fb5271a1a87979977b857204d9f3cf5190fba9",
+        "astropy__astropy-14508": "d08eb8c70acd4f003f7f477092385046092d36ff4e4155594b286795e7f9cd9f",
+        "astropy__astropy-14539": "deeb8ddb329b19eb6de7602db7ffbfb94a0887bedebd68ce49594609b6f4cf1a",
+        "astropy__astropy-14598": "5edf1315e9ce360f72c2d3b23f08cdb974a758b64b13a6724236ca5d54beb9a9",
+        "astropy__astropy-14995": "2eb1c507dd3ad67acc74872966e4bb5e14d571e20e67f246fc454ed9461f5745",
+        "astropy__astropy-7166": "70c79d6da0284ce81f9e951dbab5c77d94bf8a27cd156f54169b424d75d11e43",
+        "astropy__astropy-7336": "1c51cc8817f7b2f1feb043bdd2a54fcc4f89150dad82c60dbd43f68d1dcdf90d",
+        "astropy__astropy-7606": "d61965d0866c6a856d68dc4229f873e783399415a60d2a906d7847b777623ddd",
+        "astropy__astropy-7671": "90a901a7b3d510c5fe9317b76fc9f83e883b577de167936d9e76ccbd69677f70",
+        "astropy__astropy-8707": "f7420a19ba5b0c807396a84da376d8303e69ff66d0216c332adf099da589a714",
+        "astropy__astropy-8872": "495ed57c2183a49ff489deab1cf1f0a4fafe7e6fad6d6af79a407426de354746",
+        "django__django-10097": "2288319e7e72693551b8454b5c63f165f23dfb32bc6579ad03602d3cd311bdaa",
+        "django__django-10554": "2f72fa6137f1d53983cff629a05e06c42a2ad477ea4557746c4688cbd6aeb724",
+        "django__django-10880": "d554ba8ef84e2e4dc22c291d413e4cb58070d5d730dae3aca383a4cdb77c20b2",
+        "django__django-10914": "ba101c6d80094fe56bc64d74dcb7efe033a6e0d43dd77e8f00e65806fdbcdb8b",
+        "django__django-10973": "bde1c4529fef5d030d1bd73a02e45bdbf9535a3c351aa9a43dba5c8249800271",
+        "django__django-10999": "efbac10cda6c1ef780205a8d9fc176b5489d1da8f76d9cbd366ef303052fd8d3",
+        "django__django-11066": "2c4cbca71895396f6bac73ad9454105f56828f542278e2e927483f6cac599db8",
+        "django__django-11087": "9bd93972a91db1ad0e44e65720dd0f36f000de6264e770ffdaaeb06996a338f3",
+        "django__django-11095": "0564572e65282f6920d43eaaa77ae7b103eec95b435aa1ba183d7daa32b9e83d",
+        "django__django-11099": "b0526bc6d9268fe373bf624621c8d5f560fc6b0ffae7e64b460d84f6726f3ed5"
+      }
+    },
+    "provisional": false,
+    "provisional_reason": null,
+    "split": "test"
+  },
+  "tbench": {
+    "bin": "/home/ubuntu/gswe32/bin",
+    "connect_timeout_seconds": 20,
+    "egress_timeout_seconds": 60,
+    "eval_python": "/home/ubuntu/selective-prefix-cache-client/evaluator/env-02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/bin/python",
+    "host": "ec2-3-22-234-78.us-east-2.compute.amazonaws.com",
+    "host_key_type": "ssh-ed25519",
+    "identity_file": "/u/ycao11/.ssh/tunnel_key",
+    "identity_fingerprint_documented": "SHA256:5pP9yP/X3bOzQYEK+OPJpPChhyLLJb3WHDOFV1sthBw",
+    "known_hosts_file": "tbench_known_hosts",
+    "known_hosts_sha256": "9891dba541d004147d578a7e2fb87e5246faca091c03945eca2237664de08e0a",
+    "lock_dir": "/home/ubuntu/gswe32/lock",
+    "min_free_gb": 50,
+    "mini_python": "/home/ubuntu/selective-prefix-pilot/mini-env/bin/python",
+    "mswea_config": "/home/ubuntu/gswe32/mswea-config",
+    "port_base": 25000,
+    "port_modulus": 100,
+    "port_stride": 8,
+    "preflight_timeout_seconds": 900,
+    "root": "/home/ubuntu/gswe32",
+    "runs_dir": "/home/ubuntu/gswe32/runs",
+    "server_alive_count_max": 3,
+    "server_alive_interval": 30,
+    "socket_dir": "/home/ubuntu/gswe32/sock",
+    "user": "ubuntu"
+  },
+  "tbench_half": {
+    "files": 34,
+    "manifest_sha256": "57e689320ec22df12e0111e5fef4e230013b493c7a0de128d22c0175b0e3125f",
+    "root": "/home/ubuntu/gswe32"
+  },
+  "upstream": {
+    "prompt": "1b6a48666ad528775bd11225fa4d5c002721c25c0cdbc05b99cc15b2de31336a",
+    "prompt_file": "swebench_prompt_override.yaml",
+    "prompt_source": "runtime:examples/swebench/upstream/swebench_prompt_override.yaml",
+    "runner": "34ca6d9288c72830e61bd00ad8b15790cab4c29515db24b8df30775cfc0880a7",
+    "runner_file": "swebench_runner.py"
+  },
+  "wheel_bytes": 271361241,
+  "wheel_sha256": "700db71c3cf14697d42583521f38b12fac38db1e7a8ad062e8e4d63a5dadebd5",
+  "wheel_url": "https://files.pythonhosted.org/packages/9e/80/51a071305b4eed0f6f512dc1c1c6957cbb14ccce38db1be90ffcff2a2844/vllm-0.24.0-cp38-abi3-manylinux_2_28_aarch64.whl"
+}

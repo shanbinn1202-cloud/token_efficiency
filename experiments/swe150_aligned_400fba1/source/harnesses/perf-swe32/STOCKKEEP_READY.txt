@@ -1,0 +1,96 @@
+SUPERSEDED 2026-11-16 by PHASEB_READY.txt; this state (payload b25924bc, 4ebff97; jobs 3611917 / 3612333) is frozen in ..\perf-swe32-b25924bc\.
+perf-swe32: READY 2026-11-16 (nothing submitted). Payload b25924bcd4f46f7deb448f13f2f83da03ed5f5966d885f6e98468b3796abb8ad, entry 9b9beb31cea53ecbe71af90d7f558bfd59498b90874a7618c494eb601a6d8bd4, commit 4ebff97.
+Validation: validation\20261116T141257 (all pass but the known e2e fullt flake; repin re-run alone PASS).
+Every line below: SelfTest, DryRun, then the real submission (one visible SSH/Duo connection; the user only).
+Queue gate: a ghx4 batch plan needs -AfterJob <the last queued tbench job> (smokeqt 3586720 -> smoket 3586847 ->
+smokea 3586987 -> stockoff32t 3601220 at the time of writing; ledgerti 3611601 (perf-swe32-ledger, interactive)
+is a tbench job too). Replace <J...> by the real job id before running (PowerShell refuses "<").
+A ghx4-interactive plan takes no -AfterJob: it needs no other job of yours on ghx4-interactive (ledgerti 3611601
+must have ended) and every queued tbench job held (scontrol hold) or pending only on held jobs.
+
+== Stock keep-reasoning (pick one or both)
+# stockkeep32t: ghx4 --time 01:09:00, GPU-h 1.15 at the limit / 0.77 expected, job name swe32-stockkeep32t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep32t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep32t -RunLabel r1 -AfterJob 3601220 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_69MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep32t -RunLabel r1 -AfterJob 3601220 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_69MIN_NO_RETRY'
+
+# stockkeepsync32t: ghx4 --time 01:14:00, GPU-h 1.23 at the limit / 0.83 expected, job name swe32-stockkeepsync32t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeepsync32t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeepsync32t -RunLabel r1 -AfterJob <J_stockkeep32t> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEPSYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_SYNC_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeepsync32t -RunLabel r1 -AfterJob <J_stockkeep32t> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEPSYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_SYNC_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+
+== Async pair, batch (back to back)
+# rfillasync32t: ghx4 --time 01:22:00, GPU-h 1.37 at the limit / 0.92 expected, job name swe32-rfillasync32t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLASYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLASYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+# rfillsync32t: ghx4 --time 01:22:00, GPU-h 1.37 at the limit / 0.92 expected, job name swe32-rfillsync32t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32t -RunLabel r1 -AfterJob <J_rfillasync32t> -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLSYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32t -RunLabel r1 -AfterJob <J_rfillasync32t> -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLSYNC32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+== Async pair, ghx4-interactive (async first; one at a time)
+# rfillasync32ti: ghx4-interactive --time 01:22:00, GPU-h 2.73 at the limit / 1.83 expected, job name swe32-rfillasync32ti
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32ti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLASYNC32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillasync32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLASYNC32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+# rfillsync32ti: ghx4-interactive --time 01:22:00, GPU-h 2.73 at the limit / 1.83 expected, job name swe32-rfillsync32ti
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32ti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLSYNC32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfillsync32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILLSYNC32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+== Second half (instances 33-64), async; submit after the rfill pair is verified
+# fullh2a: ghx4 --time 01:06:00, GPU-h 1.10 at the limit / 0.74 expected, job name swe32-fullh2a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULLH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_66MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULLH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_66MIN_NO_RETRY'
+
+# recenth2a: ghx4 --time 01:28:00, GPU-h 1.47 at the limit / 1.01 expected, job name swe32-recenth2a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2a -RunLabel r1 -AfterJob <J_fullh2a> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENTH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_88MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2a -RunLabel r1 -AfterJob <J_fullh2a> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENTH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_88MIN_NO_RETRY'
+
+# obsh2a: ghx4 --time 01:27:00, GPU-h 1.45 at the limit / 1.00 expected, job name swe32-obsh2a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2a -RunLabel r1 -AfterJob <J_recenth2a> -Authorize -Authorization 'AUTHORIZE_SWE32_OBSH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_OBS_QUERY_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_87MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2a -RunLabel r1 -AfterJob <J_recenth2a> -Authorize -Authorization 'AUTHORIZE_SWE32_OBSH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_OBS_QUERY_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_87MIN_NO_RETRY'
+
+# goalh2a: ghx4 --time 01:34:00, GPU-h 1.57 at the limit / 1.18 expected, job name swe32-goalh2a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2a -RunLabel r1 -AfterJob <J_obsh2a> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_94MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2a -RunLabel r1 -AfterJob <J_obsh2a> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALH2A_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_94MIN_NO_RETRY'
+
+== Second half, sync twins (fallback)
+# fullh2s: ghx4 --time 01:06:00, GPU-h 1.10 at the limit / 0.74 expected, job name swe32-fullh2s
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2s -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2s -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULLH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_66MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fullh2s -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULLH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_66MIN_NO_RETRY'
+
+# recenth2s: ghx4 --time 01:28:00, GPU-h 1.47 at the limit / 1.01 expected, job name swe32-recenth2s
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2s -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2s -RunLabel r1 -AfterJob <J_fullh2s> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENTH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_88MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recenth2s -RunLabel r1 -AfterJob <J_fullh2s> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENTH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_88MIN_NO_RETRY'
+
+# obsh2s: ghx4 --time 01:27:00, GPU-h 1.45 at the limit / 1.00 expected, job name swe32-obsh2s
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2s -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2s -RunLabel r1 -AfterJob <J_recenth2s> -Authorize -Authorization 'AUTHORIZE_SWE32_OBSH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_OBS_QUERY_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_87MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obsh2s -RunLabel r1 -AfterJob <J_recenth2s> -Authorize -Authorization 'AUTHORIZE_SWE32_OBSH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_OBS_QUERY_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_87MIN_NO_RETRY'
+
+# goalh2s: ghx4 --time 01:34:00, GPU-h 1.57 at the limit / 1.18 expected, job name swe32-goalh2s
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2s -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2s -RunLabel r1 -AfterJob <J_obsh2s> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_94MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalh2s -RunLabel r1 -AfterJob <J_obsh2s> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALH2S_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_SYNC_BATCH_REUSED_V9_ENV_ONE_GH200_94MIN_NO_RETRY'
+
+== Second half, stock (the user picks)
+# stockh2t: ghx4 --time 01:01:00, GPU-h 1.02 at the limit / 0.68 expected, job name swe32-stockh2t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockh2t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockh2t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKH2T_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_61MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockh2t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKH2T_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_61MIN_NO_RETRY'
+
+# stockkeeph2t: ghx4 --time 01:15:00, GPU-h 1.25 at the limit / 0.84 expected, job name swe32-stockkeeph2t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeeph2t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeeph2t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEPH2T_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_75MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeeph2t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEPH2T_32TASKS_H2_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_75MIN_NO_RETRY'
+

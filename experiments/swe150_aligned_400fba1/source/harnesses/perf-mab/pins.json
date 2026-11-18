@@ -1,0 +1,3444 @@
+{
+  "bundle_bytes": 11730035,
+  "bundle_file": "public-release.bundle",
+  "bundle_ref": "refs/heads/sealed-release",
+  "bundle_sha256": "333b0911c49b6b4d30af342e3a7bb3e5c965e9111178bc36efcf42188571d261",
+  "clean_env": {
+    "base_prefix": "/u/ycao11/.local/share/uv/python/cpython-3.12.13-linux-aarch64-gnu",
+    "dependencies": {
+      "lm-format-enforcer": "0.11.3",
+      "tokenizers": "0.22.2",
+      "torch": "2.11.0",
+      "transformers": "5.13.0",
+      "vllm": "0.24.0"
+    },
+    "environment_identity": {
+      "executable": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env/bin/python",
+      "executable_sha256": "001718d5edf61e6fbc3642c9668def38d2bf28cc320e75196e6a95d49614cca8",
+      "implementation": "cpython",
+      "machine": "aarch64",
+      "prefix": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env",
+      "python_version": [
+        3,
+        12,
+        13
+      ],
+      "site": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env/lib/python3.12/site-packages"
+    },
+    "job_id": "3270721",
+    "official_record": {
+      "extra": 0,
+      "files": 4404,
+      "mismatched": 0,
+      "missing": 0,
+      "record_sha256": "cea34f29ed8f7a3b4f8f435817bdff55cb42c13479adf3edff415760a2244ff5",
+      "wheel_sha256": "700db71c3cf14697d42583521f38b12fac38db1e7a8ad062e8e4d63a5dadebd5"
+    },
+    "prefix": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d/clean-env",
+    "python": "3.12.13 (main, Jun 23 2026, 15:19:07) [Clang 22.1.3 ]",
+    "release_manifest_sha256": "b23b5f20e7c85f8f8e3ab93fe51d8519dfd465aa50fecf0cda27c95d18e9af93",
+    "snapshot_files": 66550,
+    "snapshot_sha256": "cbfab91650bfbeffb149a2df8ead3787a07b91a2cf332edd7efd0b5b0a07e5f0",
+    "stage": "/u/ycao11/spq9-277fa5f1390947e08caefecc8e928a3d"
+  },
+  "commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+  "config": {
+    "about": "THE decisions of perf-mab (pmab): GPU validation of the MemoryAgentBench kv-session protocol on the mab-kvsession runtime (GPU-PLAN G1 and G2), one GH200 per job on the ghx4 batch partition. Hand-edited; build.py copies it into pins.json (`config`), regenerates the workload plan (mab_workload.build_plan) and re-validates every plan and its time, so a change here is a rebuild, never a code change.",
+    "budget": {
+      "about": "The time model (controller.plan_fit; job.Budget re-plans before every server). Plans get about 1.25 x their expected wall time (time_factor bounds), not the worst case of every part (2026-10-14: long limits hurt backfill). The job reserves, while a server runs, every later required server's minimum (expected start + min_agent_seconds + probes + expected stop): a required server's agents run min(agent cap, what is left after those reserves, its drain and its stop), so the required parts are guaranteed their minimum and optional servers start only when their expected time x optional_start_factor is left. Starts (worst / expected): READY eager ~4-5 min at 262144 (job 3360375), graphs ~5 min cold, stock ~3-4 min. Expected decode (budget.expected.itl_ms): 77 ms eager at one session (job 3360375: 77.4 ms full, 24 GiB, 262144), ~45 ms with 16 running and CUDA graphs (job 3360375: 41.3 ms), stock eager ~70 ms, stock graphs ~22 ms at b = 1. Replies: unknown lengths (plan Q5): 400 tokens per read turn and 1,000 for the answer are the thinking-on assumptions, kept as upper bounds with thinking off (no thinking-off measurement yet; the jobs should end early); the caps cover replies about 3x longer. Drain: one 4096-token reply at the worst step.",
+      "drain_step_ms": {
+        "runtime_eager": 85,
+        "runtime_graphs": 60,
+        "stock_eager": 80,
+        "stock_graphs": 30
+      },
+      "expected": {
+        "admission_seconds": {
+          "runtime_eager": 1.5,
+          "runtime_graphs": 1.0,
+          "stock_eager": 0.5,
+          "stock_graphs": 0.5
+        },
+        "answer_reply_tokens": 1000,
+        "finish_seconds": 200,
+        "itl_ms": {
+          "runtime_eager_b1": 77,
+          "runtime_graphs_b1": 30,
+          "runtime_graphs_b16": 45,
+          "stock_eager_b1": 70,
+          "stock_graphs_b1": 22,
+          "stock_graphs_b16": 45
+        },
+        "job_checks_seconds": 40,
+        "page_cache_seconds": 90,
+        "probe_seconds": 60,
+        "read_reply_tokens": 400,
+        "start_seconds": {
+          "runtime_eager": 280,
+          "runtime_graphs": 330,
+          "stock_eager": 200,
+          "stock_graphs": 260
+        },
+        "stock_argv_gate_seconds": 60,
+        "stop_check_seconds": {
+          "runtime": 90,
+          "stock": 40
+        }
+      },
+      "finish_seconds": 300,
+      "job_checks_seconds": 90,
+      "margin_seconds": 120,
+      "memory": {
+        "about": "sbatch --mem per plan: one GH200's share of a ghx4 node (2026-10-14: ghx4 DefMemPerGPU=113560M; TRESBillingWeights CPU=13.888888, Mem=9.01726G, GRES/gpu=1000, billing the maximum, so 113560M bills 1000 = one GPU while 200G billed 1803 and 160g ~1440; nodes RealMemory 488000M, 4 GPUs). A plan's --mem must hold the worst pinned host memory of its runtime servers (controller.pinned_host = serve.py's pinned_host_bytes: the OffloadingConnector's CPU pool (32 GiB by default; 1 GiB with serve.py --connector-pool-gib 1, every runtime server here), one 154-MB GDN carry per running session, the page arena - --dram-arena-gib, else every session at the context limit - in 256-MiB chunks) plus overhead_gib of process memory plus margin_gib, and at most max_mib. overhead_gib 32: the swe16 runs' non-pool, non-arena RSS measured 20.5-31.3 GiB; margin_gib 5: an OOM kill would waste the run (coordinator 2026-10-14: worst pinned + 32 <= 105.9 GiB). g1: K = 1, no arena, 262144: 48.4 GiB + 37 -> 87,443 MiB. g2: K = 16, arena 39 GiB: 73.3 GiB + 37 -> 112,941 MiB (with an explicit arena the pinned memory does not depend on the context limit). Two shares (2 x max_mib = 227120M, billed as two GPUs; user decision 2026-10-14) only for two_share_plans: G4's runtime servers at 16 sessions with serve.py --connector-pool-gib 1 (the OffloadingConnector's CPU pool is idle in our runtime; the switch comes with the integrate-1014 re-pin) and an arena sized by arena_fit.",
+        "arena": {
+          "about": "controller.arena_fit: an arena (--dram-arena-gib) fails a capture beyond it (DRAM_ARENA_EXHAUSTED, nothing spilled; the pinned runtime's README 4.9), and every sealed Page of a session's stream (chunks, replies with their thinking, the template) has its host copy there until the session closes. Bound: the K largest cases all at their last turn at once, chunk_tokens per chunk (measured 3,995-4,114), reply_factor x the expected reply lengths (the time caps allow ~3 x), prompt_tokens for the first prompt (measured 428) and turn_tokens of template per turn. It must fit the arena.",
+          "chunk_tokens": 4120,
+          "prompt_tokens": 430,
+          "reply_factor": 3,
+          "turn_tokens": 64
+        },
+        "margin_gib": 5,
+        "max_mib": 113560,
+        "overhead_gib": 32,
+        "two_share_plans": [
+          "g4o",
+          "g4g",
+          "smq",
+          "smqt"
+        ]
+      },
+      "optional_start_factor": 1.25,
+      "page_cache_seconds": 180,
+      "probe_seconds": 180,
+      "roles": {
+        "about": "Plan roles (decision D4, 2026-11-03): a plan naming `role` takes that role's time_factor instead of time_factor (the limit / expected band); the suggestion stays the harness's 1.275 x. release-smoke: up to 2.25 x. Every other plan and rule is unchanged.",
+        "release-smoke": {
+          "time_factor": [
+            1.2,
+            2.25
+          ]
+        }
+      },
+      "sample_interval_seconds": 0.5,
+      "start_seconds": {
+        "runtime_eager": 420,
+        "runtime_graphs": 600,
+        "stock_eager": 360,
+        "stock_graphs": 480
+      },
+      "stock_argv_gate_seconds": 120,
+      "stop_check_seconds": {
+        "runtime": 240,
+        "stock": 150
+      },
+      "time_factor": [
+        1.2,
+        1.35
+      ]
+    },
+    "gemma": {
+      "about": "Gemma 4 31B IT plans gm1, gm4o, gm4g, gm4v (lead 2026-10-17) and, since the integrate-1021 re-pin (2026-10-22, user scope of 10-21: each path end to end for Goal and Obs.), gm4o / gm4g as end-to-end dry runs with gm4r (random_fill, optional) and the ghx4-interactive variants gm4oi / gm4gi / gm4ri: the Qwen plans' settings (thinking off, max_tokens 4096, 120 turns, greedy, 2 format errors, the 32K budget, the 262,144-token window, --language-model-only, --connector-pool-gib 1, CUDA graphs and --decode-fastpath as the Qwen servers) on a release installed with install.py --model-profile gemma4-31b-it (serve.py dispatches on the release manifest: prepare_gemma4). A plan and its servers run Gemma when they name `model`; every Qwen entry is unchanged. KV: gm1 and the stock servers 28 GiB (32 GiB not used: weights 57.9 GiB; stock measured READY 87,601 / peak 90,099 MiB at 26.41 GiB of KV, job 3364469); gm4o / gm4g / gm4r 25 GiB (decided_kv_cache_gib; job 3410948's goal_query OOM at 32 GiB with the rewriter: EngineCore 92.22 GiB + rewriter 2.74 GiB of 95.08 GiB), 8 sessions on g4e (16 do not fit 25 GiB at the 32K budget), the three decode fast paths, --deferred-completion-io, gm4g's rewriter batched by 4 with the profile's 25-GiB default cap T = 25,600. Context: gm1 at 131,072 (the strict rule), G4 at 262,144 (the selective rule).",
+      "arena": {
+        "about": "controller.gemma_arena_fit: the 16 largest cases at their last turn at once, each its exact Gemma stream without the replies (pins.gemma_real_tokens: gemma_counts.py through the runner's own client) plus the replies at reply_factor x the expected lengths and turn_tokens of slack per turn, in 1.25-MiB Pages; prompt_tokens / chunk_tokens only for a synthetic workload.",
+        "chunk_tokens": 4180,
+        "prompt_tokens": 219,
+        "reply_factor": 3,
+        "turn_tokens": 64
+      },
+      "budget": {
+        "about": "Overrides of config.budget for the Gemma plans (controller.budget_of). Starts: Gemma's 62.6-GB checkpoint and the never-measured Gemma runtime: worst start +120 s for our servers (540 eager, 720 graphs), expected +60 s (340, 390); stock unchanged (stage 0 t1-triton READY 174 s, t2 196 s, d1 with the FA4 JIT 270 s, all within the 260 s expected / 480 s worst of stock graphs). Page cache 110 s expected / 220 s worst (62.6 GB against Qwen's 54.8 GB at 90 / 180). Admissions from stage 0's TTFT curve (t = 0.13045 k + 0.004476 k^2 s, k = K prompt tokens; measured 0.31 / 1.43 / 9.22 / 27.64 / 80.13 s at 2K / 8K / 32K / 64K / 120K): a ~4.1K-token phase 1 attends to at most the 32K selection, 1.81 s, at 16K 1.21 s: 2.0 s for our servers (Qwen: 1.0 graphs, 1.5 eager); the stock replay and the one-session Vanilla reuse their case's prefix: 1.5 s (Qwen 0.5). ITL: eager 77 / 70 ms and stock graphs 22 ms at one session kept (stage 0: 20.6 ms graphs b1; eager adds the launch overhead Qwen measured, ~45 ms for 60 layers, so ~66-73 ms): Qwen's figures are the same or larger; with 16 sessions only about 3 decode at once on either server (controller.decode_concurrency), at 30 ms per step (stage 0: 27.0 ms with 16 short requests; the 32K selections add ~2-3 ms of KV reads at 3 sessions). Reply lengths: Qwen's upper bounds (400 per read, 1,000 per answer; thinking off makes them ~15 tokens for a read: the jobs should end early). stock_prefill: the fit for a Vanilla server that re-prefills every turn (gemma_reprefill_seconds).",
+        "expected": {
+          "admission_seconds": {
+            "runtime_eager": 2.0,
+            "runtime_graphs": 2.0,
+            "stock_eager": 1.5,
+            "stock_graphs": 1.5
+          },
+          "itl_ms": {
+            "runtime_graphs_b16": 30,
+            "stock_graphs_b16": 30
+          },
+          "page_cache_seconds": 110,
+          "start_seconds": {
+            "runtime_eager": 340,
+            "runtime_graphs": 390
+          },
+          "stock_prefill": {
+            "per_k_tokens": 0.13045,
+            "per_k_tokens_squared": 0.004476,
+            "source": "job 3364469 t1-triton TTFT, least squares"
+          }
+        },
+        "page_cache_seconds": 220,
+        "start_seconds": {
+          "runtime_eager": 540,
+          "runtime_graphs": 720
+        }
+      },
+      "decided_kv_cache_gib": {
+        "about": "The user's decision of 2026-10-21 (to match the group's Gemma baselines): a Gemma runtime server with several sessions runs observation_query, random_fill and goal_query at 25 GiB of KV and full at 32 (validate_gemma refuses another size); the one-session G1 servers (gm1a / gm1b, the stock replay's reference) keep 28 GiB as perf-gemma1's g1a does, and the stock controls keep their own (vLLM's memory profile; gm4v 28 GiB, one request at 262,144 needs 27.04).",
+        "full": 32,
+        "query_policies": 25
+      },
+      "memory": {
+        "about": "No Gemma plan needs two GH200 memory shares since the integrate-1021 re-pin: the end-to-end dry runs gm4o / gm4g / gm4r (8 sessions, g4e's 8 cases) pin 61.01 GiB (a 60-GiB arena + the 1-GiB connector pool) within one share's Gemma launcher budget (80.9 GiB) and memory_fit (+ 32 GiB of process memory + a 5-GiB margin = 100,367 of 113,560 MiB). The user approved --mem=227120M for the 16-session gm4o / gm4g of 10-17; a Gemma plan that needs it again names itself here (and --host-memory-shares 2 on its server).",
+        "two_share_plans": []
+      },
+      "model": {
+        "about": "The checkpoint on DeltaAI (perf-gemma0's confirmed download receipt of 2026-10-11, job 3364469's model gate): five metadata files = the sealed profile's GEMMA4_MODEL_PINS (build.py checks), two shards by size, the template digest of chat_template.jinja (mab_runner.template_digest: one trailing newline dropped), the runner's pinned template.",
+        "dir": "/projects/bcjw/ycao11/models/gemma-4-31b-it",
+        "metadata": {
+          "chat_template.jinja": "ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4",
+          "config.json": "e967dd38bc5cfd38bd09a995a7bf4a754075df2b46aba68f7fbb5a791e6d8dd1",
+          "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+          "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+          "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+        },
+        "profile": "gemma4-31b-it",
+        "repository": "google/gemma-4-31B-it",
+        "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "shards": {
+          "model-00001-of-00002.safetensors": 49784788364,
+          "model-00002-of-00002.safetensors": 12761549884
+        },
+        "template_sha256": "6a1015c47ccfcfa67c3b772385bccee357a4d37c3cda37bd202e9047f391ab82"
+      },
+      "runner": {
+        "about": "tokenizer_override exists only in synthetic stages (the fakes' Gemma character tokenizer)."
+      },
+      "stock": {
+        "about": "Stock vLLM 0.24.0 for Gemma (the replay gm1c and the Vanilla controls gm1v, gm4v): stage 0's GPU-validated t1-triton flags (perf-gemma0 job 3364469) where they matter for these runs - --attention-backend TRITON_ATTN (ours pins it too), --max-num-batched-tokens 8192 (ours: one 8,192-token forward), --language-model-only - with the Qwen stock control's other settings: the KV bytes of ours (28 GiB, --kv-cache-memory-bytes; stage 0: one request at 262,144 needs 27.04 GiB in vLLM's check), 262,144 tokens, prefix caching (sha256; a cache_salt per case), seed 42, served as selective-prefix. No Mamba / GDN flag (Gemma has no such state) and no parser (the runner sends token ids to /v1/completions).",
+        "attention_backend": "TRITON_ATTN",
+        "distributed_executor_backend": "uni",
+        "enable_prefix_caching": true,
+        "language_model_only": true,
+        "max_model_len": 262144,
+        "max_num_batched_tokens": 8192,
+        "max_num_seqs": 16,
+        "prefix_caching_hash_algo": "sha256",
+        "seed": 42,
+        "served_model_name": "selective-prefix"
+      }
+    },
+    "generation": {
+      "about": "The harness loop's generation: enable_thinking is the one thinking switch and is OFF (user decision 2026-10-14, aligned with the PoC): the runner renders with enable_thinking=False (the generation header <|im_start|>assistant\\n<think>\\n\\n</think>\\n\\n, the runtime's HEADERS['off']), serve.py gets --kv-session-thinking off, and the stock servers see the same renders (the Vanilla transport renders them; the replay replays them). Baseline numbers from configs with thinking ON are not directly comparable. max_tokens, turns, greedy sampling and the format-error rule are the harness's.",
+      "enable_thinking": false,
+      "max_consecutive_format_errors": 2,
+      "max_tokens": 4096,
+      "max_turns": 120,
+      "max_window_size": 262144,
+      "repetition_penalty": 1.0,
+      "request_timeout": 3600,
+      "seed": 42,
+      "temperature": 0,
+      "top_k": -1,
+      "top_p": 1.0
+    },
+    "gpu": {
+      "about": "GPU memory of a runtime server (controller.server_gpu_fit; decision D-H of the main ba4d1ba re-pin, perf-gemma-swe32's server_gpu_fit approach): a measured nvidia-smi peak plus measured terms against total_mib (97,871 MiB, the GH200 total in every gpu-samples log) with min_free_mib (2,048) left free; a server with the vLLM Goal rewriter child must leave it (validate_config), else it runs --goal-rewriter-vllm-kv-gib 2 (the documented range 2-16), never a smaller main pool. anchors (verified jobs, Remote-RA\\verification\\pmab-job<J>-*\\check\\files\\gpu-samples-<label>.log, the overall peak, which is the main engine's start before READY in each): g4o 3405844 90,383 MiB (Qwen, 32 GiB, 16 sessions, 262,144, graphs full; READY 86,205, after READY 86,623), g4g 3405845 90,383 (the same with the Hugging Face Qwen3-0.6B child; READY 87,926, after READY 89,234), gm4o 3429503 88,051 (Gemma, 25 GiB, 8 sessions; READY 86,303, after 87,623), gm4g 3429507 89,832 (the same with the Hugging Face child batched by 4, T 25,600; READY 88,344, after 89,832). vllm_child: the vLLM child (3 GiB of child KV, lm-format-enforcer, batch-invariant) over the Hugging Face child, 3,470 MiB, measured at READY identically on Qwen (perf-swe32 vllm25 r2 job 3500565 goalvllm 84,228 MiB vs job 3461703 goal262 80,758; SWE-bench, 25 GiB, 16 sessions) and on Gemma (cg r2 job 3538523 gvll 91,394 vs govl 87,924; 25 GiB, 65,536); their peaks differ by less (Gemma +2,626: 92,500 vs 89,874; Qwen -170: 89,768 vs 89,938), so the larger READY term is used, plus or minus 1,024 MiB per GiB of child KV. Never measured on MemoryAgentBench or at 32 GiB: for smqg / smqgt (32 GiB, 16 sessions) an estimate. In the measured jobs the child started after the main engine's start-up transient (3500565: its before-READY peak is its READY value; 3461703 obs262 without a child peaked 4,006 MiB above its READY value before READY), so adding the term to the anchor's overall peak is conservative. async_mib 68: --async-scheduling over the synchronous twin, the largest measured difference of the peaks (asg1 job 3532746, Qwen: +66 / +68; job 3549350, Gemma: +68 on every pair). Thinking changes no GPU memory (the pool is fixed). Estimates: smqo / smqr / smqot / smqrt 90,451 MiB (7,420 free), smqg / smqgt 93,921 (3,950 free: LEAVES_MIN_FREE, so the 3-GiB child stays; with perf-gemma-swe32's older child-alone term 5,632 MiB on g4o's peak it would be 96,083, 1,788 free), smgo / smgr 88,051 (9,820), smgg 93,302 (4,569), smgoa / smgra 88,119 (9,752), smgga 93,370 (4,501).",
+      "anchors": [
+        {
+          "cuda_graphs": "full",
+          "job": 3405844,
+          "kv_cache_gib": 32,
+          "max_model_len": 262144,
+          "max_running_sessions": 16,
+          "model": "qwen3.6-27b",
+          "peak_mib": 90383,
+          "rewriter": false,
+          "server": "g4o"
+        },
+        {
+          "cuda_graphs": "full",
+          "job": 3405845,
+          "kv_cache_gib": 32,
+          "max_model_len": 262144,
+          "max_running_sessions": 16,
+          "model": "qwen3.6-27b",
+          "peak_mib": 90383,
+          "rewriter": true,
+          "server": "g4g"
+        },
+        {
+          "cuda_graphs": "full",
+          "job": 3429503,
+          "kv_cache_gib": 25,
+          "max_model_len": 262144,
+          "max_running_sessions": 8,
+          "model": "gemma4-31b-it",
+          "peak_mib": 88051,
+          "rewriter": false,
+          "server": "gm4o"
+        },
+        {
+          "cuda_graphs": "full",
+          "job": 3429507,
+          "kv_cache_gib": 25,
+          "max_model_len": 262144,
+          "max_running_sessions": 8,
+          "model": "gemma4-31b-it",
+          "peak_mib": 89832,
+          "rewriter": true,
+          "server": "gm4g"
+        }
+      ],
+      "async_mib": 68,
+      "min_free_mib": 2048,
+      "total_mib": 97871,
+      "vllm_child": {
+        "jobs": [
+          "3500565 goalvllm / 3461703 goal262 (Qwen, at READY)",
+          "3538523 gvll / govl (Gemma, at READY)"
+        ],
+        "kv_gib": 3,
+        "over_hf_mib": 3470
+      }
+    },
+    "plan_order": [
+      "g1",
+      "g2",
+      "g4o",
+      "g4g",
+      "g4v",
+      "gm1",
+      "gm4o",
+      "gm4g",
+      "gm4v",
+      "gm4r",
+      "gm4oi",
+      "gm4gi",
+      "gm4ri",
+      "smq",
+      "smg",
+      "smqt",
+      "smga",
+      "smqc"
+    ],
+    "plans": {
+      "g1": {
+        "about": "GPU-PLAN G1 on the ghx4 batch partition: g1a (full, eager, with the G1d probes), g1b (observation_query at a 32K budget), g1c (the stock eager replay of every g1a turn) required; g1v (the Vanilla transport on stock defaults) optional. The time is ~1.3 x the expected wall time.",
+        "authorization": "AUTHORIZE_PMAB_G1_KVSESSION_FULL_OBS_STOCK_REPLAY_BATCH_REUSED_V9_ENV_ONE_GH200_70MIN_NO_RETRY",
+        "mem": "113560M",
+        "partition": "ghx4",
+        "servers": [
+          "g1a",
+          "g1b",
+          "g1c",
+          "g1v"
+        ],
+        "time": "01:10:00"
+      },
+      "g2": {
+        "about": "GPU-PLAN G2 on the ghx4 batch partition within one GH200's memory share (--mem=113560M, 32 GiB of process memory and a 5-GiB margin): g2a (16 GiB, route B) and g2b (24 GiB, route B) required, each 32 synthetic cases of 5/6/7 chunks over 16 sessions at 131072 tokens with a 39-GiB arena; g2c (16 GiB without route B, stop at the first failure) optional. The time is ~1.3 x the expected wall time.",
+        "authorization": "AUTHORIZE_PMAB_G2_ROUTEB_16SESSIONS_16_24GIB_BATCH_REUSED_V9_ENV_ONE_GH200_70MIN_NO_RETRY",
+        "mem": "113560M",
+        "partition": "ghx4",
+        "servers": [
+          "g2a",
+          "g2b",
+          "g2c"
+        ],
+        "time": "01:10:00"
+      },
+      "g4g": {
+        "about": "G4 with goal_query and the Goal rewriter: as g4o (two memory shares).",
+        "authorization": "AUTHORIZE_PMAB_G4G_REAL32_GOALQUERY_REWRITER_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_61MIN_NO_RETRY",
+        "mem": "227120M",
+        "partition": "ghx4",
+        "servers": [
+          "g4g"
+        ],
+        "time": "01:01:00"
+      },
+      "g4o": {
+        "about": "G4 with observation_query: one server, 16 sessions, two memory shares (--mem=227120M, billed as two GPUs; a deliberate request, user decision 2026-10-14).",
+        "authorization": "AUTHORIZE_PMAB_G4O_REAL32_OBSQUERY_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_47MIN_NO_RETRY",
+        "mem": "227120M",
+        "partition": "ghx4",
+        "servers": [
+          "g4o"
+        ],
+        "time": "00:47:00"
+      },
+      "g4v": {
+        "about": "G4's stock Vanilla control: 16 sessions on one memory share (stock pins no arena).",
+        "authorization": "AUTHORIZE_PMAB_G4V_REAL32_STOCK_VANILLA_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_87MIN_NO_RETRY",
+        "mem": "113560M",
+        "partition": "ghx4",
+        "servers": [
+          "g4v"
+        ],
+        "time": "01:27:00"
+      },
+      "gm1": {
+        "about": "G1 on Gemma 4 31B IT (ghx4 batch, one GH200 share): gm1a (full, eager, the G1d probes at 131,072 tokens), gm1b (observation_query 32K), gm1c (the stock eager replay of every gm1a turn) required; gm1v (the Vanilla transport on stock defaults) optional. 28 GiB of KV everywhere.",
+        "authorization": "AUTHORIZE_PMAB_GM1_GEMMA4_KVSESSION_FULL_OBS_STOCK_REPLAY_BATCH_REUSED_V9_ENV_ONE_GH200_75MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "servers": [
+          "gm1a",
+          "gm1b",
+          "gm1c",
+          "gm1v"
+        ],
+        "time": "01:15:00"
+      },
+      "gm4g": {
+        "about": "The Gemma Goal end-to-end dry run: one server (gm4g), goal_query with the Qwen3-0.6B rewriter batched by 4 (T = 25,600 by default at 25 GiB), --admission-overlap 8, otherwise as gm4o (one memory share).",
+        "authorization": "AUTHORIZE_PMAB_GM4G_GEMMA4_E2E8_GOALQUERY_REWRITER_B4_25GIB_FAST3_DCIO_BATCH_REUSED_V9_ENV_ONE_GH200_56MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "servers": [
+          "gm4g"
+        ],
+        "time": "00:56:00"
+      },
+      "gm4gi": {
+        "about": "gm4g on ghx4-interactive (urgent runs only; one submitted job per user; billed 2x): the same server, time and memory.",
+        "authorization": "AUTHORIZE_PMAB_GM4GI_GEMMA4_E2E8_GOALQUERY_REWRITER_B4_25GIB_FAST3_DCIO_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_56MIN_NO_RETRY",
+        "interactive_of": "gm4g",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4-interactive",
+        "servers": [
+          "gm4g"
+        ],
+        "time": "00:56:00"
+      },
+      "gm4o": {
+        "about": "The Gemma Obs. end-to-end dry run (integrate-1021 re-pin): one server (gm4o), observation_query on g4e's 8 real cases, 8 sessions, 25 GiB, the three decode fast paths and --deferred-completion-io, one memory share (the 60-GiB arena fits it; the approved two shares are not needed).",
+        "authorization": "AUTHORIZE_PMAB_GM4O_GEMMA4_E2E8_OBSQUERY_25GIB_FAST3_DCIO_BATCH_REUSED_V9_ENV_ONE_GH200_49MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "servers": [
+          "gm4o"
+        ],
+        "time": "00:49:00"
+      },
+      "gm4oi": {
+        "about": "gm4o on ghx4-interactive (urgent runs only; one submitted job per user; billed 2x): the same server, time and memory.",
+        "authorization": "AUTHORIZE_PMAB_GM4OI_GEMMA4_E2E8_OBSQUERY_25GIB_FAST3_DCIO_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_49MIN_NO_RETRY",
+        "interactive_of": "gm4o",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4-interactive",
+        "servers": [
+          "gm4o"
+        ],
+        "time": "00:49:00"
+      },
+      "gm4r": {
+        "about": "Optional: the random_fill control end to end, as gm4o with random_fill (one memory share).",
+        "authorization": "AUTHORIZE_PMAB_GM4R_GEMMA4_E2E8_RANDOMFILL_25GIB_FAST3_DCIO_BATCH_REUSED_V9_ENV_ONE_GH200_49MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "servers": [
+          "gm4r"
+        ],
+        "time": "00:49:00"
+      },
+      "gm4ri": {
+        "about": "gm4r on ghx4-interactive (optional; urgent runs only; one submitted job per user; billed 2x).",
+        "authorization": "AUTHORIZE_PMAB_GM4RI_GEMMA4_E2E8_RANDOMFILL_25GIB_FAST3_DCIO_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_49MIN_NO_RETRY",
+        "interactive_of": "gm4r",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4-interactive",
+        "servers": [
+          "gm4r"
+        ],
+        "time": "00:49:00"
+      },
+      "gm4v": {
+        "about": "G4's stock Vanilla control on Gemma: 16 sessions on one memory share (stock pins no arena).",
+        "authorization": "AUTHORIZE_PMAB_GM4V_GEMMA4_REAL32_STOCK_VANILLA_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_345MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "servers": [
+          "gm4v"
+        ],
+        "time": "05:45:00"
+      },
+      "smg": {
+        "about": "Release smoke, Gemma 4 31B IT x MemoryAgentBench (PLAN 2.2 J6, the documented 8 sessions at 25 GiB on 8 real cases): smgo, smgr, smgg (the vLLM Goal rewriter with --goal-overlap; smgh = the Hugging Face batch-4 server, the one-line switch if cg 3508345 fails on the child) back to back, thinking off, one memory share.",
+        "authorization": "AUTHORIZE_PMAB_SMG_RELEASE_SMOKE_GEMMA4_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          "smgo",
+          "smgr",
+          "smgg"
+        ],
+        "time": "02:00:00"
+      },
+      "smga": {
+        "about": "Release smoke, Gemma 4 31B IT x MemoryAgentBench with --async-scheduling (decision D-C of the main ba4d1ba re-pin; J6's async variant): smgoa, smgra, smgga (the vLLM Goal rewriter with --goal-overlap) back to back on smg's 8 cases, thinking off, one memory share; the time of smg. Submit only after g1g r3 3560784 is verified (smga if it passes, smg if not).",
+        "async_scheduling": true,
+        "authorization": "AUTHORIZE_PMAB_SMGA_RELEASE_SMOKE_GEMMA4_ASYNC_OBS_RFILL_GOAL_8SESSIONS_25GIB_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY",
+        "mem": "113560M",
+        "model": "gemma4-31b-it",
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          "smgoa",
+          "smgra",
+          "smgga"
+        ],
+        "time": "02:00:00"
+      },
+      "smq": {
+        "about": "Release smoke, Qwen3.6-27B x MemoryAgentBench (PLAN 2.2 J5 with the user's 11-03 workload change: the documented 16 sessions on 16 real cases): smqo (observation_query), smqr (random_fill), smqg (goal_query, the vLLM Goal rewriter with --goal-overlap) back to back, thinking off, runtime integrate-1103. Two memory shares (--mem=227120M, billed as two GPUs): the docs' 124-GiB arena; 16 sessions on these cases need 92.7 GiB of arena at the harness's reply bound, more than one share holds (70 GiB). async_scheduling: decision D2 (conditional on async G1 3499729): delete the key to run the three servers synchronously.",
+        "async_scheduling": true,
+        "authorization": "AUTHORIZE_PMAB_SMQ_RELEASE_SMOKE_QWEN_OBS_RFILL_GOAL_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_110MIN_NO_RETRY",
+        "mem": "227120M",
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          "smqo",
+          "smqr",
+          "smqg"
+        ],
+        "time": "01:50:00"
+      },
+      "smqc": {
+        "about": "The async-maxtok-1112 case on the GPU (2026-11-15): smqco (smqot's server on four FactConsolidation cases, then the cut cell) with --async-scheduling and kv-session thinking on. Job 3584105 (smqt r1, PMAB_PASS_VERIFIED) never reached the case of the fix: each server's one reply cut at max_tokens had no other request in flight. The cut cell makes it certain (each probe turn cut at its bound while the carrier decodes, nothing else in flight) and check_async_cut counts it from the runtime's rows and the client's times (hits >= min_hits, FAIL below). One memory share (4 sessions; no vLLM child).",
+        "async_scheduling": true,
+        "authorization": "AUTHORIZE_PMAB_SMQC_ASYNC_MAXTOK_CASE_QWEN_THINKING_OBS_CUT_CELL_4SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_30MIN_NO_RETRY",
+        "kv_session_thinking": "on",
+        "mem": "113560M",
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          "smqco"
+        ],
+        "time": "00:30:00"
+      },
+      "smqt": {
+        "about": "Release smoke, Qwen3.6-27B x MemoryAgentBench with kv-session thinking on (decision D-B of the main ba4d1ba re-pin; J5): smqot (observation_query), smqrt (random_fill), smqgt (goal_query, the vLLM Goal rewriter with --goal-overlap) back to back on smq's 16 cases, --async-scheduling, kv_session_thinking on (serve.py --kv-session-thinking on; the runner's enable_thinking true; the global generation.enable_thinking stays false), two memory shares (decision D-F: --mem=227120M, billed as two GPUs). Time by the harness's rule: the time model already plans thinking-on reply lengths, so smq's 01:50:00. smq (thinking off) stays the sealed fallback. kv-session thinking on has never run on a GPU.",
+        "async_scheduling": true,
+        "authorization": "AUTHORIZE_PMAB_SMQT_RELEASE_SMOKE_QWEN_THINKING_OBS_RFILL_GOAL_16SESSIONS_2SHARES_BATCH_REUSED_V9_ENV_ONE_GH200_110MIN_NO_RETRY",
+        "kv_session_thinking": "on",
+        "mem": "227120M",
+        "partition": "ghx4",
+        "role": "release-smoke",
+        "servers": [
+          "smqot",
+          "smqrt",
+          "smqgt"
+        ],
+        "time": "01:50:00"
+      }
+    },
+    "runner": {
+      "about": "mab_runner settings: the close retry window (409 while a request is in flight), the busy probe's long reply (256 tokens, ~20 s eager) and the delay of its duplicate (1 s). tokenizer_override exists only in synthetic stages (the fakes' character tokenizer); the job's runner always loads the model directory's tokenizer.",
+      "close_seconds": 120,
+      "probe_busy_delay_seconds": 1.0,
+      "probe_busy_max_tokens": 256
+    },
+    "runtime_server": {
+      "about": "serve.py settings shared by every runtime server: the kv-session protocol, 16-token decoupled Pages, 4096-token replies, the 262144-token context (the harness's max_window_size; g2 runs at 131072 for its 16-GiB pool). Per server: KV size, CUDA graphs, K, slots, arena, --decode-fastpath, --release-idle-pages. language_model_only: serve.py --language-model-only once the sealed launcher has it (runtime_features.language_model_only); until then a real submission is refused (controller.startup_spike_risk). connector_pool_gib 1: serve.py --connector-pool-gib 1 on every runtime server (the OffloadingConnector's CPU pool is idle in this runtime; startup.json connector_pool_bytes).",
+      "connector_pool_gib": 1,
+      "language_model_only": true,
+      "max_model_len": 262144,
+      "max_tokens": 4096,
+      "page_tokens": 16,
+      "protocol": "kv-session"
+    },
+    "schema": "pmab-config-v1",
+    "servers": [
+      {
+        "agent_cap_seconds": 1500,
+        "cuda_graphs": "off",
+        "decode_fastpath": false,
+        "dram_arena_gib": null,
+        "isolates": "G1a: one session, full, eager: every turn token-exact against the client's construction, the Stage-B geometry, info, closes; then G1d's probes: repeated and unknown close, a turn-0 body of the closed id, a busy session, the context limit (a 262,144-token turn-0 prompt), the refused session still usable, /health.",
+        "kind": "runtime",
+        "kv_cache_gib": 24,
+        "kv_session_slots": 4,
+        "label": "g1a",
+        "mandatory": true,
+        "max_running_sessions": 1,
+        "min_agent_seconds": 600,
+        "policy": "full",
+        "policy_args": [],
+        "priority": 1,
+        "probes": true,
+        "reference": true,
+        "release_idle_pages": false,
+        "warmup": false,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 1500,
+        "cuda_graphs": "off",
+        "decode_fastpath": false,
+        "dram_arena_gib": null,
+        "isolates": "G1b: the same case with observation_query at a 32,768-token budget: selection active on the last turns (2,048 Pages), the question turn's explicit_requirement = the question, every turn token-exact; the offline selection replay needs the bulk archive.",
+        "kind": "runtime",
+        "kv_cache_gib": 24,
+        "kv_session_slots": 4,
+        "label": "g1b",
+        "mandatory": true,
+        "max_running_sessions": 1,
+        "min_agent_seconds": 600,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 2,
+        "probes": false,
+        "release_idle_pages": false,
+        "warmup": false,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 1500,
+        "async_scheduling": false,
+        "enforce_eager": true,
+        "isolates": "G1c: stock vLLM 0.24.0, eager and synchronous like G1a, replays every G1a prompt T (/v1/completions, prompt ids, max_tokens = G1a's reply length, ignore_eos, the case's cache_salt): output ids equal G1a's on every turn (REPLAY_DIFFERS otherwise).",
+        "kind": "stock",
+        "kv_cache_gib": 24,
+        "label": "g1c",
+        "mandatory": true,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 300,
+        "priority": 3,
+        "replay_source": "g1a",
+        "role": "replay"
+      },
+      {
+        "agent_cap_seconds": 900,
+        "async_scheduling": true,
+        "enforce_eager": false,
+        "isolates": "Optional: the G1 case through the harness's Vanilla transport on stock vLLM with its defaults (CUDA graphs, async scheduling): full re-render every turn, a cache_salt per case; exercises the same-node control path G4 will use.",
+        "kind": "stock",
+        "kv_cache_gib": 24,
+        "label": "g1v",
+        "mandatory": false,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 120,
+        "priority": 4,
+        "role": "vanilla",
+        "warmup": true,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "dram_arena_gib": 39,
+        "expect_releases": true,
+        "expect_selection": false,
+        "isolates": "G2a: 16 sessions at a 32K budget, 16 GiB KV (11,489 usable blocks), 131072 tokens, route B, a 39-GiB arena: the idle pins (each idle session's whole stream below the budget, ~2,300 Pages past it) exceed the pool from about the 3rd chunk, so releases and readmissions occur; every turn completes token-exact, no preemption, releases only of idle sessions, each readmission restores its release.",
+        "kind": "runtime",
+        "kv_cache_gib": 16,
+        "kv_session_slots": null,
+        "label": "g2a",
+        "mandatory": true,
+        "max_model_len": 131072,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 600,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 5,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "g2"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "dram_arena_gib": 39,
+        "expect_releases": true,
+        "expect_selection": false,
+        "isolates": "G2b: the same at 24 GiB (19,681 usable blocks), exceeded when the 16 sessions hold about 5 chunks: fewer releases (NO_RELEASES is a finding here too), the same completion criteria.",
+        "kind": "runtime",
+        "kv_cache_gib": 24,
+        "kv_session_slots": null,
+        "label": "g2b",
+        "mandatory": true,
+        "max_model_len": 131072,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 600,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 6,
+        "probes": false,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "g2"
+      },
+      {
+        "agent_cap_seconds": 900,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "dram_arena_gib": 39,
+        "expect_failure": true,
+        "expect_selection": false,
+        "expected_agent_seconds": 450,
+        "isolates": "Optional G2c: 16 GiB without --release-idle-pages: a failed turn once every session is idle and pins (stop at the first failure); confirms the need for route B (NO_FAILURE_WITHOUT_RELEASE if every case completes).",
+        "kind": "runtime",
+        "kv_cache_gib": 16,
+        "kv_session_slots": null,
+        "label": "g2c",
+        "mandatory": false,
+        "max_model_len": 131072,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 120,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 7,
+        "probes": false,
+        "release_idle_pages": false,
+        "stop_on_failure": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "g2"
+      },
+      {
+        "agent_cap_seconds": 3000,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "dram_arena_gib": 124,
+        "expect_releases": false,
+        "isolates": "G4o: the 32 real cases with observation_query at a 32K budget on 16 sessions (two memory shares, --connector-pool-gib 1, a 124-GiB arena), route B on (a safety net), NUMA placement recorded; predictions for the official scorers.",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "g4o",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1400,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 10,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "g4"
+      },
+      {
+        "admission_overlap": 16,
+        "agent_cap_seconds": 4200,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "dram_arena_gib": 124,
+        "expect_releases": false,
+        "expected_admission_seconds": 2.0,
+        "isolates": "G4g: the same with goal_query and the Qwen3-0.6B Goal rewriter (the kv-session messages give it the chunk as the observation and the question as the explicit requirement), --admission-overlap 16 (the SWE-bench recommendation at 16 sessions).",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "g4g",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 2000,
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 11,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "g4"
+      },
+      {
+        "agent_cap_seconds": 6000,
+        "async_scheduling": true,
+        "enforce_eager": false,
+        "expected_admission_seconds": 4.0,
+        "isolates": "G4v: the same-node control on one memory share: stock vLLM 0.24.0 with its defaults and --language-model-only through the harness's Vanilla transport (/v1/completions, the whole conversation re-rendered every turn, a cache_salt per session), 16 sessions, the same cases and order; admissions assumed 4 s (prefix-cache evictions at 16 long sessions re-prefill).",
+        "kind": "stock",
+        "kv_cache_gib": 32,
+        "label": "g4v",
+        "mandatory": true,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 2700,
+        "priority": 12,
+        "reference": true,
+        "role": "vanilla",
+        "warmup": true,
+        "workers": 16,
+        "workload": "g4"
+      },
+      {
+        "agent_cap_seconds": 1500,
+        "cuda_graphs": "off",
+        "decode_fastpath": false,
+        "dram_arena_gib": null,
+        "isolates": "GM1a (G1a on Gemma 4 31B IT): one session, full, eager, 28 GiB at 131,072 tokens (the strict rule: pool 0 holds one session at 131,072, 9,133 of 17,164 usable Pages, not at 262,144: 17,325): every turn token-exact against the client's Gemma construction (header 7 after a user turn, 0 after tool responses), the Stage-B geometry with Gemma's boundary rule, info (grammar gemma4), closes; then G1d's probes with a 131,072-token turn-0 prompt for the context limit.",
+        "kind": "runtime",
+        "kv_cache_gib": 28,
+        "kv_session_slots": 4,
+        "label": "gm1a",
+        "mandatory": true,
+        "max_model_len": 131072,
+        "max_running_sessions": 1,
+        "min_agent_seconds": 600,
+        "model": "gemma4-31b-it",
+        "policy": "full",
+        "policy_args": [],
+        "priority": 21,
+        "probes": true,
+        "reference": true,
+        "release_idle_pages": false,
+        "warmup": false,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 1500,
+        "cuda_graphs": "off",
+        "decode_fastpath": false,
+        "dram_arena_gib": null,
+        "isolates": "GM1b (G1b on Gemma): the same case with observation_query at a 32,768-token budget: selection active on the last turns (2,048 Pages), the question turn's explicit_requirement = the question, every turn token-exact.",
+        "kind": "runtime",
+        "kv_cache_gib": 28,
+        "kv_session_slots": 4,
+        "label": "gm1b",
+        "mandatory": true,
+        "max_model_len": 131072,
+        "max_running_sessions": 1,
+        "min_agent_seconds": 600,
+        "model": "gemma4-31b-it",
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 22,
+        "probes": false,
+        "release_idle_pages": false,
+        "warmup": false,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 1500,
+        "async_scheduling": false,
+        "enforce_eager": true,
+        "isolates": "GM1c (G1c on Gemma): stock vLLM 0.24.0 with stage 0's Gemma flags (TRITON_ATTN, 8,192 batched tokens, --language-model-only), eager and synchronous like gm1a, replays every gm1a prompt T: output ids equal gm1a's on every turn (REPLAY_DIFFERS otherwise).",
+        "kind": "stock",
+        "kv_cache_gib": 28,
+        "label": "gm1c",
+        "mandatory": true,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 300,
+        "model": "gemma4-31b-it",
+        "priority": 23,
+        "replay_source": "gm1a",
+        "role": "replay"
+      },
+      {
+        "agent_cap_seconds": 900,
+        "async_scheduling": true,
+        "enforce_eager": false,
+        "isolates": "Optional: the GM1 case through the Vanilla transport on stock vLLM (Gemma flags, its defaults: CUDA graphs, async scheduling): full re-render with the Gemma template every turn (which drops the thought channels the kv-session stream keeps).",
+        "kind": "stock",
+        "kv_cache_gib": 28,
+        "label": "gm1v",
+        "mandatory": false,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 120,
+        "model": "gemma4-31b-it",
+        "priority": 24,
+        "role": "vanilla",
+        "warmup": true,
+        "workers": 1,
+        "workload": "g1"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "GM4o, the Gemma Obs. end-to-end dry run (integrate-1021 re-pin): observation_query at the 32K budget over g4e's 8 real cases on 8 sessions, 25 GiB (the user's 10-21 decision, the group's Gemma baselines' KV) at 262,144 tokens (the selective rule: pool 0 holds 10,158 Pages, 5,743 needed, request_pages pinned for vLLM's startup check; 16 sessions would need 5,699 of 4,957: refused), CUDA graphs full with --decode-fastpath, --decode-fastpath2 and --decode-fastpath3, --deferred-completion-io, route B on (8 idle sessions at the budget pin ~18,600 Pages: releases expected), a 60-GiB arena on one memory share, NUMA recorded; predictions for the official scorers.",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "gm4o",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 30,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "g4e"
+      },
+      {
+        "admission_overlap": 8,
+        "agent_cap_seconds": 2900,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "expected_admission_seconds": 3.0,
+        "goal_rewriter_batch": 4,
+        "isolates": "GM4g, the Gemma Goal end-to-end dry run: as gm4o with goal_query, the Qwen3-0.6B Goal rewriter on the same GPU, --admission-overlap 8 and --goal-rewriter-batch 4 with the Gemma profile's default token cap at 25 GiB (T = 25,600, not passed; startup.json and READY pin it) (the selective rule with the Goal transient: 8,878 Pages, 5,730 needed); admissions assumed 3.0 s (stage 0's phase-1 cost of a chunk at a 32K selection, 2.0 s, plus the rewriter as on Qwen).",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "gm4g",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1400,
+        "model": "gemma4-31b-it",
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 31,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "g4e"
+      },
+      {
+        "agent_cap_seconds": 18000,
+        "async_scheduling": true,
+        "decode_concurrency": 3,
+        "enforce_eager": false,
+        "isolates": "GM4v (G4v on Gemma): the same-node control on one memory share: stock vLLM 0.24.0 with stage 0's Gemma flags and its defaults through the Vanilla transport (/v1/completions, the conversation re-rendered with the Gemma template every turn, a cache_salt per session), 16 sessions, g4's 32 cases and order. Its 28-GiB KV (11,468 blocks of 2.5 MiB) holds about three sessions at ~100K tokens (a session holds ceil(n / 32) global blocks and 325 sliding ones), so a session's prefix is evicted before its next turn: every turn re-prefills its prompt (stage 0's TTFT curve) and about three replies decode at once (decode_concurrency 3). Not part of the 10-21 end-to-end scope; re-pinned unchanged.",
+        "kind": "stock",
+        "kv_cache_gib": 28,
+        "label": "gm4v",
+        "mandatory": true,
+        "max_num_seqs": 16,
+        "min_agent_seconds": 14800,
+        "model": "gemma4-31b-it",
+        "priority": 32,
+        "reference": true,
+        "reprefill": true,
+        "role": "vanilla",
+        "warmup": true,
+        "workers": 16,
+        "workload": "g4"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "GM4r (optional plan), the query policies' random_fill control end to end: as gm4o with random_fill at the same 32K budget (the selective rule as observation_query: 10,158 Pages, 5,743 needed; no Goal rewriter).",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "gm4r",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "random_fill",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 33,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "g4e"
+      },
+      {
+        "agent_cap_seconds": 2100,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "isolates": "Release smoke, Qwen Obs.: the release docs' Qwen MemoryAgentBench server (A.4: 16 sessions, 32 GiB, 262,144 tokens, the 32K budget, the 124-GiB arena on two memory shares, --connector-pool-gib 1, CUDA graphs full, --release-idle-pages) with the release speed defaults named (the three decode fast paths, --deferred-completion-io, --language-model-only: decision D3) and --async-scheduling from the plan (D2), on smq's 16 cases; route B expected (16 idle sessions at the budget exceed the pool).",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqo",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1000,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 40,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "agent_cap_seconds": 2100,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "isolates": "Release smoke, Qwen random_fill: as smqo with random_fill at the same 32K budget (the docs have no MAB random_fill command yet: this is it).",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqr",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1000,
+        "policy": "random_fill",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 41,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "admission_overlap": 16,
+        "agent_cap_seconds": 3000,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "expected_admission_seconds": 2.0,
+        "goal_overlap": true,
+        "goal_rewriter_batch_invariant": true,
+        "goal_rewriter_engine": "vllm",
+        "goal_rewriter_guided_backend": "lm-format-enforcer",
+        "goal_rewriter_vllm_kv_gib": 3,
+        "isolates": "Release smoke, Qwen Goal: as smqo with goal_query, --admission-overlap 16 and the release Goal rewriter (decision D1): Qwen3-0.6B on vLLM (--goal-rewriter-engine vllm, lm-format-enforcer, 3 GiB, batch-invariant) with --goal-overlap; admissions assumed 2.0 s as g4g.",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqg",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1450,
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 42,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "Release smoke, Gemma Obs.: the release docs' Gemma MemoryAgentBench server (A.15: 8 sessions, 25 GiB, 262,144 tokens, the 32K budget, the 60-GiB arena on one memory share, the three decode fast paths, --deferred-completion-io, --release-idle-pages) on smg's 8 cases; 16 sessions do not fit 25 GiB at the budget (the selective rule: 5,699 Pages of 4,957). No --async-scheduling (the Gemma profile refuses it).",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgo",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 50,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "Release smoke, Gemma random_fill: as smgo with random_fill.",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgr",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "random_fill",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 51,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "admission_overlap": 8,
+        "agent_cap_seconds": 2900,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "expected_admission_seconds": 3.0,
+        "goal_overlap": true,
+        "goal_rewriter_batch_invariant": true,
+        "goal_rewriter_engine": "vllm",
+        "goal_rewriter_guided_backend": "lm-format-enforcer",
+        "goal_rewriter_vllm_kv_gib": 3,
+        "isolates": "Release smoke, Gemma Goal (decision D1, conditional on cg 3508345): as smgo with goal_query, --admission-overlap 8 and the vLLM Goal rewriter (lm-format-enforcer, 3 GiB, batch-invariant) with --goal-overlap; admissions assumed 3.0 s as gm4g. If cg fails on the child: plans.smg.servers names smgh instead (the one-line switch).",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgg",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1400,
+        "model": "gemma4-31b-it",
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 52,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "admission_overlap": 8,
+        "agent_cap_seconds": 2900,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "expected_admission_seconds": 3.0,
+        "goal_rewriter_batch": 4,
+        "isolates": "Release smoke, Gemma Goal on the Hugging Face rewriter (the docs' A.15 command: --admission-overlap 8 --goal-rewriter-batch 4, T 25,600 by default at 25 GiB): smg's goal server if cg 3508345 fails on the vLLM child (replace smgg by smgh in plans.smg.servers, rebuild).",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgh",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1400,
+        "model": "gemma4-31b-it",
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 53,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "agent_cap_seconds": 2100,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "isolates": "Release smoke, thinking on (decision D-B of the main ba4d1ba re-pin): as smqo (observation_query) with the plan's kv-session thinking (serve.py --kv-session-thinking on, named; the runner renders with enable_thinking true and the 5-token thinking-on header; the stream keeps the reasoning); --async-scheduling from the plan. Its own label because servers are shared across plans (smq runs smqo thinking off). kv-session thinking on has never run on a GPU.",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqot",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1000,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 60,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "agent_cap_seconds": 2100,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "isolates": "Release smoke, thinking on (decision D-B of the main ba4d1ba re-pin): as smqr (random_fill) with the plan's kv-session thinking (serve.py --kv-session-thinking on, named; the runner renders with enable_thinking true and the 5-token thinking-on header; the stream keeps the reasoning); --async-scheduling from the plan. Its own label because servers are shared across plans (smq runs smqr thinking off). kv-session thinking on has never run on a GPU.",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqrt",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1000,
+        "policy": "random_fill",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 61,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "admission_overlap": 16,
+        "agent_cap_seconds": 3000,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 124,
+        "expect_releases": true,
+        "expected_admission_seconds": 2.0,
+        "goal_overlap": true,
+        "goal_rewriter_batch_invariant": true,
+        "goal_rewriter_engine": "vllm",
+        "goal_rewriter_guided_backend": "lm-format-enforcer",
+        "goal_rewriter_vllm_kv_gib": 3,
+        "isolates": "Release smoke, thinking on (decision D-B of the main ba4d1ba re-pin): as smqg (goal_query, the vLLM Goal rewriter with --goal-overlap, --admission-overlap 16; child KV 3 GiB by the GPU fit, decision D-H) with the plan's kv-session thinking (serve.py --kv-session-thinking on, named; the runner renders with enable_thinking true and the 5-token thinking-on header; the stream keeps the reasoning); --async-scheduling from the plan. Its own label because servers are shared across plans (smq runs smqg thinking off). kv-session thinking on has never run on a GPU.",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqgt",
+        "mandatory": true,
+        "max_running_sessions": 16,
+        "min_agent_seconds": 1450,
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 62,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 16,
+        "workload": "smq"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "async_gemma": true,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "Release smoke, Gemma with --async-scheduling (decision D-C of the main ba4d1ba re-pin: async-gemma 9f3388c / 4a498dc, CPU-tested only; async_gemma marks the server): as smgo (observation_query) with --async-scheduling from the plan smga. Its own label because async is per server (smg runs smgo synchronously). Submit only after g1g r3 3560784 is verified.",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgoa",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 70,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "agent_cap_seconds": 2400,
+        "async_gemma": true,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "isolates": "Release smoke, Gemma with --async-scheduling (decision D-C of the main ba4d1ba re-pin: async-gemma 9f3388c / 4a498dc, CPU-tested only; async_gemma marks the server): as smgr (random_fill) with --async-scheduling from the plan smga. Its own label because async is per server (smg runs smgr synchronously). Submit only after g1g r3 3560784 is verified.",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgra",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1100,
+        "model": "gemma4-31b-it",
+        "policy": "random_fill",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 71,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "admission_overlap": 8,
+        "agent_cap_seconds": 2900,
+        "async_gemma": true,
+        "cuda_graphs": "full",
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 60,
+        "expect_releases": true,
+        "expected_admission_seconds": 3.0,
+        "goal_overlap": true,
+        "goal_rewriter_batch_invariant": true,
+        "goal_rewriter_engine": "vllm",
+        "goal_rewriter_guided_backend": "lm-format-enforcer",
+        "goal_rewriter_vllm_kv_gib": 3,
+        "isolates": "Release smoke, Gemma with --async-scheduling (decision D-C of the main ba4d1ba re-pin: async-gemma 9f3388c / 4a498dc, CPU-tested only; async_gemma marks the server): as smgg (goal_query, the vLLM Goal rewriter with --goal-overlap, --admission-overlap 8) with --async-scheduling from the plan smga. Its own label because async is per server (smg runs smgg synchronously). Submit only after g1g r3 3560784 is verified.",
+        "kind": "runtime",
+        "kv_cache_gib": 25,
+        "kv_session_slots": null,
+        "label": "smgga",
+        "mandatory": true,
+        "max_running_sessions": 8,
+        "min_agent_seconds": 1400,
+        "model": "gemma4-31b-it",
+        "policy": "goal_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768",
+          "--goal-rewriter-model",
+          "/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca"
+        ],
+        "priority": 72,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 8,
+        "workload": "smg"
+      },
+      {
+        "agent_cap_seconds": 900,
+        "cuda_graphs": "full",
+        "cut_cell": {
+          "carrier_max_tokens": 3072,
+          "expected_seconds": 150,
+          "follow_bound": 32,
+          "lead_seconds": 4.0,
+          "max_carriers": 4,
+          "max_seconds": 240,
+          "min_hits": 12,
+          "probe_bounds": [
+            24,
+            40,
+            56,
+            72,
+            88,
+            104,
+            120,
+            136
+          ],
+          "tail_seconds": 1.0
+        },
+        "decode_fastpath": true,
+        "decode_fastpath2": true,
+        "decode_fastpath3": true,
+        "deferred_completion_io": true,
+        "dram_arena_gib": 32,
+        "expect_releases": false,
+        "isolates": "Plan smqc (2026-11-15), the case of async-maxtok-1112 (runtime 13ee618, in integrate-1112 4ebff97): smqot's server (observation_query --active-token-budget 32768, kv-session thinking on and --async-scheduling from the plan, CUDA graphs full, the three decode fast paths, --deferred-completion-io, --release-idle-pages) on smqc's four FactConsolidation cases with four sessions (one memory share), then the cut cell (mab_runner.run_cut_cell): a carrier session decodes a long reply while eight probe sessions, one at a time and alone on the server, are cut at their own max_tokens bounds (two turns each); mab_checks.check_async_cut requires min_hits such cuts (a cut while another request decodes and is scheduled in the next step, no pass boundary between: the state job 3568311 died in and job 3584105 never reached).",
+        "kind": "runtime",
+        "kv_cache_gib": 32,
+        "kv_session_slots": null,
+        "label": "smqco",
+        "mandatory": true,
+        "max_running_sessions": 4,
+        "min_agent_seconds": 300,
+        "policy": "observation_query",
+        "policy_args": [
+          "--active-token-budget",
+          "32768"
+        ],
+        "priority": 80,
+        "probes": false,
+        "reference": true,
+        "release_idle_pages": true,
+        "warmup": true,
+        "workers": 4,
+        "workload": "smqc"
+      }
+    ],
+    "stock": {
+      "about": "Stock vLLM 0.24.0 from the reused clean env (perf-swe16's stock control at the 262144-token context): prefix caching on (the per-case cache_salt keeps cases apart), mamba-cache-mode align, Triton GDN prefill, native sampler, 16384 batched tokens. Per server: KV size, eager / vLLM's CUDA graphs, async scheduling, max_num_seqs. --language-model-only (coordinator 2026-10-14): no multimodal warmup before READY (the vision encoder's dummy inputs sized to max_model_len spike host memory by 25-110 GiB, beyond one GH200's --mem=113560M).",
+      "distributed_executor_backend": "uni",
+      "enable_prefix_caching": true,
+      "gdn_prefill_backend": "triton",
+      "language_model_only": true,
+      "mamba_cache_mode": "align",
+      "max_model_len": 262144,
+      "max_num_batched_tokens": 16384,
+      "max_num_seqs": 16,
+      "prefix_caching_hash_algo": "sha256",
+      "seed": 42,
+      "served_model_name": "selective-prefix"
+    },
+    "workloads": {
+      "g1": {
+        "about": "G1: one synthetic case of 12 chunks of ~4,020 Qwen3.6 tokens (13,000 characters; 3.23 characters per token measured with the pinned tokenizer), the code-word question after the last chunk: ~48K tokens of history plus the replies.",
+        "cases": 1,
+        "chunk_chars": 13000,
+        "chunks": 12,
+        "estimate": {
+          "chunk_tokens": 4020
+        },
+        "kind": "synthetic",
+        "name": "g1",
+        "seed": 20261014
+      },
+      "g2": {
+        "about": "G2: 32 synthetic cases of 5, 6 and 7 chunks (~20-28K tokens of chunks each), run 16 at a time: the first wave of 16, then the next case into each freed session (the second wave, close + new binding). The idle pins (an idle session pins its whole stream below the 32K budget) exceed the 16-GiB pool from about the 3rd chunk and the 24-GiB pool when the 16 sessions hold 5 chunks. Sized so that 16 sessions' streams fit a 39-GiB arena at 3 x the expected replies (controller.arena_fit) within one GH200's memory share with 32 GiB of process memory and a 5-GiB margin.",
+        "cases": 32,
+        "chunk_chars": 13000,
+        "chunks": [
+          5,
+          6,
+          7
+        ],
+        "estimate": {
+          "chunk_tokens": 4020
+        },
+        "kind": "synthetic",
+        "name": "g2",
+        "seed": 20261014
+      },
+      "g4": {
+        "about": "G4: the 32 MemAgent32 cases (pins.real_data; read on DeltaAI from pins.real_data.deltaai_dir and verified case by case at job start), largest first so that the pool of 16 sessions packs them (list scheduling): 8 ICL cases of 113,458 tokens (28 chunks), 8 InfBench summaries of 67-79K, 8 RULER QA of 53-58K, 8 FactConsolidation of 39K; at most ~152K tokens a session with 3 x the expected replies.",
+        "cases": [
+          "icl_trec_coarse_6600shot_balance-r311-q0",
+          "icl_trec_coarse_6600shot_balance-r324-q0",
+          "icl_trec_coarse_6600shot_balance-r337-q0",
+          "icl_trec_coarse_6600shot_balance-r350-q0",
+          "icl_trec_coarse_6600shot_balance-r373-q0",
+          "icl_trec_coarse_6600shot_balance-r375-q0",
+          "icl_trec_coarse_6600shot_balance-r393-q0",
+          "icl_trec_coarse_6600shot_balance-r396-q0",
+          "infbench_sum_eng_shots2-r52-q0",
+          "infbench_sum_eng_shots2-r84-q0",
+          "infbench_sum_eng_shots2-r56-q0",
+          "infbench_sum_eng_shots2-r90-q0",
+          "infbench_sum_eng_shots2-r29-q0",
+          "infbench_sum_eng_shots2-r91-q0",
+          "infbench_sum_eng_shots2-r77-q0",
+          "infbench_sum_eng_shots2-r58-q0",
+          "ruler_qa2_validation_65536-r365-q0",
+          "ruler_qa2_validation_65536-r350-q0",
+          "ruler_qa2_validation_65536-r391-q0",
+          "ruler_qa2_validation_65536-r370-q0",
+          "ruler_qa2_validation_65536-r341-q0",
+          "ruler_qa2_validation_65536-r342-q0",
+          "ruler_qa2_validation_65536-r309-q0",
+          "ruler_qa2_validation_65536-r301-q0",
+          "factconsolidation_sh_32k-r5-q22",
+          "factconsolidation_sh_32k-r5-q37",
+          "factconsolidation_sh_32k-r5-q4",
+          "factconsolidation_sh_32k-r5-q5",
+          "factconsolidation_sh_32k-r5-q53",
+          "factconsolidation_sh_32k-r5-q60",
+          "factconsolidation_sh_32k-r5-q70",
+          "factconsolidation_sh_32k-r5-q93"
+        ],
+        "kind": "real",
+        "name": "g4"
+      },
+      "g4e": {
+        "about": "The Gemma end-to-end dry run (gm4o, gm4g, gm4r and their interactive variants; integrate-1021 re-pin, user scope 10-21: each path runs end to end): 8 of g4's 32 MemAgent32 cases, the first two of each source in g4's order (largest first): 2 ICL of 113,458 tokens (28 chunks), 2 InfBench summaries, 2 RULER QA, 2 FactConsolidation; pins.real_data hashes only, verified case by case at job start.",
+        "cases": [
+          "icl_trec_coarse_6600shot_balance-r311-q0",
+          "icl_trec_coarse_6600shot_balance-r324-q0",
+          "infbench_sum_eng_shots2-r52-q0",
+          "infbench_sum_eng_shots2-r84-q0",
+          "ruler_qa2_validation_65536-r365-q0",
+          "ruler_qa2_validation_65536-r350-q0",
+          "factconsolidation_sh_32k-r5-q22",
+          "factconsolidation_sh_32k-r5-q37"
+        ],
+        "kind": "real",
+        "name": "g4e"
+      },
+      "smg": {
+        "about": "The Gemma release smoke (plan smg, 2026-11-03): the documented Gemma configuration's 8 sessions on 8 of g4's cases, the two shortest of each source by their Gemma counts (pins.gemma_real_tokens prompt_tokens) that passed 32,768 tokens with an applied Goal REWRITE (jobs 3405845 / 3429507), in g4's order: ICL r324 / r337 (113,758 / 113,757 Gemma tokens), InfBench r91 / r58 (70,566 / 68,380), RULER QA r309 / r301 (53,047 / 52,834), FactConsolidation q22 / q37 (39,333 each; both answered on Gemma in 3429503 / 3429507).",
+        "cases": [
+          "icl_trec_coarse_6600shot_balance-r324-q0",
+          "icl_trec_coarse_6600shot_balance-r337-q0",
+          "infbench_sum_eng_shots2-r91-q0",
+          "infbench_sum_eng_shots2-r58-q0",
+          "ruler_qa2_validation_65536-r309-q0",
+          "ruler_qa2_validation_65536-r301-q0",
+          "factconsolidation_sh_32k-r5-q22",
+          "factconsolidation_sh_32k-r5-q37"
+        ],
+        "kind": "real",
+        "name": "smg"
+      },
+      "smq": {
+        "about": "The Qwen release smoke (plan smq, 2026-11-03; the user: the release's real concurrency, 16 sessions at the 32K budget): 16 of g4's 32 MemAgent32 cases, the four shortest of each source that passed 32,768 tokens and got an applied Goal REWRITE in jobs 3405844 (g4o) / 3405845 (g4g), in g4's order (counts only, D:\\Remote-RA-temp\\scratch\\perf-mab-smoke\\case-counts.json): ICL r311 / r324 / r337 / r373 (28 chunks, 113,458 tokens), InfBench r90 / r91 / r77 / r58 (17-18 chunks, 67,635-73,699), RULER QA r341 / r342 / r309 / r301 (13-14 chunks, 53,051-55,215), FactConsolidation q22 / q4 / q5 / q60 (10 chunks, 39,409; q37 left out: format_error in both Qwen runs); pins.real_data hashes only, verified case by case at job start.",
+        "cases": [
+          "icl_trec_coarse_6600shot_balance-r311-q0",
+          "icl_trec_coarse_6600shot_balance-r324-q0",
+          "icl_trec_coarse_6600shot_balance-r337-q0",
+          "icl_trec_coarse_6600shot_balance-r373-q0",
+          "infbench_sum_eng_shots2-r90-q0",
+          "infbench_sum_eng_shots2-r91-q0",
+          "infbench_sum_eng_shots2-r77-q0",
+          "infbench_sum_eng_shots2-r58-q0",
+          "ruler_qa2_validation_65536-r341-q0",
+          "ruler_qa2_validation_65536-r342-q0",
+          "ruler_qa2_validation_65536-r309-q0",
+          "ruler_qa2_validation_65536-r301-q0",
+          "factconsolidation_sh_32k-r5-q22",
+          "factconsolidation_sh_32k-r5-q4",
+          "factconsolidation_sh_32k-r5-q5",
+          "factconsolidation_sh_32k-r5-q60"
+        ],
+        "kind": "real",
+        "name": "smq"
+      },
+      "smqc": {
+        "about": "The cases of plan smqc (2026-11-15): the four FactConsolidation cases of smq (q22 / q4 / q5 / q60: 10 chunks, 39,409 tokens each, past the 32,768-token budget, so observation_query drops Pages), in smq's order, on four sessions: the MemoryAgentBench kv-session loop with thinking on and --async-scheduling before the cut cell (the server's cases, coverage and token checks as smqt's); pins.real_data hashes only, verified case by case at job start.",
+        "cases": [
+          "factconsolidation_sh_32k-r5-q22",
+          "factconsolidation_sh_32k-r5-q4",
+          "factconsolidation_sh_32k-r5-q5",
+          "factconsolidation_sh_32k-r5-q60"
+        ],
+        "kind": "real",
+        "name": "smqc"
+      }
+    }
+  },
+  "config_sha256": "fd7de34fd95b2bedc60a311252a8794b0d984b5eb7f40fa6c4bb3b9afd136f20",
+  "gemma_real_tokens": {
+    "cases": [
+      {
+        "chunks": 14,
+        "context_tokens_qwen": 54852,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r342-q0",
+        "max_tail_tokens": 4104,
+        "prompt_tokens": 54752,
+        "reply_tokens": 210,
+        "stream_tokens": 54962
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q53",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39340,
+        "reply_tokens": 150,
+        "stream_tokens": 39490
+      },
+      {
+        "chunks": 17,
+        "context_tokens_qwen": 67635,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r58-q0",
+        "max_tail_tokens": 4172,
+        "prompt_tokens": 68380,
+        "reply_tokens": 255,
+        "stream_tokens": 68635
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r337-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113757,
+        "reply_tokens": 420,
+        "stream_tokens": 114177
+      },
+      {
+        "chunks": 14,
+        "context_tokens_qwen": 55215,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r341-q0",
+        "max_tail_tokens": 4096,
+        "prompt_tokens": 54953,
+        "reply_tokens": 210,
+        "stream_tokens": 55163
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q37",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39333,
+        "reply_tokens": 150,
+        "stream_tokens": 39483
+      },
+      {
+        "chunks": 18,
+        "context_tokens_qwen": 70981,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r91-q0",
+        "max_tail_tokens": 4122,
+        "prompt_tokens": 70566,
+        "reply_tokens": 270,
+        "stream_tokens": 70836
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r324-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113758,
+        "reply_tokens": 420,
+        "stream_tokens": 114178
+      },
+      {
+        "chunks": 14,
+        "context_tokens_qwen": 56571,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r391-q0",
+        "max_tail_tokens": 4098,
+        "prompt_tokens": 56433,
+        "reply_tokens": 210,
+        "stream_tokens": 56643
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q60",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39334,
+        "reply_tokens": 150,
+        "stream_tokens": 39484
+      },
+      {
+        "chunks": 19,
+        "context_tokens_qwen": 77050,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r84-q0",
+        "max_tail_tokens": 4127,
+        "prompt_tokens": 77256,
+        "reply_tokens": 285,
+        "stream_tokens": 77541
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r375-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113764,
+        "reply_tokens": 420,
+        "stream_tokens": 114184
+      },
+      {
+        "chunks": 14,
+        "context_tokens_qwen": 53296,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r309-q0",
+        "max_tail_tokens": 4084,
+        "prompt_tokens": 53047,
+        "reply_tokens": 210,
+        "stream_tokens": 53257
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q22",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39333,
+        "reply_tokens": 150,
+        "stream_tokens": 39483
+      },
+      {
+        "chunks": 18,
+        "context_tokens_qwen": 70375,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r77-q0",
+        "max_tail_tokens": 4156,
+        "prompt_tokens": 70916,
+        "reply_tokens": 270,
+        "stream_tokens": 71186
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r350-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113760,
+        "reply_tokens": 420,
+        "stream_tokens": 114180
+      },
+      {
+        "chunks": 15,
+        "context_tokens_qwen": 58405,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r365-q0",
+        "max_tail_tokens": 4104,
+        "prompt_tokens": 58219,
+        "reply_tokens": 225,
+        "stream_tokens": 58444
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q5",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39336,
+        "reply_tokens": 150,
+        "stream_tokens": 39486
+      },
+      {
+        "chunks": 18,
+        "context_tokens_qwen": 73699,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r90-q0",
+        "max_tail_tokens": 4157,
+        "prompt_tokens": 74505,
+        "reply_tokens": 270,
+        "stream_tokens": 74775
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r396-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113759,
+        "reply_tokens": 420,
+        "stream_tokens": 114179
+      },
+      {
+        "chunks": 15,
+        "context_tokens_qwen": 57636,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r350-q0",
+        "max_tail_tokens": 4092,
+        "prompt_tokens": 57458,
+        "reply_tokens": 225,
+        "stream_tokens": 57683
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q4",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39334,
+        "reply_tokens": 150,
+        "stream_tokens": 39484
+      },
+      {
+        "chunks": 20,
+        "context_tokens_qwen": 78885,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r52-q0",
+        "max_tail_tokens": 4117,
+        "prompt_tokens": 79012,
+        "reply_tokens": 300,
+        "stream_tokens": 79312
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r393-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113763,
+        "reply_tokens": 420,
+        "stream_tokens": 114183
+      },
+      {
+        "chunks": 13,
+        "context_tokens_qwen": 53051,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r301-q0",
+        "max_tail_tokens": 4093,
+        "prompt_tokens": 52834,
+        "reply_tokens": 195,
+        "stream_tokens": 53029
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q70",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39335,
+        "reply_tokens": 150,
+        "stream_tokens": 39485
+      },
+      {
+        "chunks": 19,
+        "context_tokens_qwen": 75767,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r56-q0",
+        "max_tail_tokens": 4133,
+        "prompt_tokens": 75806,
+        "reply_tokens": 285,
+        "stream_tokens": 76091
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r311-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113759,
+        "reply_tokens": 420,
+        "stream_tokens": 114179
+      },
+      {
+        "chunks": 14,
+        "context_tokens_qwen": 55876,
+        "first_prompt_tokens": 219,
+        "id": "ruler_qa2_validation_65536-r370-q0",
+        "max_tail_tokens": 4084,
+        "prompt_tokens": 55684,
+        "reply_tokens": 210,
+        "stream_tokens": 55894
+      },
+      {
+        "chunks": 10,
+        "context_tokens_qwen": 39409,
+        "first_prompt_tokens": 219,
+        "id": "factconsolidation_sh_32k-r5-q93",
+        "max_tail_tokens": 4056,
+        "prompt_tokens": 39334,
+        "reply_tokens": 150,
+        "stream_tokens": 39484
+      },
+      {
+        "chunks": 18,
+        "context_tokens_qwen": 73658,
+        "first_prompt_tokens": 219,
+        "id": "infbench_sum_eng_shots2-r29-q0",
+        "max_tail_tokens": 4128,
+        "prompt_tokens": 73609,
+        "reply_tokens": 270,
+        "stream_tokens": 73879
+      },
+      {
+        "chunks": 28,
+        "context_tokens_qwen": 113458,
+        "first_prompt_tokens": 219,
+        "id": "icl_trec_coarse_6600shot_balance-r373-q0",
+        "max_tail_tokens": 4115,
+        "prompt_tokens": 113758,
+        "reply_tokens": 420,
+        "stream_tokens": 114178
+      }
+    ],
+    "manifest_sha256": "010fd10971905e7611ff639c81230f12bad58acd688143cf7b6eb94e30151edf",
+    "reply_text": "<|tool_call>call:bash{command:<|\"|>read_next<|\"|>}<tool_call|>",
+    "schema": "pmab-gemma-real-tokens-v1",
+    "tokenizer_template_sha256": "6a1015c47ccfcfa67c3b772385bccee357a4d37c3cda37bd202e9047f391ab82"
+  },
+  "job_system_path": "/usr/local/bin:/usr/bin:/bin",
+  "model": "/work/nvme/bcjw/ycao11/qwen3.6-27b",
+  "package_sha256": "f151fd29a2d58cb6aa3de27cfdd876ab5e00cd023a284015c84b440d5ea90e4e",
+  "real_data": {
+    "cases": [
+      {
+        "chunks": 14,
+        "context_sha256": "5d2a586b16062185746bac3cbaa5c34f02b5890aa31d9836258c7bc52e407b06",
+        "context_tokens": 54852,
+        "id": "ruler_qa2_validation_65536-r342-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q53",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 17,
+        "context_sha256": "b5ce958a6db779794a0fedfc9e5f2087593af5465654938c65b37df1a5a70eb6",
+        "context_tokens": 67635,
+        "id": "infbench_sum_eng_shots2-r58-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "eae0fbec7f482a695e24cd8c677776af63be4b769c5b2284768118568237c462",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r337-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 14,
+        "context_sha256": "8d313b9a484c93a318c2be73521313eff6fb419a4a665a36eff2153dde6faf8b",
+        "context_tokens": 55215,
+        "id": "ruler_qa2_validation_65536-r341-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q37",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 18,
+        "context_sha256": "7b93e166866edaa603f97e7fc45763a0fc2107993453471c101d37224959a481",
+        "context_tokens": 70981,
+        "id": "infbench_sum_eng_shots2-r91-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "3f0a8bc54e5fb822888afb51502313d4c539eb72077ca817665ff92615557463",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r324-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 14,
+        "context_sha256": "b0110fa82a27bb154a0242405ee62c171233d3a4c2231a4046696e6ee7a4920c",
+        "context_tokens": 56571,
+        "id": "ruler_qa2_validation_65536-r391-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q60",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 19,
+        "context_sha256": "c0f8cf56d00012e9b78bce6891f3f9be16408bd64d509672fe5506e9264e6ea6",
+        "context_tokens": 77050,
+        "id": "infbench_sum_eng_shots2-r84-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "105ff35c6fd91a9d727f95113d34b3f1c8978a14fe4739c8c576889017b12191",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r375-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 14,
+        "context_sha256": "7a07b7c28a4a12dec2db350f3f3fdc5cb99dfa7d30d1b3de3ccc355a74ce9e1a",
+        "context_tokens": 53296,
+        "id": "ruler_qa2_validation_65536-r309-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q22",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 18,
+        "context_sha256": "d3fa1ef5e2ffc10becdfc8114abdecef784a6f354ea62d987b39065d7bb36b50",
+        "context_tokens": 70375,
+        "id": "infbench_sum_eng_shots2-r77-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "95bf987db26a3ad9424beff48d2058c7397f8c1b19f91a268a337261db528674",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r350-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 15,
+        "context_sha256": "c399a4cf4ec8846816d30d2cf060c91c8bc5a28d5b7964334bc6c2488fb223fb",
+        "context_tokens": 58405,
+        "id": "ruler_qa2_validation_65536-r365-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q5",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 18,
+        "context_sha256": "4c6babc357ffba2d21763fef626c6ad97594b3685a55778f4ff648357dd5de13",
+        "context_tokens": 73699,
+        "id": "infbench_sum_eng_shots2-r90-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "1d8923f5291c22a86f55985c985df51f9732abd55d8dfce8013a1f3b9d423c3f",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r396-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 15,
+        "context_sha256": "ce6cc2295980d4bb7a89de1e0ea0787ff80ef23e18d551148126fb8458b2b5f7",
+        "context_tokens": 57636,
+        "id": "ruler_qa2_validation_65536-r350-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q4",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 20,
+        "context_sha256": "cb1104516284ee52e6c76e435af3a22c995f8671fb4a2989eff62402364003e6",
+        "context_tokens": 78885,
+        "id": "infbench_sum_eng_shots2-r52-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "1dbdfd59f8fa35ffac2507e128d4a13990a4b635a62257abc3d0154397e01479",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r393-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 13,
+        "context_sha256": "9c3e2d2798496d3f33c0cb977b6ed66a4ae332ddf4859bacbb74daa0fd8fb563",
+        "context_tokens": 53051,
+        "id": "ruler_qa2_validation_65536-r301-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q70",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 19,
+        "context_sha256": "8d802a1d4dfbf5f3768f321cff1f1ae0662e451634ed80939b5f7612da5cbe8f",
+        "context_tokens": 75767,
+        "id": "infbench_sum_eng_shots2-r56-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "433e4d18b8adb1faa842a5b443551cf7c95091b7c3939f2bdeda48aa73e51d01",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r311-q0",
+        "split": "Test_Time_Learning"
+      },
+      {
+        "chunks": 14,
+        "context_sha256": "a2386cbb9b123d6a50b71f3bd7a9656c2c4f6e4264d5bf306346c9b87bd4be26",
+        "context_tokens": 55876,
+        "id": "ruler_qa2_validation_65536-r370-q0",
+        "split": "Accurate_Retrieval"
+      },
+      {
+        "chunks": 10,
+        "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+        "context_tokens": 39409,
+        "id": "factconsolidation_sh_32k-r5-q93",
+        "split": "Conflict_Resolution"
+      },
+      {
+        "chunks": 18,
+        "context_sha256": "1ae329374a16eea23a72cacf14d7a18f6434652a3c9211808d0cd635e7a97f81",
+        "context_tokens": 73658,
+        "id": "infbench_sum_eng_shots2-r29-q0",
+        "split": "Long_Range_Understanding"
+      },
+      {
+        "chunks": 28,
+        "context_sha256": "c0d3cf0ba25a9219769c3d98cc1356d23c6fb3ba485641e8a00e821d77485d8f",
+        "context_tokens": 113458,
+        "id": "icl_trec_coarse_6600shot_balance-r373-q0",
+        "split": "Test_Time_Learning"
+      }
+    ],
+    "count": 32,
+    "deltaai_dir": "/projects/bcjw/ssun4/memagent32_qwen_20261010/shared",
+    "manifest_sha256": "010fd10971905e7611ff639c81230f12bad58acd688143cf7b6eb94e30151edf",
+    "source": "local copy verified by build.py (hashes only; the data stays outside this directory)"
+  },
+  "release_receipt": {
+    "commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+    "date": "2026-11-12",
+    "kind": "check_git_release receipt",
+    "log_sha256": "7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c",
+    "result_line_sha256": "308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f",
+    "seconds": 504.406,
+    "skipped": 139,
+    "status": "GIT_ARCHIVE_TESTS_PASS",
+    "tests_run": 2059
+  },
+  "repository": "https://github.com/CFXM/vllm-0.24.0-selective-prefix-policies",
+  "required_dependencies": {
+    "tokenizers": "0.22.2",
+    "transformers": "5.13.0",
+    "vllm": "0.24.0"
+  },
+  "resources": {
+    "gpu_interval_ms": 1000,
+    "host_interval_seconds": 1.0
+  },
+  "runtime_features": {
+    "admission_overlap": {
+      "serve_arg": "--admission-overlap"
+    },
+    "async_fix": {
+      "native_probe": "source-overlay/remote_ra_live_v2/native_probe.py with 'def _runner_pass(' (async-fix2 4ed1013)",
+      "resolve": "source-overlay/remote_ra_live_v2/async_sched.py with 'if i.request in scheduled and i.request in qwen.requests' (async-maxtok-1112 13ee618)",
+      "scheduler": "source-overlay/vllm/v1/core/sched/scheduler.py without 'decoupled KV layout does not support deferred block frees' (async-fix a0798a8)"
+    },
+    "async_scheduling": {
+      "config_key": "async_scheduling",
+      "profiles": [
+        "qwen3.6-27b",
+        "gemma4-31b-it"
+      ],
+      "requires": "--decode-fastpath2",
+      "serve_arg": "--async-scheduling",
+      "vllm_off": "--no-async-scheduling",
+      "vllm_on": "--async-scheduling"
+    },
+    "connector_pool": {
+      "choices": [
+        1,
+        31
+      ],
+      "config_key": "connector_pool_bytes",
+      "serve_arg": "--connector-pool-gib"
+    },
+    "connector_required_kv_layout": "HND",
+    "context_limits": {
+      "dram_arena_flag": true,
+      "max_model_len_choices": [
+        65536,
+        131072,
+        262144
+      ],
+      "max_tokens_choices": [
+        1536,
+        4096
+      ],
+      "pinned_host_gib": 128,
+      "requests_per_session": 256
+    },
+    "cuda_graphs": {
+      "compilation": {
+        "full": {
+          "cudagraph_mode": "FULL_AND_PIECEWISE",
+          "mode": "VLLM_COMPILE"
+        },
+        "full-decode": {
+          "cudagraph_mode": "FULL_DECODE_ONLY",
+          "mode": "NONE"
+        },
+        "piecewise": {
+          "cudagraph_mode": "PIECEWISE",
+          "mode": "VLLM_COMPILE"
+        }
+      },
+      "modes": [
+        "off",
+        "piecewise",
+        "full",
+        "full-decode"
+      ]
+    },
+    "decode_fastpath": {
+      "config_key": "decode_fastpath",
+      "serve_arg": "--decode-fastpath"
+    },
+    "decode_fastpath2": {
+      "config_key": "decode_fastpath2",
+      "requires": "--decode-fastpath",
+      "serve_arg": "--decode-fastpath2"
+    },
+    "decode_fastpath3": {
+      "config_key": "decode_fastpath3",
+      "requires": "--decode-fastpath2",
+      "serve_arg": "--decode-fastpath3"
+    },
+    "decoupled_layout": true,
+    "deferred_completion_io": {
+      "config_key": "deferred_completion_io",
+      "echo": [
+        "startup",
+        "ready"
+      ],
+      "module": "source-overlay/remote_ra_live_v2/deferred_completion.py",
+      "serve_arg": "--deferred-completion-io"
+    },
+    "gemma4": {
+      "attention_backend": "TRITON_ATTN",
+      "connector_gib": 1,
+      "forward_tokens": 8192,
+      "global_token_bytes": 81920,
+      "goal_rewriter_batch_tokens": {
+        "24": 28672,
+        "25": 25600,
+        "28": 13312,
+        "32": null
+      },
+      "goal_tokens": 2048,
+      "grammar": "gemma4",
+      "header": "<|turn>model\n<|channel>thought\n<channel|>",
+      "host_memory_mib": 113560,
+      "host_memory_shares": {
+        "choices": [
+          1,
+          2
+        ],
+        "serve_arg": "--host-memory-shares"
+      },
+      "kv_cache_gib_choices": [
+        24,
+        25,
+        28,
+        32
+      ],
+      "max_model_len_choices": [
+        65536,
+        131072,
+        262144
+      ],
+      "model_pins": {
+        "chat_template.jinja": "ae53464bf3be25802b3a5b37def7fd89667067d7577049b3b2d74c4d8de4c6d4",
+        "config.json": "e967dd38bc5cfd38bd09a995a7bf4a754075df2b46aba68f7fbb5a791e6d8dd1",
+        "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+        "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+        "tokenizer_config.json": "9f4fec4b1dc6ecddf8f4a92e9caea5971c0e67d81309f3f9066a2bee8c362633"
+      },
+      "page_tokens_choices": [
+        16,
+        32
+      ],
+      "process_overhead_gib": 30,
+      "profile": "gemma4-31b-it",
+      "request_pages_field": "request_pages",
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "servable": true,
+      "sliding_groups": 5,
+      "sliding_token_bytes": 163840,
+      "stop_ids": [
+        0,
+        1,
+        50,
+        106
+      ],
+      "switches": [
+        "decode_fastpath",
+        "decode_fastpath2",
+        "decode_fastpath3",
+        "deferred_completion_io",
+        "goal_rewriter_batch"
+      ],
+      "thinking": "off",
+      "window_tokens": 1024
+    },
+    "goal_overlap": {
+      "flag": "goal_overlap",
+      "frame": "goal_forward",
+      "gemma": true,
+      "native": [
+        "goal_overlap_ms",
+        "goal_forward_ms"
+      ],
+      "record_key": "admission",
+      "serve_arg": "--goal-overlap"
+    },
+    "goal_rewriter_batch": {
+      "config_key": "goal_rewriter_batch",
+      "max": 16,
+      "min": 2,
+      "serve_arg": "--goal-rewriter-batch",
+      "tokens_arg": "--goal-rewriter-batch-tokens",
+      "tokens_default": 16384,
+      "tokens_key": "goal_rewriter_batch_tokens",
+      "tokens_limit": 4194304
+    },
+    "goal_rewriter_engine": {
+      "backend_arg": "--goal-rewriter-guided-backend",
+      "backends": [
+        "lm-format-enforcer",
+        "xgrammar"
+      ],
+      "batch_invariant_arg": "--goal-rewriter-batch-invariant",
+      "config_key": "goal_rewriter_engine",
+      "default_backend": "lm-format-enforcer",
+      "default_kv_gib": 3,
+      "engine": "vllm",
+      "gpu_memory_utilization": 0.05,
+      "kv_arg": "--goal-rewriter-vllm-kv-gib",
+      "kv_gib": [
+        2,
+        16
+      ],
+      "serve_arg": "--goal-rewriter-engine",
+      "startup_check": "goal rewriter vllm child: startup check passed: the guided reply in ",
+      "startup_key": "startup_ms",
+      "without_unique_items": [
+        "xgrammar"
+      ]
+    },
+    "kv_cache_gib_choices": [
+      8,
+      16,
+      24,
+      25,
+      28,
+      32
+    ],
+    "kv_refusal": true,
+    "kv_session": {
+      "context_limit": "Logical RoPE context limit reached",
+      "default_slots": 64,
+      "header_off": "<|im_start|>assistant\n<think>\n\n</think>\n\n",
+      "header_on": "<|im_start|>assistant\n<think>\n",
+      "max_slots": 64,
+      "method": "dram_backed_kv",
+      "protocol": "kv_session_v1",
+      "template_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259"
+    },
+    "language_model_only": {
+      "config_key": "language_model_only",
+      "record": {
+        "mm_limits": {
+          "image": 0,
+          "video": 0
+        },
+        "vision_tower_tensors": 0
+      },
+      "serve_arg": "--language-model-only",
+      "vllm_arg": "--language-model-only"
+    },
+    "max_sessions": 16,
+    "page_tokens_choices": [
+      16,
+      32,
+      64,
+      784
+    ],
+    "policies": [
+      "full",
+      "random50",
+      "goal_query",
+      "observation_query",
+      "random_fill",
+      "recent_fill",
+      "recent_tools",
+      "akv_rule"
+    ],
+    "policy_registry": [
+      {
+        "budget": "none",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "full",
+        "name": "full",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": false
+      },
+      {
+        "budget": "half",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "random",
+        "name": "random50",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": false
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": true,
+        "goal_text": true,
+        "kind": "query",
+        "name": "goal_query",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": "goal",
+        "reply_roles": false,
+        "rewriter_unused": null,
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": null,
+        "evidence_key": null,
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "query",
+        "name": "observation_query",
+        "order_id": null,
+        "pin": null,
+        "pin_options": [],
+        "query_vector": "observation",
+        "reply_roles": false,
+        "rewriter_unused": "observation_query ranks Pages by the observation vector only",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "random_fill",
+        "evidence_key": "fill",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "random",
+        "name": "random_fill",
+        "order_id": "splitmix64_fisher_yates_v1",
+        "pin": {
+          "rng": "splitmix64_fisher_yates_v1",
+          "seed": 42
+        },
+        "pin_options": [
+          "fill_seed"
+        ],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": "random_fill fills the remaining Pages at random and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "recent_fill",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "window",
+        "name": "recent_fill",
+        "order_id": "newest_first_v1",
+        "pin": {
+          "order": "newest_first_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": false,
+        "rewriter_unused": "recent_fill fills the remaining Pages newest first and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "fixed",
+        "builtin": true,
+        "contract_key": "recent_tools",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "window",
+        "name": "recent_tools",
+        "order_id": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1",
+        "pin": {
+          "order": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": true,
+        "rewriter_unused": "recent_tools fills the remaining Pages with tool calls, then tool responses, then reasoning, each newest first, and ranks nothing",
+        "selector_v2": true
+      },
+      {
+        "budget": "rule",
+        "builtin": true,
+        "contract_key": "akv_rule",
+        "evidence_key": "window",
+        "goal_engine": false,
+        "goal_text": false,
+        "kind": "rule",
+        "name": "akv_rule",
+        "order_id": "replies_and_latest_tool_responses_v1",
+        "pin": {
+          "latest_tool_responses": 12,
+          "rule": "replies_and_latest_tool_responses_v1"
+        },
+        "pin_options": [],
+        "query_vector": null,
+        "reply_roles": true,
+        "rewriter_unused": "akv_rule keeps every reply and the latest 12 tool responses and ranks nothing",
+        "selector_v2": true
+      }
+    ],
+    "release_idle_pages": {
+      "config_key": "release_idle_pages",
+      "events": "capacity.jsonl",
+      "schema": "remote-ra-capacity-event-v1",
+      "serve_arg": "--release-idle-pages"
+    },
+    "selection_switch_tokens": 8192,
+    "session_pool": {
+      "max_tasks": 64
+    },
+    "speed_defaults": {
+      "always_named": [
+        "--cuda-graphs",
+        "--connector-pool-gib",
+        "--max-tokens"
+      ],
+      "off_switches": {
+        "decode_fastpath": "--no-decode-fastpath",
+        "decode_fastpath2": "--no-decode-fastpath2",
+        "decode_fastpath3": "--no-decode-fastpath3",
+        "deferred_completion_io": "--no-deferred-completion-io",
+        "language_model_only": "--no-language-model-only"
+      },
+      "record_key": "speed_defaults",
+      "switches": [
+        "decode_fastpath",
+        "decode_fastpath2",
+        "decode_fastpath3",
+        "deferred_completion_io",
+        "language_model_only"
+      ]
+    },
+    "stage2": true
+  },
+  "slurm": {
+    "account": "bcjw-dtai-gh",
+    "cpus_per_task": 16,
+    "job_name_prefix": "pmab-",
+    "mail_type": "BEGIN,END,FAIL",
+    "mail_user": "cao58@illinois.edu",
+    "partition_limits": {
+      "ghx4": {
+        "max_time": "48:00:00",
+        "phrase_tag": "BATCH"
+      },
+      "ghx4-interactive": {
+        "max_submitted_jobs_per_user": 1,
+        "max_time": "02:00:00",
+        "phrase_tag": "INTERACTIVE"
+      }
+    }
+  },
+  "snapshot_workers": {
+    "job": 16,
+    "login": 8
+  },
+  "source_transport": "SEALED_GIT_BUNDLE_FRESH_CLONE",
+  "wheel_bytes": 271361241,
+  "wheel_sha256": "700db71c3cf14697d42583521f38b12fac38db1e7a8ad062e8e4d63a5dadebd5",
+  "wheel_url": "https://files.pythonhosted.org/packages/9e/80/51a071305b4eed0f6f512dc1c1c6957cbb14ccce38db1be90ffcff2a2844/vllm-0.24.0-cp38-abi3-manylinux_2_28_aarch64.whl",
+  "workload_plan": {
+    "schema": "pmab-workload-plan-v1",
+    "sha256": "036406829749117db71d839177c65019e3e528c5437b0cfcd25689d12ccdb353",
+    "workloads": {
+      "g1": {
+        "cases": [
+          {
+            "answer_sha256": "7e2a1f889bde2edbbce08444a860a70f4ef2e305f0407d96e99a1c0929739754",
+            "chars": 156744,
+            "chunks": 12,
+            "context_sha256": "313b599fe0f44b36a92fcec3f4b25c19d69d6b70279b55600a64644646a55931",
+            "fact_chunk": 3,
+            "id": "g1-00"
+          }
+        ],
+        "chunks": 12,
+        "context_tokens_est": 48240,
+        "count": 1,
+        "kind": "synthetic",
+        "max_chunks": 12,
+        "max_context_tokens_est": 48240,
+        "name": "g1"
+      },
+      "g2": {
+        "cases": [
+          {
+            "answer_sha256": "9d21fc854a46d9545c1508bac0239fe994e31762d43e81e9ebc67a873bee09ce",
+            "chars": 65336,
+            "chunks": 5,
+            "context_sha256": "5bb976ef3e3b2eda902fc81b301b5058d9bae5c9dcbdf862f408df22f7f91a25",
+            "fact_chunk": 2,
+            "id": "g2-00"
+          },
+          {
+            "answer_sha256": "371125e873cc09dd5f8cc82fc2f79b2b8d5a2868c3c7b0b1cef8b58f0920eb8e",
+            "chars": 78332,
+            "chunks": 6,
+            "context_sha256": "11027533cedffe2a07780d8a5a948d9c58168e4ad617925eba801fa60642f7c6",
+            "fact_chunk": 2,
+            "id": "g2-01"
+          },
+          {
+            "answer_sha256": "15a5cdd29ebba06d4c966f9368276e6be84354ce75294c5c853f358881debc16",
+            "chars": 91519,
+            "chunks": 7,
+            "context_sha256": "4227beccfefe73244948f3bf1df91ded5f9599caf3ec688d99b0725e07879647",
+            "fact_chunk": 3,
+            "id": "g2-02"
+          },
+          {
+            "answer_sha256": "371125e873cc09dd5f8cc82fc2f79b2b8d5a2868c3c7b0b1cef8b58f0920eb8e",
+            "chars": 65173,
+            "chunks": 5,
+            "context_sha256": "37069b22797f3ce7c87c9ca882325eac952ff3a01c6e473d78ec979152f078da",
+            "fact_chunk": 1,
+            "id": "g2-03"
+          },
+          {
+            "answer_sha256": "08eaa74f361516ef950fc2a7263d99fc2a3f624849b0a6cd3301c02f5f5db7e6",
+            "chars": 78355,
+            "chunks": 6,
+            "context_sha256": "bf096ec5aed97aa1c83e4cf225f0c72e349a850981270996006e2cf7647da543",
+            "fact_chunk": 2,
+            "id": "g2-04"
+          },
+          {
+            "answer_sha256": "9d820cfa55dc72780d2079cfc9c3f0ddcaa2dca8124f52b9b626eeff84deba27",
+            "chars": 91571,
+            "chunks": 7,
+            "context_sha256": "19d6a1751864e20cb4d8917b77816f54a0f83a128fcd2a0bf597b88e3a459eda",
+            "fact_chunk": 2,
+            "id": "g2-05"
+          },
+          {
+            "answer_sha256": "27cf72e0cf1af013e24c8a15822b2837e6c4e63b0fdf1f13eedf11ea991c344d",
+            "chars": 65320,
+            "chunks": 5,
+            "context_sha256": "812b64f771496ead0238be717342cfc27a882b4bbdf31924fa3eca46ad957409",
+            "fact_chunk": 2,
+            "id": "g2-06"
+          },
+          {
+            "answer_sha256": "27cf72e0cf1af013e24c8a15822b2837e6c4e63b0fdf1f13eedf11ea991c344d",
+            "chars": 78336,
+            "chunks": 6,
+            "context_sha256": "886ec72427a69e489f8bac7b096b2a705e611d1225007f5ea2b5583becc87337",
+            "fact_chunk": 3,
+            "id": "g2-07"
+          },
+          {
+            "answer_sha256": "7e2a1f889bde2edbbce08444a860a70f4ef2e305f0407d96e99a1c0929739754",
+            "chars": 91418,
+            "chunks": 7,
+            "context_sha256": "5da44f7c09ec45b8dc1272be1aac65fae95452baf29fa110a77c2c0ab7e08de2",
+            "fact_chunk": 3,
+            "id": "g2-08"
+          },
+          {
+            "answer_sha256": "79e928cbbd6f464b4d970df2b691dea165466212c923c64fd2a2170bfbbeb31d",
+            "chars": 65475,
+            "chunks": 5,
+            "context_sha256": "0f405792f3311f419c05c5f40d456d23e0e728c50063afb34d0a67543ad1af3e",
+            "fact_chunk": 1,
+            "id": "g2-09"
+          },
+          {
+            "answer_sha256": "371125e873cc09dd5f8cc82fc2f79b2b8d5a2868c3c7b0b1cef8b58f0920eb8e",
+            "chars": 78395,
+            "chunks": 6,
+            "context_sha256": "7c941c049cf8856b5a1189b5e6c19968c21ccc8695bc36c270611b335305d157",
+            "fact_chunk": 2,
+            "id": "g2-10"
+          },
+          {
+            "answer_sha256": "371125e873cc09dd5f8cc82fc2f79b2b8d5a2868c3c7b0b1cef8b58f0920eb8e",
+            "chars": 91387,
+            "chunks": 7,
+            "context_sha256": "89c439b9e91af48bc10be681547f9beb3ce513ac7fa5f37dd3746cca0dd335ee",
+            "fact_chunk": 3,
+            "id": "g2-11"
+          },
+          {
+            "answer_sha256": "7e2a1f889bde2edbbce08444a860a70f4ef2e305f0407d96e99a1c0929739754",
+            "chars": 65458,
+            "chunks": 5,
+            "context_sha256": "b45ece8a246a151169a66f9243e7c78c3b48111a96b5198dfc5bcda48f225a2c",
+            "fact_chunk": 1,
+            "id": "g2-12"
+          },
+          {
+            "answer_sha256": "9d21fc854a46d9545c1508bac0239fe994e31762d43e81e9ebc67a873bee09ce",
+            "chars": 78803,
+            "chunks": 6,
+            "context_sha256": "b55ae85b90ddac57895e876d6a3a655b2b058f9372188cded9446b3618d51edd",
+            "fact_chunk": 2,
+            "id": "g2-13"
+          },
+          {
+            "answer_sha256": "27cf72e0cf1af013e24c8a15822b2837e6c4e63b0fdf1f13eedf11ea991c344d",
+            "chars": 91564,
+            "chunks": 7,
+            "context_sha256": "e441a33c94a24cb80590bdfcd197b46000a561157c24f6fc1500f6a8c93a9da8",
+            "fact_chunk": 1,
+            "id": "g2-14"
+          },
+          {
+            "answer_sha256": "6d2fe30128d2a0e05f11de6f4b0bb7ab48e93a48424cd66aeed0a235214d2e36",
+            "chars": 65613,
+            "chunks": 5,
+            "context_sha256": "ab7c4dd27627e8223b2a36802be602cc0112ff15a0a5374457d5b873303a5453",
+            "fact_chunk": 2,
+            "id": "g2-15"
+          },
+          {
+            "answer_sha256": "9d820cfa55dc72780d2079cfc9c3f0ddcaa2dca8124f52b9b626eeff84deba27",
+            "chars": 78555,
+            "chunks": 6,
+            "context_sha256": "a03ce3f7743468de3626bd9fdf77a52d1b5ba7f3b0cc489d1f5506721895c9cc",
+            "fact_chunk": 1,
+            "id": "g2-16"
+          },
+          {
+            "answer_sha256": "5cd75e85a9e800e5132e16a422591ea3a0cf29d8556f9bc0b78518318406dffc",
+            "chars": 91583,
+            "chunks": 7,
+            "context_sha256": "14b2f04ecfd0d1bf9daf2cc5366c8c8cf864e05642fd96cd45dba0b1ab21eaa7",
+            "fact_chunk": 5,
+            "id": "g2-17"
+          },
+          {
+            "answer_sha256": "feb329d8182407063b7dd1ad50af9fc9a1cf19f839b790d6c116a065f83a541f",
+            "chars": 65315,
+            "chunks": 5,
+            "context_sha256": "b9812ee458a9ef953f8259fed2e7c56f596de68d465da231b8d2e2fa2b139eb3",
+            "fact_chunk": 3,
+            "id": "g2-18"
+          },
+          {
+            "answer_sha256": "15a5cdd29ebba06d4c966f9368276e6be84354ce75294c5c853f358881debc16",
+            "chars": 78411,
+            "chunks": 6,
+            "context_sha256": "ae7b1741926719e85dbad5584165f3e2ea3acc4ad43cc377c47aacffe14c5f9f",
+            "fact_chunk": 1,
+            "id": "g2-19"
+          },
+          {
+            "answer_sha256": "168adc9aa364ebf54873fd409be76578f16172b3e3a007b3fc1f71e2c18e81a7",
+            "chars": 92004,
+            "chunks": 7,
+            "context_sha256": "9867398e0883aa90400146b9fd2545a8dc1f5f040adcb8347595b7d6f1a6a32c",
+            "fact_chunk": 1,
+            "id": "g2-20"
+          },
+          {
+            "answer_sha256": "2b038deb8e8318e54674f049c96b63c08f47f4c238361975861459f00403f5ea",
+            "chars": 65106,
+            "chunks": 5,
+            "context_sha256": "67decb9ff77ee39f2c631caf53069b672050db19b3c555dddb54f02fa63802ee",
+            "fact_chunk": 3,
+            "id": "g2-21"
+          },
+          {
+            "answer_sha256": "6d2fe30128d2a0e05f11de6f4b0bb7ab48e93a48424cd66aeed0a235214d2e36",
+            "chars": 78323,
+            "chunks": 6,
+            "context_sha256": "fbd25b7d02e9443c873420771adb61a42cabfb13e3314b50815aa2f5cfbe545d",
+            "fact_chunk": 3,
+            "id": "g2-22"
+          },
+          {
+            "answer_sha256": "f05516f1ff04b82b07489e7ccf2b7b152d214ac09a4d552a77ea8368acff6c21",
+            "chars": 91607,
+            "chunks": 7,
+            "context_sha256": "bd5d97ffdcb37ffdde86c37d3fcc2133fabfc07c696770b8fd77a5cc20a939b0",
+            "fact_chunk": 1,
+            "id": "g2-23"
+          },
+          {
+            "answer_sha256": "2b038deb8e8318e54674f049c96b63c08f47f4c238361975861459f00403f5ea",
+            "chars": 65252,
+            "chunks": 5,
+            "context_sha256": "43555c60fbfbcc77831f85fc8a2d125ed832e68deb7ca2d305caf8161057ace2",
+            "fact_chunk": 2,
+            "id": "g2-24"
+          },
+          {
+            "answer_sha256": "88a9fb653e09dc0eb07bf8e6ecd3fe36a3f9ea7d3baf6a9754e62d3bad9f95f2",
+            "chars": 78397,
+            "chunks": 6,
+            "context_sha256": "6e951c0abfcaf17d4048dd96f6043edf6ee34f2a797e104775e1274587a404ec",
+            "fact_chunk": 3,
+            "id": "g2-25"
+          },
+          {
+            "answer_sha256": "88a9fb653e09dc0eb07bf8e6ecd3fe36a3f9ea7d3baf6a9754e62d3bad9f95f2",
+            "chars": 91629,
+            "chunks": 7,
+            "context_sha256": "62c3cbc8f6ab74df199d3278b070581761534c7a8688fa02656f2eb77e578cd1",
+            "fact_chunk": 5,
+            "id": "g2-26"
+          },
+          {
+            "answer_sha256": "5cd75e85a9e800e5132e16a422591ea3a0cf29d8556f9bc0b78518318406dffc",
+            "chars": 65312,
+            "chunks": 5,
+            "context_sha256": "474c6982f79545a03ac718b524395ae472601c66bc64dffd37f51bac56da9bea",
+            "fact_chunk": 1,
+            "id": "g2-27"
+          },
+          {
+            "answer_sha256": "371125e873cc09dd5f8cc82fc2f79b2b8d5a2868c3c7b0b1cef8b58f0920eb8e",
+            "chars": 78642,
+            "chunks": 6,
+            "context_sha256": "4a77afbeaaa267e29cd5f5e8c43bf2fcc5738ca3709d8cd5ae67f8630db66e99",
+            "fact_chunk": 4,
+            "id": "g2-28"
+          },
+          {
+            "answer_sha256": "feb329d8182407063b7dd1ad50af9fc9a1cf19f839b790d6c116a065f83a541f",
+            "chars": 91638,
+            "chunks": 7,
+            "context_sha256": "3aa26fd4e3b4159f5a92f4677ad23e48470a9e5aa2cc9a730bd6c88667b8bfd0",
+            "fact_chunk": 2,
+            "id": "g2-29"
+          },
+          {
+            "answer_sha256": "1f980001ddcf9b5b7aec555895b70f3b41e443035db0de78972d97372adf161d",
+            "chars": 65181,
+            "chunks": 5,
+            "context_sha256": "66c37e59e7df659611697649300c28ce75ecb4d91e4a1f6f0c2c2badf5e300f6",
+            "fact_chunk": 1,
+            "id": "g2-30"
+          },
+          {
+            "answer_sha256": "27cf72e0cf1af013e24c8a15822b2837e6c4e63b0fdf1f13eedf11ea991c344d",
+            "chars": 78404,
+            "chunks": 6,
+            "context_sha256": "d7da914369ac7da8d6bf363d98ede6364bf8655b5f345dd2ca50eb59c0ff038c",
+            "fact_chunk": 1,
+            "id": "g2-31"
+          }
+        ],
+        "chunks": 191,
+        "context_tokens_est": 767820,
+        "count": 32,
+        "kind": "synthetic",
+        "max_chunks": 7,
+        "max_context_tokens_est": 28140,
+        "name": "g2"
+      },
+      "g4": {
+        "cases": [
+          {
+            "chunks": 28,
+            "context_sha256": "433e4d18b8adb1faa842a5b443551cf7c95091b7c3939f2bdeda48aa73e51d01",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r311-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "3f0a8bc54e5fb822888afb51502313d4c539eb72077ca817665ff92615557463",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r324-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "eae0fbec7f482a695e24cd8c677776af63be4b769c5b2284768118568237c462",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r337-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "95bf987db26a3ad9424beff48d2058c7397f8c1b19f91a268a337261db528674",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r350-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "c0d3cf0ba25a9219769c3d98cc1356d23c6fb3ba485641e8a00e821d77485d8f",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r373-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "105ff35c6fd91a9d727f95113d34b3f1c8978a14fe4739c8c576889017b12191",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r375-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "1dbdfd59f8fa35ffac2507e128d4a13990a4b635a62257abc3d0154397e01479",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r393-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "1d8923f5291c22a86f55985c985df51f9732abd55d8dfce8013a1f3b9d423c3f",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r396-q0"
+          },
+          {
+            "chunks": 20,
+            "context_sha256": "cb1104516284ee52e6c76e435af3a22c995f8671fb4a2989eff62402364003e6",
+            "context_tokens": 78885,
+            "id": "infbench_sum_eng_shots2-r52-q0"
+          },
+          {
+            "chunks": 19,
+            "context_sha256": "c0f8cf56d00012e9b78bce6891f3f9be16408bd64d509672fe5506e9264e6ea6",
+            "context_tokens": 77050,
+            "id": "infbench_sum_eng_shots2-r84-q0"
+          },
+          {
+            "chunks": 19,
+            "context_sha256": "8d802a1d4dfbf5f3768f321cff1f1ae0662e451634ed80939b5f7612da5cbe8f",
+            "context_tokens": 75767,
+            "id": "infbench_sum_eng_shots2-r56-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "4c6babc357ffba2d21763fef626c6ad97594b3685a55778f4ff648357dd5de13",
+            "context_tokens": 73699,
+            "id": "infbench_sum_eng_shots2-r90-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "1ae329374a16eea23a72cacf14d7a18f6434652a3c9211808d0cd635e7a97f81",
+            "context_tokens": 73658,
+            "id": "infbench_sum_eng_shots2-r29-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "7b93e166866edaa603f97e7fc45763a0fc2107993453471c101d37224959a481",
+            "context_tokens": 70981,
+            "id": "infbench_sum_eng_shots2-r91-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "d3fa1ef5e2ffc10becdfc8114abdecef784a6f354ea62d987b39065d7bb36b50",
+            "context_tokens": 70375,
+            "id": "infbench_sum_eng_shots2-r77-q0"
+          },
+          {
+            "chunks": 17,
+            "context_sha256": "b5ce958a6db779794a0fedfc9e5f2087593af5465654938c65b37df1a5a70eb6",
+            "context_tokens": 67635,
+            "id": "infbench_sum_eng_shots2-r58-q0"
+          },
+          {
+            "chunks": 15,
+            "context_sha256": "c399a4cf4ec8846816d30d2cf060c91c8bc5a28d5b7964334bc6c2488fb223fb",
+            "context_tokens": 58405,
+            "id": "ruler_qa2_validation_65536-r365-q0"
+          },
+          {
+            "chunks": 15,
+            "context_sha256": "ce6cc2295980d4bb7a89de1e0ea0787ff80ef23e18d551148126fb8458b2b5f7",
+            "context_tokens": 57636,
+            "id": "ruler_qa2_validation_65536-r350-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "b0110fa82a27bb154a0242405ee62c171233d3a4c2231a4046696e6ee7a4920c",
+            "context_tokens": 56571,
+            "id": "ruler_qa2_validation_65536-r391-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "a2386cbb9b123d6a50b71f3bd7a9656c2c4f6e4264d5bf306346c9b87bd4be26",
+            "context_tokens": 55876,
+            "id": "ruler_qa2_validation_65536-r370-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "8d313b9a484c93a318c2be73521313eff6fb419a4a665a36eff2153dde6faf8b",
+            "context_tokens": 55215,
+            "id": "ruler_qa2_validation_65536-r341-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "5d2a586b16062185746bac3cbaa5c34f02b5890aa31d9836258c7bc52e407b06",
+            "context_tokens": 54852,
+            "id": "ruler_qa2_validation_65536-r342-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "7a07b7c28a4a12dec2db350f3f3fdc5cb99dfa7d30d1b3de3ccc355a74ce9e1a",
+            "context_tokens": 53296,
+            "id": "ruler_qa2_validation_65536-r309-q0"
+          },
+          {
+            "chunks": 13,
+            "context_sha256": "9c3e2d2798496d3f33c0cb977b6ed66a4ae332ddf4859bacbb74daa0fd8fb563",
+            "context_tokens": 53051,
+            "id": "ruler_qa2_validation_65536-r301-q0"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q22"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q37"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q4"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q5"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q53"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q60"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q70"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q93"
+          }
+        ],
+        "chunks": 564,
+        "context_tokens_est": 2255888,
+        "count": 32,
+        "kind": "real",
+        "max_chunks": 28,
+        "max_context_tokens_est": 113458,
+        "name": "g4"
+      },
+      "g4e": {
+        "cases": [
+          {
+            "chunks": 28,
+            "context_sha256": "433e4d18b8adb1faa842a5b443551cf7c95091b7c3939f2bdeda48aa73e51d01",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r311-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "3f0a8bc54e5fb822888afb51502313d4c539eb72077ca817665ff92615557463",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r324-q0"
+          },
+          {
+            "chunks": 20,
+            "context_sha256": "cb1104516284ee52e6c76e435af3a22c995f8671fb4a2989eff62402364003e6",
+            "context_tokens": 78885,
+            "id": "infbench_sum_eng_shots2-r52-q0"
+          },
+          {
+            "chunks": 19,
+            "context_sha256": "c0f8cf56d00012e9b78bce6891f3f9be16408bd64d509672fe5506e9264e6ea6",
+            "context_tokens": 77050,
+            "id": "infbench_sum_eng_shots2-r84-q0"
+          },
+          {
+            "chunks": 15,
+            "context_sha256": "c399a4cf4ec8846816d30d2cf060c91c8bc5a28d5b7964334bc6c2488fb223fb",
+            "context_tokens": 58405,
+            "id": "ruler_qa2_validation_65536-r365-q0"
+          },
+          {
+            "chunks": 15,
+            "context_sha256": "ce6cc2295980d4bb7a89de1e0ea0787ff80ef23e18d551148126fb8458b2b5f7",
+            "context_tokens": 57636,
+            "id": "ruler_qa2_validation_65536-r350-q0"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q22"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q37"
+          }
+        ],
+        "chunks": 145,
+        "context_tokens_est": 577710,
+        "count": 8,
+        "kind": "real",
+        "max_chunks": 28,
+        "max_context_tokens_est": 113458,
+        "name": "g4e"
+      },
+      "smg": {
+        "cases": [
+          {
+            "chunks": 28,
+            "context_sha256": "3f0a8bc54e5fb822888afb51502313d4c539eb72077ca817665ff92615557463",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r324-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "eae0fbec7f482a695e24cd8c677776af63be4b769c5b2284768118568237c462",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r337-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "7b93e166866edaa603f97e7fc45763a0fc2107993453471c101d37224959a481",
+            "context_tokens": 70981,
+            "id": "infbench_sum_eng_shots2-r91-q0"
+          },
+          {
+            "chunks": 17,
+            "context_sha256": "b5ce958a6db779794a0fedfc9e5f2087593af5465654938c65b37df1a5a70eb6",
+            "context_tokens": 67635,
+            "id": "infbench_sum_eng_shots2-r58-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "7a07b7c28a4a12dec2db350f3f3fdc5cb99dfa7d30d1b3de3ccc355a74ce9e1a",
+            "context_tokens": 53296,
+            "id": "ruler_qa2_validation_65536-r309-q0"
+          },
+          {
+            "chunks": 13,
+            "context_sha256": "9c3e2d2798496d3f33c0cb977b6ed66a4ae332ddf4859bacbb74daa0fd8fb563",
+            "context_tokens": 53051,
+            "id": "ruler_qa2_validation_65536-r301-q0"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q22"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q37"
+          }
+        ],
+        "chunks": 138,
+        "context_tokens_est": 550697,
+        "count": 8,
+        "kind": "real",
+        "max_chunks": 28,
+        "max_context_tokens_est": 113458,
+        "name": "smg"
+      },
+      "smq": {
+        "cases": [
+          {
+            "chunks": 28,
+            "context_sha256": "433e4d18b8adb1faa842a5b443551cf7c95091b7c3939f2bdeda48aa73e51d01",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r311-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "3f0a8bc54e5fb822888afb51502313d4c539eb72077ca817665ff92615557463",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r324-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "eae0fbec7f482a695e24cd8c677776af63be4b769c5b2284768118568237c462",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r337-q0"
+          },
+          {
+            "chunks": 28,
+            "context_sha256": "c0d3cf0ba25a9219769c3d98cc1356d23c6fb3ba485641e8a00e821d77485d8f",
+            "context_tokens": 113458,
+            "id": "icl_trec_coarse_6600shot_balance-r373-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "4c6babc357ffba2d21763fef626c6ad97594b3685a55778f4ff648357dd5de13",
+            "context_tokens": 73699,
+            "id": "infbench_sum_eng_shots2-r90-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "7b93e166866edaa603f97e7fc45763a0fc2107993453471c101d37224959a481",
+            "context_tokens": 70981,
+            "id": "infbench_sum_eng_shots2-r91-q0"
+          },
+          {
+            "chunks": 18,
+            "context_sha256": "d3fa1ef5e2ffc10becdfc8114abdecef784a6f354ea62d987b39065d7bb36b50",
+            "context_tokens": 70375,
+            "id": "infbench_sum_eng_shots2-r77-q0"
+          },
+          {
+            "chunks": 17,
+            "context_sha256": "b5ce958a6db779794a0fedfc9e5f2087593af5465654938c65b37df1a5a70eb6",
+            "context_tokens": 67635,
+            "id": "infbench_sum_eng_shots2-r58-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "8d313b9a484c93a318c2be73521313eff6fb419a4a665a36eff2153dde6faf8b",
+            "context_tokens": 55215,
+            "id": "ruler_qa2_validation_65536-r341-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "5d2a586b16062185746bac3cbaa5c34f02b5890aa31d9836258c7bc52e407b06",
+            "context_tokens": 54852,
+            "id": "ruler_qa2_validation_65536-r342-q0"
+          },
+          {
+            "chunks": 14,
+            "context_sha256": "7a07b7c28a4a12dec2db350f3f3fdc5cb99dfa7d30d1b3de3ccc355a74ce9e1a",
+            "context_tokens": 53296,
+            "id": "ruler_qa2_validation_65536-r309-q0"
+          },
+          {
+            "chunks": 13,
+            "context_sha256": "9c3e2d2798496d3f33c0cb977b6ed66a4ae332ddf4859bacbb74daa0fd8fb563",
+            "context_tokens": 53051,
+            "id": "ruler_qa2_validation_65536-r301-q0"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q22"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q4"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q5"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q60"
+          }
+        ],
+        "chunks": 278,
+        "context_tokens_est": 1110572,
+        "count": 16,
+        "kind": "real",
+        "max_chunks": 28,
+        "max_context_tokens_est": 113458,
+        "name": "smq"
+      },
+      "smqc": {
+        "cases": [
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q22"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q4"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q5"
+          },
+          {
+            "chunks": 10,
+            "context_sha256": "2a44d6ad3264a775596fe6de01994d6b348280303fdd964f82288e2c476a7409",
+            "context_tokens": 39409,
+            "id": "factconsolidation_sh_32k-r5-q60"
+          }
+        ],
+        "chunks": 40,
+        "context_tokens_est": 157636,
+        "count": 4,
+        "kind": "real",
+        "max_chunks": 10,
+        "max_context_tokens_est": 39409,
+        "name": "smqc"
+      }
+    }
+  }
+}

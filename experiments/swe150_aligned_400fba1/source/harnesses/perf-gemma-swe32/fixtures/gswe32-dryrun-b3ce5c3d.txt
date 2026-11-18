@@ -1,0 +1,409 @@
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=full ready=yes billing_factor=1 servers=full:full:32tasks:120steps:2280s partition=ghx4 time=01:10:00 expected_seconds=3120 gpu_hours_limit=1.17 gpu_hours_expected=0.87 worst_case_seconds=4200 with_eval_wait_seconds=3720 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=32 gpu_peak_mib=97331 gpu_free_mib=540 gpu_status=BELOW_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-full run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-3e881ab1c5af43c682ff3c3789a0bd47 payload_bytes=13583605 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=full ready=yes billing_factor=1 servers=full:full:32tasks:120steps:2280s partition=ghx4 time=01:10:00 expected_seconds=3120 gpu_hours_limit=1.17 gpu_hours_expected=0.87 worst_case_seconds=4200 with_eval_wait_seconds=3720 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=32 gpu_peak_mib=97331 gpu_free_mib=540 gpu_status=BELOW_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-full run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-3f3c420f9b2f4bd19b1965ac7cbc2a9f payload_bytes=13583610 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=full ready=yes billing_factor=1 servers=full:full:32tasks:120steps:2280s partition=ghx4 time=01:10:00 expected_seconds=3120 gpu_hours_limit=1.17 gpu_hours_expected=0.87 worst_case_seconds=4200 with_eval_wait_seconds=3720 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=32 gpu_peak_mib=97331 gpu_free_mib=540 gpu_status=BELOW_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-full run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=goal ready=yes billing_factor=1 servers=goal:goal_query:32tasks:120steps:5340s:batch4:T15360 partition=ghx4 time=02:01:00 expected_seconds=5580 gpu_hours_limit=2.02 gpu_hours_expected=1.55 worst_case_seconds=7260 with_eval_wait_seconds=5620 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-goal run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-5eed8f43f6c747ada6f6eb350c0997a4 payload_bytes=13583615 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=goal ready=yes billing_factor=1 servers=goal:goal_query:32tasks:120steps:5340s:batch4:T15360 partition=ghx4 time=02:01:00 expected_seconds=5580 gpu_hours_limit=2.02 gpu_hours_expected=1.55 worst_case_seconds=7260 with_eval_wait_seconds=5620 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-goal run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-360206c4524242349a0050b059b36a9e payload_bytes=13583620 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=goal ready=yes billing_factor=1 servers=goal:goal_query:32tasks:120steps:5340s:batch4:T15360 partition=ghx4 time=02:01:00 expected_seconds=5580 gpu_hours_limit=2.02 gpu_hours_expected=1.55 worst_case_seconds=7260 with_eval_wait_seconds=5620 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-goal run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs ready=yes billing_factor=1 servers=obs:observation_query:32tasks:120steps:2760s partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-a23a4c78b3f841efac898d1e4c980943 payload_bytes=13583603 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs ready=yes billing_factor=1 servers=obs:observation_query:32tasks:120steps:2760s partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-bcc53d6b89d247b8a5fc07dc37bf3075 payload_bytes=13583608 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs ready=yes billing_factor=1 servers=obs:observation_query:32tasks:120steps:2760s partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs4k ready=yes billing_factor=1 servers=obs4k:observation_query:32tasks:120steps:2760s:forward4096 partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs4k run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-a0a2bfeb945349f5a66337824cac05ee payload_bytes=13583619 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs4k ready=yes billing_factor=1 servers=obs4k:observation_query:32tasks:120steps:2760s:forward4096 partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs4k run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-92ed2d97a9464995acba9ac770425168 payload_bytes=13583624 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obs4k ready=yes billing_factor=1 servers=obs4k:observation_query:32tasks:120steps:2760s:forward4096 partition=ghx4 time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obs4k run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=rfill ready=yes billing_factor=1 servers=rfill:random_fill:32tasks:120steps:2940s partition=ghx4 time=01:21:00 expected_seconds=3720 gpu_hours_limit=1.35 gpu_hours_expected=1.03 worst_case_seconds=4860 with_eval_wait_seconds=4170 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-rfill run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-9c39938128994d329e1b17e27c49d7c9 payload_bytes=13583607 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=rfill ready=yes billing_factor=1 servers=rfill:random_fill:32tasks:120steps:2940s partition=ghx4 time=01:21:00 expected_seconds=3720 gpu_hours_limit=1.35 gpu_hours_expected=1.03 worst_case_seconds=4860 with_eval_wait_seconds=4170 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-rfill run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-fe6def456c0145529794da1fc2324fd6 payload_bytes=13583612 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=rfill ready=yes billing_factor=1 servers=rfill:random_fill:32tasks:120steps:2940s partition=ghx4 time=01:21:00 expected_seconds=3720 gpu_hours_limit=1.35 gpu_hours_expected=1.03 worst_case_seconds=4860 with_eval_wait_seconds=4170 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-rfill run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=stock ready=yes billing_factor=1 servers=stock:stock:32tasks:120steps:2460s partition=ghx4 time=01:05:00 expected_seconds=2760 gpu_hours_limit=1.08 gpu_hours_expected=0.77 worst_case_seconds=3900 with_eval_wait_seconds=3340 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=vllm-default gpu_peak_mib=90873 gpu_free_mib=6998 gpu_status=STOCK_MEASURED mem=113560M dram_arena_gib=72 memory_need_gib=32.00 memory_spare_gib=78.90 startup_spike=ELIMINATED job_name=gswe32-stock run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-9cfb2fd563364716984db13298b1884c payload_bytes=13583607 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=stock ready=yes billing_factor=1 servers=stock:stock:32tasks:120steps:2460s partition=ghx4 time=01:05:00 expected_seconds=2760 gpu_hours_limit=1.08 gpu_hours_expected=0.77 worst_case_seconds=3900 with_eval_wait_seconds=3340 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=vllm-default gpu_peak_mib=90873 gpu_free_mib=6998 gpu_status=STOCK_MEASURED mem=113560M dram_arena_gib=72 memory_need_gib=32.00 memory_spare_gib=78.90 startup_spike=ELIMINATED job_name=gswe32-stock run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-b5926dfc22c3453d91f65549bcc07f2a payload_bytes=13583612 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=stock ready=yes billing_factor=1 servers=stock:stock:32tasks:120steps:2460s partition=ghx4 time=01:05:00 expected_seconds=2760 gpu_hours_limit=1.08 gpu_hours_expected=0.77 worst_case_seconds=3900 with_eval_wait_seconds=3340 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=vllm-default gpu_peak_mib=90873 gpu_free_mib=6998 gpu_status=STOCK_MEASURED mem=113560M dram_arena_gib=72 memory_need_gib=32.00 memory_spare_gib=78.90 startup_spike=ELIMINATED job_name=gswe32-stock run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+WARNING: plan fulli: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=fulli ready=yes billing_factor=2 servers=full:full:32tasks:120steps:2280s partition=ghx4-interactive time=01:10:00 expected_seconds=3120 gpu_hours_limit=1.17 gpu_hours_expected=0.87 worst_case_seconds=4200 with_eval_wait_seconds=3720 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=32 gpu_peak_mib=97331 gpu_free_mib=540 gpu_status=BELOW_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-fulli run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+WARNING: plan fulli: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-c0c8348347b6436aa4f9359dc9d92e0e payload_bytes=13583613 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=fulli ready=yes billing_factor=2 servers=full:full:32tasks:120steps:2280s partition=ghx4-interactive time=01:10:00 expected_seconds=3120 gpu_hours_limit=1.17 gpu_hours_expected=0.87 worst_case_seconds=4200 with_eval_wait_seconds=3720 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=32 gpu_peak_mib=97331 gpu_free_mib=540 gpu_status=BELOW_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-fulli run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+WARNING: plan fulli: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+-AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user, 2x billing) goes first in a tbe
+nch chain, while no other tbench job of yours is queued
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:103 char:65
++ ... ractive') { throw '-AfterJob is for ghx4 batch plans: a ghx4-interact ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (-AfterJob is fo...yours is queued:String) [], RuntimeException
+    + FullyQualifiedErrorId : -AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user,  
+   2x billing) goes first in a tbench chain, while no other tbench job of yours is queued
+ 
+REFUSED as expected: -AfterJob on ghx4-interactive plan fulli
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obsi ready=yes billing_factor=2 servers=obs:observation_query:32tasks:120steps:2760s partition=ghx4-interactive time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obsi run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-d4f8c968a7244214a124cc88ba5b1ecb payload_bytes=13583611 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=obsi ready=yes billing_factor=2 servers=obs:observation_query:32tasks:120steps:2760s partition=ghx4-interactive time=01:18:00 expected_seconds=3600 gpu_hours_limit=1.30 gpu_hours_expected=1.00 worst_case_seconds=4680 with_eval_wait_seconds=4070 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-obsi run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+-AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user, 2x billing) goes first in a tbe
+nch chain, while no other tbench job of yours is queued
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:103 char:65
++ ... ractive') { throw '-AfterJob is for ghx4 batch plans: a ghx4-interact ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (-AfterJob is fo...yours is queued:String) [], RuntimeException
+    + FullyQualifiedErrorId : -AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user,  
+   2x billing) goes first in a tbench chain, while no other tbench job of yours is queued
+ 
+REFUSED as expected: -AfterJob on ghx4-interactive plan obsi
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=rfilli ready=yes billing_factor=2 servers=rfill:random_fill:32tasks:120steps:2940s partition=ghx4-interactive time=01:21:00 expected_seconds=3720 gpu_hours_limit=1.35 gpu_hours_expected=1.03 worst_case_seconds=4860 with_eval_wait_seconds=4170 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-rfilli run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-e967776a93674b4ab742339ea2b19c0c payload_bytes=13583615 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=rfilli ready=yes billing_factor=2 servers=rfill:random_fill:32tasks:120steps:2940s partition=ghx4-interactive time=01:21:00 expected_seconds=3720 gpu_hours_limit=1.35 gpu_hours_expected=1.03 worst_case_seconds=4860 with_eval_wait_seconds=4170 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=90163 gpu_free_mib=7708 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-rfilli run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+-AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user, 2x billing) goes first in a tbe
+nch chain, while no other tbench job of yours is queued
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:103 char:65
++ ... ractive') { throw '-AfterJob is for ghx4 batch plans: a ghx4-interact ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (-AfterJob is fo...yours is queued:String) [], RuntimeException
+    + FullyQualifiedErrorId : -AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user,  
+   2x billing) goes first in a tbench chain, while no other tbench job of yours is queued
+ 
+REFUSED as expected: -AfterJob on ghx4-interactive plan rfilli
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=stocki ready=yes billing_factor=2 servers=stock:stock:32tasks:120steps:2460s partition=ghx4-interactive time=01:05:00 expected_seconds=2760 gpu_hours_limit=1.08 gpu_hours_expected=0.77 worst_case_seconds=3900 with_eval_wait_seconds=3340 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=vllm-default gpu_peak_mib=90873 gpu_free_mib=6998 gpu_status=STOCK_MEASURED mem=113560M dram_arena_gib=72 memory_need_gib=32.00 memory_spare_gib=78.90 startup_spike=ELIMINATED job_name=gswe32-stocki run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-98187ae747eb4efabb43de586ef699eb payload_bytes=13583615 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=stocki ready=yes billing_factor=2 servers=stock:stock:32tasks:120steps:2460s partition=ghx4-interactive time=01:05:00 expected_seconds=2760 gpu_hours_limit=1.08 gpu_hours_expected=0.77 worst_case_seconds=3900 with_eval_wait_seconds=3340 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=vllm-default gpu_peak_mib=90873 gpu_free_mib=6998 gpu_status=STOCK_MEASURED mem=113560M dram_arena_gib=72 memory_need_gib=32.00 memory_spare_gib=78.90 startup_spike=ELIMINATED job_name=gswe32-stocki run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes
+-AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user, 2x billing) goes first in a tbe
+nch chain, while no other tbench job of yours is queued
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:103 char:65
++ ... ractive') { throw '-AfterJob is for ghx4 batch plans: a ghx4-interact ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (-AfterJob is fo...yours is queued:String) [], RuntimeException
+    + FullyQualifiedErrorId : -AfterJob is for ghx4 batch plans: a ghx4-interactive plan (one submitted job per user,  
+   2x billing) goes first in a tbench chain, while no other tbench job of yours is queued
+ 
+REFUSED as expected: -AfterJob on ghx4-interactive plan stocki
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smoke ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smoke run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-865533fc70da4e4f9d1eb2968072a516 payload_bytes=13583664 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smoke ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smoke run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-37307899da8e469699e486affb2cf23a payload_bytes=13583669 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smoke ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smoke run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE
+WARNING: plan smokehf: the fallback of plan smoke: submit only if cg 3508345 failed on the vLLM Goal rewriter child
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokehf ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalhf4ks:goal_query:32tasks:10steps:1700s:batch4:T15360:forward4096 partition=ghx4 time=02:28:00 expected_seconds=5000 gpu_hours_limit=2.47 gpu_hours_expected=1.39 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokehf run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.78 max_limit_over_expected=2.25 gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalhf4ks:25:95671:2200:LEAVES_MIN_FREE
+WARNING: plan smokehf: the fallback of plan smoke: submit only if cg 3508345 failed on the vLLM Goal rewriter child
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-2d42bb74aadc439a92b15be9d08a74ac payload_bytes=13583660 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokehf ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalhf4ks:goal_query:32tasks:10steps:1700s:batch4:T15360:forward4096 partition=ghx4 time=02:28:00 expected_seconds=5000 gpu_hours_limit=2.47 gpu_hours_expected=1.39 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokehf run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.78 max_limit_over_expected=2.25 gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalhf4ks:25:95671:2200:LEAVES_MIN_FREE
+WARNING: plan smokehf: the fallback of plan smoke: submit only if cg 3508345 failed on the vLLM Goal rewriter child
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-5edf57b9f4844083bd3c0a863fca6af9 payload_bytes=13583665 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokehf ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalhf4ks:goal_query:32tasks:10steps:1700s:batch4:T15360:forward4096 partition=ghx4 time=02:28:00 expected_seconds=5000 gpu_hours_limit=2.47 gpu_hours_expected=1.39 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 kv_cache_gib=25 gpu_peak_mib=95671 gpu_free_mib=2200 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokehf run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.78 max_limit_over_expected=2.25 gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalhf4ks:25:95671:2200:LEAVES_MIN_FREE
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=b3ce5c3dc53b06bd224038ea5bf8ca05dd77d7d8633e943e9901b01dbe3ec428 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokea ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokea run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE async_scheduling=obs4ks:on,rfill4ks:on,goalvllm4ks:on
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-fe7db18e704047089df9d5fa9ccfd3fd payload_bytes=13583672 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokea ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokea run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE async_scheduling=obs4ks:on,rfill4ks:on,goalvllm4ks:on
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+DRY_RUN connections=0 stage=/u/ycao11/gswe32-061e2594c9544ae2bba74ae8d477b85d payload_bytes=13583677 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokea ready=yes billing_factor=1 servers=obs4ks:observation_query:32tasks:10steps:1500s:forward4096,rfill4ks:random_fill:32tasks:10steps:1600s:forward4096,goalvllm4ks:goal_query:32tasks:10steps:1700s:forward4096:vllm3gib:overlap partition=ghx4 time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44 worst_case_seconds=8880 with_eval_wait_seconds=7130 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 kv_cache_gib=25 gpu_peak_mib=95595 gpu_free_mib=2276 gpu_status=LEAVES_MIN_FREE mem=113560M dram_arena_gib=72 memory_need_gib=105.22 memory_spare_gib=5.68 startup_spike=ELIMINATED job_name=gswe32-smokea run_label=r1 after_job=1234567 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16 / swe32) model=gemma4-31b-it@842da37 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on release_idle_pages=on connector_pool_gib=1 goal_text=goals.jsonl still_provisional=evaluation,fast_paths,goal_rewriter_batch,kv_pool,prompt_and_runner,throughput,time,vanilla statements_sealed=yes role=release-smoke limit_over_expected=1.76 max_limit_over_expected=2.25 goal_rewriter_engine=goalvllm4ks:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllm4ks gpu_servers=obs4ks:25:90163:7708:LEAVES_MIN_FREE,rfill4ks:25:90163:7708:LEAVES_MIN_FREE,goalvllm4ks:25:95595:2276:LEAVES_MIN_FREE async_scheduling=obs4ks:on,rfill4ks:on,goalvllm4ks:on
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+exact authorization phrase of plan full required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n full required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan full required
+ 
+REFUSED as expected: -Plan full -Authorize -Authorization AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY -DryRun
+exact authorization phrase of plan goal required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n goal required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan goal required
+ 
+REFUSED as expected: -Plan goal -Authorize -Authorization AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY -DryRun
+exact authorization phrase of plan goal required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n goal required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan goal required
+ 
+REFUSED as expected: -Plan goal -Authorize -Authorization AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY -DryRun
+exact authorization phrase of plan goal required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n goal required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan goal required
+ 
+REFUSED as expected: -Plan goal -Authorize -Authorization AUTHORIZE_GSWE32_GOAL_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY -DryRun
+unknown plan 'goalb4' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea
+)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 'g...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'goalb4' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, 
+    stocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan goalb4 -SelfTest
+exact authorization phrase of plan goal required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n goal required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan goal required
+ 
+REFUSED as expected: -Plan goal -Authorize -Authorization authorize_gswe32_goal_gemma4_32tasks_16sessions_rewriter_batch_reused_v9_env_one_gh200_121min_no_retry -DryRun
+exact authorization phrase of plan goal required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n goal required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan goal required
+ 
+REFUSED as expected: -Plan goal -Authorize -Authorization AUTHORIZE_SWE16_GOAL_32TASKS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY -DryRun
+explicit -Authorize switch also required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:160 char:27
++ ... ($Authorization) { throw 'explicit -Authorize switch also required' }
++                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (explicit -Authorize switch also required:String) [], RuntimeException
+    + FullyQualifiedErrorId : explicit -Authorize switch also required
+ 
+REFUSED as expected: -Plan goal -Authorization AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY
+AfterJob must be a Slurm job id
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:102 char:60
++ ... notmatch '^[0-9]{1,12}$') { throw 'AfterJob must be a Slurm job id' }
++                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (AfterJob must be a Slurm job id:String) [], RuntimeException
+    + FullyQualifiedErrorId : AfterJob must be a Slurm job id
+ 
+REFUSED as expected: -Plan goal -AfterJob x7 -Authorize -Authorization AUTHORIZE_GSWE32_GOAL_GEMMA4_32TASKS_16SESSIONS_REWRITER_BATCH_REUSED_V9_ENV_ONE_GH200_121MIN_NO_RETRY -DryRun
+unknown plan 'all' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 'a...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'all' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, st 
+   ocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan all -SelfTest
+unknown plan 'nope' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 'n...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'nope' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, s 
+   tocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan nope -SelfTest
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+RunLabel must match r[0-9]{1,2} (for example r1, r2)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:101 char:45
++ ... ]{1,2}$') { throw 'RunLabel must match r[0-9]{1,2} (for example r1, r ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (RunLabel must m...example r1, r2):String) [], RuntimeException
+    + FullyQualifiedErrorId : RunLabel must match r[0-9]{1,2} (for example r1, r2)
+ 
+REFUSED as expected: -Plan full -RunLabel x1 -SelfTest
+WARNING: plan full: the GPU-memory estimate at --kv-cache-gib 32 leaves 540 MiB, under the 2-GiB rule (README GPU 
+memory: full is pinned at 32 GiB by the runtime, job 3410948 measured it TIGHT at 97,121 MiB)
+RunLabel must match r[0-9]{1,2} (for example r1, r2)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:101 char:45
++ ... ]{1,2}$') { throw 'RunLabel must match r[0-9]{1,2} (for example r1, r ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (RunLabel must m...example r1, r2):String) [], RuntimeException
+    + FullyQualifiedErrorId : RunLabel must match r[0-9]{1,2} (for example r1, r2)
+ 
+REFUSED as expected: -Plan full -RunLabel r100 -SelfTest
+exact authorization phrase of plan obsi required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...n obsi required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan obsi required
+ 
+REFUSED as expected: -Plan obsi -Authorize -Authorization AUTHORIZE_GSWE32_OBS_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+exact authorization phrase of plan obs required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...an obs required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan obs required
+ 
+REFUSED as expected: -Plan obs -Authorize -Authorization AUTHORIZE_GSWE32_OBSI_GEMMA4_32TASKS_16SESSIONS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+exact authorization phrase of plan obs4k required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... obs4k required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan obs4k required
+ 
+REFUSED as expected: -Plan obs4k -Authorize -Authorization AUTHORIZE_GSWE32_OBS_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+exact authorization phrase of plan obs required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...an obs required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan obs required
+ 
+REFUSED as expected: -Plan obs -Authorize -Authorization AUTHORIZE_GSWE32_OBS4K_GEMMA4_32TASKS_16SESSIONS_FORWARD4096_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+exact authorization phrase of plan obs4k required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... obs4k required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan obs4k required
+ 
+REFUSED as expected: -Plan obs4k -Authorize -Authorization AUTHORIZE_GSWE32_OBS4K_GEMMA4_32TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+unknown plan 'obs4ki' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea
+)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 'o...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'obs4ki' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, 
+    stocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan obs4ki -SelfTest
+unknown plan 'goali' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 'g...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'goali' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli,  
+   stocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan goali -SelfTest
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_SMOKEHF_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_HF_REWRITER_BATCH4_BATCH_REUSED_V9_ENV_ONE_GH200_148MIN_NO_RETRY -DryRun
+WARNING: plan smokehf: the fallback of plan smoke: submit only if cg 3508345 failed on the vLLM Goal rewriter child
+exact authorization phrase of plan smokehf required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...mokehf required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smokehf required
+ 
+REFUSED as expected: -Plan smokehf -Authorize -Authorization AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_152MIN_NO_RETRY -DryRun
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_OBS4K_GEMMA4_32TASKS_16SESSIONS_FORWARD4096_BATCH_REUSED_V9_ENV_ONE_GH200_78MIN_NO_RETRY -DryRun
+unknown plan 'smokei' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smokea
+)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 's...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'smokei' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, 
+    stocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan smokei -SelfTest
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+exact authorization phrase of plan smokea required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...smokea required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smokea required
+ 
+REFUSED as expected: -Plan smokea -Authorize -Authorization AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smoke: goal_query on the vLLM Goal rewriter child with --goal-overlap on Gemma: submit only after cg 
+3508345 (perf-compose-g1, path (c)) passed; if it failed on the child, submit plan smokehf instead
+exact authorization phrase of plan smoke required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza... smoke required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smoke required
+ 
+REFUSED as expected: -Plan smoke -Authorize -Authorization AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+exact authorization phrase of plan smokea required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...smokea required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smokea required
+ 
+REFUSED as expected: -Plan smokea -Authorize -Authorization AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+exact authorization phrase of plan smokea required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...smokea required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smokea required
+ 
+REFUSED as expected: -Plan smokea -Authorize -Authorization AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_152MIN_NO_RETRY -DryRun
+WARNING: plan smokea: the async-on variant of plan smoke (--async-scheduling on the Gemma 4 profile, CPU-tested only): 
+submit only after g1g r3 3560784 (Gemma async) is verified; if it does not pass, submit plan smoke instead
+exact authorization phrase of plan smokea required
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:164 char:50
++ ... rization) { throw ('exact authorization phrase of plan '+$Plan+' requ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (exact authoriza...smokea required:String) [], RuntimeException
+    + FullyQualifiedErrorId : exact authorization phrase of plan smokea required
+ 
+REFUSED as expected: -Plan smokea -Authorize -Authorization AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY -DryRun
+unknown plan 'smokeai' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli, stocki, smoke, smokehf, smoke
+a)
+At I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1:88 char:36
++ ... s($Plan)) { throw ('unknown plan '''+$Plan+''' (one of '+(@($Plans.Ke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (unknown plan 's...mokehf, smokea):String) [], RuntimeException
+    + FullyQualifiedErrorId : unknown plan 'smokeai' (one of full, goal, obs, obs4k, rfill, stock, fulli, obsi, rfilli 
+   , stocki, smoke, smokehf, smokea)
+ 
+REFUSED as expected: -Plan smokeai -SelfTest
+DRYRUN_LINES SAME recorded=16 differ=0 [] new=['smokea|', 'smokea|1234567', 'smokehf|', 'smokehf|1234567', 'smoke|', 'smoke|1234567']
+PLAN_FINGERPRINT SAME plans=10 differences=0 []
+DRYRUN_LINES SAME recorded=20 differ=0 [] new=['smokea|', 'smokea|1234567'] masked=['smoke:gpu_peak_mib+gpu_free_mib+gpu_servers'] differ_only_in_masked=['smoke|', 'smoke|1234567']
+PLAN_FINGERPRINT SAME_EXCEPT_EXPECTED plans=12 differences=2 ['smoke gpu_fit', 'smoke plan_row'] expected=['smoke gpu_fit', 'smoke plan_row']
+ENTRY_CHECKS bad=0

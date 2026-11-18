@@ -1,0 +1,14 @@
+{
+  "instance_id": "django__django-10973",
+  "image": "/projects/bcjw/ssun4/swe64_standard_20261115/random-interactive-20261116/assets-recovery/django__django-10973.base.sif",
+  "base_commit": "ddb293685235fd09e932805771ae97f72e817181",
+  "base_available": true,
+  "checkout": "ddb293685235fd09e932805771ae97f72e817181",
+  "elf": "aarch64",
+  "python": "/opt/miniconda3/envs/testbed/bin/python",
+  "module": "/testbed/django/__init__.py",
+  "package_version": "3.0.dev20190213221133",
+  "image_bytes": 911712256,
+  "passed": true,
+  "entrypoint_checked": false
+}

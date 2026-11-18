@@ -1,0 +1,50 @@
+Third-party source and model assets
+
+vLLM source under source-overlay/vllm/ derives from vllm-project/vllm
+v0.24.0: https://github.com/vllm-project/vllm/tree/v0.24.0
+Its Apache-2.0 license and per-file copyright/SPDX notices are retained.
+Local changes implement selective-prefix runtime integration; the review diff
+is patches/v0.24.0.diff. The repository LICENSE does not replace upstream notices.
+
+The model configuration and tokenizer assets under
+source-overlay/remote_ra_linux/model-evidence/ are third-party assets from the
+Qwen3.6-27B snapshot recorded in INSTALL_RELEASE.json:
+revision 6a9e13bd6fc8f0983b9b99948120bc37f49c13e9.
+Upstream model repository: https://huggingface.co/Qwen/Qwen3.6-27B
+model-config.json corresponds to config.json; tokenizer-config.json corresponds
+to tokenizer_config.json; tokenizer.json retains its upstream name.
+The installer checks these assets by SHA256. Model weights are not distributed.
+Consult the upstream model repository's license and model-card conditions for
+the snapshot before redistribution or use. This project's Apache-2.0 LICENSE
+does not grant or replace rights in third-party model/tokenizer assets.
+
+The dram_kv source and xuanxue_vllm_policy_adapter retain their upstream names
+and notices. The captured dram-backed-kv LICENSE identifies Apache License 2.0
+and "Copyright 2026 SnapKV experiments". Their algorithm integration is recorded in the source manifests;
+the maintained Goal constructor uses its deterministic mode (rewriter=None).
+Structured tool-call action normalization is a local integration change.
+
+source-overlay/remote_ra_live_v2/terminus2_goal.py contains, verbatim, the
+prompt templates terminus-json-plain.txt and timeout.txt of Harbor 0.21.0
+(harbor/agents/terminus_2/templates/, SHA-256 pinned in that file) and short
+literal strings of its terminus_2.py and tmux_session.py, used only to
+recognise the requests of Harbor's Terminus 2 agent. Harbor 0.21.0 is
+distributed under the Apache License 2.0 (its package metadata:
+License-Expression: Apache-2.0).
+
+Historical qualification references document a predecessor runtime. They do
+not certify a newly built package or change the licenses of any bundled asset.
+
+examples/memoryagentbench/ contains short strings of two projects under the MIT License:
+MemoryAgentBench (https://github.com/HUST-AI-HYZ/MemoryAgentBench, commit
+538026089d1a8a8eff05121d0db89b388f360eba, Copyright (c) 2026 Yuanzhe Hu): its SYSTEM_MESSAGE and its
+long-context query template (utils/templates.py), in cases.py; and mini-swe-agent
+(https://github.com/SWE-agent/mini-swe-agent, Copyright (c) 2025 Kilian A. Lieret and Carlos E.
+Jimenez): its bash tool definition and the <returncode>/<output> observation format, in run_cases.py.
+Their licenses are licenses/MemoryAgentBench-LICENSE and licenses/mini-swe-agent-LICENSE.
+cases.py and score.py read MemoryAgentBench's utils/templates.py and utils/eval_other_utils.py from
+the user's own checkout, SHA-256 pinned in examples/memoryagentbench/upstream/SHA256SUMS; those files
+are not distributed here. No benchmark data is distributed here either: cases.py lists the MemAgent32
+cases by row of the Hugging Face dataset cxkjntmngm/MemAgent_Bench (revision
+a785de0f8d2511a43b9e524b5326e1105a4d218a), which declares no license, and builds them from the user's
+own download.

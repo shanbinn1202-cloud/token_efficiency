@@ -1,0 +1,21 @@
+# 截至 2026-11-16 的 MemoryAgentBench 验证状态（冻结）
+
+[English](memoryagentbench-validation.md) | 简体中文
+
+> **2026-11-16 冻结**（在 `e6d0c88`）：原来 [docs/MEMORYAGENTBENCH_BENCHMARK.zh-CN.md](../MEMORYAGENTBENCH_BENCHMARK.zh-CN.md#验证状态) 的“验证状态”一节，由 docs-reorg-1116 原样移到这里，只改了相对链接；不再更新。“A.x”和“B.x”指该页的各节；“Part A”是该页正式记录的配置（thinking 关闭、32 GiB、262,144 token）。下面有些句子在冻结时已经过时（例如 `random_fill`“未运行”、打分“待定”：打分已推迟）。每次运行的当前状态见 [docs/status.zh-CN.md](../status.zh-CN.md)。
+
+已在一张 GH200 上经过 GPU 验证：Qwen3.6-27B 跑 kv-session 协议，关闭 thinking。两个作业都于 2026-10-17 在 runtime commit `0d37346` 上运行，并于 2026-10-18 离线核验。与证据一起存档的那次核验是第一次，用的是当时的作业 harness，它的 pins 和交付代码与这两个作业的不同，结论为 `NOT_VERIFIED`。下面的结论来自之后为这两个作业重建的作业自己的 harness 所做的重新核验（G2 的 `PMAB_PASS`：用修正后的检查重新计算的状态）：
+
+- **作业 3397844（G1）：`PMAB_PASS_VERIFIED`。** 一个 12 块的合成 case（约 48K token 的历史）及其问题，每个服务一个 session，262,144 token 的上下文，24 GiB GPU KV，eager 执行：先是本 runtime 的 `full`（参照组）和 32,768 token 预算的 `observation_query`，再是 eager、同步调度的 stock vLLM 0.24.0，回放 `full` 服务的每一个 prompt。两个 runtime 服务的每一轮都与客户端的构造 token 级精确一致；stock 回放在全部 13 轮上生成了与 `full` 相同的 token，`observation_query` 在全部 13 轮上给出了与 `full` 相同的回复。协议探针全部通过：重复关闭和未知 id 的关闭（200），对已关闭 id 的第 0 轮请求（400），对忙碌 session 的请求（400），一个 262,144 token 的 prompt 在任何模型计算之前以 `CONTEXT_LIMIT` 被拒绝、该 session 之后仍可用，以及 `/health`（200）。一个可选的、使用 vLLM 默认设置并经 A.5 的 Vanilla transport 访问的 stock 服务也通过了。
+- **作业 3397842（G2）：runtime 正确；作业的结论 `PMAB_FAIL` 来自作业 harness 一项检查的 bug，用修正后的检查离线重新计算，证据的结论为 `PMAB_PASS`。** 16 个 `observation_query` session，32,768 token 预算，`--cuda-graphs full --decode-fastpath`，131,072 token 的上下文，`--dram-arena-gib 39` 和 `--release-idle-pages`（[docs/reference.zh-CN.md 4.13 节](../reference.zh-CN.md#413-释放空闲-session-的-page需显式开启)），分别用 16 GiB 和 24 GiB 的池各跑一次：32 个 5 到 7 块的合成 case，同时运行 16 个，每个 case 都给出了回答。16 GiB 时 139 次释放、124 次重新载入，24 GiB 时 13 次和 13 次；没有任何抢占；32 个 case 在两个池之间完全相同，每次重新载入都恰好恢复了一个已完成轮次所提交的 Page。未通过的那项检查（route-b）把引擎完成一轮之后、在请求的 HTTP 尾段发生的释放也算了进去；用修正后的检查，该服务通过。一个可选的、不开 `--release-idle-pages` 的第三个服务如预期那样因 block 不足而有一轮失败；在本正式测试所用的 runtime 上，这样的一轮会改为等待（[docs/running.zh-CN.md 4.4 节](../running.zh-CN.md#44-一个服务上的多个-session)）。
+
+**已运行，评分待出：** 本配置的 32 个 case 的运行（G4）都在 runtime commit `f9322a6` 上，于 2026-10-18 运行：作业 3405844（`observation_query`）、作业 3405845（带 Goal rewriter 的 `goal_query`）和作业 3405855（stock Vanilla 对照）。每个服务都跑完了全部 32 个 case，同时运行 16 个（614 到 618 个请求），没有 runtime 错误。作业 3405844：`PMAB_PARTIAL_PASS_VERIFIED`；runtime 的检查全部通过，有一个 case 停在 agent 自己的连续格式错误上限。作业 3405845：作业结论 `PMAB_FAIL` 只来自作业 harness 的 route-B 检查，它把一个请求从到达服务端起就算作运行中，而该请求当时仍在等待接纳（这样的 session 算空闲，[docs/reference.zh-CN.md 4.13 节](../reference.zh-CN.md#413-释放空闲-session-的-page需显式开启)）；用修正后的检查离线重新核验，作业为 `PMAB_PARTIAL_PASS`（一个 case 停在格式错误上限）。作业 3405855：作业结论 `PMAB_FAIL` 来自作业 harness 的指标检查，它也要求 stock 服务不发生抢占；stock vLLM 抢占了 9 次（`vllm:num_preemptions_total` = 9），修正后的检查把它记为一项发现，作业为 `PMAB_PASS`。route B 在作业 3405844 中释放空闲 session 的页 385 次，在作业 3405845 中 460 次，每次重新载入都恰好恢复了被释放的页；本 runtime 没有发生任何抢占。integrate-1018 的 commit 说明记录了在 Qwen release 上 `f9322a6` 对照 `0d37346` 的 identity probe（launcher、启动、worker 和 engine 的输出：555 + 219 + 482 + 977 项，0 处差异）；probe 的输出本身不在存档的证据中。
+
+**Gemma 4 31B IT，8 个 case 端到端（A.15）：** 两个作业都于 2026-10-21 在 runtime commit `9ef0d6d`（integrate-1021）上、在一张 GH200 上运行，用 32 个 case 中的 8 个（每个来源的前两个）、8 个 session、25 GiB GPU KV、CUDA graph `full`、三个解码快速路径和 `--deferred-completion-io`，并已离线核验：
+
+- **作业 3429503（`observation_query`）：`PMAB_PASS_VERIFIED`。** 155 个请求；8 个 case 中 7 个给出了回答，另一个的回答停在 4,096 token 的回复上限（`unfinished_thinking`，正常的结束状态，A.7）。所有检查都通过，其中包括解码快速路径 2 和 3、`--deferred-completion-io`、Gemma profile、route B（空闲 Page 的释放和重新载入）以及选页。
+- **作业 3429507（`goal_query`，Goal rewriter 每批最多 4 个）：`PMAB_PASS_VERIFIED`。** 155 个请求；8 个 case 中 7 个给出了回答，另一个的回答停在回复上限。所有检查都通过；route B 释放空闲 session 的页 106 次，重新载入 101 次。40 次 rewriter 调用以批处理方式运行（33 次单独运行，3 次在一个三个调用的批中，4 次在一个四个调用的批中），没有 Goal 回退，也没有 CUDA 显存不足：这是 Gemma profile 的批处理 rewriter 第一次在 GPU 上运行（25 GiB，默认 token 上限 25,600）。
+
+这两次运行说明 Gemma 路径能端到端跑通，但它们不是 32 个 case 的配置。它们的分数没有计算（官方评分尚待进行，与 Qwen 相同），Gemma 的 Vanilla 对照和 `random_fill` 都还没有运行（A.15）。
+
+尚未完成：这些运行的官方评分（A.10），包括 Long-Range Understanding case 的官方评判。B.3 的 Slurm 脚本、B.2 中 dry run 和评分程序的检查以及 B.7 的脚本都未经测试；`examples/memoryagentbench/` 的 `run_cases.py`、`cases.py` 和 `score.py` 只有 CPU 测试（`tests/test_mab_client.py`），还没有在 GPU 作业中运行过。本文档不报告任何分数。

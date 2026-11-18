@@ -1,0 +1,29 @@
+{
+  "job_name": "@JOB_NAME@",
+  "jobs_dir": "@JOBS_DIR@",
+  "n_attempts": 1,
+  "timeout_multiplier": 1.0,
+  "n_concurrent_trials": 16,
+  "quiet": true,
+  "retry": {"max_retries": 0},
+  "environment": {"type": "docker", "delete": true, "force_build": false},
+  "verifier": {"disable": false},
+  "agents": [
+    {
+      "name": "terminus-2",
+      "model_name": "hosted_vllm/selective-prefix",
+      "kwargs": {
+        "api_base": "http://127.0.0.1:@PORT@/v1",
+        "model_info": {"max_input_tokens": 262144, "max_output_tokens": 4096, "input_cost_per_token": 0,
+                       "output_cost_per_token": 0},
+        "temperature": 0.0,
+        "llm_kwargs": {"max_tokens": 4096, "timeout": 3600, "max_retries": 0, "num_retries": 0}
+      }
+    }
+  ],
+  "datasets": [
+    {"name": "terminal-bench/terminal-bench-2",
+     "ref": "sha256:c6fc2e2382c1dbae99b2d5ecd2f4f4a60c3c01e0d84642d69b4afd92e99d078b",
+     "task_names": "@TASK_NAMES@"}
+  ]
+}

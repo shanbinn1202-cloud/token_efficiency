@@ -1,0 +1,198 @@
+{
+ "commit": "51b4085",
+ "rows": [
+  {
+   "budget": "none",
+   "builtin": true,
+   "contract_key": null,
+   "evidence_key": null,
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "full",
+   "name": "full",
+   "order_id": null,
+   "pin": null,
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": false,
+   "rewriter_unused": null,
+   "selector_v2": false
+  },
+  {
+   "budget": "half",
+   "builtin": true,
+   "contract_key": null,
+   "evidence_key": null,
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "random",
+   "name": "random50",
+   "order_id": null,
+   "pin": null,
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": false,
+   "rewriter_unused": null,
+   "selector_v2": false
+  },
+  {
+   "budget": "fixed",
+   "builtin": true,
+   "contract_key": null,
+   "evidence_key": null,
+   "goal_engine": true,
+   "goal_text": true,
+   "hooked": false,
+   "kind": "query",
+   "name": "goal_query",
+   "order_id": null,
+   "pin": null,
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": "goal",
+   "reply_roles": false,
+   "rewriter_unused": null,
+   "selector_v2": true
+  },
+  {
+   "budget": "fixed",
+   "builtin": true,
+   "contract_key": null,
+   "evidence_key": null,
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "query",
+   "name": "observation_query",
+   "order_id": null,
+   "pin": null,
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": "observation",
+   "reply_roles": false,
+   "rewriter_unused": "observation_query ranks Pages by the observation vector only",
+   "selector_v2": true
+  },
+  {
+   "budget": "fixed",
+   "builtin": true,
+   "contract_key": "random_fill",
+   "evidence_key": "fill",
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "random",
+   "name": "random_fill",
+   "order_id": "splitmix64_fisher_yates_v1",
+   "pin": {
+    "rng": "splitmix64_fisher_yates_v1",
+    "seed": 42
+   },
+   "pin_options": [
+    "fill_seed"
+   ],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": false,
+   "rewriter_unused": "random_fill fills the remaining Pages at random and ranks nothing",
+   "selector_v2": true
+  },
+  {
+   "budget": "fixed",
+   "builtin": true,
+   "contract_key": "recent_fill",
+   "evidence_key": "window",
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "window",
+   "name": "recent_fill",
+   "order_id": "newest_first_v1",
+   "pin": {
+    "order": "newest_first_v1"
+   },
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": false,
+   "rewriter_unused": "recent_fill fills the remaining Pages newest first and ranks nothing",
+   "selector_v2": true
+  },
+  {
+   "budget": "fixed",
+   "builtin": true,
+   "contract_key": "recent_tools",
+   "evidence_key": "window",
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "window",
+   "name": "recent_tools",
+   "order_id": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1",
+   "pin": {
+    "order": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1"
+   },
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": true,
+   "rewriter_unused": "recent_tools fills the remaining Pages with tool calls, then tool responses, then reasoning, each newest first, and ranks nothing",
+   "selector_v2": true
+  },
+  {
+   "budget": "rule",
+   "builtin": true,
+   "contract_key": "akv_rule",
+   "evidence_key": "window",
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": false,
+   "kind": "rule",
+   "name": "akv_rule",
+   "order_id": "replies_and_latest_tool_responses_v1",
+   "pin": {
+    "latest_tool_responses": 12,
+    "rule": "replies_and_latest_tool_responses_v1"
+   },
+   "pin_options": [],
+   "protocols": null,
+   "query_vector": null,
+   "reply_roles": true,
+   "rewriter_unused": "akv_rule keeps every reply and the latest 12 tool responses and ranks nothing",
+   "selector_v2": true
+  },
+  {
+   "budget": "fixed",
+   "builtin": false,
+   "contract_key": "ledger_query",
+   "evidence_key": "hook",
+   "goal_engine": false,
+   "goal_text": false,
+   "hooked": true,
+   "kind": "query",
+   "name": "ledger_query",
+   "order_id": "ledger_dedupe_reasoning_light_v1",
+   "pin": {
+    "dedupe": true,
+    "ledger_cap_percent": 50,
+    "order": "ledger_dedupe_reasoning_light_v1",
+    "reasoning_turns": 2
+   },
+   "pin_options": [
+    "ledger_cap_percent"
+   ],
+   "protocols": [
+    "mswea_xml_v1"
+   ],
+   "query_vector": "observation",
+   "reply_roles": false,
+   "rewriter_unused": "ledger_query ranks Pages by the observation vector after its file and edit ledger and builds no Goal query",
+   "selector_v2": true
+  }
+ ],
+ "source": "controller.registry_rows of ledger-int-1112 51b4085 (2026-11-14): describe() of source-overlay/policy_registry.py (the eight built-in policies and the release plug-in ledger_query, with `protocols`) plus each policy's `hooked` (DESCRIBE)"
+}

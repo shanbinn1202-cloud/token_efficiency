@@ -1,0 +1,24 @@
+{
+  "random": {
+    "policy": "random_fill",
+    "release_idle_pages": true,
+    "async_scheduling": true,
+    "dram_arena_pages": 69632,
+    "kv_layout": {
+      "mamba_slots": 49,
+      "mamba_tokens": 784,
+      "page_tokens": 16
+    }
+  },
+  "sliding_window": {
+    "policy": "recent_fill",
+    "release_idle_pages": true,
+    "async_scheduling": true,
+    "dram_arena_pages": 69632,
+    "kv_layout": {
+      "mamba_slots": 49,
+      "mamba_tokens": 784,
+      "page_tokens": 16
+    }
+  }
+}

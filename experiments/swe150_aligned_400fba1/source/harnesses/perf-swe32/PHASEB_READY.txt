@@ -1,0 +1,152 @@
+perf-swe32 PHASE B: READY 2026-11-17 (nothing queued). Pin integrate-1116 7a8c36e (goal-rollback-1116 merged).
+Submitted so far: keepedgei r2 = job 3613280 (SWE32_PASS_VERIFIED; join re-run JOIN_PASS); keepedgegoalpi r1 = job
+3613408 (SWE32_PASS_VERIFIED, JOIN_PASS; its pair compare PAIR_DIFFERS = decode nondeterminism at 16 sessions, the
+analysis of 11-17); sess24i r1 = job 3613537 (SWE32_FAIL: capacity stall at 24 sessions without --release-idle-pages);
+full64ak24 r1 = 3613549 and stockkeep64k24 r2 = 3613662 cancelled by the user (their next labels: r2 / r3).
+Payload 9735ad9a80414a4422b787f6222a81c1d88c8febd24b61bf0bc28d2921b5d482, entry 58493ab887d2e8256cc8af771bffdb5fcabd37a2aac2b110985c3b2328364d5a (9fdb921d, which ran the jobs above, is frozen at ..\perf-swe32-9fdb921d\).
+tbench: verification code code/b4f66ad67ee26b3c (pointer by-payload 80eb473e...; 9fdb921d's pointer 6afdc580... ->
+12bc49516ca3a059 kept), the edge module upstream/swe32_edge_script.py (97141b98...), the tbench half MANIFEST a675913e...
+Every line below: SelfTest, DryRun, then the real submission (one visible SSH/Duo connection; the user only). All
+SelfTests and DryRuns below were run locally on this payload: PASS (D:\Remote-RA-temp\scratch\harness-1116\phaseb-selftest-dryrun.json).
+tbench preflight: a job can only be submitted while no agent pool is live on tbench (the preflight refuses a live pool
+even with -AfterJob), so hold the next job of a chain and submit the new ones between pools.
+
+SUBMIT ORDER (the user's of 2026-11-17: the group runs at 24 concurrent sessions; this smoke validates the K = 24 stable
+configuration first). ghx4-interactive plans: one interactive job per user, one tbench job at a time, no -AfterJob.
+ghx4 batch plans: each -AfterJob the previous one (replace <J_prev> by the real job id).
+  1. sess24ri: the K = 24 stable configuration: sess24's goal_query server (vLLM Goal child, --goal-overlap, the scripted
+     edge-case client, 24 tasks at 24 sessions, replies up to 1536 tokens) with --release-idle-pages and
+     --admission-overlap 24. It verifies: no CAPACITY_STALL at 24 sessions (3613537 stalled), the scripted rollbacks'
+     rebuilds get room through idle release (check_release_idle_pages: evictions, readmissions, dropped_by_rebuild), the
+     keep render and goal-carry checks, every other check. Likely ~23 min (3613537's pool start at 423 s + the scripted
+     agents + the readmissions).
+     sess24ri        --time 00:41:00 (GPU-h 1.37 at the limit / 0.91 expected, 2x billing)
+  2. the remaining functional jobs (ghx4-interactive, one at a time):
+     gdnobspi        --time 01:14:00 (GPU-h 2.47 at the limit / 1.64 expected, 2x billing)
+     gdngoalpi       --time 01:14:00 (GPU-h 2.47 at the limit / 1.64 expected, 2x billing)
+     gdnidlepi       --time 01:14:00 (GPU-h 2.47 at the limit / 1.64 expected, 2x billing)
+     gdnobs24pi      --time 01:20:00 (GPU-h 2.67 at the limit / 1.78 expected, 2x billing)
+     keepedgesynci   --time 00:44:00 (GPU-h 1.47 at the limit / 0.98 expected, 2x billing)
+     The gdn pairs run OFF then ON in one job; compare_pair.py is information only at 16 / 24 sessions (decode
+     nondeterminism; the criterion change for the pairs is pending the user's decision of 11-17).
+  3. the 64-task chain at K = 24 (ghx4 batch; every selective plan now has --release-idle-pages, goal64ak24
+     --admission-overlap 24):
+     full64ak24      --time 01:53:00 (GPU-h 1.88 at the limit / 1.26 expected)  -RunLabel r2
+     stockkeep64k24  --time 02:39:00 (GPU-h 2.65 at the limit / 2.00 expected)  -RunLabel r3
+     goal64ak24      --time 02:34:00 (GPU-h 2.57 at the limit / 2.07 expected)  -RunLabel r2
+     obs64ak24       --time 02:13:00 (GPU-h 2.22 at the limit / 1.48 expected)
+     recent64ak24    --time 02:13:00 (GPU-h 2.22 at the limit / 1.65 expected)
+     ledger64ak24    --time 02:13:00 (GPU-h 2.22 at the limit / 1.48 expected)
+  4. the same chain at K = 16 (ghx4 batch; the selective plans with --release-idle-pages):
+     full64a         --time 01:53:00 (GPU-h 1.88 at the limit / 1.26 expected)
+     stockkeep64t    --time 02:39:00 (GPU-h 2.65 at the limit / 2.00 expected)
+     goal64a         --time 02:34:00 (GPU-h 2.57 at the limit / 2.07 expected)
+     obs64a          --time 02:13:00 (GPU-h 2.22 at the limit / 1.48 expected)
+     recent64a       --time 02:13:00 (GPU-h 2.22 at the limit / 1.65 expected)
+     ledger64a       --time 02:13:00 (GPU-h 2.22 at the limit / 1.48 expected)
+
+== FIRST: the K = 24 stable configuration smoke, ghx4-interactive (no -AfterJob; one interactive job per user)
+# sess24ri: ghx4-interactive --time 00:41:00, GPU-h 1.37 at the limit / 0.91 expected, job name swe32-sess24ri
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24ri -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24ri -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_SESS24RI_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_RELEASE_IDLE_OVERLAP24_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_41MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24ri -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_SESS24RI_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_RELEASE_IDLE_OVERLAP24_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_41MIN_NO_RETRY'
+
+== then the remaining functional jobs, ghx4-interactive, one at a time (keepedgei 3613280 and keepedgegoalpi 3613408 are done)
+# gdnobspi: ghx4-interactive --time 01:14:00, GPU-h 2.47 at the limit / 1.64 expected, job name swe32-gdnobspi
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobspi -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobspi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBSPI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobspi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBSPI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdngoalpi: ghx4-interactive --time 01:14:00, GPU-h 2.47 at the limit / 1.64 expected, job name swe32-gdngoalpi
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalpi -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalpi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNGOALPI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalpi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNGOALPI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdnidlepi: ghx4-interactive --time 01:14:00, GPU-h 2.47 at the limit / 1.64 expected, job name swe32-gdnidlepi
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlepi -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlepi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNIDLEPI_8TASKS_4SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlepi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNIDLEPI_8TASKS_4SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdnobs24pi: ghx4-interactive --time 01:20:00, GPU-h 2.67 at the limit / 1.78 expected, job name swe32-gdnobs24pi
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24pi -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24pi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBS24PI_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_80MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24pi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBS24PI_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_80MIN_NO_RETRY'
+# keepedgesynci: ghx4-interactive --time 00:44:00, GPU-h 1.47 at the limit / 0.98 expected, job name swe32-keepedgesynci
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesynci -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesynci -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_KEEPEDGESYNCI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_SYNC_SCRIPTED_SYNC_EDGE_CASES_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_44MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesynci -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_KEEPEDGESYNCI_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_SYNC_SCRIPTED_SYNC_EDGE_CASES_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_44MIN_NO_RETRY'
+
+== 64-task plans at K = 24 (ghx4 batch, chained -AfterJob; every selective one with --release-idle-pages, goal with --admission-overlap 24)
+# full64ak24: ghx4 --time 01:53:00, GPU-h 1.88 at the limit / 1.26 expected, job name swe32-full64ak24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64ak24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64ak24 -RunLabel r2 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64ak24 -RunLabel r2 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY'
+# stockkeep64k24: ghx4 --time 02:39:00, GPU-h 2.65 at the limit / 2.00 expected, job name swe32-stockkeep64k24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64k24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64k24 -RunLabel r3 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP64K24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64k24 -RunLabel r3 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP64K24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY'
+# goal64ak24: ghx4 --time 02:34:00, GPU-h 2.57 at the limit / 2.07 expected, job name swe32-goal64ak24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64ak24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64ak24 -RunLabel r2 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_VLLM_GOAL_OVERLAP_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64ak24 -RunLabel r2 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_VLLM_GOAL_OVERLAP_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+# obs64ak24: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.48 expected, job name swe32-obs64ak24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64ak24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_OBS_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_OBS_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+# recent64ak24: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.65 expected, job name swe32-recent64ak24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64ak24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_RECENT_FILL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_RECENT_FILL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+# ledger64ak24: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.48 expected, job name swe32-ledger64ak24
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64ak24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64ak24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER64AK24_64TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+
+== 64-task plans at K = 16 (ghx4 batch, chained -AfterJob; the selective ones with --release-idle-pages)
+# full64a: ghx4 --time 01:53:00, GPU-h 1.88 at the limit / 1.26 expected, job name swe32-full64a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY'
+# recent64a: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.65 expected, job name swe32-recent64a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_RECENT_FILL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_RECENT_FILL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+# obs64a: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.48 expected, job name swe32-obs64a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_OBS_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_OBS_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+# goal64a: ghx4 --time 02:34:00, GPU-h 2.57 at the limit / 2.07 expected, job name swe32-goal64a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_VLLM_GOAL_OVERLAP_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_VLLM_GOAL_OVERLAP_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+# ledger64a: ghx4 --time 02:13:00, GPU-h 2.22 at the limit / 1.48 expected, job name swe32-ledger64a
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64a -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger64a -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER64A_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+# stockkeep64t: ghx4 --time 02:39:00, GPU-h 2.65 at the limit / 2.00 expected, job name swe32-stockkeep64t
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP64T_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep64t -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP64T_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY'
+
+== batch forms of the functional jobs (ghx4, if interactive is not wanted)
+# sess24r: ghx4 --time 00:41:00, GPU-h 0.68 at the limit / 0.46 expected, job name swe32-sess24r
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24r -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24r -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_SESS24R_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_RELEASE_IDLE_OVERLAP24_BATCH_REUSED_V9_ENV_ONE_GH200_41MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan sess24r -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_SESS24R_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_RELEASE_IDLE_OVERLAP24_BATCH_REUSED_V9_ENV_ONE_GH200_41MIN_NO_RETRY'
+# keepedgesync: ghx4 --time 00:44:00, GPU-h 0.73 at the limit / 0.49 expected, job name swe32-keepedgesync
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesync -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesync -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_KEEPEDGESYNC_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_SYNC_SCRIPTED_SYNC_EDGE_CASES_BATCH_REUSED_V9_ENV_ONE_GH200_44MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan keepedgesync -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_KEEPEDGESYNC_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_SYNC_SCRIPTED_SYNC_EDGE_CASES_BATCH_REUSED_V9_ENV_ONE_GH200_44MIN_NO_RETRY'
+# gdnobsp: ghx4 --time 01:14:00, GPU-h 1.23 at the limit / 0.82 expected, job name swe32-gdnobsp
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobsp -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobsp -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBSP_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobsp -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBSP_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdngoalp: ghx4 --time 01:14:00, GPU-h 1.23 at the limit / 0.82 expected, job name swe32-gdngoalp
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalp -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalp -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNGOALP_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdngoalp -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNGOALP_16TASKS_16SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdnidlep: ghx4 --time 01:14:00, GPU-h 1.23 at the limit / 0.82 expected, job name swe32-gdnidlep
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlep -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlep -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNIDLEP_8TASKS_4SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnidlep -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNIDLEP_8TASKS_4SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+# gdnobs24p: ghx4 --time 01:20:00, GPU-h 1.33 at the limit / 0.89 expected, job name swe32-gdnobs24p
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24p -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24p -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBS24P_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_80MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan gdnobs24p -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_GDNOBS24P_24TASKS_24SESSIONS_262K_KV25_REPLY1536_THINKING_ON_ASYNC_SCRIPTED_PAIR_BATCH_REUSED_V9_ENV_ONE_GH200_80MIN_NO_RETRY'

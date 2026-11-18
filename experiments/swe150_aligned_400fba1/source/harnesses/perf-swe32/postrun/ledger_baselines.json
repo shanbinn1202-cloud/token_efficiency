@@ -1,0 +1,109 @@
+{
+ "about": "The baselines' endpoints, computed by postrun/ledger_verify.py --endpoints-only on their verified evidence and tbench runs (2026-11-14; the GPU-PLAN's recorded values: re-reads not attended 16.9 % / 23.1 %, exact duplicates 16.3 % (10.4 % without loops) / 9.5 %, re-read steps 27.4 % (obs262), steps 48.4 / 68.2). Wall time and admission times are not comparable across runtime commits (60c5d21, cf2b28d vs 51b4085). 2026-11-15: recomputed with the loop-count fix (the same code, endpoints only; every other value unchanged): loop_streaks (the number of streaks) and loop_instances (the instances with at least one streak) apart, loops_by_instance added; before, loop_instances counted the streaks (here equal by chance: obst 2 streaks in 2 instances, ctx25 none). Outputs: D:\\Remote-RA-temp\\scratch\\loop-receipt-1115\\baselines\\.",
+ "runs": {
+  "ctx25 3461703": {
+   "commit": "cf2b28d",
+   "endpoints": {
+    "actions": 2179,
+    "admission_engine_ms": {
+     "max": 2408.034,
+     "mean": 159.701,
+     "n": 2183,
+     "p50": 151.691,
+     "p95": 203.489
+    },
+    "capacity_stall": null,
+    "capacity_wait_requests": 0,
+    "capacity_waits": 0,
+    "exact_dup_no_loops_pct": 9.5,
+    "exact_dup_pct": 9.5,
+    "exact_dups": 208,
+    "hook": null,
+    "instances": 32,
+    "loop_instances": 0,
+    "loop_streaks": 0,
+    "loops": [],
+    "loops_by_instance": {},
+    "reread_steps_no_loops_pct": 27.4,
+    "reread_steps_pct": 27.4,
+    "rereads": 524,
+    "rereads_unattended": 121,
+    "rereads_unattended_pct": 23.1,
+    "resolved": 20,
+    "resolved_of": 32,
+    "selection_ms": {
+     "max": 2597.374,
+     "mean": 99.321,
+     "n": 2183,
+     "p50": 78.715,
+     "p95": 144.515
+    },
+    "sessions_joined": 32,
+    "steps_per_instance": 68.2
+   },
+   "job": "3461703",
+   "label": "obs262",
+   "note": "the ledger baseline (thinking off, ctx25's obs262 settings)",
+   "plan": "ctx25",
+   "policy": "observation_query",
+   "thinking": false
+  },
+  "obst 3539260": {
+   "commit": "60c5d21",
+   "endpoints": {
+    "actions": 1505,
+    "admission_engine_ms": {
+     "max": 1814.946,
+     "mean": 157.152,
+     "n": 1548,
+     "p50": 144.823,
+     "p95": 229.645
+    },
+    "capacity_stall": null,
+    "capacity_wait_requests": 0,
+    "capacity_waits": 0,
+    "exact_dup_no_loops_pct": 10.4,
+    "exact_dup_pct": 16.3,
+    "exact_dups": 246,
+    "hook": null,
+    "instances": 32,
+    "loop_instances": 2,
+    "loop_streaks": 2,
+    "loops": [
+     82,
+     20
+    ],
+    "loops_by_instance": {
+     "astropy__astropy-13977": [
+      82
+     ],
+     "django__django-10554": [
+      20
+     ]
+    },
+    "reread_steps_no_loops_pct": 23.9,
+    "reread_steps_pct": 23.6,
+    "rereads": 307,
+    "rereads_unattended": 52,
+    "rereads_unattended_pct": 16.9,
+    "resolved": 21,
+    "resolved_of": 32,
+    "selection_ms": {
+     "max": 3488.19,
+     "mean": 110.054,
+     "n": 1548,
+     "p50": 78.402,
+     "p95": 175.426
+    },
+    "sessions_joined": 32,
+    "steps_per_instance": 48.4
+   },
+   "job": "3539260",
+   "label": "obs262t",
+   "note": "the ledgert / ledger64 baseline (thinking on, obst's settings)",
+   "plan": "obst",
+   "policy": "observation_query",
+   "thinking": true
+  }
+ }
+}

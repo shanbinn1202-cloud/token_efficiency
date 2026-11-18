@@ -1,0 +1,32 @@
+{
+ "agent_host": "tbench (ssh tbench, read-only copy)",
+ "date": "2026-10-21",
+ "definition": "terminus2-goal-inputs-provisional-v2",
+ "errors": 0,
+ "failures": 0,
+ "files": {
+  "templates/terminus-json-plain.txt": "89a3dc3a15752b748a99fb907c9251ab31a464e13386583fb48476b078b54a34",
+  "templates/timeout.txt": "32bf9aa7b157a6a0e0ba0d33b81e59dd67204276f158afc1fe6cb684ced68872",
+  "terminus_2.py": "c6b72b8c6289809b2ff3a3009b8f118fa1edb1da205f48d0b56c6938a49cb12f",
+  "tmux_session.py": "38642b794c3358809dabddfb36ea53d57fadf3e1e6fd736d82b39da8f3ce7976"
+ },
+ "harbor_dir": "/home/ubuntu/harbor-env/lib/python3.12/site-packages/harbor/agents/terminus_2",
+ "harbor_source_tests": [
+  "test_literals_are_harbor_constants (test_terminus2_goal.HarborSourceTests.test_literals_are_harbor_constants) ... ok",
+  "test_pins (test_terminus2_goal.HarborSourceTests.test_pins) ... ok"
+ ],
+ "kind": "terminus2-goal agent-host check",
+ "pins": {
+  "sources": {
+   "harbor/agents/terminus_2/templates/timeout.txt": "32bf9aa7b157a6a0e0ba0d33b81e59dd67204276f158afc1fe6cb684ced68872",
+   "harbor/agents/terminus_2/terminus_2.py": "c6b72b8c6289809b2ff3a3009b8f118fa1edb1da205f48d0b56c6938a49cb12f",
+   "harbor/agents/terminus_2/tmux_session.py": "38642b794c3358809dabddfb36ea53d57fadf3e1e6fd736d82b39da8f3ce7976"
+  },
+  "template_sha256": "89a3dc3a15752b748a99fb907c9251ab31a464e13386583fb48476b078b54a34"
+ },
+ "repo_head": "120bc3c0a6db281eeba21f541957c3ae6941542d",
+ "seconds": 1.7,
+ "skipped": 0,
+ "status": "PASS",
+ "tests_run": 12
+}

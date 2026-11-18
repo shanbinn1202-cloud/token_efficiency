@@ -1,0 +1,69 @@
+(APIServer pid=3795963) INFO 10-28 18:26:55 [model.py:1725] Using max model len 131072
+(APIServer pid=3795963) INFO 10-28 18:26:55 [vllm.py:1006] Asynchronous scheduling is disabled.
+(APIServer pid=3795963) INFO 10-28 18:26:56 [registry.py:134] All limits of multimodal modalities supported by the model are set to 0, running in text-only mode.
+(EngineCore pid=3797122) INFO 10-28 18:27:22 [core.py:121] Initializing a V1 LLM engine (v0.24.0) with config: model='/projects/bcjw/ycao11/models/gemma-4-31b-it', speculative_config=None, tokenizer='/projects/bcjw/ycao11/models/gemma-4-31b-it', dtype=torch.bfloat16, max_seq_len=131072, enforce_eager=False, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'backend': 'inductor', 'custom_ops': ['none'], 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32], 'max_cudagraph_capture_size': 32}
+(EngineCore pid=3797122) INFO 10-28 18:27:25 [registry.py:134] All limits of multimodal modalities supported by the model are set to 0, running in text-only mode.
+(EngineCore pid=3797122) INFO 10-28 18:27:26 [topk_topp_sampler.py:39] FlashInfer top-p/top-k sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0.
+(EngineCore pid=3797122) INFO 10-28 18:27:26 [vllm.py:1006] Asynchronous scheduling is disabled.
+(EngineCore pid=3797122) INFO 10-28 18:27:26 [cuda.py:420] Using AttentionBackendEnum.TRITON_ATTN backend.
+(EngineCore pid=3797122) INFO 10-28 18:27:26 [cuda.py:420] Using AttentionBackendEnum.TRITON_ATTN backend.
+(EngineCore pid=3797122) INFO 10-28 18:28:59 [default_loader.py:430] Loading weights took 90.28 seconds
+(EngineCore pid=3797122) INFO 10-28 18:29:00 [gpu_model_runner.py:5570] Model loading took 57.91 GiB memory and 93.301494 seconds
+(EngineCore pid=3797122) INFO 10-28 18:29:00 [interface.py:1271] Decoupled KV layout: full-attention and sliding-window blocks of 16 tokens, window 1024 tokens, 16 window slots, 4096-token forwards.
+(EngineCore pid=3797122) INFO 10-28 18:29:17 [backends.py:1148] Dynamo bytecode transform time: 17.15 s
+(EngineCore pid=3797122) INFO 10-28 18:29:29 [backends.py:378] Cache the graph of compile range (1, 4096) for later use
+(EngineCore pid=3797122) INFO 10-28 18:29:48 [backends.py:393] Compiling a graph for compile range (1, 4096) takes 30.51 s
+(EngineCore pid=3797122) INFO 10-28 18:29:54 [monitor.py:53] torch.compile took 53.93 s in total
+(EngineCore pid=3797122) INFO 10-28 18:30:00 [kv_cache_utils.py:2438] Decoupled KV cache pools: 7518 full-attention blocks, 6481 sliding-window blocks
+(EngineCore pid=3797122) INFO 10-28 18:30:00 [kv_cache_utils.py:2448] GPU KV cache size: 120,288 tokens
+(EngineCore pid=3797122) INFO 10-28 18:30:00 [kv_cache_utils.py:2449] Maximum concurrency for 131,072 tokens per request: 0.92x
+(EngineCore pid=3797122) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/7 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▍        | 1/7 [00:00<00:00,  8.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 3/7 [00:00<00:00, 10.86it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  71%|███████▏  | 5/7 [00:00<00:00, 11.95it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 7/7 [00:00<00:00, 12.28it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 7/7 [00:00<00:00, 11.78it/s]
+(EngineCore pid=3797122) Capturing CUDA graphs (decode, FULL):   0%|          | 0/5 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):  20%|██        | 1/5 [00:01<00:06,  1.71s/it]Capturing CUDA graphs (decode, FULL):  40%|████      | 2/5 [00:03<00:05,  1.84s/it]Capturing CUDA graphs (decode, FULL):  80%|████████  | 4/5 [00:03<00:00,  1.37it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 5/5 [00:05<00:00,  1.13s/it]Capturing CUDA graphs (decode, FULL): 100%|██████████| 5/5 [00:05<00:00,  1.16s/it]
+(EngineCore pid=3797122) INFO 10-28 18:30:08 [gpu_model_runner.py:6972] Graph capturing finished in 7 secs, took 0.12 GiB
+(EngineCore pid=3797122) INFO 10-28 18:30:08 [jit_monitor.py:60] Kernel JIT monitor activated — Triton JIT compilations during inference will be logged as warnings.
+(EngineCore pid=3797122) INFO 10-28 18:30:08 [core.py:344] init engine (profile, create kv cache, warmup model) took 68.25 s (compilation: 53.93 s)
+INFO 11-02 02:17:57 [model.py:598] Resolved architecture: Qwen3ForCausalLM
+INFO 11-02 02:17:57 [model.py:1725] Using max model len 16384
+INFO 11-02 02:17:57 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 11-02 02:17:57 [vllm.py:1006] Asynchronous scheduling is enabled.
+INFO 11-02 02:17:57 [kernel.py:276] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=33376) INFO 11-02 02:18:13 [core.py:114] Initializing a V1 LLM engine (v0.24.0) with config: model='/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca', speculative_config=None, tokenizer='/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca', dtype=torch.bfloat16, max_seq_len=16384, enforce_eager=False, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'backend': 'inductor', 'custom_ops': ['none'], 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16], 'max_cudagraph_capture_size': 16}
+(EngineCore pid=33376) INFO 11-02 02:18:15 [topk_topp_sampler.py:39] FlashInfer top-p/top-k sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0.
+(EngineCore pid=33376) INFO 11-02 02:18:16 [cuda.py:480] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=33376) INFO 11-02 02:18:16 [flash_attn.py:670] Using FlashAttention version 3
+[W1102 02:18:15.654242165 Context.cpp:541] Warning: torch.backends.cuda.preferred_blas_library is an experimental feature. If you see any error or unexpected behavior when this flag is set please file an issue on GitHub. (function operator())
+(EngineCore pid=33376) INFO 11-02 02:18:25 [backends.py:1148] Dynamo bytecode transform time: 6.72 s
+(EngineCore pid=33376) INFO 11-02 02:18:35 [backends.py:378] Cache the graph of compile range (1, 8192) for later use
+(EngineCore pid=33376) INFO 11-02 02:19:02 [backends.py:393] Compiling a graph for compile range (1, 8192) takes 36.62 s
+(EngineCore pid=33376) INFO 11-02 02:19:03 [monitor.py:53] torch.compile and initial profiling/warmup run together took 44.55 s in total
+(EngineCore pid=33376) INFO 11-02 02:19:08 [kv_cache_utils.py:2146] GPU KV cache size: 28,080 tokens
+(EngineCore pid=33376) INFO 11-02 02:19:08 [kv_cache_utils.py:2147] Maximum concurrency for 16,384 tokens per request: 1.71x
+(EngineCore pid=33376) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/5 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  80%|████████  | 4/5 [00:00<00:00, 32.05it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 5/5 [00:00<00:00, 31.73it/s]
+(EngineCore pid=33376) Capturing CUDA graphs (decode, FULL):   0%|          | 0/5 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):  80%|████████  | 4/5 [00:00<00:00, 35.13it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 5/5 [00:00<00:00, 36.17it/s]
+(EngineCore pid=33376) INFO 11-02 02:19:09 [gpu_model_runner.py:6656] Graph capturing finished in 1 secs, took 0.03 GiB
+(EngineCore pid=33376) INFO 11-02 02:19:09 [jit_monitor.py:60] Kernel JIT monitor activated — Triton JIT compilations during inference will be logged as warnings.
+(EngineCore pid=33376) INFO 11-02 02:19:10 [core.py:337] init engine (profile, create kv cache, warmup model) took 51.27 s (compilation: 44.55 s)
+WARNING 11-02 02:19:10 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+goal rewriter vllm child: startup check passed: the guided reply in 26 tokens, 2683 ms
+goal rewriter vllm child: engine ready: structured outputs lm-format-enforcer, stop token ids [151643, 151645], batch invariant True
+(APIServer pid=3795963) INFO 10-28 18:30:16 [parser_manager.py:37] "auto" tool choice has been enabled.
+(APIServer pid=3795963) INFO 10-28 18:30:18 [api_server.py:586] Starting vLLM server on http://127.0.0.1:47473
+(APIServer pid=3795963) INFO 10-28 19:16:05 [launcher.py:106] [shutdown] API server: shutdown triggered
+(APIServer pid=3795963) INFO 10-28 19:16:05 [launcher.py:125] [shutdown] API server: stopping engine client mode=abort timeout=0s
+(EngineCore pid=3797122) INFO 10-28 19:16:05 [core.py:1503] [shutdown] EngineCore: start mode=abort timeout=0s
+(EngineCore pid=3797122) INFO 10-28 19:16:05 [core.py:1534] [shutdown] EngineCore: request processing complete; starting resource teardown
+(EngineCore pid=3797122) INFO 10-28 19:16:05 [core.py:1322] [shutdown] EngineCore: exiting busy loop
+(APIServer pid=3795963) INFO 10-28 19:16:09 [launcher.py:133] [shutdown] API server: engine client stopped
+(APIServer pid=3795963) INFO 10-28 19:16:09 [launcher.py:137] [shutdown] API server: signalling HTTP server shutdown
+(APIServer pid=3795963) INFO 10-28 19:16:09 [launcher.py:158] [shutdown] API server: shutting down FastAPI HTTP server
+(APIServer pid=3795963) INFO:     Waiting for application shutdown.
+(APIServer pid=3795963) INFO:     Application shutdown complete.
+(EngineCore pid=33376) INFO 11-02 02:53:11 [core.py:1214] [shutdown] EngineCore: trigger received signal=SIGTERM
+(EngineCore pid=33376) INFO 11-02 02:53:11 [core.py:1333] [shutdown] EngineCore: start mode=abort timeout=0s
+(EngineCore pid=33376) INFO 11-02 02:53:11 [core.py:1364] [shutdown] EngineCore: request processing complete; starting resource teardown
+(EngineCore pid=33376) INFO 11-02 02:53:11 [core.py:1227] [shutdown] EngineCore: exiting busy loop
+INFO 11-02 02:53:11 [core_client.py:655] [shutdown] MPClient: start timeout=default
+INFO 11-02 02:53:11 [core_client.py:657] [shutdown] MPClient: stopping engine manager
+INFO 11-02 02:53:15 [core_client.py:659] [shutdown] MPClient: engine manager stopped
+INFO 11-02 02:53:15 [core_client.py:660] [shutdown] MPClient: cleaning up background resources
+INFO 11-02 02:53:15 [core_client.py:662] [shutdown] MPClient: complete

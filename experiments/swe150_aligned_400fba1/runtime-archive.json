@@ -1,0 +1,12 @@
+{
+  "archive": "/work/nvme/bcjw/ssun4/goal_runtime_cache_20261104/prepared-wheel-harness.tar",
+  "sha256": "b0e730a47b00325522781583c66e545801399e7568817d3ed34bcbb896827bd1",
+  "bytes": 9626910720,
+  "created": 1793824330.3253706,
+  "source_bundle": "/projects/bcjw/ssun4/goal_latest_swe64_20261118/code/runtime-dependencies",
+  "source_engine_environment": "/projects/bcjw/ssun4/selective_prefix_first32_20261006/environment/venv",
+  "source_prepared_node": "gh091:/tmp/ssun4-goal-stream-3528664/venv",
+  "contents": "Original unchanged wheel environment plus already pinned harness/grading additions, both verified before snapshot. No patched vLLM release installed in site-packages.",
+  "tar_completed_exit": 0,
+  "original_engine_version_changed": false
+}

@@ -1,0 +1,168 @@
+{
+ "about": "policy-registry-1112 755550e (in integrate-1112): source-overlay/policy_registry.py describe() and remote_ra_live_v2/chat_text_protocol.policies(), read with controller.sealed_read (2026-11-12; the unit tests of PolicyRegistry1112)",
+ "chat_policies": [
+  "full",
+  "random50",
+  "observation_query",
+  "random_fill",
+  "goal_query",
+  "recent_fill",
+  "recent_tools",
+  "akv_rule"
+ ],
+ "commit": "755550e",
+ "registry": {
+  "module": "source-overlay/policy_registry.py",
+  "module_sha256": "0743252b7a92696a790be962a5f3473f47299d227c6a7ceacfe2d51d0ac8996d",
+  "policies": [
+   {
+    "budget": "none",
+    "builtin": true,
+    "contract_key": null,
+    "evidence_key": null,
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "full",
+    "name": "full",
+    "order_id": null,
+    "pin": null,
+    "pin_options": [],
+    "query_vector": null,
+    "reply_roles": false,
+    "rewriter_unused": null,
+    "selector_v2": false
+   },
+   {
+    "budget": "half",
+    "builtin": true,
+    "contract_key": null,
+    "evidence_key": null,
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "random",
+    "name": "random50",
+    "order_id": null,
+    "pin": null,
+    "pin_options": [],
+    "query_vector": null,
+    "reply_roles": false,
+    "rewriter_unused": null,
+    "selector_v2": false
+   },
+   {
+    "budget": "fixed",
+    "builtin": true,
+    "contract_key": null,
+    "evidence_key": null,
+    "goal_engine": true,
+    "goal_text": true,
+    "kind": "query",
+    "name": "goal_query",
+    "order_id": null,
+    "pin": null,
+    "pin_options": [],
+    "query_vector": "goal",
+    "reply_roles": false,
+    "rewriter_unused": null,
+    "selector_v2": true
+   },
+   {
+    "budget": "fixed",
+    "builtin": true,
+    "contract_key": null,
+    "evidence_key": null,
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "query",
+    "name": "observation_query",
+    "order_id": null,
+    "pin": null,
+    "pin_options": [],
+    "query_vector": "observation",
+    "reply_roles": false,
+    "rewriter_unused": "observation_query ranks Pages by the observation vector only",
+    "selector_v2": true
+   },
+   {
+    "budget": "fixed",
+    "builtin": true,
+    "contract_key": "random_fill",
+    "evidence_key": "fill",
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "random",
+    "name": "random_fill",
+    "order_id": "splitmix64_fisher_yates_v1",
+    "pin": {
+     "rng": "splitmix64_fisher_yates_v1",
+     "seed": 42
+    },
+    "pin_options": [
+     "fill_seed"
+    ],
+    "query_vector": null,
+    "reply_roles": false,
+    "rewriter_unused": "random_fill fills the remaining Pages at random and ranks nothing",
+    "selector_v2": true
+   },
+   {
+    "budget": "fixed",
+    "builtin": true,
+    "contract_key": "recent_fill",
+    "evidence_key": "window",
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "window",
+    "name": "recent_fill",
+    "order_id": "newest_first_v1",
+    "pin": {
+     "order": "newest_first_v1"
+    },
+    "pin_options": [],
+    "query_vector": null,
+    "reply_roles": false,
+    "rewriter_unused": "recent_fill fills the remaining Pages newest first and ranks nothing",
+    "selector_v2": true
+   },
+   {
+    "budget": "fixed",
+    "builtin": true,
+    "contract_key": "recent_tools",
+    "evidence_key": "window",
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "window",
+    "name": "recent_tools",
+    "order_id": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1",
+    "pin": {
+     "order": "tool_calls_then_tool_responses_then_reasoning_newest_first_v1"
+    },
+    "pin_options": [],
+    "query_vector": null,
+    "reply_roles": true,
+    "rewriter_unused": "recent_tools fills the remaining Pages with tool calls, then tool responses, then reasoning, each newest first, and ranks nothing",
+    "selector_v2": true
+   },
+   {
+    "budget": "rule",
+    "builtin": true,
+    "contract_key": "akv_rule",
+    "evidence_key": "window",
+    "goal_engine": false,
+    "goal_text": false,
+    "kind": "rule",
+    "name": "akv_rule",
+    "order_id": "replies_and_latest_tool_responses_v1",
+    "pin": {
+     "latest_tool_responses": 12,
+     "rule": "replies_and_latest_tool_responses_v1"
+    },
+    "pin_options": [],
+    "query_vector": null,
+    "reply_roles": true,
+    "rewriter_unused": "akv_rule keeps every reply and the latest 12 tool responses and ranks nothing",
+    "selector_v2": true
+   }
+  ]
+ }
+}

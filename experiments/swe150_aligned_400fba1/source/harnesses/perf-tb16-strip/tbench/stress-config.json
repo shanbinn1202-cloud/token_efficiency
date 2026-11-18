@@ -1,0 +1,45 @@
+{
+ "agent": {
+  "kwargs": {
+   "llm_kwargs": {
+    "max_retries": 0,
+    "max_tokens": 4096,
+    "num_retries": 0,
+    "timeout": 3600
+   },
+   "model_info": {
+    "input_cost_per_token": 0,
+    "max_input_tokens": 65536,
+    "max_output_tokens": 4096,
+    "output_cost_per_token": 0
+   },
+   "temperature": 0.0
+  },
+  "model_name": "hosted_vllm/selective-prefix",
+  "name": "terminus-2"
+ },
+ "dataset": {
+  "name": "terminal-bench/terminal-bench-2",
+  "ref": "sha256:c6fc2e2382c1dbae99b2d5ecd2f4f4a60c3c01e0d84642d69b4afd92e99d078b"
+ },
+ "harbor": {
+  "allowed_extra": {
+   "harbor/agents/installed/mini_swe_agent.py.bak": "6458398cc58f2d44612c8510a23ef8a6ce83803c318e890581fff01df9f58f34"
+  },
+  "dependencies": {
+   "litellm": {
+    "record_sha256": "72afa2c0743782c1014b5c4105bc544e75579634b9a822abf8c2fb1d7d0e9efe",
+    "version": "1.97.0"
+   },
+   "openai": {
+    "record_sha256": "8f907c3c4c7ba781f155bc97ad74d84a21e0d647cb7c58668ce84c3114dc4af2",
+    "version": "2.54.0"
+   }
+  },
+  "python_version": "3.12.3",
+  "record_files": 414,
+  "record_sha256": "abfaf4e154a499d7e3c8c83ba85a8ee8861a99f66b11b7d7cb035f10b85d1424",
+  "version": "0.21.0"
+ },
+ "schema": "tb16-stress-config-v1"
+}

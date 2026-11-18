@@ -1,0 +1,196 @@
+SUPERSEDED (2026-11-06): current READY file: PHASEB_READY.txt; this state is frozen at perf-swe32-20a5d68f\ (its NOTE below).
+RTOOLS_READY (2026-11-06, follow-up) - perf-swe32: recent_tools = tool calls, then tool responses, then reasoning (plan rtoolst), and goalt on the same runtime
+=================================================================================================================================================================
+
+NOTE (2026-11-07): rtoolst was submitted from this state (job 3540110), now frozen at perf-swe32-20a5d68f\ (fetch
+it only there). This folder is re-pinned to f4ccd4b (akv_rule, plan akvt); for goalt and akvt use AKV_READY.txt.
+
+STATUS: READY. rtoolst (recent_tools, thinking on) is chained behind obst (job 3539260): -AfterJob 3539260. goalt
+(goal_query = goalvllm, thinking on): submit only after recentt (job 3539242) is verified (it shows thinking on works).
+Nothing was submitted; nothing connected to DeltaAI or tbench. Jobs 3539242 / 3539260 were not touched.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32   (re-pinned to d72745c)
+Frozen     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-fbd644ce\   (payload fbd644ce..., runtime 60c5d21: the state of jobs 3539242 recentt and 3539260 obst; 91
+           files + FROZEN-fbd644ce.md; list D:\Remote-RA-temp\scratch\perf-swe32-fbd644ce.sha256; FREEZE_VERIFY PASS;
+           the live folder still equalled that list when the re-pin started). perf-swe32-bcb702e6\: plan smoke only.
+Runtime    recent-fill-1103 d72745ca803ac0808fea8b71aca03a0f8612ef3a (CFXM/vllm-0.24.0-selective-prefix-policies, branch recent-fill-1103, pushed
+           60c5d21..d72745c, a new commit on 60c5d21, no amend, no force; main untouched at 2dcd018; CPU-tested only)
+           receipt D:\Remote-RA-temp\scratch\recent-fill\release-receipt-d72745c.json (GIT_ARCHIVE_TESTS_PASS, 1,737 tests,
+           126 skipped, 452.969 s parallel, result line 423537cd..., log b45a7442...)
+Payload    20a5d68f3dd32fc0f8712a22573d0252ecd1763f95006e6c48e328bff5cde6fc   (dist\payload.json; was fbd644ce...)
+Entry      3e32f5a61b069457be76ceb8934288457541e941eb39d8da93b36b1cccd2f08c   (run_one_connection.ps1)
+Pins       51dacbadd9fe50aa47aa401a7190c7c81029c1dbd0695d4d3f01ae1fa7ca9ad1   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=d72745ca803ac0808fea8b71aca03a0f8612ef3a goal_text=goals.jsonl payload=20a5d68f3dd32fc0f8712a22573d0252ecd1763f95006e6c48e328bff5cde6fc (16 steps, exit 0 each: build-1, build-2, deterministic, unit-tests, release-parity, real-tokenizer, goal-text-probe, gate-checks, repin, synthetic-stages, pipeline-compat, entry, transport, deploy-selftest, fetch-selftest, cleanup)
+           logs I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\validation\20261106T222919
+
+MIXED COMMITS (on purpose): recentt (3539242) and obst (3539260) run 60c5d21 / payload fbd644ce; rtoolst and goalt run
+d72745c / payload 20a5d68f. d72745c changes recent_tools only: the 144 default contracts, random_fill and recent_fill
+(contracts, receipts, stage-B digests) are byte-identical and pinned in test_recent_fill.py, and every plan but
+rtoolst has the same fingerprint and the same DryRun line (commit masked). So obst (60c5d21) vs goalt (d72745c) and
+recentt (60c5d21) vs rtoolst (d72745c) differ only by the policy itself.
+
+Which folder fetches each job:
+  3539242 recentt  stage /u/ycao11/swe32-db3beb480814436588e3808862143d05  run_id swe32-3539242-r1  -> perf-swe32-fbd644ce
+  3539260 obst     stage /u/ycao11/swe32-c16cfa82062f4098b88a508dbfc13443  run_id swe32-3539260-r1  -> perf-swe32-fbd644ce
+  rtoolst / goalt  stage from the submission's JSON line                                         -> perf-swe32 (this)
+(the verifier requires the delivered helpers to equal its own harness's sealed payload).
+
+
+1. WHAT CHANGED
+---------------
+Runtime (d72745c, on 60c5d21): every candidate Page of recent_tools is classified by cover, CALL before TOOL before
+REASONING. CALL: any tool-call token (a reply's content after its </think>, through the closing boundary; thinking
+off or a reply without </think>: the whole reply after the generation header). TOOL: any tool-response token (an
+observation span). REASONING: the rest of a reply (the generation header, <think> ... </think>). After the mandatory
+and recent Pages the fill takes CALL newest first, then TOOL newest first, then REASONING newest first; same threshold,
+capacity (budget 8192), mandatory Pages and recent set. The history of a rebuilt first request is in no span and stays
+with the tool responses (TOOL), as before (documented). New order id
+tool_calls_then_tool_responses_then_reasoning_newest_first_v1 (replaces reply_cover_then_tool_responses_newest_first_v1);
+the split runs on the transcript's own token stream (selection_contract.call_start / window_classes,
+query_selection.call_starts). query.selection.window (receipt and runtime row) for recent_tools: call_pages,
+calls_kept, calls_truncated (were reply_pages, replies_kept, replies_truncated), tool_pages, tools_kept,
+reasoning_pages, reasoning_kept, first_tool_page, first_tool_position. Tests: test_recent_fill.py (39; in-suite
+mutation checks; source mutations of the precedence / the class order fail 44 / 42 subtests, restored byte for byte),
+the full parallel check_git_release (receipt above). Docs: README(.zh-CN), docs/SWEBENCH_BENCHMARK(.zh-CN).
+Harness: re-pinned (controller.RELEASE_RECEIPTS, build.DEFAULT_RECEIPT, test_swe32.RECEIPT_PIN); WINDOW_ORDERS and
+the rewriter-unused reason of recent_tools; window_feature also requires window_classes / call_start (60c5d21's old
+recent_tools order is refused; test_repin case refuse-repin-to-60c5d21-with-the-old-recent-tools); the in-job window
+check classifies the Pages from the turn's prompt token ids (the header's token count and </think> when thinking is
+on) and checks the new fields (smoke_checks.call_start / window_classes / window_order / window_record /
+check_window, swe_checks passes the split); fake_server plans the classes on its own prompts; e2e detail
+calls_truncated / reasoning_kept; test_swe32 test_the_window_check (thinking on and off, precedence and order
+mutations refused).
+Plans: only rtoolst changes: PLAN_FINGERPRINT DIFFERENT plans=22 differences=1 ['rtoolst server:rtools262t'] (its
+startup expectation: the window pin order and the rewriter-unused reason; commit masked) against
+D:\Remote-RA-temp\scratch\recent-fill\swe32-plans-fbd644ce.json; DRYRUN_LINES SAME recorded=22 differ=0 against
+dryrun-fbd644ce.txt (serve.py flags, time, memory, mail unchanged). rtoolst: --time 02:29:00, cap 7,200 s, E 6,400 s,
+2.48 / 1.78 GPU-h; goalt: --time 02:34:00, E 6,700 s, 2.57 / 1.86 GPU-h (not within 2 h, as before).
+
+
+2. HOW MANY TURNS THE CALLS FILL AT 8K (an ESTIMATE, UNAUDITED; D:\Remote-RA-temp\scratch\recent-fill\turns_estimate.py)
+-------------------------------------------------------------------------------------------------------------------
+Replayed on obs262 (job 3461703; thinking OFF; observation_query has the same partition as recent_tools: mandatory,
+recent set, capacity 512 Pages at 8,192 / 16): 32 sessions, 2,183 turns (68.2 per session), 1,757 active turns.
+- The room after the mandatory and recent Pages: median 337 Pages (198 .. 413).
+- CALL Pages per history reply (thinking off: the reply after the 7-token generation header): mean 11.2, median 10.5.
+- Thinking OFF: the calls alone fill the room after a median 30.5 history turns (15 .. 54; 30 of 32 sessions get
+  there); then the newest ~24 replies keep every CALL Page (median 24, mean 24.3) and no older tool response is kept
+  (only the recent set). 66 % of the active turns (1,163 / 1,757) are in that state.
+- Thinking ON (estimated, no thinking-on SWE data yet: the content of a thinking-on reply taken as the thinking-off
+  reply, plus one CALL Page per reply for the Page that holds </think> and the first content tokens; the reasoning is
+  REASONING and is filled last): ~12.2 CALL Pages per reply, the room filled after ~28 history turns; 70 % of the
+  active turns (1,233 / 1,757) truncated. The real number comes from rtoolst's query.selection.window
+  (calls_truncated, calls_kept) and recentt's thinking rows (content_tokens).
+- For comparison, 60c5d21's recent_tools (the whole reply incl. ~1,000 reasoning tokens = ~63 Pages per reply)
+  filled the room after ~5-6 turns with thinking on.
+
+
+3. LOCAL CHECKS (no connection)
+--------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolst -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolst -RunLabel r1 -AfterJob 3539260 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLST_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOALT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+Seen (this validation; DryRun without -AfterJob):
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=20a5d68f3dd32fc0f8712a22573d0252ecd1763f95006e6c48e328bff5cde6fc commit=d72745ca803ac0808fea8b71aca03a0f8612ef3a plan=rtoolst role=validation variant_of=- servers=rtools262t:recent_tools:32tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=6400 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=1.78 release_check=PINNED receipt_result_sha256=423537cd5974c28ee0f019c0fb8aecbb5212ef49591bf89f9785b6e563b43719 receipt_log_sha256=b45a744228147cc1400cd7a2a8d1e45244336c21d9968b8ae6fae65826871b9e worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-rtoolst run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 thinking=rtools262t:on
+  DRY_RUN connections=0 stage=/u/ycao11/swe32-e8db5ec45680431dba3c8c2ca6d06b74 payload_bytes=12135931 commit=d72745ca803ac0808fea8b71aca03a0f8612ef3a plan=rtoolst role=validation variant_of=- servers=rtools262t:recent_tools:32tasks:120steps:7200s:thinking partition=ghx4 time=02:29:00 expected_seconds=6400 billing_factor=1 gpu_hours_limit=2.48 gpu_hours_expected=1.78 release_check=PINNED receipt_result_sha256=423537cd5974c28ee0f019c0fb8aecbb5212ef49591bf89f9785b6e563b43719 receipt_log_sha256=b45a744228147cc1400cd7a2a8d1e45244336c21d9968b8ae6fae65826871b9e worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-rtoolst run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 thinking=rtools262t:on
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=20a5d68f3dd32fc0f8712a22573d0252ecd1763f95006e6c48e328bff5cde6fc commit=d72745ca803ac0808fea8b71aca03a0f8612ef3a plan=goalt role=validation variant_of=- servers=goalvllmt:goal_query:32tasks:120steps:7200s:vllm3gib:overlap:thinking partition=ghx4 time=02:34:00 expected_seconds=6700 billing_factor=1 gpu_hours_limit=2.57 gpu_hours_expected=1.86 release_check=PINNED receipt_result_sha256=423537cd5974c28ee0f019c0fb8aecbb5212ef49591bf89f9785b6e563b43719 receipt_log_sha256=b45a744228147cc1400cd7a2a8d1e45244336c21d9968b8ae6fae65826871b9e worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-goalt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 goal_rewriter_engine=goalvllmt:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllmt thinking=goalvllmt:on
+  DRY_RUN connections=0 stage=/u/ycao11/swe32-ed238fbaeffa4c28822446c3e39996d4 payload_bytes=12135941 commit=d72745ca803ac0808fea8b71aca03a0f8612ef3a plan=goalt role=validation variant_of=- servers=goalvllmt:goal_query:32tasks:120steps:7200s:vllm3gib:overlap:thinking partition=ghx4 time=02:34:00 expected_seconds=6700 billing_factor=1 gpu_hours_limit=2.57 gpu_hours_expected=1.86 release_check=PINNED receipt_result_sha256=423537cd5974c28ee0f019c0fb8aecbb5212ef49591bf89f9785b6e563b43719 receipt_log_sha256=b45a744228147cc1400cd7a2a8d1e45244336c21d9968b8ae6fae65826871b9e worst_case_seconds=8940 with_eval_wait_seconds=6420 cap_after_wait_fits=true eval_wait_seconds=600 margin_seconds=300 spare_seconds=300 mem=113560M dram_arena_gib=70 memory_need_gib=105.29 memory_spare_gib=5.61 startup_spike=ELIMINATED job_name=swe32-goalt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL tasks=CONFIRMED(32 = the first 32 SWE-bench Verified instances, as swe16) decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 release_idle_pages=off goal_rewriter_batch=off goal_text=goals.jsonl still_provisional=evaluation,kv_pool,prompt_and_runner,throughput,vanilla statements_sealed=yes plan_server=own kv_cache_gib=25 max_model_len=262144 plan_dram_arena_gib=70 qwen_kv_cache_gib=8,16,24,25,32 goal_rewriter_engine=goalvllmt:vllm:lm-format-enforcer:3:batch-invariant goal_overlap=goalvllmt thinking=goalvllmt:on
+
+
+4. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First, in your DeltaAI shell (read-only): squeue -h -u ycao11 -o '%i|%T|%P|%j|%E'
+rtoolst now (chained behind obst 3539260):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolst -RunLabel r1 -AfterJob 3539260 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLST_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_BATCH_REUSED_V9_ENV_ONE_GH200_149MIN_NO_RETRY'
+goalt - ONLY AFTER recentt (3539242) is verified (thinking on works); chain it behind the last queued / running job of
+yours that shares tbench (swe32-*, swe10-*, swe16-*, gswe32-*, tb16-*, gem0-*; e.g. rtoolst's job id), or drop
+-AfterJob if none is queued:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalt -RunLabel r1 -AfterJob <J of the last such job> -Authorize -Authorization 'AUTHORIZE_SWE32_GOALT_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+Exit 86 = a pre-claim gate failed, nothing claimed (read QUALIFY_ERROR= / ERROR=, fix, new -RunLabel). The last JSON
+line prints stage and job_id.
+
+
+5. AFTER THE END MAIL: read-only check block (your DeltaAI shell; system python only), then the fetch
+-----------------------------------------------------------------------------------------------------
+Replace S and J: 3539242 S=/u/ycao11/swe32-db3beb480814436588e3808862143d05; 3539260
+S=/u/ycao11/swe32-c16cfa82062f4098b88a508dbfc13443; rtoolst / goalt: the stage and job id of the submission's JSON line.
+
+bash <<'EOF'
+S=/u/ycao11/swe32-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'receipt', (r.get('release_receipt') or {}).get('result_line_sha256', '')[:8])
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-10s %-17s %-16s cap=%s rows=%s selective=%s lock=%s goal_text=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], s.get('agent_timeout_seconds'), s.get('rows'), s.get('active_selection_turns'), (s.get('lock_wait') or {}).get('status'), (s.get('goal_text') or {}).get('status'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+for path in sorted(glob.glob('job-output/*/ready.json')):
+    ready = json.load(open(path)); start = json.load(open(path.replace('ready.json', 'startup.json')))
+    print('ready', path.split('/')[1], 'fast', ready.get('decode_fastpath'), 'fast2', ready.get('decode_fastpath2'), 'fast3', ready.get('decode_fastpath3'), 'deferred_io', ready.get('deferred_completion_io'), 'lmo', bool(ready.get('language_model_only')), 'pool_bytes', start.get('connector_pool_bytes'), 'arena_pages', start.get('dram_arena_pages'), 'thinking_header', repr((start.get('thinking') or {}).get('header_text')), 'ready_thinking', ready.get('thinking') == start.get('thinking'), 'async', start.get('async_scheduling'))
+for name in ('archives.json', 'eval-launch.json'):
+    v = json.load(open('fetch/' + name))
+    print(name, json.dumps({k: (x.get('bytes'), x.get('sha256')) if isinstance(x, dict) and 'sha256' in x else x for k, x in v.items() if k in ('core', 'bulk', 'status', 'labels', 'reason', 'elapsed_s')}))
+PY
+else echo RESULT_ABSENT; fi
+echo "== thinking and windows (expect every row a thinking record, fresh = sessions, the rest append; active windows on recent_fill / recent_tools; the calls_* / tools_kept / reasoning_kept fields only on recent_tools)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/runtime.jsonl')):
+    rows = [json.loads(l) for l in open(p) if l.strip()]
+    t = [r.get('thinking') for r in rows]
+    hist = {}
+    for x in t:
+        if x: hist[x['history']] = hist.get(x['history'], 0) + 1
+    win = [r['query']['selection'].get('window') for r in rows if r.get('query')]
+    on = [x for x in t if x]
+    print(p.split('/')[1], 'rows', len(rows), 'thinking', len(on), hist, 'unclosed', sum(1 for x in on if not x['closed']), 'reasoning_mean', round(sum(x['reasoning_tokens'] for x in on) / max(1, len(on)), 1), 'reasoning_max', max([x['reasoning_tokens'] for x in on] or [0]), 'active_windows', sum(1 for w in win if w), 'calls_truncated', sum(1 for w in win if w and w.get('calls_truncated')), 'reasoning_kept_turns', sum(1 for w in win if w and w.get('reasoning_kept')), 'calls_kept_mean', round(sum(w.get('calls_kept', 0) for w in win if w) / max(1, sum(1 for w in win if w)), 1), 'tools_kept_mean', round(sum(w.get('tools_kept', 0) for w in win if w) / max(1, sum(1 for w in win if w)), 1), 'covered_turns_mean', round(sum(w['covered_turns'] for w in win if w) / max(1, sum(1 for w in win if w)), 2))
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    for row in s.get('checks') or ():
+        if row.get('check') == 'thinking':
+            print(p, 'thinking', row.get('status'), row.get('finding') or '', {k: (row.get('detail') or {}).get(k) for k in ('histories', 'unclosed', 'mean_reasoning_tokens')})
+PY
+echo "== goal texts"; wc -l job-output/*/goals.jsonl 2>/dev/null || echo "no goals.jsonl (not a goal_query plan)"
+echo "== kernels"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|GDN prefill kernel \(requested=[a-z]+|sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== completion writer (expect 0)"; grep -c "COMPLETION_WRITE_FAILED\|remote-ra completion writer" server-*.log
+echo "== text-only (expect mm=0 and text_only>=1; encoder_backend is information only)"; for f in server-*.log; do echo "$f mm=$(grep -cE 'Encoder cache will be initialized|Multi-modal warmup completed' "$f") text_only=$(grep -c 'text-only mode' "$f") encoder_backend=$(grep -c 'for MMEncoderAttention' "$f")"; done
+echo "== arena (expect 0)"; grep -c DRAM_ARENA_EXHAUSTED server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== host peak"; for f in host-samples-*.log; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1], 'rss_peak_gib=%.2f cgroup_peak_gib=%.2f' % (max(x.get('vmrss_kb') or 0 for x in r)/2**20, max(x.get('cgroup_current_bytes') or 0 for x in r)/2**30))" "$f"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/swe32-core.tar.xz fetch/swe32-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the two sha256sum lines and the sacct job row are needed by the fetch). Then, locally:
+3539242 (recentt) and 3539260 (obst): the FROZEN folder's fetch:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-fbd644ce\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-db3beb480814436588e3808862143d05' -JobId '3539242' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32-fbd644ce\postrun\fetch_run.ps1' -Stage '/u/ycao11/swe32-c16cfa82062f4098b88a508dbfc13443' -JobId '3539260' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+rtoolst / goalt: this folder's fetch:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\fetch_run.ps1' -Stage '<STAGE>' -JobId '<J>' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+(-CoreOnly first on a slow link; TBENCH_EVALUATION_RUNNING exit 3: run it again later.) Expected VERDICT=
+SWE32_PASS_VERIFIED (SWE32_PARTIAL_VERIFIED if the 7,200-s cap cut instances). Evidence:
+...\verification\swe32-job<J>-<stamp>\; trajectories under D:\Remote-RA-temp\scratch\perf-swe32\fetch\job<J>\.
+Repetition (local only, UNAUDITED; RECENT_FILL_READY.txt section 6): postrun\repetition_swe32.py --run
+rtools262t=<...>\rtools262t (and recent262t / obs262t / goalvllmt) after each fetch.
+
+
+6. DECISIONS FOR YOU / RISKS
+----------------------------
+- At 8K with thinking off the CALL Pages alone fill the room after ~30 history turns (section 2); from then on (about
+  two thirds of the active turns of a 68-step mean trajectory) recent_tools keeps no tool response older than the
+  recent set (the last two turns, at most 64 Pages). If that is not the intent, a cap on the CALL share of the room
+  (e.g. at most half) would be a new order id and a new commit; ask if wanted.
+- Thinking off the generation header is REASONING, as specified; with Qwen's 7-token header at P = 16 no Page is
+  header-only, so thinking off has no REASONING Pages (calls = the old reply cover). Thinking on, the Page holding
+  </think> and the first content tokens is CALL.
+- Paths outside SWE: chat-text under --thinking-history strip splits a reply as the stripped history holds it; the
+  kv-session transcript has no encoder, so its replies are all call.
+- Not GPU-validated: d72745c (CPU tests only), as 60c5d21. The thinking-on SWE path is first exercised by 3539242.
+- goalt waits for recentt's verification; obst / goalt (thinking on) are the comparisons for recentt / rtoolst.
+- Local leftover: share\vllm-0.24.0-selective-prefix-policies\.git\worktrees\wt-60c5d21 (an admin folder of the removed
+  temporary worktree; OneDrive denied its deletion; harmless; git worktree prune clears it later).

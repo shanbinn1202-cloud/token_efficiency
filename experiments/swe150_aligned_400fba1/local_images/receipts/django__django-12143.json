@@ -1,0 +1,14 @@
+{
+  "instance_id": "django__django-12143",
+  "image": "/work/nvme/bcjw/ssun4/readonly-assets-20261109/swe500_qwen_20261009/images/django__django-12143.sif",
+  "base_commit": "5573a54d409bb98b5c5acdb308310bed02d392c2",
+  "base_available": true,
+  "checkout": "5573a54d409bb98b5c5acdb308310bed02d392c2",
+  "elf": "aarch64",
+  "python": "/opt/miniconda3/envs/testbed/bin/python",
+  "module": "/testbed/django/__init__.py",
+  "package_version": "3.1",
+  "image_bytes": 911908864,
+  "passed": true,
+  "entrypoint_checked": false
+}

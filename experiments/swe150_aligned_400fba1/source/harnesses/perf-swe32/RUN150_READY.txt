@@ -1,0 +1,51 @@
+perf-swe32 150-INSTANCE RUNS AT 24 SESSIONS: READY 2026-11-17 (NOT submitted). Pin integrate-1117 2fb7f62
+(7a8c36e's runtime + 06c1e90: the session pool registers up to 256 tasks; docs; examples/swebench/verified-150.txt);
+release receipt D:\Remote-RA-temp\scratch\harness-1117-150\receipt\release-receipt-2fb7f62.json.
+Payload 269a00e654094b0caf4ab2bdb46f89297be2429ce66031bdf0c94a39a05c259c, entry 5fe80b46c3f636fcb9a9d9db51525c46b1031688e038daab2eb92310bd9a3537.
+The previous payload 9735ad9a (job 3616345 = sess24ri r2, run swe32-3616345-r2) is frozen at ..\perf-swe32-9735ad9a\:
+verify and fetch 3616345 THERE (its tbench pointer by-payload 80eb473e... -> code/b4f66ad67ee26b3c is unchanged).
+Check fix in this payload: swe_checks.check_release_idle_pages orders a session's second eviction against its rebuild
+by the runtime's ADMISSION order (engine-cleanup admitted_request_ids), not request_index (arrival order), and requires
+the second eviction to release the rebuild's sealed Pages. 3616345's only failed check (s13) was this rule's error:
+re-checked offline on tbench with the new rule, check_server PASS (failed none; finding GOAL_FALLBACK only;
+dropped_by_rebuild 53), JOIN_PASS; the job-level verdict stays NOT_VERIFIED only because the job's own in-job record
+says release-idle-pages FAILED (the rerun must equal it): D:\Remote-RA-temp\scratch\harness-1117-150\NOTES.md.
+tbench: verification code of this payload code/c67ef0261fbc2d78 (pointer by-payload 5ea02bb2...); the tbench half (MANIFEST a675913e...)
+and the edge module are unchanged. Images: all 150 evaluation images present on tbench (digests equal to the runtime's
+examples/swebench/verified-150.txt, checked 2026-11-17).
+The configuration = the runtime README's "24-session configuration" (Qwen3.6-27B, thinking on, async scheduling, 25 GiB
+of KV, 262,144 tokens, 16-token pages decoupled, 24 sessions, --release-idle-pages, --dram-arena-gib 68, 120 steps,
+client timeout 4,400 s on the runtime servers / 3,600 s on stock; ledger_query --active-token-budget 8192 with the
+default 50 % cap; no Goal options, no --admission-overlap). Partition ghx4 (batch), --mem 113560M, mail
+cao58@illinois.edu BEGIN,END,FAIL (enforced by the entry script). Times are ESTIMATES (the 64-task plans' model at 150
+tasks: D:\Remote-RA-temp\scratch\harness-1117-150\time150.py); NOT GPU-validated (24 sessions, 150 tasks).
+Every SelfTest and DryRun below was run locally on this payload: PASS (D:\Remote-RA-temp\scratch\harness-1117-150\selftest-dryrun-150.json).
+
+SUBMIT ORDER (ghx4 batch, each -AfterJob the previous one; replace <J_prev> by the real job id; for the first line
+<J_prev> = the job it should follow, or drop "-AfterJob <J_prev>" when nothing should precede it):
+  1. full150k24      --time 03:15:00 (expected 9644 s): GPU-h 3.25 at the limit / 2.68 expected; agent cap 8820 s, minimum 6210 s; eval wait 2760 s; memory spare 6.46 GiB
+  2. stockkeep150k24 --time 05:06:00 (expected 14998 s): GPU-h 5.10 at the limit / 4.17 expected; agent cap 16500 s, minimum 11680 s; eval wait 2760 s; memory spare 78.90 GiB
+  3. ledger150k24    --time 04:02:00 (expected 11993 s): GPU-h 4.03 at the limit / 3.33 expected; agent cap 11220 s, minimum 7910 s; eval wait 2760 s; memory spare 6.46 GiB
+  total 12.38 GPU-h at the limits / 10.18 expected.
+tbench preflight: a submission is refused while ANY agent pool is live on tbench (even with -AfterJob). So: submit
+full150k24 while no pool runs (e.g. after sess24ri 3616345's pool has ended), then hold stockkeep150k24 and submit it
+(with -AfterJob <full150k24's id>) in a gap between pools (while full150k24 is still queued, or after its pool ended:
+its evaluation does not block the submission), and the same for ledger150k24 after stockkeep150k24.
+
+# full150k24: ghx4 --time 03:15:00, GPU-h 3.25 at the limit / 2.68 expected, job name swe32-full150k24
+# what it verifies: policy full (no Pages dropped, Goal machinery off) on the first 150 instances at 24 sessions, --release-idle-pages: the full-context baseline of our runtime; the job checks every server switch, idle release (evictions / readmissions), the 150 registered tasks, K = 24 and the 4,400-s client timeout; tbench evaluates the 150 patches.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full150k24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_195MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_FULL150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_195MIN_NO_RETRY'
+
+# stockkeep150k24: ghx4 --time 05:06:00, GPU-h 5.10 at the limit / 4.17 expected, job name swe32-stockkeep150k24
+# what it verifies: unmodified vLLM 0.24.0 (reasoning kept, max_num_seqs 24) on the same 150 instances: the stock control the group compares JCT and resolved against; preemption reported as a finding.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep150k24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_306MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stockkeep150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_STOCKKEEP150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_REASONING_KEPT_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_306MIN_NO_RETRY'
+
+# ledger150k24: ghx4 --time 04:02:00, GPU-h 4.03 at the limit / 3.33 expected, job name swe32-ledger150k24
+# what it verifies: ledger_query (--active-token-budget 8192, the default 50 % ledger cap) on the same 150 instances at 24 sessions with --release-idle-pages: the observation-ranked policy's run; the job checks every active turn's ledger hook record, idle release, the 150 tasks.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger150k24 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_242MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan ledger150k24 -RunLabel r1 -AfterJob <J_prev> -Authorize -Authorization 'AUTHORIZE_SWE32_LEDGER150K24_150TASKS_24SESSIONS_262K_KV25_THINKING_ON_ASYNC_LEDGER_QUERY_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_242MIN_NO_RETRY'

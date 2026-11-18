@@ -1,0 +1,14 @@
+{
+  "instance_id": "astropy__astropy-8872",
+  "image": "/projects/bcjw/ssun4/swe_first32_20261005/shared/images/astropy__astropy-8872-toolchain.sif",
+  "base_commit": "b750a0e6ee76fb6b8a099a4d16ec51977be46bf6",
+  "base_available": true,
+  "checkout": "b750a0e6ee76fb6b8a099a4d16ec51977be46bf6",
+  "elf": "aarch64",
+  "python": "/opt/miniconda3/envs/testbed/bin/python",
+  "module": "/testbed/astropy/__init__.py",
+  "package_version": "4.0.dev24916",
+  "image_bytes": 889622528,
+  "passed": true,
+  "entrypoint_checked": false
+}

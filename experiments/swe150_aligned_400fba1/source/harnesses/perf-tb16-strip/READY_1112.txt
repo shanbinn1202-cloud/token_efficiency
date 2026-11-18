@@ -1,0 +1,89 @@
+READY_1112 (2026-11-12) - perf-tb16-strip re-pinned to integrate-1112 4ebff97: Q2 = plan smokeqt (TB-Qwen, thinking strip, async on, the vLLM Goal child + --goal-overlap)
+=================================================================================================================================================================
+
+SINCE 2026-11-15: SUPERSEDED BY READY_1115.txt. The live folder carries the join fix of job 3560498 (payload 4203f013...); the 98a149cd state below, the one of smokeqt 3586720 (queued; cancelled 2026-11-16, never ran), is frozen in perf-tb16-strip-98a149cd: fetch and verify 3586720 there (READY_1115.txt section 3, FROZEN-98a149cd.md).
+
+STATUS: READY to submit (the user). Nothing was submitted; no DeltaAI connection was made. Q2 of
+D:\Remote-RA-temp\scratch\integrate-1112\GPU-VALIDATION-PLAN.md (after Q1, perf-mab smqt, the direct check of the async fix).
+smokeqt 3568310 (main ba4d1ba) was cancelled; it would have run the unfixed async resolve.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip
+Frozen     ..\perf-tb16-strip-58de72a9\ (the ba4d1ba state before this re-pin; no job); jobs verify in their copy:
+           gctx25 3560498 -> perf-tb16-strip-3acc490a, smokeqt 3568310 (cancelled) -> perf-tb16-strip-a3f53060
+Runtime    integrate-1112 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (worktrees\pin-4ebff97, detached)
+           receipt D:\Remote-RA-temp\scratch\integrate-1112\receipt\release-receipt-4ebff97.json (GIT_ARCHIVE_TESTS_PASS, 2059 tests,
+           139 skipped; result line 308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f, log 7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c)
+Payload    98a149cd5cc44a13045a7798ce93444806564e692f06589b5e33c390fb991b82   (dist\payload.json)
+Entry      84e70b4b2e4d9d84ae8518a5f4a9faba1ffdcc6d967575423ebe198423d1a914   (run_one_connection.ps1)
+Pins       b98610d9b5c26c8a0d44d0cde758bdd065e4b8483b29a073d52a62289a0ba45a   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 pin=PINNED payload=98a149cd5cc44a13045a7798ce93444806564e692f06589b5e33c390fb991b82
+           (validation\20261112T162143, -Jobs 6, 1988 s; D:\Remote-RA-temp\scratch\tb16-reg-1112\lv-2.log; run 1, validation\20261112T145425, failed only at the entry step on the new tbench_push field: README)
+tbench     half unchanged (manifest d08ba8d3...7ab1, no redeploy); verification code for this payload deployed:
+           /home/ubuntu/tb16-verify/code/8bcc0a0b17ae1d52 (83 files), pointer code/by-payload/
+           6b2ae279cdf6f84e5a4aa35435c1f3d6b1214d6e8941c6087a3e05a4fb2684bd (the payload members id the job sends),
+           venv tok-ad35fb59b78e (freeze e0e33033...); checked on tbench by the real run of job 3499759 (section 4)
+
+
+1. THE PLANS (unchanged by the re-pin but the commit; ghx4 batch, --mem=113560M, mail BEGIN,END,FAIL to cao58@illinois.edu)
+------------------------------------------------------------------------------------------------------------------------
+  smokeqt  strip     async on   --time 02:53:00  expected  7000 s  GPU-h 2.88 / 1.94  runnable
+  smokeq   off       async on   --time 02:53:00  expected  6900 s  GPU-h 2.88 / 1.92  runnable
+  smokeqs  off       async off  --time 02:53:00  expected  6900 s  GPU-h 2.88 / 1.92  runnable
+smokeqt: servers sobst (observation_query) -> srfillt (random_fill) -> sgoalt (goal_query, --admission-overlap 16, the
+vLLM Goal child with lm-format-enforcer, 3 GiB, batch-invariant, --goal-overlap), smoke32 (32 tasks) at Harbor -n 16,
+K = 20, 25 GiB, 262,144, arena 70 GiB, --async-scheduling, --enable-thinking --thinking-history strip; no stock control.
+smokeq / smokeqs: the same without the strip (smokeqs also without async): fallbacks INSTEAD of smokeqt, never after it.
+On main ba4d1ba / gemma-tb-262k f5a5c36 smokeqt and smokeq are now NOT_SUBMITTABLE (no async resolve fix; test_repin).
+What this job adds to integrate-1112's GPU evidence: the async resolve fix on chat-text (a reply cut at --max-tokens
+4096 next to other decodes: no LiveV2Error, every request answered), review-fixes on Qwen chat-text, the registry's
+lookups on chat-text (the two re-accepted modules).
+
+
+2. LOCAL CHECKS (no connection; done 2026-11-12, see section 5 of SMOKE_READY.txt for the same lines at ba4d1ba)
+-------------------------------------------------------------------------------------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -RunLabel r1 -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY' -DryRun
+Seen: (2026-11-12, payload 98a149cd...; no NOT_SUBMITTABLE)
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=98a149cd5cc44a13045a7798ce93444806564e692f06589b5e33c390fb991b82 commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 plan=smokeqt servers=sobst:observation_query:32tasks:2280s,srfillt:random_fill:32tasks:2280s,sgoalt:goal_query:32tasks:2280s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=70 max_input_tokens=262144 thinking=strip role=release-smoke task_set=smoke32 async_scheduling=on coverage=evictions partition=ghx4 time=02:53:00 expected_seconds=7000 gpu_hours_limit=2.88 gpu_hours_expected=1.94 billing=x1 billed_gpu_hours_limit=2.88 billed_gpu_hours_expected=1.94 worst_case_seconds=10380 with_eval_wait_seconds=9840 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M memory_need_gib=105.87 memory_spare_gib=5.03 startup_spike=ELIMINATED job_name=tb16-smokeqt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED tasks=89 kv_budget=8192 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 goal_query=admission_overlap16,goal_rewriter_engine=vllm,guided_backend=lm-format-enforcer,kv_gib=3,batch_invariant,goal_overlap,rewriter_model=/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca,goal_inputs=terminus2-goal-inputs-provisional-v2 still_provisional=chat_text_slots,context,goal_query,kv_budget,kv_pool,running_sessions,sampling,session_close,vanilla tbench_push=/home/ubuntu/tb16-verify:120s
+  RELEASE_RECEIPT commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 status=GIT_ARCHIVE_TESTS_PASS tests=2059 skipped=139 result_line_sha256=308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f log_sha256=7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c login_test_runs=0
+  DRY_RUN connections=0 stage=/u/ycao11/tb16-5e895afcbc804930b778f445aac70ffb payload_bytes=17407279 commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 plan=smokeqt servers=sobst:observation_query:32tasks:2280s,srfillt:random_fill:32tasks:2280s,sgoalt:goal_query:32tasks:2280s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=70 max_input_tokens=262144 thinking=strip role=release-smoke task_set=smoke32 async_scheduling=on coverage=evictions partition=ghx4 time=02:53:00 expected_seconds=7000 gpu_hours_limit=2.88 gpu_hours_expected=1.94 billing=x1 billed_gpu_hours_limit=2.88 billed_gpu_hours_expected=1.94 worst_case_seconds=10380 with_eval_wait_seconds=9840 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M memory_need_gib=105.87 memory_spare_gib=5.03 startup_spike=ELIMINATED job_name=tb16-smokeqt run_label=r1 after_job=3560498 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED tasks=89 kv_budget=8192 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 goal_query=admission_overlap16,goal_rewriter_engine=vllm,guided_backend=lm-format-enforcer,kv_gib=3,batch_invariant,goal_overlap,rewriter_model=/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca,goal_inputs=terminus2-goal-inputs-provisional-v2 still_provisional=chat_text_slots,context,goal_query,kv_budget,kv_pool,running_sessions,sampling,session_close,vanilla tbench_push=/home/ubuntu/tb16-verify:120s
+  RELEASE_RECEIPT commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 status=GIT_ARCHIVE_TESTS_PASS tests=2059 skipped=139 result_line_sha256=308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f log_sha256=7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c login_test_runs=0
+
+
+3. SUBMIT (Windows PowerShell 5.1; one command; one visible SSH/Duo connection to gh-login03)
+--------------------------------------------------------------------------------------------
+First, in your DeltaAI shell (read-only): squeue -h -u ycao11 -o '%i|%T|%P|%r|%j|%E'
+-AfterJob names the last queued / running job of yours that shares tbench (tb16- / swe32- / swe10- / swe16- / gem0- /
+gswe32-): on 11-12 gctx25 3560498 (released, queued), unless perf-swe32's smoket (job A) or another tbench job was
+submitted after it: then that one. With none queued or running, leave -AfterJob out. (Q1, perf-mab smqt, does not use
+tbench: it needs no chain.)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -RunLabel r1 -AfterJob <last tbench job> -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY'
+Fallback (instead of smokeqt, thinking off):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeq -RunLabel r1 -AfterJob <last tbench job> -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQ_32TASKS_3SERVERS_262K_KV25_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY'
+Light login gates ~4-6 min; exit 86 = a pre-claim gate failed, nothing claimed.
+
+
+4. AFTER THE END MAIL
+---------------------
+(Checked on the real tbench 2026-11-12 with job 3499759's archives and its frozen harness: push PUSHED / PRESENT,
+trigger WAITER_STARTED, the waiter's RESULT DONE TB16_PASS_VERIFIED / JOIN_PASS in 116 s, the pull 13 of 15 files
+byte-identical to that job's local verification, the other two differing in paths / seconds / verified_on only.)
+New since 2026-11-12: the job pushes its two archives to tbench (/home/ubuntu/tb16-verify) and a niced waiter there
+verifies once its Harbor runs ended (its last line: tbench_push=PUSH_OK). Locally, with the END mail's State and
+ExitCode (required; Claude runs it with the tokenizer venv):
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\postrun\verify_on_tbench.py --pull --job-id <J> --slurm-state <State> --slurm-exit-code <ExitCode>
+(exit 3 = the waiter is not done yet: run it again later; TBENCH_NO_REQUEST = the push failed (fetch/tbench-push.json
+says why): use the check block and fetch_run.ps1 below.) Expected VERDICT=TB16_PASS_VERIFIED, JOIN_PASS, every server's
+cell-coverage COVERED.
+The read-only check block of SMOKE_READY.txt section 7 (it names only the stage and the job id) is still valid; with it
+the old path also works: this folder's postrun\fetch_run.ps1 -Stage <S> -JobId <J> -CoreSha256 ... -BulkSha256 ...
+-SlurmState ... -SlurmExitCode ... (job 3568310 of payload a3f53060 stays with perf-tb16-strip-a3f53060).
+
+
+5. NOT IN THIS FOLDER YET
+-------------------------
+- GG2 gstrip25 (Gemma thinking strip on Terminal-Bench, gt3\GPU-PLAN.md): not built. Its gate is GG1 passed and gctx25
+  3560498 verified (K / H decision (a)); it needs the Gemma variant of the strip verifier (V1-V5 on channel ids, the
+  window hold instead of the GDN carry, the hold checks, CAPACITY_WAIT by cause), the Gemma thinking-on stock control,
+  --window-hold-slots in the launch / dry-run gates, the fakes and the runtime's Gemma strip evidence in
+  runtime_evidence. Planned limit 2.1 / 1.5 GPU-h expected (02:05:00), per GPU-PLAN.md.

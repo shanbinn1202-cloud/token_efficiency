@@ -1,0 +1,84 @@
+2026-11-16: smokeqt 3586720 cancelled before it ran; nothing to submit or fetch from this file until a re-pin.
+READY_1115 (2026-11-15) - perf-tb16-strip: the join fix of gctx25 job 3560498 (the killed in-flight row), payload 4203f013
+=========================================================================================================================
+
+STATUS: READY locally (no new submission is planned from this payload now). Nothing was submitted, no DeltaAI connection
+was made, nothing was pushed. The queued smokeqt job 3586720 (cancelled 2026-11-16, never ran) runs payload 98a149cd and is fetched and verified from the
+frozen copy perf-tb16-strip-98a149cd (section 3), never from this folder.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip
+Frozen     ..\perf-tb16-strip-98a149cd\ (the 98a149cd state of smokeqt 3586720; FROZEN-98a149cd.md, list
+           D:\Remote-RA-temp\scratch\perf-tb16-strip-98a149cd.sha256 4f777841...9116, VERIFY_OK); earlier jobs verify in
+           their copies: gctx25 3560498 -> perf-tb16-strip-3acc490a, smokeqt 3568310 (cancelled) -> perf-tb16-strip-a3f53060
+Runtime    integrate-1112 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (unchanged; PINNED, receipt GIT_ARCHIVE_TESTS_PASS 2059 / 139)
+Payload    4203f013c52613edb64d365b6e014be6f70a0605a6c07fd2dc5262807ecc5bb5   (dist\payload.json; was 98a149cd: pins.json only)
+Entry      26a16328cced4949e8ef633ae89019def0adba6c1e2a36ac7f4573dc385a7a3c   (run_one_connection.ps1)
+Pins       a7760e78791a07b18a67bb9554a235ca5595c06127aca2e28b0a1414b747f568   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 pin=PINNED payload=4203f013c52613edb64d365b6e014be6f70a0605a6c07fd2dc5262807ecc5bb5
+           (validation\20261115T015540, -Jobs 6, 2,203 s, HEAVY_TEST.lock; D:\Remote-RA-temp\scratch\tb16-join-1115\lv-1.log);
+           unit tests 129 OK, GATE_CHECKS_PASS 28 / 149, E2E 41 passed, EVAL_COMPAT_PASS, ENTRY_CHECKS bad=0
+tbench     half unchanged (manifest d08ba8d3...7ab1, no redeploy); verification code for this payload deployed:
+           /home/ubuntu/tb16-verify/code/5a707eb95262ca50 (83 files), pointer code/by-payload/
+           12a853e8cb1741e77efdfe27e6ae743e6e48b319efb737809f2bc8c56d7e3af2 (the payload members id the job sends),
+           venv tok-ad35fb59b78e (freeze e0e33033...); D:\Remote-RA-temp\scratch\tb16-join-1115\deploy-final.log
+           the 98a149cd pointer (code/by-payload/6b2ae279..., code/8bcc0a0b17ae1d52 = the frozen copy's files) unchanged
+
+
+1. WHAT CHANGED (README "Join fix of 2026-11-15")
+-------------------------------------------------
+- postrun\join_tb16.py: a trial the client killed (AgentTimeoutError) whose server has exactly one row more than its
+  calls, with nothing counted by Harbor beyond its trajectory, joins when that row is the trial's last row and its
+  session's last, its prompt token ids extend the previous row's, and the other rows equal the calls: check
+  killed-in-flight-final-row, finding KILLED_IN_FLIGHT (join.json findings / killed_in_flight_rows), columns "Killed
+  in-flight requests" / "Killed in-flight tok (never received)" (instances.csv, servers.csv, table1.csv), its tokens
+  allowed exactly in numerator-client-equals-server. Every other count difference still fails.
+- postrun\verify_on_tbench.py --join-candidate-dir / tbench_verify\remote_verify.py run --join-harness (manual mode):
+  an old job verified by its own frozen copy's sealed verifier and joined with a later join.
+- tb16-config.json tbench_verify.about (text): records the rule, so this verification has its own payload id on tbench.
+- Note: one guard was added to verify_on_tbench.py's manual-mode summary line (read join.json only when it exists)
+  after the LV's unit-test step had run (the LV's e2e step and the final unit run, 129 OK, used it); not delivered.
+- Plans unchanged: plan_fingerprint 28/28 equal to the frozen copy's (section tbench_verify aside); SelfTest / DryRun of
+  all 28 plans exit 0, masked lines equal 28/28, no NOT_SUBMITTABLE.
+
+
+2. LOCAL CHECKS (no connection; done 2026-11-15)
+------------------------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -RunLabel r1 -AfterJob 3586720 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY' -DryRun
+Seen (every plan: D:\Remote-RA-temp\scratch\tb16-join-1115\dryrun-after.txt):
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=4203f013c52613edb64d365b6e014be6f70a0605a6c07fd2dc5262807ecc5bb5 commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 plan=smokeqt servers=sobst:observation_query:32tasks:2280s,srfillt:random_fill:32tasks:2280s,sgoalt:goal_query:32tasks:2280s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=70 max_input_tokens=262144 thinking=strip role=release-smoke task_set=smoke32 async_scheduling=on coverage=evictions partition=ghx4 time=02:53:00 expected_seconds=7000 gpu_hours_limit=2.88 gpu_hours_expected=1.94 billing=x1 billed_gpu_hours_limit=2.88 billed_gpu_hours_expected=1.94 worst_case_seconds=10380 with_eval_wait_seconds=9840 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M memory_need_gib=105.87 memory_spare_gib=5.03 startup_spike=ELIMINATED job_name=tb16-smokeqt run_label=r1 after_job= mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED tasks=89 kv_budget=8192 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 goal_query=admission_overlap16,goal_rewriter_engine=vllm,guided_backend=lm-format-enforcer,kv_gib=3,batch_invariant,goal_overlap,rewriter_model=/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca,goal_inputs=terminus2-goal-inputs-provisional-v2 still_provisional=chat_text_slots,context,goal_query,kv_budget,kv_pool,running_sessions,sampling,session_close,vanilla tbench_push=/home/ubuntu/tb16-verify:120s
+  RELEASE_RECEIPT commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 status=GIT_ARCHIVE_TESTS_PASS tests=2059 skipped=139 result_line_sha256=308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f log_sha256=7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c login_test_runs=0
+  DRY_RUN connections=0 stage=/u/ycao11/tb16-ab69ab1fcdd5418188fc70c249c6edd4 payload_bytes=17408227 commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 plan=smokeqt servers=sobst:observation_query:32tasks:2280s,srfillt:random_fill:32tasks:2280s,sgoalt:goal_query:32tasks:2280s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=70 max_input_tokens=262144 thinking=strip role=release-smoke task_set=smoke32 async_scheduling=on coverage=evictions partition=ghx4 time=02:53:00 expected_seconds=7000 gpu_hours_limit=2.88 gpu_hours_expected=1.94 billing=x1 billed_gpu_hours_limit=2.88 billed_gpu_hours_expected=1.94 worst_case_seconds=10380 with_eval_wait_seconds=9840 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M memory_need_gib=105.87 memory_spare_gib=5.03 startup_spike=ELIMINATED job_name=tb16-smokeqt run_label=r1 after_job=3586720 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED tasks=89 kv_budget=8192 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 goal_query=admission_overlap16,goal_rewriter_engine=vllm,guided_backend=lm-format-enforcer,kv_gib=3,batch_invariant,goal_overlap,rewriter_model=/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca,goal_inputs=terminus2-goal-inputs-provisional-v2 still_provisional=chat_text_slots,context,goal_query,kv_budget,kv_pool,running_sessions,sampling,session_close,vanilla tbench_push=/home/ubuntu/tb16-verify:120s
+  RELEASE_RECEIPT commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 status=GIT_ARCHIVE_TESTS_PASS tests=2059 skipped=139 result_line_sha256=308a6e79fc938fd2e2b62a87ebd7b7760703df31befac715fdb966459b30ea8f log_sha256=7bb8bcbd486c873fcab85964d9f59f4213c503fe4c8a2a785bbc424b54b82a6c login_test_runs=0
+
+
+3. SMOKEQT 3586720 (queued; cancelled 2026-11-16, never ran; payload 98a149cd): FETCH AND VERIFY FROM THE FROZEN COPY
+-----------------------------------------------------------------------------------
+Run tb16-3586720-r2, stage /u/ycao11/tb16-9ec70f14ef604bf3b7e2a8044a48e7dd (afterany 3560498). The job pushes its two
+archives to tbench and its trigger follows code/by-payload/6b2ae279... (the 98a149cd tree, unchanged). After its END
+mail, Claude runs (tokenizer venv; State and ExitCode from the mail):
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B "I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-98a149cd\postrun\verify_on_tbench.py" --pull --job-id 3586720 --run-id tb16-3586720-r2 --slurm-state <State> --slurm-exit-code <ExitCode>
+(exit 3 = the waiter on tbench is not done yet: run it again later; TBENCH_NO_REQUEST = the push failed: the read-only
+check block of SMOKE_READY.txt section 7 with this stage and job id, then the same script in manual mode with --stage
+/u/ycao11/tb16-9ec70f14ef604bf3b7e2a8044a48e7dd --job-id 3586720 --run-id tb16-3586720-r2 --core-sha256 <core>
+--bulk-sha256 <bulk> --slurm-state <State> --slurm-exit-code <ExitCode>; --print-copy prints the DeltaAI-side copy.)
+Expected VERDICT=TB16_PASS_VERIFIED, JOIN_PASS, every server's cell-coverage COVERED.
+If its join fails ONLY on a killed in-flight row (an AgentTimeoutError trial with one server row more than its calls),
+re-verify with this copy's verifier and the fixed join (the archives are on tbench already; results only):
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B "I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\postrun\verify_on_tbench.py" --stage /u/ycao11/tb16-9ec70f14ef604bf3b7e2a8044a48e7dd --job-id 3586720 --run-id tb16-3586720-r2 --core-sha256 <core> --bulk-sha256 <bulk> --slurm-state <State> --slurm-exit-code <ExitCode> --candidate-dir "I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-98a149cd" --join-candidate-dir "I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip"
+(<core> / <bulk>: the job's pushed values, in the pulled check\local-verification.json or tbench's RESULT.json.)
+
+
+4. GCTX25 3560498 RE-VERIFIED ON TBENCH WITH THE FIXED JOIN (2026-11-15)
+-----------------------------------------------------------------------
+I:\onedrive\文档\Remote-RA\verification\tb16-job3560498-20261115T015150\ (code tree b219a488eecf45e0: verifier
+perf-tb16-strip-3acc490a, join perf-tb16-strip):
+  VERDICT=TB16_FAIL_VERIFIED  JOIN=JOIN_PASS  KILLED_IN_FLIGHT_ROWS=1 (grfill262 crack-7z-hash, 329 tokens)
+The join now passes (16 of 16 per server). The verdict stays TB16_FAIL_VERIFIED: ggoal262's in-job checks (one
+goal_query turn CAPACITY_EXCEEDED: 1,581 global Pages needed, at most 1,462 ever free), unchanged and not a join matter.
+
+
+5. A NEW SMOKEQT SUBMISSION FROM THIS FOLDER (only if the user decides; not planned now)
+-------------------------------------------------------------------------------------
+The submit line of READY_1112.txt section 3 is unchanged (the same plan and authorization; this folder's
+run_one_connection.ps1 carries the new payload): -AfterJob = the last queued / running tbench job of yours.

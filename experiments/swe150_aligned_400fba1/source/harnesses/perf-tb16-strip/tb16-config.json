@@ -1,0 +1,1094 @@
+{
+ "schema": "tb16-config-v1",
+ "about": "The decisions of the Terminal-Bench 2.0 runs on the selective-prefix runtime (perf-tb16, route T-a step 5 of deliverables/plans-20261016/terminal-bench-plan.md; user decisions 2026-10-16): Harbor 0.21.0's Terminus 2 unchanged (version 2.0.0, json parser, its own prompt, summarization and retries) on tbench, thinking OFF, 16 concurrent trials (harbor -n 16) over all 89 tasks of terminal-bench/terminal-bench-2 at its pinned ref, one ghx4 batch job per configuration (full, goal_query, observation_query, random_fill on our runtime; a stock vLLM 0.24.0 control with the same settings; --language-model-only on both sides), plus an optional two-server dry plan. Hand-edited; build.py copies it into pins.json (`config`) and re-validates every plan, so a change here is a rebuild, never a code change. THE task list is tasks/tb16-tasks.json. The runtime's chat protocol (`chat_text_v1`, tb-runtime's INTERFACE.md, D:/Remote-RA-temp/scratch/tb-runtime/INTERFACE.md) is read from the sealed source (integrate-1016 0d37346 first; pinned since 2026-10-21: integrate-1019-tbgoal 120bc3c with goal_query on chat-text, provisional Terminus 2 Goal inputs); everything in `provisional` waits for an agreement.",
+ "server": {
+  "about": "Shared by every server of our runtime (full, observation_query, random_fill, goal_query): serve.py flags. K = max_running_sessions = 20 open sessions per server (vLLM max_num_seqs), Harbor -n 16 (agent.n_concurrent; the stock control runs max_num_seqs = -n): the 4 spares take finished trials (Terminus sends no close) and Terminus's summary sub-calls (the user, 2026-10-16; INTERFACE.md of tb-runtime 0fd34f3: a chat-text server runs up to 24, sessions.py MAX_CHAT_TEXT_RUNNING). max_model_len 65536 = THE TB context, one value (build.py gives the stock control's max_model_len and Terminus's model_info.max_input_tokens this value): the August runs' model_info (a prompt plus its reply must fit; Terminus summarizes when fewer than 8000 tokens are left and handles the context-limit 400); at K = 20 and 32 GiB, 131072 does not fit the no-deadlock rule; PROVISIONAL; max_tokens 4096, the reply bound (Terminus sends llm_kwargs.max_tokens 4096 too). dram_arena_gib 64 (INTERFACE.md section 1: 65,536 Pages of 1 MiB, e.g. 20 sessions of 52K tokens; 67.9 GiB pinned with the pool and the carries; the arena of every session at the limit would be 80.3 GiB, 84.1 GiB pinned, which does not fit --mem=113560M with the 32-GiB reserve): a capture beyond it fails that request with DRAM_ARENA_EXHAUSTED (a failure in the checks). connector_pool_gib 1, the optimized runtime (the user, 2026-10-21: Table 1 runs with the optimized flags): decode_fastpath, decode_fastpath2 and decode_fastpath3 true (serve.py refuses 3 without 2 and 2 without 1) and deferred_completion_io true (the completion files written off the engine thread), language_model_only true (the startup spike ELIMINATED); the Gemma servers keep decode_fastpath alone (config.gemma.server: the Gemma 4 profile refuses --decode-fastpath3 and --deferred-completion-io; its plans keep their flags). protocol: the runtime's chat protocol for Terminus 2 (`chat_text_v1`: the serve.py --protocol value, its extra arguments and the session binding are read from the sealed source by controller.chat_text_feature and pinned in pins.json runtime_features.chat_text).",
+  "kv_cache_gib": 32,
+  "page_tokens": 16,
+  "kv_layout": "decoupled",
+  "max_model_len": 65536,
+  "max_tokens": 4096,
+  "dram_arena_gib": 64,
+  "cuda_graphs": "full",
+  "max_running_sessions": 20,
+  "decode_fastpath": true,
+  "decode_fastpath2": true,
+  "decode_fastpath3": true,
+  "deferred_completion_io": true,
+  "optimized_about": "The optimized runtime of the paper's Table 1 (the user, 2026-10-21): --decode-fastpath --decode-fastpath2 --decode-fastpath3 --deferred-completion-io --language-model-only on every Qwen runtime server (full, observation_query, random_fill, goal_query); each switch pins its startup key (startup.json, READY; the decode fast paths also the worker receipt) and changes no vLLM argument (release parity: the vLLM command equals the one without them). Accepted on chat-text for every policy by the sealed serve.py (test_release_parity) and by the runtime's CPU end-to-end evidence (runtime_evidence.py: test_integrate_flags' chat-text runs with the three fast paths, test_deferred_completion's chat-text server). Not GPU-validated on TB before these runs.",
+  "language_model_only": true,
+  "release_idle_pages": true,
+  "release_about": "--release-idle-pages on every runtime server (coordinator, 2026-10-17, after job 3398129: full at K = 20 / 32 GiB / 65,536 without it pinned 26,632 of 26,698 FA blocks with 16 idle sessions; a turn admitted while nothing ran found no block and vLLM preempted it, which aborts the EngineCore). Under GPU pressure the capacity gate releases idle sessions' resident Pages, least recently used first (their DRAM copies stay in the arena's catalog: no new pinned host memory) and readmits them before the session's next turn; with 68d19b4 a turn that still does not fit waits (CAPACITY_WAIT) instead of running. Evidence: capacity.jsonl (evict / readmit), the rows' and native files' idle_release, engine-cleanup.json totals; a preemption stays a failure.",
+  "connector_pool_gib": 1,
+  "protocol": "chat-text",
+  "protocol_args": [
+   "--chat-text-slots",
+   "512",
+   "--chat-text-idle-timeout",
+   "600",
+   "--chat-text-evict-after",
+   "30"
+  ],
+  "protocol_about": "INTERFACE.md (tb-runtime 0fd34f3) section 1: --protocol chat-text (chat_text_v1, no --task), its slots over the lifetime (client sessions + summarization calls + rebinds; 512 = the runtime's default, at least 128 required), and the close rule: failed / rebound / client-closed / bound-reached slots close at once; a live session closes only when all K are open: for each request waiting to open, the least recently used one idle >= --chat-text-evict-after (30 s) closes, asides first; with nobody waiting, the least recently used one idle >= --chat-text-idle-timeout (600 s) closes, one, so the next new session finds a spare. The runtime's defaults, pinned explicitly (PROVISIONAL).",
+  "session_binding": "initial_segment"
+ },
+ "selection": {
+  "about": "THE KV budget of the three selective policies (observation_query, random_fill, goal_query): serve.py --active-token-budget N, a fixed per-session token budget (the same for the three; full and stock have none). The value is to be agreed (user decision 2026-10-16: configurable); 8192 is the SWE-bench value. The runtime's selection starts only once a session's sealed history exceeds its switch threshold (8,192 tokens; pinned from the sealed source), and the August Terminus runs' largest prompt per trial had a median of about 9.1K tokens, so on TB many trials stay below it with any budget. Changing it: edit this one value, build.py --reuse-bundle, local_validation.ps1 (the phrases and times do not change).",
+  "active_token_budget": 8192
+ },
+ "policies": {
+  "about": "Per-policy settings (as perf-swe32): selective = gets --active-token-budget (selection.active_token_budget); admission: the admission flags (perf-swe32's tokens; goal_query (f) --admission-overlap 16); rewriter: start goal_query with the pinned Qwen3-0.6B Goal rewriter (pins.json rewriter_default; -RewriterModel overrides the path); rewriter_batch: goal_query's --goal-rewriter-batch N (4, the user 2026-10-21; the per-batch token cap T is serve.py's default GOAL_REWRITER_BATCH_TOKENS, 16384, not passed, recorded in startup.json / READY and checked). The Goal construction is the runtime's, unchanged; on TB its inputs are the runtime's PROVISIONAL Terminus 2 Goal inputs (terminus2_goal, definition terminus2-goal-inputs-provisional-v2: requirement = the task instruction of Terminus 2's first message, observation = the newest terminal output; the summarization sub-calls never call the rewriter): the harness does not change them, it pins and checks them.",
+  "full": {
+   "selective": false,
+   "admission": [],
+   "rewriter": false
+  },
+  "observation_query": {
+   "selective": true,
+   "admission": [],
+   "rewriter": false
+  },
+  "random_fill": {
+   "selective": true,
+   "admission": [],
+   "rewriter": false
+  },
+  "goal_query": {
+   "selective": true,
+   "admission": [
+    "admission_overlap=16"
+   ],
+   "rewriter": true,
+   "rewriter_batch": 4
+  }
+ },
+ "agent": {
+  "about": "Harbor 0.21.0 on tbench (/home/ubuntu/harbor-env, its files verified against the wheel RECORD by the tbench preflight), the built-in Terminus 2 (`-a terminus-2`, harbor.agents.terminus_2:Terminus2, version 2.0.0) unchanged: json parser, its prompt template, summarization on (threshold 8000), its own retries (LiteLLM.call 3 x, _query_llm 3 x; the server must answer a re-sent request deterministically), no session header and no close (the runtime binds a session by its first message). The job config (controller.harbor_job_config, rendered on DeltaAI from this section and sent with the run) sets: the dataset at its pinned ref (the plan's task names as the filter), n_concurrent_trials 16 (agent.n_concurrent, at most the servers' K), n_attempts 1, timeout multiplier 1.0 (the task timeouts unchanged: build-pov-ray 12,000 s, sam-cell-seg 7,200 s), Harbor's own trial retries off (max_retries 0), quiet, the docker environment with delete, verification on; the agent kwargs: api_base = the loopback relay of the job's tunnel, model_info, temperature 0, llm_kwargs (max_tokens 4096, litellm timeout 3600 s so that a request waiting in the server's admission is not cancelled and re-sent, no litellm / OpenAI-client retries). Thinking off: our runtime renders the thinking-off generation header itself; the stock control gets enable_thinking false from the client per call (stock.llm_call_kwargs, as SWE-bench). HARBOR_TELEMETRY=0 on every harbor process.",
+  "harbor_version": "0.21.0",
+  "agent_name": "terminus-2",
+  "agent_version": "2.0.0",
+  "model_name": "hosted_vllm/selective-prefix",
+  "n_concurrent": 16,
+  "n_attempts": 1,
+  "harbor_retries": 0,
+  "timeout_multiplier": 1.0,
+  "thinking": "off",
+  "temperature": 0.0,
+  "model_info": {
+   "max_output_tokens": 4096,
+   "input_cost_per_token": 0,
+   "output_cost_per_token": 0
+  },
+  "llm_kwargs": {
+   "max_tokens": 4096,
+   "timeout": 3600,
+   "max_retries": 0,
+   "num_retries": 0
+  },
+  "session_close": "none",
+  "provisional": [
+   "temperature",
+   "llm_kwargs",
+   "model_info",
+   "session_close"
+  ]
+ },
+ "stock": {
+  "about": "Same-node stock vLLM 0.24.0 control (as perf-swe32): plain vllm.entrypoints.openai.api_server from the reused clean env, no runtime source, the same context (server.max_model_len, given by build.py), reply bound and KV bytes, max_num_seqs = Harbor's -n (16), prefix caching, --gdn-prefill-backend triton, VLLM_USE_FLASHINFER_SAMPLER=0, vLLM's own --language-model-only; served under the same model name. vLLM's default chat template kwargs on the server (the user, 2026-10-16: as SWE-bench); thinking off comes from the client per call (llm_call_kwargs: extra_body.chat_template_kwargs enable_thinking false, Terminus 2's per-call LiteLLM kwargs), so the stock job config differs from ours by that one entry. Greedy from the client's temperature 0; replies end at EOS or at max_tokens (finish_reason length, which Terminus handles).",
+  "mode": "default",
+  "async_scheduling": true,
+  "served_model_name": "selective-prefix",
+  "max_num_seqs": 16,
+  "max_num_batched_tokens": 16384,
+  "kv_cache_gib": 32,
+  "seed": 42,
+  "enable_prefix_caching": true,
+  "prefix_caching_hash_algo": "sha256",
+  "mamba_cache_mode": "align",
+  "gdn_prefill_backend": "triton",
+  "distributed_executor_backend": "uni",
+  "language_model_only": true,
+  "extra_serve_args": [],
+  "provisional": [
+   "mode",
+   "async_scheduling",
+   "max_num_batched_tokens",
+   "enable_prefix_caching",
+   "kv_cache_gib",
+   "llm_call_kwargs"
+  ],
+  "llm_call_kwargs": {
+   "extra_body": {
+    "chat_template_kwargs": {
+     "enable_thinking": false
+    }
+   }
+  }
+ },
+ "stock_thinking": {
+  "about": "The thinking-on stock control of the thinking plans (perf-tb16-strip, strip25): config.stock with these keys over it and the plan's own context and KV size (controller.stock_section: kv_cache_gib, max_model_len of config.plans.<name>.server). The client sends the stock default template with thinking on per call (llm_call_kwargs extra_body.chat_template_kwargs enable_thinking true, no preserve_thinking: every past reply renders as its content only, the strip servers' history); vLLM's Qwen3 reasoning parser (--reasoning-parser qwen3) returns the text after </think> as the content and the reasoning apart, as our strip servers return it, and Harbor 0.21.0's Terminus 2 (interleaved_thinking off, harbor/llms/chat.py) sends back the content only. Everything else is config.stock's (vLLM's defaults: CUDA graphs, async scheduling, prefix caching, max_num_seqs = Harbor's -n). PROVISIONAL: the collaborator's thinking-on baseline settings are not pinned here.",
+  "extra_serve_args": [
+   "--reasoning-parser",
+   "qwen3"
+  ],
+  "llm_call_kwargs": {
+   "extra_body": {
+    "chat_template_kwargs": {
+     "enable_thinking": true
+    }
+   }
+  }
+ },
+ "memory": {
+  "about": "Host memory of every job: sbatch --mem=113560M = one GH200's share (110.90 GiB; billing max(16 x 13.89, 110.9 x 9.017, 1000) = 1000 = one GPU-hour per hour). A runtime server's worst case = serve.py's pinned host memory (connector pool 1 GiB + 16 GDN carries 2.29 GiB + the arena of every running session at the 65536-token limit, 65,792 Pages in 256-MiB chunks = 64.25 GiB; 67.54 GiB) + process_overhead_gib 32 (perf-swe32's reserve: the swe16 servers' memory beside the pool, the carries and the arena was 20.6-29.0 GiB, the Goal rewriter included) = 99.54 GiB: 11.36 GiB spare (at least min_spare_gib 5). The stock control pins nothing: 32 GiB, 78.9 spare. No arena demand / bound applies (the arena holds every session at the limit). The multi-modal warmup spike (up to 152.4 GiB measured) is ELIMINATED by --language-model-only on every server (on_risk refuse).",
+  "max_mem_mib": 113560,
+  "process_overhead_gib": 32,
+  "min_spare_gib": 5,
+  "arena_demand_gib": null,
+  "arena_min_ratio": 1.5,
+  "arena_bound_gib": null,
+  "multimodal_warmup": {
+   "need_gib": 152.4,
+   "on_risk": "refuse"
+  }
+ },
+ "tbench_host": {
+  "about": "tbench/bin/host_check.py (the login-node preflight; run_harbor.sh after taking the locks): refuses only for leftover containers of OUR previous runs (the docker compose projects of our trials: <trial>__env and its verifier projects) and for MemAvailable / free disk below these limits; other containers (the SWE halves, other users' Harbor work) and the load are reported, never refused; nothing that is not ours is ever stopped or removed. shared_lock_roots: the tbench lock is shared with the SWE harnesses: a TB run takes its own lock (/home/ubuntu/tb16/lock) and each SWE half's lock through a byte-identical copy of that half's lock module (perf-gemma0's way with swe16's), so a SWE pool, stress test or evaluation never runs beside a TB run and the other way round; a running SWE evaluation is waited for (bounded, eval_wait_seconds). tbench: 16 vCPU, 30 GB RAM, -n 16 trials with 2-8 GB memory limits.",
+  "min_mem_available_gb": 12,
+  "min_free_disk_gb": 50,
+  "shared_lock_roots": {
+   "swe32": "/home/ubuntu/swe32",
+   "swe16": "/home/ubuntu/swe16",
+   "swe10": "/home/ubuntu/swe10"
+  }
+ },
+ "tbench_verify": {
+  "about": "2026-11-12 (perf-swe32's evidence push of 2026-11-11, ported): after its archives the job pushes fetch/tb16-core.tar.xz and tb16-bulk.tar.xz to <root>/evidence/<run_id>/ over its tbench SSH link (one ssh per archive, stdin to a .part file, SHA-256 checked against archives.json on arrival before the rename, never over a different file) and calls <root>/code/by-payload/<payload members id> -> code/<tag>/tbench_verify/remote_verify.py trigger (the code tree postrun/verify_on_tbench.py --deploy installed; checked against its SHA256SUMS): it records the job's archive SHA-256 values and end record (status, the Slurm state it implies: from the job, confirmed by the END mail) and starts a detached niced waiter that verifies once the evidence is complete and the run's Harbor runs ended (bin/package_run.sh's rule; at most wait_seconds): verify_evidence, the tbench run package, join_tb16 and tb16_tables as postrun/fetch_run.ps1 runs them, writing out/<run_id>/RESULT.json; verify_on_tbench.py --pull (with the END mail's Slurm state and exit code) brings the small result home. Best effort: at most total_seconds (and never closer than slurm_margin_seconds to the plan's Slurm limit), every ssh with a timeout; any failure is recorded in fetch/tbench-push.json and the job's last line, never in its status; fetch_run.ps1 still works. 2026-11-15: the payload id selects the verification code tree (code/by-payload/<payload members id>), so a change of the tbench verification gets a new payload id and a queued job keeps the code of its own payload (smokeqt 3586720 of payload 98a149cd: perf-tb16-strip-98a149cd). From this payload on the join accepts the killed in-flight row of job 3560498 as a counted finding (KILLED_IN_FLIGHT): the one row beyond the calls of a trial the client killed (AgentTimeoutError) with nothing counted beyond its trajectory, the trial's last row and its session's, its prompt extending the previous row's, the other rows equal to the calls (join_tb16.killed_in_flight_row); every other count difference still fails.",
+  "push": true,
+  "root": "/home/ubuntu/tb16-verify",
+  "python": "/usr/bin/python3",
+  "total_seconds": 120,
+  "trigger_seconds": 30,
+  "min_push_seconds": 10,
+  "slurm_margin_seconds": 120,
+  "poll_seconds": 60,
+  "wait_seconds": 28800
+ },
+ "harbor": {
+  "about": "The pinned Harbor install on tbench, verified read-only by tbench/bin/preflight.py before every claim (and by run_harbor.sh before every run): harbor-0.21.0.dist-info/RECORD has this SHA-256 (the wheel's, restored 2026-10-16 08:49 UTC; the former MSWEA_CTX_PATCH file is archived in ~/harbor-ctx-patch-archive/) and every file it lists (harbor/*, the dist-info, bin/harbor) has its RECORD hash and size; no other file under harbor/ except __pycache__/*.pyc; litellm and openai at these versions with these RECORD files; no MSWEA_CTX_* variable in the environment (run_configs.sh is never sourced); the 89 task packages in the task cache with their pinned content hashes and tree hashes; the 89 task images present.",
+  "env": "/home/ubuntu/harbor-env",
+  "site": "/home/ubuntu/harbor-env/lib/python3.12/site-packages",
+  "python_version": "3.12.3",
+  "record_sha256": "abfaf4e154a499d7e3c8c83ba85a8ee8861a99f66b11b7d7cb035f10b85d1424",
+  "record_files": 414,
+  "allowed_extra": {
+   "harbor/agents/installed/mini_swe_agent.py.bak": "6458398cc58f2d44612c8510a23ef8a6ce83803c318e890581fff01df9f58f34"
+  },
+  "allowed_extra_about": "The one file under harbor/ that is not in the wheel RECORD (read-only check on tbench, 2026-10-16): the patch era's backup, a byte copy of the wheel's own mini_swe_agent.py (the same SHA-256 as its RECORD entry), never imported (.bak). Allowed with exactly this SHA-256 and reported; any other extra file, or another content, fails the preflight.",
+  "terminus2_goal_files": {
+   "harbor/agents/terminus_2/templates/terminus-json-plain.txt": "89a3dc3a15752b748a99fb907c9251ab31a464e13386583fb48476b078b54a34",
+   "harbor/agents/terminus_2/templates/timeout.txt": "32bf9aa7b157a6a0e0ba0d33b81e59dd67204276f158afc1fe6cb684ced68872",
+   "harbor/agents/terminus_2/terminus_2.py": "c6b72b8c6289809b2ff3a3009b8f118fa1edb1da205f48d0b56c6938a49cb12f",
+   "harbor/agents/terminus_2/tmux_session.py": "38642b794c3358809dabddfb36ea53d57fadf3e1e6fd736d82b39da8f3ce7976"
+  },
+  "terminus2_goal_about": "goal_query's Terminus 2 Goal inputs (the runtime's terminus2_goal, PROVISIONAL) pin these four files of Harbor 0.21.0 by SHA-256; here are their entries in the pinned harbor-0.21.0.dist-info/RECORD (record_sha256 above; read on tbench 2026-10-21, RECORD SHA-256 equal to the pin). build.py and setup refuse a sealed runtime whose pins differ (controller.check_terminus2_goal_pins); the tbench preflight checks every Harbor file against this RECORD before every claim, so the agent host runs exactly these files. One-time agent-host check (2026-10-21): the runtime's test_terminus2_goal with REMOTE_RA_HARBOR_TERMINUS2_DIR on a read-only copy of tbench's harbor/agents/terminus_2 (12 tests, the two HarborSourceTests included: PASS; fixtures/terminus2-agent-host-check.json).",
+  "dependencies": {
+   "litellm": {
+    "version": "1.97.0",
+    "record_sha256": "72afa2c0743782c1014b5c4105bc544e75579634b9a822abf8c2fb1d7d0e9efe"
+   },
+   "openai": {
+    "version": "2.54.0",
+    "record_sha256": "8f907c3c4c7ba781f155bc97ad74d84a21e0d647cb7c58668ce84c3114dc4af2"
+   }
+  },
+  "task_cache": "/home/ubuntu/.cache/harbor/tasks/packages/terminal-bench",
+  "telemetry": "off"
+ },
+ "throughput": {
+  "about": "Approved by the user (2026-10-17): main-agent completion tokens of all trials (the sum of the ATIF trajectory steps' completion_tokens of agent/trajectory.json; the summarization sub-calls are in trajectory.summarization-*.json and reported apart) / span, span = first agent start to last agent end (Harbor's agent_execution times, the tbench clock); the harbor job wall (setup and verifiers included) is reported beside it; the numerator is cross-checked with the server's generated tokens and vLLM's generation_tokens delta.",
+  "numerator": "atif_main_completion_tokens",
+  "span": "first_agent_start_to_last_agent_end"
+ },
+ "budget": {
+  "about": "Seconds reserved per job and per server (controller.plan_fit; at run time the harbor cap is min(plan cap, what the deadline leaves)), perf-swe32's measured reserves: job checks 60, server start to READY 360, tunnel 60, stop 180 (stop_harbor.sh: SIGTERM, Harbor cancels its trials and removes their containers, harbor_stop_timeout_seconds 150), checks 300 (89 sessions of ~5-25 calls each, about the swe16 runs' turns), finish 480 (closes, S2, RECORD, the xz archives), margin 300; the stock control: checks 120, finish 180. R = 1,740 s (ours) / 1,260 s (stock). eval_wait (per plan): a SWE evaluation (565-574 s for 32 instances) may hold a shared lock when a job starts; the job waits up to 600 s from its start (overlapping the server start) and refuses cleanly at the bound.",
+  "job_checks_seconds": 60,
+  "server_start_seconds": 360,
+  "tunnel_seconds": 60,
+  "stop_reserve_seconds": 180,
+  "check_seconds": 300,
+  "finish_seconds": 480,
+  "stock_check_seconds": 120,
+  "stock_finish_seconds": 180,
+  "margin_seconds": 300,
+  "sample_interval_seconds": 0.25,
+  "tunnel_verify_seconds": 60,
+  "lock_poll_seconds": 30,
+  "harbor_stop_timeout_seconds": 150,
+  "close_retry_seconds": 60,
+  "remote_grace_seconds": 300,
+  "stall_watchdog_seconds": 600,
+  "stall_poll_seconds": 30,
+  "stall_about": "The job's stall watchdog during each Harbor run (job.StallWatchdog): every stall_poll_seconds it reads the server's pending requests (runtime: GET /v1/chat-text/info, client sessions busy plus sessions waiting to open; stock: vLLM running + waiting), its completed rows (runtime.jsonl) and vLLM's prompt / generation token counters; when requests are pending and nothing completed and no token was computed for stall_watchdog_seconds it records CAPACITY_STALL (capacity-stall-<label>.json), stops the Harbor run (stop_harbor.sh) and the server FAILs, so a pool that cannot hold one more turn ends the run instead of burning the allocation. It only shortens a run: the time plan is unchanged."
+ },
+ "plans_about": "One ghx4 batch job per configuration (1 GPU, --mem=113560M, billing 1000 = one GPU-hour per hour), all 89 tasks, 16 concurrent trials. Time limit = 1.3 x E rounded up to the minute, E = the expected elapsed = the measured reserves (~1,100 s ours, ~700 s stock) + the expected harbor wall W = 12,800 s: the two August Terminus jobs' trials (n = 8, thinking on) rescheduled at n = 16 in Harbor's order give 12,032 / 13,235 s, set by build-pov-ray's 12,000-s agent timeout (it starts in the first wave and timed out in both runs); every trial at its agent timeout + 120 s gives 13,980 s (+ 300 s: 14,850 s). Harbor cap = limit - every reserve (>= the all-timeout schedule); harbor minimum = 12,600 s (build-pov-ray's timeout + 600 s; with less left after the lock wait the job refuses before any agent). One run per job: a cut run is TB16_PARTIAL and gives no throughput. D:/Remote-RA-temp/scratch/perf-tb16/make_tasks.py -> tb16-sizing.json. dry: the optional first GPU contact (full then observation_query, 16 tasks with 900-s timeouts, the dry subset). goal (2026-10-21): goal_query on the 89 tasks (Table 1 Ours), the same time as full / obs / rfill; goaldry / goaldryi: goal_query on the dry subset (ghx4 batch / ghx4-interactive), dryo's time. ggoal / ggoaldry: the Gemma goal_query plans (integrate-1021 9ef0d6d, explicit T = 20,480); gobsdry / grfilldry: observation_query / random_fill alone on the Gemma dry subset (2026-10-22), ggoaldry's time. ctx25 / ctx24 (2026-10-26): the 262,144-token Qwen dry plans at the group's settings, goal_query then observation_query on the dry subset in one job with their own server settings (plans.<name>.server: KV 25 / 24 GiB, --max-model-len 262144, --dram-arena-gib 70) and arena sizing (plans.<name>.memory); ctx25 blocked by the sealed Qwen KV sizes (kv_block), ctx24 submittable; dryi's time.",
+ "plans": {
+  "full": {
+   "about": "full (no selection), 89 tasks.",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 13900,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_FULL_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "full",
+     "policy": "full",
+     "task_set": "all",
+     "agent_cap_seconds": 16380,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "obs": {
+   "about": "observation_query, 89 tasks.",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 13900,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_OBS_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "obs",
+     "policy": "observation_query",
+     "task_set": "all",
+     "agent_cap_seconds": 16380,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "rfill": {
+   "about": "random_fill, 89 tasks.",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 13900,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_RFILL_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "rfill",
+     "policy": "random_fill",
+     "task_set": "all",
+     "agent_cap_seconds": 16380,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "goal": {
+   "about": "goal_query, 89 tasks (Table 1 Ours, the user 2026-10-21): --policy goal_query --active-token-budget 8192 --goal-rewriter-model <Qwen3-0.6B> --admission-overlap 16 --goal-rewriter-batch 4 (T: serve.py's default 16384) with the optimized runtime flags; the provisional Terminus 2 Goal inputs. Time as full / obs / rfill: the Harbor wall is set by the agent timeouts (build-pov-ray 12,000 s), not by the server's speed; the rewriter starts with the server (READY within the 360-s reserve, as swe32's goal servers: 279-303 s).",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 13960,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GOAL_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "goal",
+     "policy": "goal_query",
+     "task_set": "all",
+     "agent_cap_seconds": 16380,
+     "agent_min_seconds": 12600,
+     "goal_rewriter_batch": 4
+    }
+   ]
+  },
+  "stock": {
+   "about": "Same-node stock vLLM 0.24.0 control, 89 tasks.",
+   "partition": "ghx4",
+   "time": "04:53:00",
+   "expected_seconds": 13500,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_STOCK_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_293MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "stock",
+     "policy": "stock",
+     "task_set": "all",
+     "agent_cap_seconds": 16320,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "dry": {
+   "about": "OPTIONAL first GPU contact: full, then observation_query, each on the 16-task dry subset (900-s agent timeouts, the largest August prompts) at -n 16; expected ~3,960 s (the subset's August trial walls at most 980 s).",
+   "partition": "ghx4",
+   "time": "01:26:00",
+   "expected_seconds": 3960,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_DRY_16TASKS_2SERVERS_BATCH_REUSED_V9_ENV_ONE_GH200_86MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "dryfull",
+     "policy": "full",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "dryobs",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "dryi": {
+   "about": "The dry plan on ghx4-interactive (urgent: ghx4 batch waits are about a day; coordinator, 2026-10-17): the same two servers, task subset, caps, checks and archives as dry; its own phrase; one submitted ghx4-interactive job per user; NCSA bills ghx4-interactive 2x (billing_factor of the partition).",
+   "partition": "ghx4-interactive",
+   "urgent": "ghx4 batch waits are about a day (coordinator, 2026-10-17)",
+   "time": "01:26:00",
+   "expected_seconds": 3960,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_DRYI_16TASKS_2SERVERS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_86MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "dryfull",
+     "policy": "full",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "dryobs",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "dryo": {
+   "about": "observation_query alone on the 16-task dry subset on ghx4-interactive (coordinator, 2026-10-18, after job 3399075: dryfull ran clean on 68d19b4 and its check failures stopped dryobs): one server, the dry plan's caps and checks; expected ~2,400 s (the 980-s Harbor wall of job 3399075's dryfull plus the reserves of one server); its own phrase; billed 2x.",
+   "partition": "ghx4-interactive",
+   "urgent": "ghx4 batch waits are about a day (coordinator, 2026-10-18)",
+   "time": "00:52:00",
+   "expected_seconds": 2400,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_DRYO_16TASKS_1SERVER_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "dryobs",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "goaldry": {
+   "about": "goal_query alone on the 16-task dry subset (the goal dry run, like dryo / dryi; the user 2026-10-21): the goal plan's server (overlap 16, rewriter batch 4) with the dry caps and checks; expected ~2,460 s (dryo's 2,400 s and the rewriter's start). ghx4 batch; goaldryi is the same on ghx4-interactive.",
+   "partition": "ghx4",
+   "time": "00:52:00",
+   "expected_seconds": 2460,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GOALDRY_16TASKS_1SERVER_BATCH_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "drygoal",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4
+    }
+   ]
+  },
+  "goaldryi": {
+   "about": "goaldry on ghx4-interactive (the fit is within 02:00:00): the same server, caps, checks and archives; its own phrase; one submitted ghx4-interactive job per user; billed 2x.",
+   "partition": "ghx4-interactive",
+   "urgent": "paper deadline 2026-10-30: the goal_query GPU validation before the 89-task goal run of Table 1 (the user, 2026-10-21)",
+   "time": "00:52:00",
+   "expected_seconds": 2460,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GOALDRYI_16TASKS_1SERVER_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "drygoal",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4
+    }
+   ]
+  },
+  "gfull": {
+   "about": "Gemma 4 31B IT, full (no selection) at 32 GiB with K = 20, 89 tasks (the user, 2026-10-21).",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 14020,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GFULL_GEMMA4_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gfull",
+     "policy": "full",
+     "task_set": "all",
+     "agent_cap_seconds": 16260,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "gobs": {
+   "about": "Gemma 4 31B IT, observation_query at 25 GiB with K = 17, 89 tasks (the user, 2026-10-21).",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 14020,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GOBS_GEMMA4_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gobs",
+     "policy": "observation_query",
+     "task_set": "all",
+     "agent_cap_seconds": 16260,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "grfill": {
+   "about": "Gemma 4 31B IT, random_fill at 25 GiB with K = 17, 89 tasks (the user, 2026-10-21).",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 14020,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GRFILL_GEMMA4_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "grfill",
+     "policy": "random_fill",
+     "task_set": "all",
+     "agent_cap_seconds": 16260,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "gstock": {
+   "about": "Same-node stock vLLM 0.24.0 control for Gemma 4 31B IT (gemma.stock at 25 GiB, the selective servers' KV size), 89 tasks.",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "04:53:00",
+   "expected_seconds": 13620,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GSTOCK_GEMMA4_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_293MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gstock",
+     "policy": "stock",
+     "task_set": "all",
+     "agent_cap_seconds": 16200,
+     "agent_min_seconds": 12600
+    }
+   ]
+  },
+  "gdry": {
+   "about": "The Gemma dry plan, the first GPU contact of the Gemma runtime: full (32 GiB, K = 20), then observation_query (25 GiB, K = 17), each on the 16-task dry subset at -n 16 (the Qwen dry plan's caps); expected ~4,200 s.",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "01:30:00",
+   "expected_seconds": 4200,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GDRY_GEMMA4_16TASKS_2SERVERS_BATCH_REUSED_V9_ENV_ONE_GH200_90MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gdryfull",
+     "policy": "full",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "gdryobs",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "ggoal": {
+   "about": "Gemma 4 31B IT, goal_query at 25 GiB with K = 17, 89 tasks (not needed now); --admission-overlap 16, --goal-rewriter-batch 4, T = 20480 (--goal-rewriter-batch-tokens, explicit: the coordinator 2026-10-22, >= 2 GiB free at the estimated peak with the rewriter; controller.gemma_goal_gpu: EngineCore 87,286 MiB at 25 GiB, 258 MiB admission transient, the rewriter child 2,836 MiB and a batch of 3,724 MiB x 1.3 = 4,841 MiB: 95,221 of 97,362 MiB, 2,141 free; serve.py's default at 25 GiB, 25,600, would leave ~0.7 GiB).",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "05:02:00",
+   "expected_seconds": 14080,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GGOAL_GEMMA4_89TASKS_16SESSIONS_BATCH_REUSED_V9_ENV_ONE_GH200_302MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "ggoal",
+     "policy": "goal_query",
+     "task_set": "all",
+     "agent_cap_seconds": 16260,
+     "agent_min_seconds": 12600,
+     "goal_rewriter_batch": 4,
+     "goal_rewriter_batch_tokens": 20480
+    }
+   ]
+  },
+  "ggoaldry": {
+   "about": "Gemma 4 31B IT, goal_query alone on the 16-task dry subset at 25 GiB with K = 17 (the Gemma goal dry run, integrate-1021 9ef0d6d); --admission-overlap 16, --goal-rewriter-batch 4, T = 20480 (--goal-rewriter-batch-tokens, explicit: the coordinator 2026-10-22, >= 2 GiB free at the estimated peak with the rewriter; controller.gemma_goal_gpu: EngineCore 87,286 MiB at 25 GiB, 258 MiB admission transient, the rewriter child 2,836 MiB and a batch of 3,724 MiB x 1.3 = 4,841 MiB: 95,221 of 97,362 MiB, 2,141 free; serve.py's default at 25 GiB, 25,600, would leave ~0.7 GiB). The dry caps and the Gemma start reserve.",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "00:52:00",
+   "expected_seconds": 2580,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GGOALDRY_GEMMA4_16TASKS_1SERVER_BATCH_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gdrygoal",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4,
+     "goal_rewriter_batch_tokens": 20480
+    }
+   ]
+  },
+  "gobsdry": {
+   "about": "Gemma 4 31B IT, observation_query alone on the 16-task dry subset at 25 GiB with K = 17 (the Gemma obs dry run, the coordinator 2026-10-22: each path end to end; gdry's second server without its full one); the dry caps; expected ~2,520 s (dryo's 2,400 s and the Gemma start reserve).",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "00:52:00",
+   "expected_seconds": 2520,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GOBSDRY_GEMMA4_16TASKS_1SERVER_BATCH_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gdryobs",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "grfilldry": {
+   "about": "Gemma 4 31B IT, random_fill alone on the 16-task dry subset at 25 GiB with K = 17 (the optional control, the coordinator 2026-10-22); the dry caps; expected ~2,520 s.",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "00:52:00",
+   "expected_seconds": 2520,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GRFILLDRY_GEMMA4_16TASKS_1SERVER_BATCH_REUSED_V9_ENV_ONE_GH200_52MIN_NO_RETRY",
+   "servers": [
+    {
+     "label": "gdryrfill",
+     "policy": "random_fill",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "ctx25": {
+   "about": "KV 25 GiB (the group's baselines' KV): the group's settings of 2026-10-26 for Qwen3.6-27B: two servers in one ghx4 batch job on the 16-task dry subset (Harbor -n 16, K = 20), drygoal262 = goaldry's goal_query server (--active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B rewriter, --goal-rewriter-batch 4, T = serve.py's default 16,384) then dryobs262 = dryo's observation_query server, every other flag as validated (--release-idle-pages, the three fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, CUDA graphs full, 16-token decoupled Pages, --max-tokens 4096, the chat-text arguments), with this plan's own settings (server): --max-model-len 262144 and --dram-arena-gib 70; Terminus 2 model_info.max_input_tokens 262,144. Time 01:26:00 = dryi's two-server budget (each server at its 1,260-s cap); expected 4,020 s = goaldry's 2,460 + dryo's 2,400 - the once-per-job reserves counted twice (840 s: job checks 60, finish 480, margin 300); jobs 3434533 / 3399437 reached their archive step after 1,447 / 1,386 s, and the dry tasks' 900-s agent windows bind at any context. BLOCKED by itself while the sealed serve.py serves Qwen at --kv-cache-gib 8, 16, 24 or 32 only (KV_CACHE_GIB at 53e3b7a / 4f5f4e7; its argparse choices list Gemma's 25 / 28; controller.kv_block): SelfTest / DryRun print NOT_SUBMITTABLE blocked_plan, setup refuses; it unblocks at a re-pin to a runtime whose KV_CACHE_GIB holds 25. Arena 70 GiB (the largest that keeps 5 GiB of --mem=113560M spare at K = 20: 1 + 2.87 + 70 = 73.87 GiB pinned + the 32-GiB reserve = 105.87 of 110.90 GiB): the TB histories are no longer cut at 65,536. Measured arena high-water marks at 65,536: 27.75 / 29.5 / 30.25 GiB (jobs 3399075 dryfull, 3399437 dryobs, 3434533 drygoal; sessions.jsonl close records, 256-MiB chunks). The 262,144 model (D:/Remote-RA-temp/scratch/qwen25-262k/tb_growth.py -> tb-growth.json; an assumption): a trial that met the 65,536 limit (4 of 16 in 3434533, all agent timeouts at 900 s) keeps growing at its own pre-limit rate (67-108 tokens per second of agent time) until its 900-s agent window ends, Terminus 2 summarizes proactively below 8,000 free tokens of max_input_tokens 262,144, and a finished trial's slot lingers 600 s (--chat-text-idle-timeout; -n 16 of K = 20 slots, nobody waits for one): 26.2 / 25.8 / 34.3 GiB (peak trials 61-97K tokens); pessimistic (every agent-timeout trial at the fastest rate, 108 tok/s, over its whole window) 32.6 / 42.4 / 44.6 GiB, plus the <= 3.7 GiB the replay misses against the measured mark: <= 48.3 GiB. 70 GiB holds the model 2.0x and the pessimistic bound 1.45x (memory.arena_demand_gib 34.34 x 1.5 = 51.5, arena_bound_gib 48.26). A capture beyond the arena fails that request (DRAM_ARENA_EXHAUSTED), visibly. Capacity at 262,144 (serve.py at 53e3b7a; D:/Remote-RA-temp/scratch/qwen25-262k/capacity-53e3b7a.json): the launcher's one rule for a Qwen server, one lone turn at the context limit (16,385 + 1,024 + 257 blocks + the 1 % watermark), needs 17,861 of the 19,530 usable attention blocks at 25 GiB and K = 20 (17,851 of 18,506 at 24 GiB): accepted. README 4.9's strict never-deadlock rule (19 idle sessions at the 8,192-token budget, 513 blocks each, + one turn at the full-context peak 17,409 + the margin) needs 27,608 and holds at most 9 sessions at 25 GiB (8 at 24); 16 Harbor trials at 262,144 therefore rely on --release-idle-pages (idle sessions' Pages released under pressure, readmitted before their next turn) and the capacity gate (CAPACITY_WAIT, never a preemption); a stall is the watchdog's CAPACITY_STALL. GPU: job 3434533's peak 93,918 MiB at 32 GiB with the rewriter, 7 / 8 GiB less KV here (estimate).",
+   "partition": "ghx4",
+   "time": "01:26:00",
+   "expected_seconds": 4020,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_CTX25_16TASKS_2SERVERS_262K_KV25_BATCH_REUSED_V9_ENV_ONE_GH200_86MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 34.34,
+    "arena_bound_gib": 48.26
+   },
+   "servers": [
+    {
+     "label": "drygoal262",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4
+    },
+    {
+     "label": "dryobs262",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "ctx24": {
+   "about": "KV 24 GiB (the nearest size the pinned runtime serves for Qwen, 1 GiB below the group's 25; a stricter capacity test): ctx25 with --kv-cache-gib 24, its own phrase; submittable on 53e3b7a. the group's settings of 2026-10-26 for Qwen3.6-27B: two servers in one ghx4 batch job on the 16-task dry subset (Harbor -n 16, K = 20), drygoal262 = goaldry's goal_query server (--active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B rewriter, --goal-rewriter-batch 4, T = serve.py's default 16,384) then dryobs262 = dryo's observation_query server, every other flag as validated (--release-idle-pages, the three fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, CUDA graphs full, 16-token decoupled Pages, --max-tokens 4096, the chat-text arguments), with this plan's own settings (server): --max-model-len 262144 and --dram-arena-gib 70; Terminus 2 model_info.max_input_tokens 262,144. Time 01:26:00 = dryi's two-server budget (each server at its 1,260-s cap); expected 4,020 s = goaldry's 2,460 + dryo's 2,400 - the once-per-job reserves counted twice (840 s: job checks 60, finish 480, margin 300); jobs 3434533 / 3399437 reached their archive step after 1,447 / 1,386 s, and the dry tasks' 900-s agent windows bind at any context. Arena 70 GiB (the largest that keeps 5 GiB of --mem=113560M spare at K = 20: 1 + 2.87 + 70 = 73.87 GiB pinned + the 32-GiB reserve = 105.87 of 110.90 GiB): the TB histories are no longer cut at 65,536. Measured arena high-water marks at 65,536: 27.75 / 29.5 / 30.25 GiB (jobs 3399075 dryfull, 3399437 dryobs, 3434533 drygoal; sessions.jsonl close records, 256-MiB chunks). The 262,144 model (D:/Remote-RA-temp/scratch/qwen25-262k/tb_growth.py -> tb-growth.json; an assumption): a trial that met the 65,536 limit (4 of 16 in 3434533, all agent timeouts at 900 s) keeps growing at its own pre-limit rate (67-108 tokens per second of agent time) until its 900-s agent window ends, Terminus 2 summarizes proactively below 8,000 free tokens of max_input_tokens 262,144, and a finished trial's slot lingers 600 s (--chat-text-idle-timeout; -n 16 of K = 20 slots, nobody waits for one): 26.2 / 25.8 / 34.3 GiB (peak trials 61-97K tokens); pessimistic (every agent-timeout trial at the fastest rate, 108 tok/s, over its whole window) 32.6 / 42.4 / 44.6 GiB, plus the <= 3.7 GiB the replay misses against the measured mark: <= 48.3 GiB. 70 GiB holds the model 2.0x and the pessimistic bound 1.45x (memory.arena_demand_gib 34.34 x 1.5 = 51.5, arena_bound_gib 48.26). A capture beyond the arena fails that request (DRAM_ARENA_EXHAUSTED), visibly. Capacity at 262,144 (serve.py at 53e3b7a; D:/Remote-RA-temp/scratch/qwen25-262k/capacity-53e3b7a.json): the launcher's one rule for a Qwen server, one lone turn at the context limit (16,385 + 1,024 + 257 blocks + the 1 % watermark), needs 17,861 of the 19,530 usable attention blocks at 25 GiB and K = 20 (17,851 of 18,506 at 24 GiB): accepted. README 4.9's strict never-deadlock rule (19 idle sessions at the 8,192-token budget, 513 blocks each, + one turn at the full-context peak 17,409 + the margin) needs 27,608 and holds at most 9 sessions at 25 GiB (8 at 24); 16 Harbor trials at 262,144 therefore rely on --release-idle-pages (idle sessions' Pages released under pressure, readmitted before their next turn) and the capacity gate (CAPACITY_WAIT, never a preemption); a stall is the watchdog's CAPACITY_STALL. GPU: job 3434533's peak 93,918 MiB at 32 GiB with the rewriter, 7 / 8 GiB less KV here (estimate).",
+   "partition": "ghx4",
+   "time": "01:26:00",
+   "expected_seconds": 4020,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_CTX24_16TASKS_2SERVERS_262K_KV24_BATCH_REUSED_V9_ENV_ONE_GH200_86MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 24,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 34.34,
+    "arena_bound_gib": 48.26
+   },
+   "servers": [
+    {
+     "label": "drygoal262",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4
+    },
+    {
+     "label": "dryobs262",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "strip25": {
+   "about": "G2 of option (a) form E (thinking-strip 8ca8511; CPU-tested only): thinking on with the history strip (serve.py --enable-thinking --thinking-history strip: the stock default template with enable_thinking true, each completion commits the slot at its cut X = the generation header's start, the next turn re-prefills the reply the client sent back) at the group's settings of ctx25 (--kv-cache-gib 25, --max-model-len 262144, --dram-arena-gib 70, Terminus 2 max_input_tokens 262,144; every other flag as validated: --release-idle-pages, the three fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, CUDA graphs full, 16-token decoupled Pages, --max-tokens 4096, the chat-text arguments) on the 16-task dry subset at Harbor -n 16 and K = 20, three servers in one ghx4 batch job: stripobs262 = dryobs262's observation_query server with the strip (first: no rewriter), stripgoal262 = drygoal262's goal_query server with the strip (--active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B rewriter, --goal-rewriter-batch 4), then stockthink262 = stock vLLM 0.24.0 with thinking on (config.stock_thinking: enable_thinking true per call, --reasoning-parser qwen3, the plan's 25 GiB and 262,144 context). Measures: zero PHASE1_TOO_LONG, phase-1 tokens and ms per continuing turn (longer by the re-prefilled reply, |C| + 3 tokens), the D2H the cut avoids (modelled from the records), the strip servers' prompts token counts equal to the control's where the trajectories agree (join_tb16 strip-vs-control), and tb_checks' V1-V5 on every request. Time 01:59:00 = the worst case (every server at its 1,260-s cap: 2 x 2,160 + 1,980 + 840 job reserves = 7,140 s); expected 5,400 s (ctx25's 4,020 + the stock dry server's ~1,380). Memory, arena and capacity as ctx25 (the stock server pins nothing).",
+   "partition": "ghx4",
+   "time": "01:59:00",
+   "expected_seconds": 5400,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_STRIP25_16TASKS_3SERVERS_262K_KV25_THINKING_STRIP_BATCH_REUSED_V9_ENV_ONE_GH200_119MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 34.34,
+    "arena_bound_gib": 48.26
+   },
+   "thinking": {
+    "history": "strip"
+   },
+   "servers": [
+    {
+     "label": "stripobs262",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "stripgoal262",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4
+    },
+    {
+     "label": "stockthink262",
+     "policy": "stock",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "smokeq": {
+   "about": "Qwen3.6-27B, the release smoke of integrate-1103 ea18256 (the release-matrix brief, 2026-11-03; PLAN.md job TB-Qwen): the three policies' servers back to back, observation_query, random_fill, goal_query, on the 32-task smoke32 set (the 16 dry tasks and the 16 non-dry 900-s tasks that finished within their timeout in an August Terminus 2 job: controller.SMOKE32_EXTRA) at Harbor -n 16 with K = 20 (the user, 11-03: more trials than running sessions, so the idle eviction runs), thinking off, --max-tokens 4096. --async-scheduling on every server (D2, the plan switch async_scheduling; conditional on async G1 3499729: smokeqs is this plan without it). goal_query (D1): --active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B Goal rewriter on vLLM (--goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer --goal-rewriter-vllm-kv-gib 3 --goal-rewriter-batch-invariant, no --goal-rewriter-batch) with --goal-overlap. Each server ctx25's settings (--kv-cache-gib 25, --max-model-len 262144, --dram-arena-gib 70, K = 20; every speed switch named: CUDA graphs full, the three decode fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, --release-idle-pages, 16-token decoupled Pages, the chat-text arguments). Memory: the arena demand / bound of ctx25 scaled from 16 to the 20 sessions the eviction keeps open (34.34 / 48.26 x 1.25 = 42.93 / 60.33 GiB; 70 GiB holds both, an assumption). Time 02:53:00 = plan_fit's worst case (840-s job reserves + 3 x (360 start + 60 tunnel + 2,280 Harbor cap + 180 stop + 300 checks) = 10,380 s); the Harbor cap 2,280 s = two 900-s agent windows + 120 s each (2,040 s, every trial at its timeout) + 240 s (the dry plans' margin), the minimum 2,040 s; expected 6,900 s (job 3499759's measured pieces: start 40 s, READY 250 / 118 s, the vLLM child +90 s, stop and checks 80-100 s per server at 32 trials, S2 230 s, archive 250 s; the Harbor wall 1,850 s, from the measured trial walls of the dry 16 on our GPU runs and the 16 others in the August jobs rescheduled at -n 16: 1,499-1,884 s). Role release-smoke (D4). ",
+   "role": "release-smoke",
+   "partition": "ghx4",
+   "time": "02:53:00",
+   "expected_seconds": 6900,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_SMOKEQ_32TASKS_3SERVERS_262K_KV25_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 42.93,
+    "arena_bound_gib": 60.33
+   },
+   "async_scheduling": true,
+   "coverage": {
+    "evictions": true
+   },
+   "servers": [
+    {
+     "label": "sobs",
+     "policy": "observation_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "srfill",
+     "policy": "random_fill",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "sgoal",
+     "policy": "goal_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040,
+     "goal_rewriter_engine": "vllm",
+     "goal_rewriter_guided_backend": "lm-format-enforcer",
+     "goal_rewriter_vllm_kv_gib": 3,
+     "goal_rewriter_batch_invariant": true,
+     "goal_overlap": true
+    }
+   ]
+  },
+  "smokeqs": {
+   "about": "Qwen3.6-27B, the release smoke of integrate-1103 ea18256 (the release-matrix brief, 2026-11-03; PLAN.md job TB-Qwen): the three policies' servers back to back, observation_query, random_fill, goal_query, on the 32-task smoke32 set (the 16 dry tasks and the 16 non-dry 900-s tasks that finished within their timeout in an August Terminus 2 job: controller.SMOKE32_EXTRA) at Harbor -n 16 with K = 20 (the user, 11-03: more trials than running sessions, so the idle eviction runs), thinking off, --max-tokens 4096. No --async-scheduling (the fallback of D2 if async G1 3499729 fails; smokeq runs it). goal_query (D1): --active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B Goal rewriter on vLLM (--goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer --goal-rewriter-vllm-kv-gib 3 --goal-rewriter-batch-invariant, no --goal-rewriter-batch) with --goal-overlap. Each server ctx25's settings (--kv-cache-gib 25, --max-model-len 262144, --dram-arena-gib 70, K = 20; every speed switch named: CUDA graphs full, the three decode fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, --release-idle-pages, 16-token decoupled Pages, the chat-text arguments). Memory: the arena demand / bound of ctx25 scaled from 16 to the 20 sessions the eviction keeps open (34.34 / 48.26 x 1.25 = 42.93 / 60.33 GiB; 70 GiB holds both, an assumption). Time 02:53:00 = plan_fit's worst case (840-s job reserves + 3 x (360 start + 60 tunnel + 2,280 Harbor cap + 180 stop + 300 checks) = 10,380 s); the Harbor cap 2,280 s = two 900-s agent windows + 120 s each (2,040 s, every trial at its timeout) + 240 s (the dry plans' margin), the minimum 2,040 s; expected 6,900 s (job 3499759's measured pieces: start 40 s, READY 250 / 118 s, the vLLM child +90 s, stop and checks 80-100 s per server at 32 trials, S2 230 s, archive 250 s; the Harbor wall 1,850 s, from the measured trial walls of the dry 16 on our GPU runs and the 16 others in the August jobs rescheduled at -n 16: 1,499-1,884 s). Role release-smoke (D4). ",
+   "role": "release-smoke",
+   "partition": "ghx4",
+   "time": "02:53:00",
+   "expected_seconds": 6900,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_SMOKEQS_32TASKS_3SERVERS_262K_KV25_VLLM_REWRITER_GOAL_OVERLAP_NO_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 42.93,
+    "arena_bound_gib": 60.33
+   },
+   "async_scheduling": false,
+   "coverage": {
+    "evictions": true
+   },
+   "servers": [
+    {
+     "label": "sobs",
+     "policy": "observation_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "srfill",
+     "policy": "random_fill",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "sgoal",
+     "policy": "goal_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040,
+     "goal_rewriter_engine": "vllm",
+     "goal_rewriter_guided_backend": "lm-format-enforcer",
+     "goal_rewriter_vllm_kv_gib": 3,
+     "goal_rewriter_batch_invariant": true,
+     "goal_overlap": true
+    }
+   ]
+  },
+  "smokeg": {
+   "about": "Gemma 4 31B IT, the release smoke of integrate-1103 ea18256 (the release-matrix brief, 2026-11-03; PLAN.md job TB-Gemma): the three policies' servers back to back, observation_query, random_fill, goal_query, on the 32-task smoke32 set (the 16 dry tasks and the 16 non-dry 900-s tasks that finished within their timeout in an August Terminus 2 job: controller.SMOKE32_EXTRA) at Harbor -n 16 with K = 17 (the user, 11-03: more trials than running sessions, so the idle eviction runs), thinking off, --max-tokens 4096. No --async-scheduling (the Gemma 4 launcher refuses it). goal_query (D1, conditional on cg 3508345; smokegh is the Hugging Face batch-4 fallback): --active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B Goal rewriter on vLLM (--goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer --goal-rewriter-vllm-kv-gib 3 --goal-rewriter-batch-invariant, no --goal-rewriter-batch) with --goal-overlap. GPU estimate with the child (controller.gemma_vllm_goal_gpu; the child measured next to Qwen, jobs 3500565 / 3499759: at most 6,909 MiB): 87,286 MiB EngineCore + 258 admission + 6,912 child = 94,456 of 97,362 MiB, 2,906 free (>= 2,048, tight); the child's 0.05 gate needs 4,868 MiB free at its start, 10,076 free after the server's KV. Each server the Gemma query servers' settings (config.gemma.server: --kv-cache-gib 25, K = 17, --release-idle-pages; 65,536 tokens; the window layout, TRITON_ATTN). Time 02:59:00 = plan_fit's worst case with the Gemma start reserve (840 + 3 x (480 + 60 + 2,280 + 180 + 300) = 10,740 s); the Harbor cap and minimum as smokeq; expected 7,000 s (jobs 3433706 / 3434544: start 48 s, READY 273 s, a later Gemma server ~220 s, the vLLM child +90 s, S2 66 s, archive 250 s; the Harbor wall 1,850 s as smokeq). Role release-smoke (D4). ",
+   "model": "gemma4-31b-it",
+   "role": "release-smoke",
+   "partition": "ghx4",
+   "time": "02:59:00",
+   "expected_seconds": 7000,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_SMOKEG_GEMMA4_32TASKS_3SERVERS_KV25_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_179MIN_NO_RETRY",
+   "coverage": {
+    "evictions": true
+   },
+   "servers": [
+    {
+     "label": "gsobs",
+     "policy": "observation_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "gsrfill",
+     "policy": "random_fill",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "gsgoal",
+     "policy": "goal_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040,
+     "goal_rewriter_engine": "vllm",
+     "goal_rewriter_guided_backend": "lm-format-enforcer",
+     "goal_rewriter_vllm_kv_gib": 3,
+     "goal_rewriter_batch_invariant": true,
+     "goal_overlap": true
+    }
+   ]
+  },
+  "smokegh": {
+   "about": "Gemma 4 31B IT, the release smoke of integrate-1103 ea18256 (the release-matrix brief, 2026-11-03; PLAN.md job TB-Gemma): the three policies' servers back to back, observation_query, random_fill, goal_query, on the 32-task smoke32 set (the 16 dry tasks and the 16 non-dry 900-s tasks that finished within their timeout in an August Terminus 2 job: controller.SMOKE32_EXTRA) at Harbor -n 16 with K = 17 (the user, 11-03: more trials than running sessions, so the idle eviction runs), thinking off, --max-tokens 4096. No --async-scheduling (the Gemma 4 launcher refuses it). goal_query: the docs' Hugging Face command (--goal-rewriter-batch 4, T = 20,480 as ggoaldry, --admission-overlap 16, no --goal-overlap): the D1 fallback if cg 3508345 shows the vLLM child does not fit or start next to the Gemma server (smokeg is this plan with it). Each server the Gemma query servers' settings (config.gemma.server: --kv-cache-gib 25, K = 17, --release-idle-pages; 65,536 tokens; the window layout, TRITON_ATTN). Time 02:59:00 = plan_fit's worst case with the Gemma start reserve (840 + 3 x (480 + 60 + 2,280 + 180 + 300) = 10,740 s); the Harbor cap and minimum as smokeq; expected 7,000 s (jobs 3433706 / 3434544: start 48 s, READY 273 s, a later Gemma server ~220 s, the vLLM child +90 s, S2 66 s, archive 250 s; the Harbor wall 1,850 s as smokeq). Role release-smoke (D4). ",
+   "model": "gemma4-31b-it",
+   "role": "release-smoke",
+   "partition": "ghx4",
+   "time": "02:59:00",
+   "expected_seconds": 7000,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_SMOKEGH_GEMMA4_32TASKS_3SERVERS_KV25_HF_REWRITER_BATCH4_BATCH_REUSED_V9_ENV_ONE_GH200_179MIN_NO_RETRY",
+   "coverage": {
+    "evictions": true
+   },
+   "servers": [
+    {
+     "label": "gsobs",
+     "policy": "observation_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "gsrfill",
+     "policy": "random_fill",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "gsgoalhf",
+     "policy": "goal_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040,
+     "goal_rewriter_batch": 4,
+     "goal_rewriter_batch_tokens": 20480
+    }
+   ]
+  },
+  "gctx25": {
+   "about": "Gemma 4 31B IT on the 16-task dry subset at 262,144 tokens (the maintainer's decisions of 2026-11-08; the runtime's TERMINALBENCH A.14 at gemma-tb-262k f5a5c36, where the client's Gemma job is the Qwen one, max_input_tokens 262144): four servers in one ghx4 batch job at Harbor -n 16, K = 20, --kv-cache-gib 25, --max-model-len 262144, --max-num-batched-tokens 4096 (one native 4,096-token forward, gemma-forward4k; a phase 1 above it runs in 3,056-token chunks) and --dram-arena-gib 72 (the plan's own server settings over config.gemma.server), every other flag as the Gemma dry runs (--release-idle-pages, the three decode fast paths, --deferred-completion-io, --language-model-only, connector 1 GiB, CUDA graphs full, 16-token Pages, --max-tokens 4096, the chat-text arguments): gobs262 observation_query, ggoal262 goal_query (--active-token-budget 8192, --admission-overlap 16, the Qwen3-0.6B rewriter, --goal-rewriter-batch 4 with T = 20,480: ggoaldry's Goal flags, A.14), grfill262 random_fill (never run on Terminal-Bench before), then gstock262 = A.14's stock vLLM 0.24.0 control at 262,144 tokens (--kv-cache-memory-bytes 26843545600 --max-num-batched-tokens 4096 --max-num-seqs 16, TRITON_ATTN, no parser; never run before); no full (it does not fit at 262,144: 17,023 Pages needed against 10,652 at 32 GiB). GPU (controller.gemma_pool_fit, serve.py's selective rule at 4,096-token forwards): pool 1 7,781 block ids (goal_query 8,421 with its Goal transient), pool 0 4,918 Pages (3,638), 2,119 (2,106) of 4,917 (3,637) usable needed: margins 2,798 / 1,531 Pages, at most 24 / 22 sessions; the goal server's estimate with the rewriter 95,221 of 97,362 MiB (2,141 free at T = 20,480; no term for K, the context or the forward). The stock control: vLLM's startup check needs 9,797 of the 10,240 block ids of 25 GiB (23.92 GiB) for one request at 262,144 tokens with 4,096-token forwards (11,077 = 27.04 GiB with 8,192: refused, job 3364469); it holds one request at the limit, the dry subset's concurrent trials needed at most 9,104 ids (3433706). Host: 72 GiB = 58,982 Pages in 290 chunks of 204 (72.22 GiB) + the 1-GiB connector = 73.22 GiB pinned + the 32-GiB reserve = 105.22 of 110.90 GiB at --mem=113560M (5.68 spare; 73 GiB would leave 4.69); memory.arena_demand_gib 17.4 (the Gemma dry runs 3433706 / 3434544 replayed at 262,144 with tb_growth.py: no trial came within 8,000 tokens of 65,536, so the model equals the replay) x 1.5 = 26.1 and arena_bound_gib 59.31 (the pessimistic bound at Qwen's fastest 108.41 tok/s, 57.79, + the 1.52-GiB replay miss); 16 trials < K = 20, so no eviction. Time 02:43:00 = plan_fit's worst case with the Gemma start reserve (840 + 3 x (480 + 60 + 1,260 + 180 + 300) + (480 + 60 + 1,260 + 180 + 120) = 9,780 s); the dry caps (1,260 / 1,000 s); expected 7,440 s = gobsdry's 2,520 + ggoaldry's 2,580 + grfilldry's 2,520 - twice the 840-s job reserves + the stock dry server's ~1,500 (strip25's ~1,380 + the Gemma start reserve); measured pieces (3433706 / 3434544: start 48 s, READY 227-273 s, ~1,445 s to the end of the first server's checks; 3499759's later servers ~1,260-1,390 s each, S2 66-230 s, archive ~250 s) suggest ~6,000 s. 2.72 GPU-hours at the limit, 2.07 expected. The dry subset's 900-s agent windows keep Gemma's histories below ~25K tokens: the run checks startup, flags, the arena, the 4,096-token forward, the stock control and the job file at 262,144, not long histories.",
+   "model": "gemma4-31b-it",
+   "partition": "ghx4",
+   "time": "02:43:00",
+   "expected_seconds": 7440,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_GCTX25_GEMMA4_16TASKS_4SERVERS_262K_KV25_BATCH_REUSED_V9_ENV_ONE_GH200_163MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 72,
+    "max_running_sessions": 20,
+    "max_num_batched_tokens": 4096
+   },
+   "memory": {
+    "arena_demand_gib": 17.4,
+    "arena_bound_gib": 59.31
+   },
+   "servers": [
+    {
+     "label": "gobs262",
+     "policy": "observation_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "ggoal262",
+     "policy": "goal_query",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000,
+     "goal_rewriter_batch": 4,
+     "goal_rewriter_batch_tokens": 20480
+    },
+    {
+     "label": "grfill262",
+     "policy": "random_fill",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    },
+    {
+     "label": "gstock262",
+     "policy": "stock",
+     "task_set": "dry",
+     "agent_cap_seconds": 1260,
+     "agent_min_seconds": 1000
+    }
+   ]
+  },
+  "smokeqt": {
+   "about": "Qwen3.6-27B, the release smoke of main ba4d1ba with thinking on (the re-pin of 2026-11-09; decision D-B: the TB Qwen job TB-Qwen = smokeq + the history strip): smokeq's three servers, observation_query, random_fill, goal_query, back to back on the 32-task smoke32 set at Harbor -n 16 with K = 20, ctx25's settings (--kv-cache-gib 25, --max-model-len 262144, --dram-arena-gib 70; every speed switch named), --max-tokens 4096, --async-scheduling on every server (D2; async G1 r3 3532746 passed on async-fix2 4ed1013, in ba4d1ba), the goal server with the vLLM Goal rewriter child (lm-format-enforcer, 3 GiB, batch-invariant) and --goal-overlap (D1), plus thinking on with the history strip (`thinking` {\"history\": \"strip\"}: --enable-thinking --thinking-history strip on every runtime server, strip25's mechanism, GPU-validated in job 3499759; Harbor 0.21.0's Terminus 2 sends each past reply back as its content only, so the strip is the history mode that keeps the stream append-only). Async + --goal-overlap + the strip are CPU-tested together in the runtime (tests/test_async_goal_overlap.py), not on a GPU. Memory as smokeq (42.93 / 60.33 GiB arena demand / bound at 20 open sessions; the strip commits each reply at its cut, so the reasoning never enters the stream). Time 02:53:00 = plan_fit's worst case, smokeq's (840 + 3 x (360 + 60 + 2,280 + 180 + 300) = 10,380 s; the Harbor cap 2,280 s is every trial at its 900-s timeout already); expected 7,000 s = smokeq's 6,900 s with the Harbor wall of the thinking-on trial walls: strip25 job 3499759's two strip servers (the dry 16) and the August Terminus 2 jobs (the other 16, thinking on) rescheduled in name order on 16 slots, 1,627-1,884 s (max 1,884 against smokeq's 1,850 s: +34 s per server); every trial at its timeout would be 2,040 s (7,470 s). Fallbacks: smokeq (thinking off, async on), smokeqs (thinking off, async off). Role release-smoke (D4).",
+   "role": "release-smoke",
+   "partition": "ghx4",
+   "time": "02:53:00",
+   "expected_seconds": 7000,
+   "eval_wait_seconds": 600,
+   "authorization": "AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY",
+   "server": {
+    "kv_cache_gib": 25,
+    "max_model_len": 262144,
+    "dram_arena_gib": 70
+   },
+   "memory": {
+    "arena_demand_gib": 42.93,
+    "arena_bound_gib": 60.33
+   },
+   "async_scheduling": true,
+   "thinking": {
+    "history": "strip"
+   },
+   "coverage": {
+    "evictions": true
+   },
+   "servers": [
+    {
+     "label": "sobst",
+     "policy": "observation_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "srfillt",
+     "policy": "random_fill",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040
+    },
+    {
+     "label": "sgoalt",
+     "policy": "goal_query",
+     "task_set": "smoke32",
+     "agent_cap_seconds": 2280,
+     "agent_min_seconds": 2040,
+     "goal_rewriter_engine": "vllm",
+     "goal_rewriter_guided_backend": "lm-format-enforcer",
+     "goal_rewriter_vllm_kv_gib": 3,
+     "goal_rewriter_batch_invariant": true,
+     "goal_overlap": true
+    }
+   ]
+  }
+ },
+ "plan_order": [
+  "full",
+  "obs",
+  "rfill",
+  "goal",
+  "stock",
+  "dry",
+  "dryi",
+  "dryo",
+  "goaldry",
+  "goaldryi",
+  "gfull",
+  "gobs",
+  "grfill",
+  "gstock",
+  "gdry",
+  "ggoal",
+  "ggoaldry",
+  "gobsdry",
+  "grfilldry",
+  "ctx25",
+  "ctx24",
+  "strip25",
+  "smokeq",
+  "smokeqs",
+  "smokeg",
+  "smokegh",
+  "gctx25",
+  "smokeqt"
+ ],
+ "confirmed": {
+  "agent": "Harbor 0.21.0 Terminus 2 unchanged, thinking off, -n 16, all 89 tasks (user 2026-10-16)",
+  "policies": "full, goal_query, observation_query, random_fill on our runtime + a stock vLLM 0.24.0 control with the same settings, --language-model-only on both sides (user 2026-10-16)",
+  "goal_query": "goal_query on TB (the user, 2026-10-21, for the paper's Table 1): --admission-overlap 16, --goal-rewriter-batch 4 (default T), the Qwen3-0.6B rewriter on the same GPU, the runtime's provisional Terminus 2 Goal inputs (not changed by the harness)",
+  "optimized": "the optimized runtime flags on every Qwen runtime server (the user, 2026-10-21): --decode-fastpath --decode-fastpath2 --decode-fastpath3 --deferred-completion-io --language-model-only",
+  "gemma": "Gemma TB (the user, 2026-10-21): observation_query, random_fill and goal_query at --kv-cache-gib 25 with K = 17 (Harbor -n 16), full at 32 GiB (K = 20: the largest the release rule allows at 32 GiB and 65,536 is computed by the harness and serve.py: see README), the Gemma stock control at 25 GiB"
+ },
+ "provisional": {
+  "kv_budget": "selection.active_token_budget 8192 (one config value)",
+  "sampling": "agent.temperature 0, llm_kwargs max_tokens 4096 / timeout 3600 / no litellm retries, model_info 65536 / 4096 (plan questions 3, 4, 9)",
+  "context": "server.max_model_len 65536 (the user's August runs; 131072 does not fit the no-deadlock rule at K = 20 and 32 GiB): unconfirmed; one config value",
+  "kv_pool": "server.kv_cache_gib 32 for all policies (as swe32)",
+  "vanilla": "stock: vLLM defaults (graphs, async scheduling, its default chat template kwargs), prefix caching on, thinking off from the client per call (llm_call_kwargs extra_body.chat_template_kwargs enable_thinking false), as SWE-bench",
+  "session_close": "agent.session_close none: Terminus 2 sends no close (unchanged); a live session closes only when all 20 slots are open (the least recently used idle one: 30 s while a session waits, 600 s otherwise); the job closes what is left at the end (POST /v1/chat-text/close)",
+  "chat_text_slots": "server.protocol_args --chat-text-slots 512 (the runtime default; lifetime sessions = 89 trials + one per summarization questions call + rebinds)",
+  "running_sessions": "server.max_running_sessions 20 with Harbor -n 16 (the user; INTERFACE.md) and dram_arena_gib 64 (INTERFACE.md: 67.9 GiB pinned; DRAM_ARENA_EXHAUSTED beyond 65,536 Pages)",
+  "goal_query": "the Terminus 2 Goal inputs are the runtime's provisional definition terminus2-goal-inputs-provisional-v2 (the harness pins and checks them, never changes them); --goal-rewriter-batch 4 with the default per-batch token cap 16384 (not GPU-validated)"
+ },
+ "gemma": {
+  "about": "The Gemma 4 31B IT plans (gfull, gobs, grfill, gstock, gdry; the coordinator, 2026-10-17): the Qwen plans' Terminal-Bench settings (all 89 tasks, Harbor 0.21.0 Terminus 2 unchanged, -n 16, thinking off, the agent section, max_tokens 4096, the one context server.max_model_len, the one KV budget selection.active_token_budget, server.protocol_args, CUDA graphs full, the three decode fast paths and --deferred-completion-io (since the integrate-1021 9ef0d6d re-pin, 2026-10-22; before it --decode-fastpath alone), --connector-pool-gib 1, --language-model-only, --dram-arena-gib 64, K = 20) on a release installed with install.py --model-profile gemma4-31b-it (perf-gemma1's way; serve.py dispatches on the release manifest: TRITON_ATTN, the window layout at 16-token Pages, 8,192-token forwards, the gemma4 parsers, --chat-template-content-format openai, no Mamba/GDN flags). A plan runs Gemma when it names `model`; every Qwen plan and section is unchanged. The checkpoint is pins.json gemma (perf-gemma0's confirmed download, job 3364469's model gate).",
+  "model_profile": "gemma4-31b-it",
+  "server": {
+   "kv_cache_gib": 25,
+   "max_running_sessions": 17,
+   "release_idle_pages": true
+  },
+  "server_about": "Overrides of config.server for every Gemma runtime server (the user, 2026-10-21): kv_cache_gib 25 with K = 17 (Harbor -n 16) for observation_query, random_fill and goal_query (the runtime agent at 25 GiB and 65,536: goal_query K = 17 is the largest that fits with its Goal transient, observation_query K = 19); release_idle_pages: serve.py --release-idle-pages (idle sessions' global Pages released under pressure and readmitted at their next turn, the windows stay on the GPU). Since the integrate-1021 9ef0d6d re-pin (the coordinator, 2026-10-22) the Gemma servers run config.server's optimized switches too: --decode-fastpath --decode-fastpath2 --decode-fastpath3 --deferred-completion-io (gemma-fastpath3, gemma-deferred-io; 120bc3c and earlier refused the last two on the Gemma 4 profile).",
+  "policy_server": {
+   "full": {
+    "kv_cache_gib": 32,
+    "max_running_sessions": 20
+   }
+  },
+  "policy_server_about": "Per-policy overrides of the Gemma servers. full at 32 GiB (the user, 2026-10-21): K = 20, within the largest K the release rule allows at 32 GiB and 65,536 (controller.gemma_pool_fit most_sessions, the same as serve.py's prepare_gemma4: README \"Gemma 4 31B IT\"); 32 GiB leaves < 2 GiB of the GH200 by the estimates (weights 57.9 GiB).",
+  "budget": {
+   "server_start_seconds": 480
+  },
+  "budget_about": "Overrides of config.budget for the Gemma plans: a Gemma server's start to READY is reserved 480 s instead of 360 s (stock t1-triton, job 3364469: READY 174 s on a warm page cache, the 62.6-GB checkpoint read in 63 s, torch.compile 50 s; ours adds the cold read from /projects, the runtime's startup and the K = 20 capture). The 89-task plans keep the Qwen --time (05:02:00 / 04:53:00): their harbor caps are 120 s lower (16,260 / 16,200 s, still above the 13,980-s all-timeout schedule); gdry keeps the dry caps and gets 01:30:00 (two starts).",
+  "stock": {
+   "about": "Same-node stock vLLM 0.24.0 control for Gemma: plain vllm.entrypoints.openai.api_server from the reused clean env (no runtime source), Qwen's stock defaults (CUDA graphs, async scheduling, prefix caching sha256, vLLM's default chat template kwargs, thinking off from the client per call: llm_call_kwargs, harmless for Gemma whose template defaults to thinking off) plus --attention-backend TRITON_ATTN and --language-model-only; max_num_seqs = Harbor -n (16), the context server.max_model_len (given by build.py), the KV bytes of our selective servers (25 GiB, the user 2026-10-21), served as selective-prefix. Based on perf-gemma0's GPU-validated t1-triton server (job 3364469), which differs in: --max-model-len 131072, vLLM's memory profile (26.41 GiB KV), served name gemma-4-31b-it, --dtype bfloat16 (the config's dtype; vLLM's auto here, as our runtime), --enable-prompt-tokens-details, VLLM_PREFIX_CACHE_RETENTION_INTERVAL=0 and the gemma4 parsers (--reasoning-parser gemma4 --tool-call-parser gemma4 --enable-auto-tool-choice). No parser here, as Qwen's stock: the reply content is the whole decoded text (special tokens skipped), exactly what our runtime's chat-text route returns; t1-triton with the reasoning parser and thinking off kept the whole reply in content too (content_lost 0, reasoning 0 on 10 of 10 turns; the agent smoke of job 3364911 passed). max_num_batched_tokens 8192 (t1-triton's and our runtime's forward).",
+   "mode": "default",
+   "async_scheduling": true,
+   "served_model_name": "selective-prefix",
+   "max_num_seqs": 16,
+   "max_num_batched_tokens": 8192,
+   "kv_cache_gib": 25,
+   "seed": 42,
+   "enable_prefix_caching": true,
+   "prefix_caching_hash_algo": "sha256",
+   "attention_backend": "TRITON_ATTN",
+   "distributed_executor_backend": "uni",
+   "language_model_only": true,
+   "extra_serve_args": [],
+   "llm_call_kwargs": {
+    "extra_body": {
+     "chat_template_kwargs": {
+      "enable_thinking": false
+     }
+    }
+   }
+  },
+  "provisional": {
+   "kv_pool": "gemma.server.kv_cache_gib 25 (observation_query / random_fill / goal_query, K = 17), full 32 GiB (K = 20), stock 25 GiB (the user, 2026-10-21)",
+   "release_idle_pages": "gemma.server.release_idle_pages on every Gemma runtime server (the Qwen servers have it too since 2026-10-17: server.release_idle_pages)",
+   "server_start": "gemma.budget.server_start_seconds 480 (an estimate: the Gemma runtime has never run on a GPU)",
+   "goal_query": "the Gemma goal plans (ggoal, ggoaldry) are blocked until the next runtime head (gemma-tb-goal, gemma-rewriter-batch); their flags are prepared"
+  }
+ }
+}

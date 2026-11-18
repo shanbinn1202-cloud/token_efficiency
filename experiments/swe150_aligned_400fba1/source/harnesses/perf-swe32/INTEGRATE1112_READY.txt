@@ -1,0 +1,167 @@
+SUPERSEDED (2026-11-16): this folder is re-pinned to integrate-1116 7a8c36e; current READY file: PHASEB_READY.txt.
+INTEGRATE1112_READY (2026-11-12, later) - perf-swe32 re-pinned to integrate-1112 4ebff97 (the policy registry
+readers), the stock control with thinking ON (stock32ti / stock32t / stock64t) and recent64 / akv64 / rfill64(i)
+=====================================================================================================================
+
+2026-11-13 (main session): payload now ae895273da439a9b8504e0dd4441c23aaa62269c0cc43719d2abc393dacd3434 (same commit 4ebff97). controller.serve_dry_run_gate rebound `release` (the release directory) inside its per-server loop, so every runtime server after the first got --release-dir False on the login node (smoket r1 refused, NO_SUBMISSION_CLAIM). Fixed (idle_release) + test ReleaseSmoke.test_dry_run_gate_keeps_its_release_dir; LV PASS validation\20261113T014440; tbench verify code b325be25c804a847. Frozen first: ..\perf-swe32-c7c3e8dc (stock32ti 3583822 ran on c7c3e8dc: verify it there). Submitted since: smoket r2 = job 3586847 (afterany 3586720).
+
+STATUS: READY. Submitted by the user since: stock32ti as job 3583822 on this payload (verify it from ..\perf-swe32-c7c3e8dc;
+freeze this folder before any change to a payload member). Every Qwen plan of this folder now runs integrate-1112 4ebff97 (was main
+ba4d1ba: frozen with payload 67c55f26 in ..\perf-swe32-67c55f26\, where fulltri 3583081 ran; verify jobs of that
+payload there). integrate-1112 is CPU-checked only (GIT_ARCHIVE_TESTS_PASS 2,059 / 139 skipped): its GPU check is
+the GPU-VALIDATION-PLAN's job A = smoket (D:\Remote-RA-temp\scratch\integrate-1112\GPU-VALIDATION-PLAN.md). Settings
+as SWE64_READY.txt: thinking ON (keep history; stock: reasoning_dropped), 16 sessions refilled in list order, 120
+steps, 25 GiB KV, 262,144 tokens, arena 70 GiB, one GH200, --mem=113560M, mail BEGIN,END,FAIL to
+cao58@illinois.edu, no retry, evidence pushed to tbench and verified there; Claude pulls the result after END.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32
+Runtime    integrate-1112 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (receipt D:\Remote-RA-temp\scratch\integrate-1112\receipt\release-receipt-4ebff97.json)
+Payload    c7c3e8dc1d2adc703565e2cdeea8eb11b66d42f531a446cb8a25d536cdd2a3a0   (dist\payload.json; was 67c55f26...)
+Entry      2f7470e30f4f071f177062ec019f5cf22d6a71d7d9ec111d01fb62a6b6737a1a   (run_one_connection.ps1)
+Pins       782341403afa9efd86fc7af8eccf6100734cf28c673009dff07929f8ed285fb4   (pins.json)
+Validation validation\20261112T152547 and \20261112T160520 (-Jobs 6, this payload): every step PASS in one or the other; open: e2e fullt (full without idle release) fails its session-pool check when the fake's pool clamps (README); repin fixed (test_repin.py, not a payload member)
+tbench     half unchanged (manifest 58245387..., no redeploy); verification code for this payload: /home/ubuntu/swe32-verify/code/ce42f13448ae91d3 (members id 6b51dd15...)
+Earlier    PLAN_FINGERPRINT SAME 33 / DRYRUN_LINES SAME 33 against the 11-12 records (every plan through fulltri but
+           the re-fitted fulltr / fulltri / full64: only the pin fields change); SAME 12 against the 4f5f4e7 fixture;
+           features of 4ebff97 = ba4d1ba's pinned ones + the registry rows.
+
+Times are ESTIMATES (README "Since 2026-11-12 (later)").
+
+
+1. THE PLANS
+------------
+
+New (2026-11-12, later):
+
+| Plan | Partition | Tasks | Server (policy) | --time | E (s) | Agent cap / min (s) | GPU-h limit / expected |
+| --- | --- | ---: | --- | ---: | ---: | ---: | ---: |
+| stock32ti | ghx4-interactive | 32 | stock32t (stock) | 01:24:00 | 3,397 | 3,600 / 2,290 | 2.80 / 1.89 (2x) |
+| stock32t | ghx4 | 32 | stock32t (stock) | 01:24:00 | 3,397 | 3,600 / 2,290 | 1.40 / 0.94 |
+| stock64t | ghx4 | 64 | stock64t (stock) | 02:39:00 | 7,216 | 7,680 / 5,410 | 2.65 / 2.00 |
+| recent64 | ghx4 | 64 | recent64t (recent_fill) | 02:13:00 | 5,946 | 5,640 / 3,970 | 2.22 / 1.65 |
+| akv64 | ghx4 | 64 | akv64tr (akv_rule, --release-idle-pages) | 02:14:00 | 6,249 | 5,700 / 2,880 | 2.23 / 1.74 |
+| rfill64 | ghx4 | 64 | rfill64t (random_fill) | 02:13:00 | 5,343 | 5,640 / 3,450 | 2.22 / 1.48 |
+| rfill64i | ghx4-interactive | 64 | rfill64t (random_fill) | 02:00:00 | 5,343 | 4,860 / 3,450 | 4.00 / 2.97 (2x) |
+
+Re-pinned, otherwise unchanged (SWE64_READY.txt's rows; smoke / smoket: the release smokes):
+
+| Plan | Partition | Tasks | Server (policy) | --time | E (s) | Agent cap / min (s) | GPU-h limit / expected |
+| --- | --- | ---: | --- | ---: | ---: | ---: | ---: |
+| smoke | ghx4 | 32 | obs262s (observation_query), rfill262s (random_fill), goalvllms (goal_query) | 01:49:00 | 3,300 | 840 / 450 | 1.82 / 0.92 |
+| smoket | ghx4 | 32 | obs262st (observation_query), rfill262st (random_fill), goalvllmst (goal_query) | 02:34:00 | 4,530 | 1,440 / 800 | 2.57 / 1.26 |
+| obs64 | ghx4 | 64 | obs64t (observation_query) | 02:13:00 | 5,343 | 5,640 / 3,450 | 2.22 / 1.48 |
+| obs64i | ghx4-interactive | 64 | obs64t (observation_query) | 02:00:00 | 5,343 | 4,860 / 3,450 | 4.00 / 2.97 (2x) |
+| goal64 | ghx4 | 64 | goalvllm64t (goal_query) | 02:34:00 | 7,458 | 6,900 / 4,900 | 2.57 / 2.07 |
+| full64 | ghx4 | 64 | full64tr (full, --release-idle-pages) | 01:53:00 | 4,555 | 4,440 / 2,890 | 1.88 / 1.26 |
+| fulltr | ghx4 | 32 | full262tr (full, --release-idle-pages) | 01:14:00 | 2,978 | 2,700 / 1,440 | 1.23 / 0.83 |
+| fulltri | ghx4-interactive | 32 | full262tr (full, --release-idle-pages) | 01:14:00 | 2,978 | 2,700 / 1,440 | 2.47 / 1.65 (2x) |
+
+- stock32ti (URGENT: stock vLLM full context with thinking ON) = stock32t on
+  ghx4-interactive, the same server and --time 01:24:00 (cap 3,600 s), 2x billing: submit it first.
+- stock32ti / stock32t / stock64t: stock vLLM 0.24 at stock25's settings (25 GiB, 262,144, preemption a finding) with
+  --reasoning-parser qwen3 and the agents' enable_thinking true, no stop string. History reasoning_dropped: stock
+  vLLM reads only `reasoning`, the agent sends `reasoning_content`, so earlier replies lose their reasoning; our
+  keep mode keeps it. Not token-comparable with our runtime; NOT GPU-validated. The job stops before any agent if
+  the live header probe fails. Time: stock262 3507294 (thinking off, span 1,905 s) x 1.417 = our obs262t / obs262
+  span ratio (obst 3539260 2,503 s / obs262 3461703 1,766 s): W32 2,700 s, W64 6,369 s; ESTIMATE.
+- akv64 runs --release-idle-pages: the capacity replay says akv_rule at 64 / K 16 / 25 GiB can deadlock (akvsi
+  3577833: 0 CAPACITY_WAIT at 32, but 77 % of the FullAttention pool in use at its peak and one session holding
+  52 %). Idle release is GPU-validated at 32 with policy full (fulltri 3583081: SWE32_PASS_VERIFIED, 2 evictions,
+  2 readmissions), not with akv_rule or at 64.
+- fulltr / fulltri / full64 re-fitted from fulltri 3583081 (span 1,694 s, elapsed 2,421 s, 21 / 32 resolved):
+  fulltr / fulltri 01:14:00 (cap 2,700 s), full64 01:53:00 (cap 4,440 s; was 03:02:00). Their fingerprints
+  change by that re-fit only (time, cap, minimum, E, phrase).
+- rfill64: obst's walls (no thinking-on random_fill run). recent64: recentt 3539242. akv64: akvsi without its
+  straggler + the straggler allowance (django-11087 runs again: >= 4,973 s).
+- No recent64i / akv64i / stock64ti (02:00:00 leaves a cap of 4,860 s, below their straggler bounds or W).
+- One ghx4 batch job at a time is the habit (fairshare); a 32-task plan right after a 64-task job: wait ~20 min
+  after the END mail (the 600-s evaluation wait).
+
+
+2. BEFORE EACH SUBMISSION (your DeltaAI shell, read-only)
+---------------------------------------------------------
+squeue -h -u ycao11 -o '%i|%T|%P|%j|%E|%r'
+Interactive plans: no job of yours on ghx4-interactive. Batch plans: if a tbench job of yours is queued or
+running, add -AfterJob <that job id> (the queue gate says so).
+
+
+3. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First SelfTest and DryRun (no connection; Claude ran both for every plan below: exit 0), then the submit line.
+
+stock32ti (ghx4-interactive; URGENT, first: no other job of yours on ghx4-interactive)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32ti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_84MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32ti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK32TI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_84MIN_NO_RETRY'
+
+smoket (job A of the GPU-VALIDATION-PLAN: the release smoke, thinking on + async, on integrate-1112)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan smoket -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan smoket -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_SMOKET_32TASKS_16SESSIONS_3SERVERS_20STEPS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan smoket -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_SMOKET_32TASKS_16SESSIONS_3SERVERS_20STEPS_262K_KV25_THINKING_ON_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+
+recent64 (ghx4)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan recent64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RECENT64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_FILL_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+
+rfill64 (ghx4)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RANDOM_FILL_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RANDOM_FILL_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+
+rfill64i (ghx4-interactive; or rfill64)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64i -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64i -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILL64I_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RANDOM_FILL_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rfill64i -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RFILL64I_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_RANDOM_FILL_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+stock64t (ghx4; the stock thinking-on baseline at 64)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock64t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock64t -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK64T_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock64t -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK64T_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_159MIN_NO_RETRY'
+
+stock32t (ghx4; the stock thinking-on baseline at 32 (the batch form of stock32ti))
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32t -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32t -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_84MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan stock32t -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_STOCK32T_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_STOCK_VLLM_BATCH_REUSED_V9_ENV_ONE_GH200_84MIN_NO_RETRY'
+
+akv64 (ghx4; akv_rule with --release-idle-pages)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akv64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akv64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_AKV64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_134MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akv64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_AKV64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_134MIN_NO_RETRY'
+
+obs64 (ghx4 (SWE64_READY.txt's phrase, re-pinned))
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan obs64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_OBS64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_OBS_BATCH_REUSED_V9_ENV_ONE_GH200_133MIN_NO_RETRY'
+
+goal64 (ghx4)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goal64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOAL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_154MIN_NO_RETRY'
+
+full64 (ghx4; re-fitted from fulltri 3583081)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan full64 -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULL64_64TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_113MIN_NO_RETRY'
+
+fulltr (ghx4; a repeat of fulltri 3583081, re-fitted)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTR_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan fulltr -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_FULLTR_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_FULL_RELEASE_IDLE_BATCH_REUSED_V9_ENV_ONE_GH200_74MIN_NO_RETRY'
+
+(smoke, obs64i, fulltri: the same three lines with their own phrases from pins.json config.plans; SelfTest
+and DryRun exit 0.)
+
+
+4. AFTER THE END MAIL: Claude pulls the result (no DeltaAI step)
+-----------------------------------------------------------------
+D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\verify_on_tbench.py --pull --job-id <J> --slurm-state <State> --slurm-exit-code <ExitCode>
+
+
+5. NOT GPU-VALIDATED / OPEN
+---------------------------
+- integrate-1112 4ebff97 itself (job A = smoket first).
+- the stock thinking-on control: its history differs from our keep mode (reasoning dropped); the probe's header
+  check and the parser's handling of a reply cut inside its reasoning are read from source and template.
+- akv_rule with --release-idle-pages; every new time (ESTIMATE).
+

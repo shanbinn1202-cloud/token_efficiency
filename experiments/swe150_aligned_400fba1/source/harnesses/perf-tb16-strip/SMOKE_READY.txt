@@ -1,0 +1,265 @@
+SMOKE_READY (2026-11-09) - perf-tb16-strip re-pinned to runtime main ba4d1ba: TB-Qwen = plan smokeqt (Qwen3.6-27B, thinking on with the history strip, --async-scheduling, the vLLM Goal rewriter + --goal-overlap)
+==========================================================================================================================================================================================================
+
+SINCE 2026-11-12: SUPERSEDED BY READY_1112.txt. This folder is re-pinned to integrate-1112 4ebff97 (payload 98a149cd...);
+smokeqt runs from there (Q2). On main ba4d1ba smokeqt / smokeq are now NOT_SUBMITTABLE (no async resolve fix, job
+3568311). The ba4d1ba state described below is frozen in perf-tb16-strip-58de72a9 (and, as submitted for job 3568310,
+cancelled, in perf-tb16-strip-a3f53060).
+
+STATUS: READY to submit (the maintainer). One ghx4 batch job, three servers back to back on the 32-task smoke32 set at
+Harbor -n 16: observation_query, random_fill, goal_query. Chained behind gctx25 3560498 (-AfterJob 3560498, the end of
+the queued tbench chain obst 3539260 -> rtoolst 3540110 -> akvs 3549065 -> goalt 3554749 -> gctx25 3560498; decision
+D-E). Nothing was submitted; nothing connected to DeltaAI or tbench. The tbench half is unchanged (manifest
+d08ba8d3...7ab1): no redeploy.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip   (re-pinned to ba4d1ba; plan smokeqt added)
+Frozen     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-3acc490a\   (FIRST, before any change: payload 3acc490a...,
+           gemma-tb-262k f5a5c36, gctx25 as submitted; 91 files + FROZEN-3acc490a.md; list
+           D:\Remote-RA-temp\scratch\perf-tb16-strip-3acc490a.sha256, sha256sum -c OK on copy and source; the 19 payload
+           members = the files). JOB 3560498 (gctx25) IS FETCHED / VERIFIED THERE, NOT HERE.
+           earlier: perf-tb16-strip-44e60bc5\ (ea18256; now with a DO NOT SUBMIT line for its async smokeq),
+           perf-tb16-strip-16803f97\ (strip25, job 3499759)
+Runtime    main ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 (read-only worktree worktrees\pin-ba4d1ba; integrate-1107 + docs)
+           receipt D:\Remote-RA-temp\scratch\main-ba4d1ba\release-receipt-ba4d1ba.json (the full in-repo check_git_release,
+           parallel: GIT_ARCHIVE_TESTS_PASS, 1,852 tests, 135 skipped;
+           result_line_sha256 887112869ed0fcd4f33f26d06c2b1f2b0edfa144e7ed0e649cd06c6ed16dcfac,
+           log_sha256 11319ba5426339ebeadce81d72f5a05e2941a9668b92481bc83abddfc397d36c)
+           build.py --repo <worktrees\pin-ba4d1ba> --commit ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 --release-receipt <receipt>:
+           BUILD_PASS, RUNTIME_PIN=PINNED; chat module 2b492e67... = INTERFACE_ACCEPTED (no new acceptance)
+Payload    58de72a910875e81e6526a67a518aaa69c447aeac67d4c42bf058419bff2548b   (dist\payload.json; 2026-11-10 harness fixes: measure.py;
+           was a3f53060..., the payload of job 3568310, frozen in perf-tb16-strip-a3f53060\)
+Entry      d9fb4630be6183e1ffdc7133607cdbefb34eeb66698cbaa4cb46a7c27b5ab460   (run_one_connection.ps1; was 199e31a3...)
+Pins       4a202c39980538154c5ed8dd809f251c31b215c91b8517fbae975e73d49a5440   (pins.json; unchanged)
+Validation LOCAL_VALIDATION_PASS commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 pin=PINNED payload=58de72a910875e81e6526a67a518aaa69c447aeac67d4c42bf058419bff2548b
+           (17 steps, exit 0 each, 2,025 s with -Jobs 6: build-1, build-2, deterministic, unit-tests, gate-checks,
+           release-parity, runtime-evidence, real-tokenizer, terminus2-goal, repin, synthetic-stages, eval-pipeline, entry,
+           transport, deploy-selftest, fetch-selftest, cleanup; D:\Remote-RA-temp\scratch\tb16-hfix-1110\lv-1.log)
+           logs I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\validation\20261110T202030
+           (before the fixes: payload a3f53060..., 5,857 s, validation\20261110T122855)
+
+SINCE 2026-11-10: smokeqt r1 = JOB 3568310 WAS SUBMITTED FROM PAYLOAD a3f53060 AND IS FETCHED / VERIFIED IN THE FROZEN
+COPY I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-a3f53060\ (FROZEN-a3f53060.md; list
+D:\Remote-RA-temp\scratch\perf-tb16-strip-a3f53060.sha256): in section 7 use that folder's postrun\fetch_run.ps1. This
+folder gets the harness fixes of 2026-11-10 (a new payload; see STATUS.md).
+Which folder fetches each job: smokeqt 3568310 -> perf-tb16-strip-a3f53060. gctx25 3560498 -> perf-tb16-strip-3acc490a;
+3499759 -> perf-tb16-strip-16803f97; 3433706 -> perf-tb16-gemma-9ef0d6d; 3434544 / 3461661 -> perf-tb16. (The verifier
+requires the delivered helpers to equal its own harness's sealed payload.)
+
+
+1. THE PLAN (tb16-config.json plans.smokeqt; decision D-B of 2026-11-09: TB Qwen thinking on = the strip)
+----------------------------------------------------------------------------------------------------------
+Harbor 0.21.0 Terminus 2 unchanged (its interleaved_thinking off: each past reply goes back as its content only, so
+the strip is the history mode), task set smoke32 = the 16 dry tasks + the 16 non-dry 900-s tasks of
+controller.SMOKE32_EXTRA, -n 16, one attempt; K = 20 (32 trials over 20 sessions: the idle eviction runs); each
+server's Harbor cap 2,280 s (every trial at its 900-s timeout, two waves), minimum 2,040 s; ghx4 batch,
+--mem=113560M (one GH200 share), mail BEGIN,END,FAIL to cao58@illinois.edu, no retry. Servers in run order:
+  sobst    observation_query  --active-token-budget 8192
+  srfillt  random_fill        --active-token-budget 8192
+  sgoalt   goal_query         --active-token-budget 8192 --admission-overlap 16 --goal-rewriter-model <Qwen3-0.6B pin>
+                              --goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer
+                              --goal-rewriter-vllm-kv-gib 3 --goal-rewriter-batch-invariant --goal-overlap
+Every server (smokeq's flags + the strip): --protocol chat-text --chat-text-slots 512 --chat-text-idle-timeout 600
+  --chat-text-evict-after 30 --kv-cache-gib 25 --page-tokens 16 --kv-layout decoupled --cuda-graphs full
+  --max-running-sessions 20 --max-tokens 4096 --max-model-len 262144 --dram-arena-gib 70 --connector-pool-gib 1
+  --decode-fastpath --decode-fastpath2 --decode-fastpath3 --deferred-completion-io --language-model-only
+  --release-idle-pages --async-scheduling --enable-thinking --thinking-history strip
+Terminus 2 model_info.max_input_tokens 262,144. No stock control.
+Phrase AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY
+
+The smoke plans of this folder (all role release-smoke, smoke32 = 32 tasks, three servers obs -> rfill -> goal, ghx4
+batch, --mem=113560M, mail BEGIN,END,FAIL; each unchanged by the re-pin but the commit, except smokeqt, which is new):
+  plan     model, K        thinking  async  goal server                       --time    expected  GPU-h limit / expected  state at ba4d1ba
+  smokeqt  Qwen, 20        strip     on     vLLM child + --goal-overlap       02:53:00  7,000 s   2.88 / 1.94             SUBMIT (TB-Qwen)
+  smokeq   Qwen, 20        off       on     vLLM child + --goal-overlap       02:53:00  6,900 s   2.88 / 1.92             fallback (thinking off)
+  smokeqs  Qwen, 20        off       off    vLLM child + --goal-overlap       02:53:00  6,900 s   2.88 / 1.92             fallback (thinking off, no async)
+  smokeg   Gemma, 17, 64K  off       off    vLLM child + --goal-overlap       02:59:00  7,000 s   2.98 / 1.94             runnable; NOT the D-A choice (65,536)
+  smokegh  Gemma, 17, 64K  off       off    Hugging Face batch 4, T = 20,480  02:59:00  7,000 s   2.98 / 1.94             runnable; NOT the D-A choice (65,536)
+  (gctx25, not a smoke plan: NOT_SUBMITTABLE here by the client block; its job 3560498 runs from perf-tb16-strip-3acc490a.)
+Fallbacks are sealed plans: instead of smokeqt, never after it. TB-Gemma for the matrix is the 262,144-token plan of
+the second re-pin (section 8), not smokeg / smokegh; those two stay as they were (D-C: async off).
+
+
+2. FIT (the harness's own rules; validate_plan at build and on the login node)
+-----------------------------------------------------------------------------
+Time (plan_fit): 840 + 3 x (360 start + 60 tunnel + 2,280 + 180 stop + 300 checks) = 10,380 s = --time 02:53:00;
+  after the 600-s evaluation wait 9,840 s, every minimum kept.
+  Expected 7,000 s = smokeq's 6,900 s (job 3499759's measured pieces, the vLLM child +90 s) with the Harbor wall of the
+  thinking-on trial walls: strip25 job 3499759's two strip servers (dry 16) and the two August Terminus 2 jobs
+  (thinking on; the other 16), rescheduled in name order on 16 slots: 1,627-1,884 s, max 1,884 s against smokeq's
+  1,850 s (+34 s x 3 servers). Every trial at its 900-s timeout: 2,040 s (7,470 s; PLAN-REPIN's ~2.08 GPU-h).
+  Limit / expected 1.48 (release-smoke role: at most 2.25).
+Cost: 2.88 GPU-hours at the limit, 1.94 expected (ghx4 batch, billing x1). One job, no split.
+Memory: as smokeq: 73.87 GiB pinned (arena 70 GiB + connector 1 GiB + carries) + the 32-GiB reserve = 105.87 of
+  110.90 GiB (5.03 spare); arena demand / bound 42.93 / 60.33 GiB at 20 open sessions (scaled from 16, an assumption).
+GPU: as smokeq (25 GiB, 262,144, K = 20; the child measured on Qwen in job 3500565: peak 89,768 MiB at K = 16).
+
+
+3. WHAT CHANGED (every earlier plan: unchanged but the commit; gctx25 now NOT_SUBMITTABLE here, expected)
+---------------------------------------------------------------------------------------------------------
+- runtime features: async_fix (async-fix a0798a8 + async-fix2 4ed1013), tb_client (examples/terminalbench/make_job.py:
+  ba4d1ba writes the Gemma job at 65,536, no --context), gemma.async_scheduling (async-gemma).
+- async_fix_block (D-G): an async plan on a runtime without both fixes is NOT_SUBMITTABLE (test_repin step 12: f4ccd4b).
+- client_block (D-A): a Gemma plan with its own context the sealed client does not write is NOT_SUBMITTABLE: gctx25 on
+  ba4d1ba (expected; job 3560498 runs from the frozen copy); test_repin step 11 (f5a5c36) lifts it.
+- Gemma async harness path (D-C): a Gemma release-smoke plan may name async_scheduling (launch arguments, expectation,
+  the Gemma dry-run gate, the entry script, the fake server); smokeg / smokegh unchanged (async off).
+- plan smokeqt; e2e scenarios smokeqt and gasync; eval sets smoketset / gasyncset; tests.
+- PLAN_FINGERPRINT (27 earlier plans, frozen copy vs final build): DIFFERENCES 1 = gctx25's entry row, its `blocked` field (the client
+  block; expected). The pin apart: commit f5a5c36 -> ba4d1ba; runtime_features async_fix, gemma (async_scheduling), tb_client.
+  (D:\Remote-RA-temp\scratch\tb16-repin-ba4d1ba\fp-before-3acc490a.json / fp-final-a3f53060.json; fp_compare.py of
+  D:\Remote-RA-temp\scratch\gemma-tb-262k\harness)
+- DryRun / SelfTest lines (27 earlier plans, masked: stage, payload bytes / hash, commit, receipt): same 26,
+  differs 1 = gctx25 (two added lines: BLOCKED on its SelfTest, NOT_SUBMITTABLE blocked_plan=gctx25 on its DryRun; expected);
+  smokeqt new. All 114 lines exit 0, -AfterJob 3560498. (dryrun-before-3acc490a.txt / dryrun-final-a3f53060.txt and their
+  -masked copies, dryrun_compare.py, in D:\Remote-RA-temp\scratch\tb16-repin-ba4d1ba)
+
+
+4. VALIDATION (local, no connection)
+-------------------------------------
+- 2026-11-10, after the harness fixes (README "Harness fixes of the perf review"): LOCAL_VALIDATION_PASS payload
+  58de72a9... (validation\20261110T202030, -Jobs 6, 2,025 s): unit tests 110 OK (ParallelValidation1110 4 and
+  MeasurementFixes1110 4 new); GATE_CHECKS_PASS 28 / 147; parity 14 run, 4 skipped, OK; RUNTIME_EVIDENCE_PASS 76 / 3,059 /
+  29 of 29 (932 s); REALTOK 14; TERMINUS2 12; REPIN_PASS; 38 / 38 synthetic stages (540 s); EVAL_COMPAT_PASS;
+  ENTRY_CHECKS bad=0; CLEANUP bad=0. Plans: plan_fingerprint of all 28 equal to the frozen a3f53060 copy's; SelfTest /
+  DryRun lines (masked) same 28 of 28.
+- LOCAL_VALIDATION_PASS (validation\20261110T122855, run 3; payload a3f53060): two builds byte-identical; unit tests 102 OK (Repin1109: 4
+  new); GATE_CHECKS_PASS 28 plans / 147 refusals (8 new: smokeqt's history mode, --phase1-in-step, model and phrase; smokeq
+  and smokeqt without the async fixes; gctx25 on ba4d1ba's client; a Gemma async plan without async-gemma); release
+  parity 14 run, 4 skipped, OK (test_the_thinking_smoke_plan: the three strip servers through the sealed serve.py with
+  --async-scheduling, the thinking record and async pinned together, smokeq's vLLM commands; test_the_gemma_async_variant:
+  smokeg with the switch through the sealed prepare_gemma4; test_the_gemma_262k_plan at ba4d1ba: the block expected, the
+  launcher, pools, host, A.14's other flags, the stock argv but context / forward, the job files but Terminus 2's limit);
+  RUNTIME_EVIDENCE_PASS 76 servers / 3,059 requests / 29 of 29 tampered copies refused (ba4d1ba's own chat-text
+  evidence); REALTOK_CHECK_PASS 14; TERMINUS2_GOAL_CHECK_PASS 12 tests; REPIN_PASS (12 steps; 11: f5a5c36 PINNED, gctx25 /
+  smokeqt / smokeq runnable; 12: f4ccd4b PINNED, smokeq / smokeqt blocked by the async-fix guard, gctx25 by the missing
+  client, smokeqs runnable); synthetic stages 38 / 38 PASS: smokeqt TB16_PASS, TB16_PASS_VERIFIED, JOIN_PASS 32 / 32 per
+  server, cell-coverage COVERED (12 idle evictions, 97 dropped-Page turns, 64 REWRITE decisions and 64 goal_forward frames
+  on the goal server), async true on the main engine of all three, the child's FLASH_ATTN / FA 3 lines attributed, 192 cut
+  turns per server, no PHASE1_TOO_LONG; gasync (smokeg with --async-scheduling) the same checks with async true; gctx25:
+  the client block expected first, then the plan with a 262,144-token client (forward check, model_info 262,144);
+  EVAL_COMPAT_PASS (smoketset, gasyncset new); ENTRY_CHECKS bad=0 (QWEN_DRYRUN_IDENTICAL 20, 68d19b4 switches-only 14,
+  CLIENT_BLOCKED gctx25, 27 refusals incl. smokeqt with smokeq's phrase and the reverse); transport, deploy (manifest =
+  pin) and fetch self-tests; CLEANUP bad=0.
+- Earlier runs: run 1 (validation\20261109T211208) was cut when the Claude app exited (child processes died at start,
+  0xC0000142): environmental. Run 2 (validation\20261110T000812): 37 of 38 synthetic stages; gctx25's verifier refused the
+  blocked plan (the scenario still expected f5a5c36's client): the scenario now expects the block (e2e_tb16.py only; no
+  payload member, no check of gctx25 changed). Nothing else in the e2e assumed f5a5c36's client.
+
+
+5. LOCAL CHECKS (no connection)
+-------------------------------
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -RunLabel r1 -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY' -DryRun
+Seen (2026-11-10, the harness-fix build 58de72a9; no NOT_SUBMITTABLE; the a3f53060 build's lines were the same with
+payload_sha256=a3f53060... and payload_bytes=13929583):
+  LOCAL_SELFTEST_PASS connections=0 install=0 submit=0 payload_sha256=58de72a910875e81e6526a67a518aaa69c447aeac67d4c42bf058419bff2548b commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokeqt ...
+  DRY_RUN connections=0 stage=/u/ycao11/tb16-01302e9af22546fab1148c8dd6688037 payload_bytes=13940927 commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 plan=smokeqt servers=sobst:observation_query:32tasks:2280s,srfillt:random_fill:32tasks:2280s,sgoalt:goal_query:32tasks:2280s kv_cache_gib=25 max_model_len=262144 dram_arena_gib=70 max_input_tokens=262144 thinking=strip role=release-smoke task_set=smoke32 async_scheduling=on coverage=evictions partition=ghx4 time=02:53:00 expected_seconds=7000 gpu_hours_limit=2.88 gpu_hours_expected=1.94 billing=x1 billed_gpu_hours_limit=2.88 billed_gpu_hours_expected=1.94 worst_case_seconds=10380 with_eval_wait_seconds=9840 cap_after_wait_fits=false eval_wait_seconds=600 margin_seconds=300 spare_seconds=0 mem=113560M memory_need_gib=105.87 memory_spare_gib=5.03 startup_spike=ELIMINATED job_name=tb16-smokeqt run_label=r1 after_job=3560498 mail_user=cao58@illinois.edu mail_type=BEGIN,END,FAIL runtime_pin=PINNED tasks=89 kv_budget=8192 decode_fastpath=on decode_fastpath2=on decode_fastpath3=on deferred_completion_io=on language_model_only=on connector_pool_gib=1 goal_query=admission_overlap16,goal_rewriter_engine=vllm,guided_backend=lm-format-enforcer,kv_gib=3,batch_invariant,goal_overlap,rewriter_model=/projects/bcjw/jgerard1/hf_cache/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca,goal_inputs=terminus2-goal-inputs-provisional-v2 still_provisional=chat_text_slots,context,goal_query,kv_budget,kv_pool,running_sessions,sampling,session_close,vanilla
+  RELEASE_RECEIPT commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 status=GIT_ARCHIVE_TESTS_PASS tests=1852 skipped=135 result_line_sha256=887112869ed0fcd4f33f26d06c2b1f2b0edfa144e7ed0e649cd06c6ed16dcfac log_sha256=11319ba5426339ebeadce81d72f5a05e2941a9668b92481bc83abddfc397d36c login_test_runs=0
+
+
+6. SUBMIT (Windows PowerShell 5.1; one command; one visible SSH/Duo connection to gh-login03)
+--------------------------------------------------------------------------------------------
+First, in your DeltaAI shell (read-only): squeue -h -u ycao11 -o '%i|%T|%P|%r|%j|%E'
+The queue gate refuses any queued or running job of yours that shares tbench (tb16- / swe32- / swe10- / swe16- / gem0- /
+gswe32-) unless it is the -AfterJob job or in that job's afterany chain (or PENDING on your hold). The chain on 11-09:
+obst 3539260 -> rtoolst 3540110 -> akvs 3549065 -> goalt 3554749 -> gctx25 3560498 (afterany each), so name gctx25. If
+gctx25 is gone and another tbench-sharing job is last, name that one; with none queued or running, leave -AfterJob out.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqt -RunLabel r1 -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQT_32TASKS_3SERVERS_262K_KV25_THINKING_STRIP_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY'
+The light login gates take ~4-6 min (the goal server's Goal model probe); exit 86 = a pre-claim gate failed, nothing
+claimed (read QUALIFY_ERROR= / ERROR=, fix, new -RunLabel). The last JSON line prints stage and job_id: TB-Gemma's
+-AfterJob is this job id (D-E: TB-Qwen -> TB-Gemma -> SWE-Gemma -> SWE-Qwen). gctx25 has no SWE evaluation after it,
+so this job's 600-s lock wait covers the chain.
+
+Fallbacks (one of them INSTEAD of the smokeqt line above, same predecessor; the DryRun of each passes at ba4d1ba):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeq -RunLabel r1 -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQ_32TASKS_3SERVERS_262K_KV25_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeqs -RunLabel r1 -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEQS_32TASKS_3SERVERS_262K_KV25_VLLM_REWRITER_GOAL_OVERLAP_NO_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_173MIN_NO_RETRY'
+The Gemma plans of this folder at 65,536 tokens (only if the maintainer falls back from D-A's 262,144; their DryRun here
+used -AfterJob 3560498 as a stand-in: the real predecessor is the TB-Qwen job's id, in place of <TB-Qwen job id>):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokeg -RunLabel r1 -AfterJob <TB-Qwen job id> -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEG_GEMMA4_32TASKS_3SERVERS_KV25_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_179MIN_NO_RETRY'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip\run_one_connection.ps1' -Plan smokegh -RunLabel r1 -AfterJob <TB-Qwen job id> -Authorize -Authorization 'AUTHORIZE_TB16_SMOKEGH_GEMMA4_32TASKS_3SERVERS_KV25_HF_REWRITER_BATCH4_BATCH_REUSED_V9_ENV_ONE_GH200_179MIN_NO_RETRY'
+The check block of section 7 serves smokeq / smokeqs too (their thinking column reads None; the strip summary is empty).
+
+
+7. AFTER THE END MAIL: read-only check block (your DeltaAI shell; system python only), then the fetch
+-----------------------------------------------------------------------------------------------------
+Replace S and J (the submission's JSON line):
+
+bash <<'EOF'
+S=/u/ycao11/tb16-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -X -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'timing', r.get('timing'))
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    a, res = s.get('agent') or {}, s.get('resources') or {}
+    print('%-8s %-17s %-18s outcome=%s acc=%s rows=%s selective=%s gpu_max_mib=%s ready_s=%s finished_s=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], a.get('outcome'), s.get('accuracy'), s.get('rows'), s.get('active_selection_turns'), res.get('gpu_memory_used_mib_max'), s.get('ready_s'), s.get('finished_s'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+PY
+else echo RESULT_ABSENT; fi
+echo "== startup (expect ctx 262144, kv 26843545600, K 20, async true / true, thinking history strip, the goal server's engine vllm and admission goal_overlap true)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/startup.json')):
+    st = json.load(open(p)); e = st.get('effective_server_config') or {}
+    engines = {k: (v or {}).get('engine') for k, v in st.items() if k.endswith('_engine') and isinstance(v, dict)}
+    print(p.split('/')[1], 'ctx', e.get('max_model_len'), 'kv_bytes', e.get('kv_cache_memory_bytes'), 'K', st.get('max_running_sessions'), 'async', st.get('async_scheduling'), e.get('async_scheduling'), 'thinking', (st.get('thinking') or {}).get('history'), 'engines', engines, 'admission', json.dumps(st.get('admission'), sort_keys=True))
+PY
+echo "== checks of note (async-scheduling, thinking, per-request (V1-V5), cell-coverage, goal-overlap, goal engine, any non-PASS)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    for row in s.get('checks') or ():
+        name = row.get('check') or ''
+        if name in ('async-scheduling', 'thinking', 'per-request', 'cell-coverage', 'goal-overlap', 'kernel-alignment', 'context-limits', 'no-preemption') or name.startswith('goal-') or row.get('status') != 'PASS':
+            d = row.get('detail')
+            print(p, name, row.get('status'), json.dumps(d)[:300] if d is not None else '')
+    strip = (s.get('measurements') or {}).get('strip') or {}
+    print(p, 'strip', json.dumps({k: strip.get(k) for k in ('turns', 'cut_turns', 'local_turn0', 'rebuilds', 'phase1_too_long', 'strip_reply_head', 'phase1_tokens')})[:400])
+PY
+echo "== arena high-water (GiB; the 70-GiB arena; model 42.93, bound 60.33)"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/sessions.jsonl')):
+    m = 0
+    for line in open(p):
+        if line.strip():
+            e = json.loads(line)
+            m = max(m, ((((e.get('released') or {}).get('worker') or {}).get('arena') or {}).get('pinned_bytes') or 0))
+    print(p.split('/')[1], 'arena_pinned_high_water_gib=%.2f' % (m / 2**30))
+PY
+echo "== prompt sizes (max prompt tokens per server)"; for f in job-output/*/runtime.jsonl; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1].split('/')[1], 'rows', len(r), 'max_prompt', max([(x.get('chat_text') or {}).get('prompt_tokens') or 0 for x in r] or [0]))" "$f"; done
+echo "== kernels and async lines (main engine: FLASH_ATTN, async enabled; the child's lines too)"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== the Goal child's startup check (goal server)"; grep -h "startup check passed" server-*.log 2>/dev/null | cut -c1-200 | head -3
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== arena / capacity (expect 0)"; grep -c "DRAM_ARENA_EXHAUSTED\|CAPACITY_EXCEEDED\|CAPACITY_STALL\|PHASE1_TOO_LONG" server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/tb16-core.tar.xz fetch/tb16-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the two sha256sum lines and the sacct row are needed by the fetch). Then, locally (job
+3568310: the frozen copy perf-tb16-strip-a3f53060, whose helpers equal the payload it was submitted with):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-tb16-strip-a3f53060\postrun\fetch_run.ps1' -Stage '<STAGE>' -JobId '<J>' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+(fetch read-only from DeltaAI and tbench (package_run.sh: exit 3 while Harbor still runs, run it again later),
+verify_evidence (V1-V5 offline in decode-only mode), join_tb16, tb16_tables; safe to rerun). Expected
+VERDICT=TB16_PASS_VERIFIED with JOIN_PASS 32 / 32 per server (TB16_PARTIAL_VERIFIED if a check failed but every server
+ran); each server's cell-coverage COVERED (else NOT_EXERCISED, a finding: the cell needs a rerun). The cache goes to
+D:\Remote-RA-temp\scratch\perf-tb16-strip\fetch\job<J>.
+
+
+8. WHAT MUST WAIT / OPEN
+------------------------
+- TB-Gemma: at 262,144 tokens (the maintainer's 11-08 setting; smokeg262 / smokeg262a) only after gctx25 3560498 passes
+  and gemma-tb-262k is merged into main, with a second re-pin of this directory (one more freeze + local validation).
+  Those plans are not built; gctx25 is NOT_SUBMITTABLE here until then (client_block). The TB-Gemma job's -AfterJob is
+  the TB-Qwen job's id (D-E).
+- Gemma async (smokeg262a and the other harnesses' Gemma async plans): only after g1g r3 3560784 is verified (D-C); the
+  harness path is built and checked on fakes and the sealed prepare_gemma4 only.
+- Not GPU-validated: async + --goal-overlap + the strip together (CPU-tested in the runtime); the 16 extra tasks on our
+  runtime (their Docker images may not be cached on tbench); the arena at 20 open sessions; the overlap's goal-async
+  rule (fakes only).
+- The release repository and the runtime docs are the maintainer's (D-I: docs after the six smoke jobs verify).

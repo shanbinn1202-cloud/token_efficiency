@@ -1,0 +1,12 @@
+{
+ "commit": "51af07949dd703a21cf07a068196b3c78152b559",
+ "feature": {
+  "history": "rollback",
+  "keys": [
+   "kept_tokens",
+   "reencoded_replies"
+  ],
+  "tool": "tools/keep_render_check.py",
+  "tool_sha256": "6ca905ab99c5fa6b4932a55640a017b49387029ba1025a2653fb166d3cef3da8"
+ }
+}

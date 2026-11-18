@@ -1,0 +1,37 @@
+perf-swe32 RELEASE GATE 2 (full against stock, token for token): plan parity150 READY 2026-11-17 (NOT submitted).
+Pin integrate-1117 2fb7f62 (the runtime of the 150-instance runs). Payload f62064f1e5ee3e6a84c205afb2452350809c346317ccda9af864bd40728bca44,
+entry 6ec2e711e66eb81b421a2696541bfd12baf745d723fab588c32268fcda223b7c. README section "Since 2026-11-17 (evening)".
+The previous payload 269a00e6 (the queued 150-instance jobs 3616690 / 3616705 / 3616729) is frozen at
+..\perf-swe32-269a00e6\: verify and fetch THOSE jobs there.
+SelfTest and DryRun (no connection) of parity150 on this payload: PASS (D:\Remote-RA-temp\scratch\gate2-tables-1117\selftest-dryrun-parity.json).
+Times are ESTIMATES; NOT GPU-validated. Partition ghx4 (batch), --mem 113560M, mail cao58@illinois.edu BEGIN,END,FAIL
+(enforced by the entry script).
+
+What the job verifies, in plain words: it starts our runtime's `full` server with exactly the settings of the
+150-instance run full150k24, sends it the first request of 8 SWE-bench instances one at a time (thinking on, greedy) and
+records the tokens it generated; then it stops it and starts unmodified vLLM 0.24.0 with exactly the stock control's
+settings (stockkeep150k24) on the same GPU with the same kernels (FlashAttention 3, CUDA graphs FULL_AND_PIECEWISE with
+torch.compile, the Triton GDN prefill, the native sampler, --language-model-only, async scheduling, 24 sequences,
+16,384 batched tokens, the 784-token Mamba block), feeds it our server's exact prompt token ids and checks that the first
+256 decode steps produce the same token ids. Verdict line GATE2_PASS (all equal) / GATE2_NEAR_TIE (only differences
+where stock's top-2 margin is below 0.1 nats) / GATE2_DIFFERS / GATE2_INCOMPLETE, recomputed offline on tbench. No
+agents, no tbench lock, no SWE-bench evaluation.
+
+SUBMIT (ghx4 batch, after the last queued swe32 job; today the 150-run chain ends with 3616729 = ledger150k24 r2; if
+the chain changed, name its last queued job instead, or drop "-AfterJob <J_prev>" when nothing is queued). The tbench
+preflight refuses a submission while ANY agent pool is live on tbench: submit in a gap between pools (e.g. while
+3616729 is still queued, or after its pool ended).
+
+# parity150: ghx4 --time 00:55:00, GPU-h 0.92 at the limit / 0.42 expected, job name swe32-parity150
+# what it verifies: release gate 2 for runtime 2fb7f62: our full server (full150k24's settings) against stock vLLM 0.24.0 (stockkeep150k24's settings), same kernels, the same 8 prompts, the first 256 generated tokens compared token for token (GATE2_PASS / NEAR_TIE / DIFFERS / INCOMPLETE).
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan parity150 -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan parity150 -RunLabel r1 -AfterJob 3616729 -Authorize -Authorization 'AUTHORIZE_SWE32_PARITY150_GATE2_FULL_VS_STOCK_8PROMPTS_WINDOW256_262K_KV25_THINKING_ON_ASYNC_K24_BATCH_REUSED_V9_ENV_ONE_GH200_55MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan parity150 -RunLabel r1 -AfterJob 3616729 -Authorize -Authorization 'AUTHORIZE_SWE32_PARITY150_GATE2_FULL_VS_STOCK_8PROMPTS_WINDOW256_262K_KV25_THINKING_ON_ASYNC_K24_BATCH_REUSED_V9_ENV_ONE_GH200_55MIN_NO_RETRY'
+
+After the END mail: the tbench waiter verifies it (verify_evidence + gate2-recomputed; no package / join / tables);
+pull with postrun\verify_on_tbench.py --pull --job-id <J> (prints GATE2=...). fetch_run.ps1 (the phase-1 path) is not
+adapted to a gate-2 job (it expects an evaluation): use the pull.
+
+tbench: the verification code of this payload is deployed: code/0d4d0ffac9db64db, pointer by-payload/7e0f8c98a7ef4a772239fe5b9a92040dcb3a18835ad1d8cad0d7fb7fcaf97078
+(a new pointer only; the 269a00e6 pointer 5ea02bb2... -> code/c67ef0261fbc2d78 of the queued jobs is unchanged; the tbench half unchanged).
+Validation: validation\20261117T190547\ LOCAL_VALIDATION_PASS.

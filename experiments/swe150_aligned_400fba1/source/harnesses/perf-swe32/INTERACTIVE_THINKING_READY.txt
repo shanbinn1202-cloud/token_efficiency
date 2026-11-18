@@ -1,0 +1,186 @@
+SUPERSEDED (2026-11-11): current READY file: PHASEB_READY.txt; this file's payload 1582d0d9 is frozen in ..\perf-swe32-1582d0d9\ (its NOTE below).
+NOTE (2026-11-11 evening): this folder was rebuilt (payload 5ea4bdfc538caa4e12d4eacdf0b001c4f82f4864e5272525eaa0725f2f450cfc: the evidence push, plans fullt / fullti). This file describes payload 1582d0d9, frozen in ..\perf-swe32-1582d0d9\ (whose copy of this file is current): goalti 3576565 / akvsi 3577833 verify there. For rtoolsti from THIS folder use PUSH_FULLT_READY.txt.
+
+INTERACTIVE_THINKING_READY (2026-11-11) - perf-swe32: goalti -> akvsi -> rtoolsti, thinking ON, 32 SWE-bench Verified instances x 16 sessions, on ghx4-interactive
+======================================================================================================================================================
+
+STATUS: READY, nothing submitted. The user submits, one job at a time, in this order, each only after the previous
+one ENDED (END mail; squeue shows no job of yours on ghx4-interactive): goalti, then akvsi, then rtoolsti; then
+release the hold of gctx25 3560498 (section 4). No sub-step touched DeltaAI or tbench.
+
+Folder     I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32
+Runtime    main ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 (unchanged pin; receipt D:\Remote-RA-temp\scratch\main-ba4d1ba\release-receipt-ba4d1ba.json)
+Payload    1582d0d982e16c41980723621492f1e32c6ad583c9988a32202318aff3b26698   (dist\payload.json; was 9a2d73cf..., on which no job was submitted)
+Entry      3fa94da17cdd7c85baa7e623656e263e00d2f690e42e6f2dc5df2600ed63bf03   (run_one_connection.ps1)
+Pins       354b4aeeea86ae17b1806f080aa96995016024096be678bb7572a4b39e57d8ba   (pins.json)
+Validation LOCAL_VALIDATION_PASS commit=ba4d1ba4fc37ed9d3d593cdc6333b43628b36903 (I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\validation\20261111T122608\, -Jobs 6)
+tbench     half unchanged (manifest 58245387..., no redeploy)
+Notes      README "Since 2026-11-11"; INTERACTIVE-PROGRESS.md; work dir D:\Remote-RA-temp\scratch\swe32-interactive-1111\
+
+
+1. THE PLANS (ghx4-interactive, 2x billing, one submitted job per user, at most 02:00:00; one GH200, --mem=113560M,
+   mail BEGIN,END,FAIL to cao58@illinois.edu, no retry, no -AfterJob; each the batch plan's server, settings
+   (--kv-cache-gib 25, --max-model-len 262144, --dram-arena-gib 70) and thinking ON, 32 tasks, K = 16, 120 steps;
+   only the time, the agent cap / minimum and E differ: the batch plans' 02:29-02:34 do not fit the partition)
+---------------------------------------------------------------------------------------------------------------------
+
+a) goalti  (variant_of goalt; goal_query + the vLLM Goal rewriter (lm-format-enforcer, 3 GiB, batch-invariant) + --goal-overlap, --admission-overlap 16 (server goalvllmt))
+   --time 02:00:00 (7200 s) | E 5,480 s | cap 5,460 s / min 3,750 s | worst case 7200 s = the limit (1,740 s reserves + cap) | after the 600-s evaluation wait the agents get 5280 s
+   pool W used: 4,468 s conservative (obst 2,503 s x goal262 / obs262 thinking off, 3,152 / 1,766 s); 2,848 s with goalt's own server ratio (goalvllm 2,009 / obs262 1,766 s); cap / W 1.22 x (1.92 x)
+   GPU-h at 2x billing: limit 4.00, expected 3.04 (2.15 at the low W)
+   phrase AUTHORIZE_SWE32_GOALTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY
+
+b) akvsi  (variant_of akvt; akv_rule: every reply and the latest 12 tool responses (server akv262t))
+   --time 01:52:00 (6720 s) | E 4,490 s | cap 4,980 s / min 3,150 s | worst case 6720 s = the limit (1,740 s reserves + cap) | after the 600-s evaluation wait the agents get 4800 s
+   pool W used: 3,738 s ESTIMATE (obst 2,503 s x 1.31 pool concurrency at R = 200 x 1.14 KV bytes per step); cap / W 1.33 x
+   GPU-h at 2x billing: limit 3.73, expected 2.49
+   phrase AUTHORIZE_SWE32_AKVSI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_112MIN_NO_RETRY
+
+c) rtoolsti  (variant_of rtoolst; recent_tools: tool calls, then tool responses, then reasoning, budget 8192 (server rtools262t))
+   --time 01:22:00 (4920 s) | E 3,300 s | cap 3,180 s / min 2,100 s | worst case 4920 s = the limit (1,740 s reserves + cap) | after the 600-s evaluation wait the agents get 3000 s
+   pool W used: 2,525 s (recentt 3539242: recent_fill, the other window policy at the same budget); cap / W 1.26 x
+   GPU-h at 2x billing: limit 2.73, expected 1.83
+   phrase AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY
+
+Total if all three run to E: about 7.37 billed GPU-h (limits 10.47). Wall about 1.5 + 1.25 + 0.9 h plus the queue and
+the 3-5 min of login gates per submission.
+
+How the fit was made (README "Since 2026-11-11"; measured from the jobs' own events, swe32-interactive-1111\timeline.py):
+- obst 3539260 / recentt 3539242 (thinking on): READY 226 / 230 s, pool walls 2,520 / 2,545 s, 751 / 745 s outside
+  the pool; goalvllm 3500565 (the vLLM child, thinking off): READY 340 s, 1,015 s outside the pool. The 1,740-s
+  reserves of config.budget hold all of them, so they stay; cap = --time - 1,740 s, minimum = 0.85 x W (down to 50 s),
+  --time = min(02:00:00, 1.5 x E) (the harness's tight-limit rule). goalt's 300-s vLLM-child spare is dropped.
+- goalti: if goal_query thinking on runs above ~5,460 s of pool wall it is cut (SWE32_PARTIAL). The conservative W is
+  4,468 s; the goalvllm-based one 2,848 s.
+- akvsi RISK: by the estimate at the measured reasoning (R = 200), 16 sessions' AKV sets pass the 25-GiB pool at about
+  local turn 30; idle sessions keep their Pages, so admissions may wait for a session close (CAPACITY_WAIT) and the
+  run may end SWE32_PARTIAL at its 4,980-s cap. akvsi is akvt's server (32 tasks, 16 sessions: your decision), not
+  akvs (8 tasks, 4 sessions).
+
+
+2. BEFORE EACH SUBMISSION (your DeltaAI shell, read-only)
+---------------------------------------------------------
+squeue -h -u ycao11 -o '%i|%T|%P|%j|%E|%r'
+Expect: no job of yours on ghx4-interactive; 3560498 PENDING ... JobHeldUser; 3568310 PENDING with
+afterany:3560498(unfulfilled) (or any dependency only on 3560498); no other swe32- / swe10- / swe16- / gswe32- /
+tb16- / gem0- job. The queue gate (twice, before setup and before the claim) allows exactly those two as "parked";
+anything else stops it before the claim (exit 86, nothing burned).
+
+
+3. SUBMIT (Windows PowerShell 5.1; one command per line; one visible SSH/Duo connection to gh-login03 per plan)
+---------------------------------------------------------------------------------------------------------------
+First the local SelfTest and DryRun (no connection), then the submit line. About 3-5 min of light login gates, then
+exactly one sbatch; exit 86 = a pre-claim gate failed, nothing claimed (read QUALIFY_ERROR= / ERROR=, fix, new
+-RunLabel). The last JSON line prints stage and job_id: keep both for the check block. Submit the next plan only
+after the END mail of the previous one. Its evaluation (~10 min, launched at its end) may still hold the tbench lock
+when the next job starts: the job waits up to 600 s from its start (overlapping the server start) and refuses
+cleanly (SWE32_REFUSED, no agents) past it; the 3-5 min of login gates cover most of it. If it refuses, submit the
+same plan again with -RunLabel r2.
+
+a) goalti
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOALTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan goalti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_GOALTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_VLLM_GOAL_OVERLAP_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_120MIN_NO_RETRY'
+
+b) akvsi (after goalti ENDED)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvsi -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvsi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_AKVSI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_112MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan akvsi -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_AKVSI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_AKV_RULE_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_112MIN_NO_RETRY'
+
+c) rtoolsti (after akvsi ENDED)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\run_one_connection.ps1' -Plan rtoolsti -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_SWE32_RTOOLSTI_32TASKS_16SESSIONS_262K_KV25_THINKING_ON_RECENT_TOOLS_INTERACTIVE_REUSED_V9_ENV_ONE_GH200_82MIN_NO_RETRY'
+
+
+4. AFTER rtoolsti ENDED (and only then): release the hold (your DeltaAI shell)
+------------------------------------------------------------------------------
+scontrol release 3560498
+(smokeqt 3568310 then waits on gctx25 as before; the tbench lock guards every start.)
+
+
+5. AFTER EACH END MAIL: read-only check block (your DeltaAI shell; system python only), then the fetch
+-----------------------------------------------------------------------------------------------------
+Fill the S= / J= line from that submission's JSON line (stage, job_id):
+
+bash <<'EOF'
+S=/u/ycao11/swe32-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'], 'receipt', (r.get('release_receipt') or {}).get('result_line_sha256', '')[:8])
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-10s %-17s %-16s cap=%s capacity_waits=%s rows=%s selective=%s lock=%s goal_text=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], s.get('agent_timeout_seconds'), (s.get('measurements') or {}).get('capacity_waits'), s.get('rows'), s.get('active_selection_turns'), (s.get('lock_wait') or {}).get('status'), (s.get('goal_text') or {}).get('status'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+for path in sorted(glob.glob('job-output/*/ready.json')):
+    ready = json.load(open(path)); start = json.load(open(path.replace('ready.json', 'startup.json')))
+    print('ready', path.split('/')[1], 'fast', ready.get('decode_fastpath'), 'fast2', ready.get('decode_fastpath2'), 'fast3', ready.get('decode_fastpath3'), 'deferred_io', ready.get('deferred_completion_io'), 'lmo', bool(ready.get('language_model_only')), 'pool_bytes', start.get('connector_pool_bytes'), 'arena_pages', start.get('dram_arena_pages'), 'thinking_header', repr((start.get('thinking') or {}).get('header_text')), 'ready_thinking', ready.get('thinking') == start.get('thinking'), 'async', start.get('async_scheduling'), 'effective_async', (start.get('effective_server_config') or {}).get('async_scheduling'), 'engine', (start.get('goal_rewriter_engine') or {}).get('engine'), 'overlap', (start.get('admission') or {}).get('goal_overlap'))
+for name in ('archives.json', 'eval-launch.json'):
+    v = json.load(open('fetch/' + name))
+    print(name, json.dumps({k: (x.get('bytes'), x.get('sha256')) if isinstance(x, dict) and 'sha256' in x else x for k, x in v.items() if k in ('core', 'bulk', 'status', 'labels', 'reason', 'elapsed_s')}))
+PY
+else echo RESULT_ABSENT; fi
+echo "== thinking (expect every row a thinking record, fresh = sessions, the rest append), capacity waits (akvsi: CAPACITY_WAIT stalls show here) and every check of the server"
+/usr/bin/python3 -B - <<'PY'
+import glob, json
+for p in sorted(glob.glob('job-output/*/runtime.jsonl')):
+    rows = [json.loads(l) for l in open(p) if l.strip()]
+    t = [r.get('thinking') for r in rows]
+    hist = {}
+    for x in t:
+        if x: hist[x['history']] = hist.get(x['history'], 0) + 1
+    on = [x for x in t if x]
+    turns = {}
+    for r in rows: turns[r.get('session_index')] = turns.get(r.get('session_index'), 0) + 1
+    print(p.split('/')[1], 'rows', len(rows), 'sessions', len(turns), 'max_turns', max(turns.values() or [0]), 'thinking', len(on), hist, 'unclosed', sum(1 for x in on if not x['closed']), 'reasoning_mean', round(sum(x['reasoning_tokens'] for x in on) / max(1, len(on)), 1), 'reasoning_max', max([x['reasoning_tokens'] for x in on] or [0]), 'capacity_waits', sum(r.get('capacity_waits') or 0 for r in rows))
+for p in sorted(glob.glob('summary-*.json')):
+    s = json.load(open(p))
+    print(p, ' '.join('%s=%s' % (row.get('check'), row.get('status')) for row in s.get('checks') or ()))
+    for row in s.get('checks') or ():
+        if row.get('check') in ('thinking', 'goal-rewriter-engine', 'goal-overlap') or row.get('finding'):
+            d = row.get('detail') or {}
+            print('  ', row.get('check'), row.get('status'), row.get('finding') or '', {k: d.get(k) for k in ('histories', 'unclosed', 'mean_reasoning_tokens', 'rewriter', 'turns', 'goal_forwards') if k in d})
+PY
+echo "== goal texts"; wc -l job-output/*/goals.jsonl 2>/dev/null || echo "no goals.jsonl"
+echo "== kernels"; for f in server-*.log; do echo "$f $(grep -oE 'Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|GDN prefill kernel \(requested=[a-z]+|sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== completion writer (expect 0)"; grep -c "COMPLETION_WRITE_FAILED\|remote-ra completion writer" server-*.log
+echo "== text-only (expect mm=0 and text_only>=1; encoder_backend is information only)"; for f in server-*.log; do echo "$f mm=$(grep -cE 'Encoder cache will be initialized|Multi-modal warmup completed' "$f") text_only=$(grep -c 'text-only mode' "$f") encoder_backend=$(grep -c 'for MMEncoderAttention' "$f")"; done
+echo "== arena (expect 0)"; grep -c DRAM_ARENA_EXHAUSTED server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== host peak"; for f in host-samples-*.log; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1], 'rss_peak_gib=%.2f cgroup_peak_gib=%.2f' % (max(x.get('vmrss_kb') or 0 for x in r)/2**20, max(x.get('cgroup_current_bytes') or 0 for x in r)/2**30))" "$f"; done
+echo "== gpu peak (memory.used MiB; the vLLM child beside the 25-GiB server on goalvllmt)"; for f in gpu-samples-*.log; do echo "$f used_mib_max=$(awk -F', ' '{ if ($2 + 0 > m) m = $2 + 0 } END { print m + 0 }' "$f")"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/swe32-core.tar.xz fetch/swe32-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+
+Send back the whole output (the two sha256sum lines and the sacct job row are needed by the fetch). Then, locally
+(this folder's fetch; the jobs' payload is this folder's):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-swe32\postrun\fetch_run.ps1' -Stage '<STAGE>' -JobId '<J>' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+(-CoreOnly first on a slow link; TBENCH_EVALUATION_RUNNING exit 3: run it again later.) Expected VERDICT=
+SWE32_PASS_VERIFIED, or SWE32_PARTIAL_VERIFIED if the cap cut instances (akvsi: likely if CAPACITY_WAIT stalls).
+
+
+6. WHAT CHANGED (harness only; the runtime is untouched)
+--------------------------------------------------------
+- swe32-config.json: goalti / akvsi / rtoolsti (role interactive, variant_of goalt / akvt / rtoolst).
+- controller.variant_servers_match: a variant copies the batch plan's servers, `server`, thinking and async;
+  it may lower only the agent cap / minimum, and only when the batch plan's --time is above the partition maximum.
+- controller.queue_parked / queue_gate: squeue %i|%T|%P|%j|%E|%r; an interactive plan may start beside held tbench
+  jobs (JobHeldUser / JobHeldAdmin) and those pending only on them; everything else as before (batch plans unchanged).
+- Tests: unit InteractiveThinking1111, gate_checks (variant refusals, the queue gate both ways), e2e scenario goalti.
+- The 25 earlier plans: PLAN_FINGERPRINT SAME 25 and DRYRUN_LINES SAME 25 against the 11-10 records.
+
+
+7. NOT GPU-VALIDATED / UNCERTAIN
+--------------------------------
+- No thinking-on goal_query or akv_rule run exists; recent_tools with thinking on has not run (rtoolsti's W is
+  recent_fill's). goalti's W is a ratio, akvsi's an estimate with a stall risk (section 1).
+- The measured thinking-on jobs ran runtime 60c5d21 (obst / recentt), goalvllm c07d42a; these run main ba4d1ba
+  (f4ccd4b's policies + the async fixes; async off here). The cancelled batch plans would have run f4ccd4b / d72745c.
+- Keep 3560498 held until rtoolsti ended; releasing it earlier lets gctx25 start (the tbench lock then serializes).
+
+LAST STEP, after rtoolsti ENDED: scontrol release 3560498

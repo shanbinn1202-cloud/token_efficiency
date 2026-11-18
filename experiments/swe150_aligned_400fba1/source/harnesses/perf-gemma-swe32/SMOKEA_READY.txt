@@ -1,0 +1,157 @@
+2026-11-16: smokea job 3586987 was cancelled before it ran; nothing to fetch or verify. Gemma work deferred; this harness is not updated for integrate-1116 (session cap 16, docs/known-limits.md 5.5): do not submit.
+perf-gemma-swe32 (gswe32) - integration plan D: smokea (SWE-bench Verified 32, Gemma 4 31B IT, --async-scheduling on): READY on integrate-1112 4ebff97
+Re-pinned 2026-11-12 (D:\Remote-RA-temp\scratch\integrate-1112\GPU-VALIDATION-PLAN.md, job D). NOT SUBMITTED.
+Supersedes SMOKE_READY.txt (the ba4d1ba state, payload b3ce5c3d, frozen at ..\perf-gemma-swe32-b3ce5c3d; do not submit from there).
+
+==== 2026-11-14: smokea job 3586987 (queued) (cancelled 2026-11-16) runs payload e5c93e1e: verify it ONLY from ..\perf-gemma-swe32-e5c93e1e ====
+Job smokea 3586987 was submitted from payload e5c93e1ed45bf0b3f17e828cd105dc1ca83693da99fedf7a2b49ac08fd6fee3a. That
+state is frozen at ..\perf-gemma-swe32-e5c93e1e (FROZEN-e5c93e1e.md; 113 files, SHA-256 list
+D:\Remote-RA-temp\scratch\perf-gemma-swe32-e5c93e1e.sha256, FREEZE_VERIFY PASS). Fetch / verify / pull 3586987 only
+with that folder's postrun (the commands under "After the END mail" below name it); its tbench trigger follows
+code/by-payload/340582f5... -> code/15c6b359aebdac78 (kept on tbench).
+This folder then changed: the async guard also checks async-maxtok-1112 13ee618's resolve line (as perf-mab /
+perf-tb16-strip; async plans are NOT_SUBMITTABLE on a commit without it, e.g. main ba4d1ba). Same pin 4ebff97, every
+plan's arguments unchanged (PLAN_FINGERPRINT SAME 13, DRYRUN_LINES SAME 22 against the e5c93e1e record); new payload
+aaa272a23ebfec9209f1a6d95aebf1c64be268980f3f6da05a9fc218b2d6f31c, LOCAL_VALIDATION_PASS validation\20261114T141219,
+tbench verification code deployed for it (code/ee7e006fbc451737, pointer code/by-payload/2aaec8cd...). Any later
+submission of these plans comes from this folder (payload aaa272a2); the submit lines below are unchanged.
+
+==== READ FIRST: what must wait ====
+1. The gate is g1g r3 (job 3560784, perf-async-g1): ASG1_PARTIAL_PASS_VERIFIED (its async servers gea / gga passed; ge
+   is incomplete only because ges was skipped for time). The coordinator keeps smokea (async on) as planned; whether the
+   partial pass is accepted as the gate is the user's call at submission:
+   - accepted     -> submit plan smokea (async on: it runs async-maxtok-1112's resolve fix on every async step);
+   - not accepted -> submit plan smoke (async off: it does not exercise the async fix).
+   Exactly one of the two, never both. Thinking stays off for Gemma (both plans).
+2. Order of the integration plan: after g1g r3: B (GG1), then D (this job) and E (perf-mab smga). tbench is shared by
+   the SWE / TB harnesses: if another tbench job (swe32 / tb16 / gswe32) is queued or running when you submit, pass
+   -AfterJob <its job id> (this job waits 600 s for one 32-instance evaluation before it); the DryRuns below use
+   -AfterJob 3560498 as a stand-in only.
+3.
+
+==== Pin ====
+Runtime integrate-1112 4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (origin/integrate-1112; share repo), receipt
+release-receipt.json = D:\Remote-RA-temp\scratch\integrate-1112\receipt\release-receipt-4ebff97.json
+(GIT_ARCHIVE_TESTS_PASS, 2,059 tests, 139 skipped, result line 308a6e79..., log 7bb8bcbd..., LOG_VERIFIED by build.py).
+Since 2026-11-14: payload aaa272a23ebfec9209f1a6d95aebf1c64be268980f3f6da05a9fc218b2d6f31c, entry script fd2ac1f738c7a9ba1c2810803150d786ece0d02e868dfbab8f755c90502ea5d6, pins.json 23bf410140e535ec8c028fd71b8816555f436837117b2c42c01f3b81712076b6 (= e5c93e1e's pins plus runtime_features.async_fix.resolve), tbench half manifest 57e68932... (unchanged: no redeploy).
+LOCAL_VALIDATION_PASS commit=4ebff978661f4c5e2e06da0ee68a5217f92dfa82 (validation\20261114T141219; STATUS.md 2026-11-14).
+(2026-11-12 state, job 3586987's: payload e5c93e1ed45bf0b3f17e828cd105dc1ca83693da99fedf7a2b49ac08fd6fee3a, entry script c76430e5a112f79e6245847b9ae3009d6b600bf54240a57639c6ef22d7a2889c, pins.json e3dc823a78fc106b78ed13100af63f38b5658af24caab95e18f1d4ca13f90682, LOCAL_VALIDATION_PASS validation\20261112T153643; frozen at ..\perf-gemma-swe32-e5c93e1e.)
+New in this payload: the runtime policy registry read from the sealed source (setup refuses a registry that describes
+observation_query / random_fill / goal_query / full differently), and the evidence push to tbench at the job's end
+(fetch/tbench-push.json; the verification code for payload e5c93e1e is deployed: /home/ubuntu/gswe32-verify/code/15c6b359aebdac78 (60 files), pointer code/by-payload/340582f5bcbcff7af38d5df2445b3eee5ed0196f5699bfbdb6633d205988e3f3;
+for payload aaa272a2 (2026-11-14): /home/ubuntu/gswe32-verify/code/ee7e006fbc451737 (60 files), pointer code/by-payload/2aaec8cd07f64546e898c53ba12c45d249b0d060a3602d4202064309c83e26ce).
+
+==== Plans (both: role release-smoke, ghx4 batch, one GH200, --mem=113560M, mail BEGIN,END,FAIL to cao58@illinois.edu,
+     no retry, eval wait 600 s, thinking off) ====
+Servers, in order: obs4ks (observation_query) -> rfill4ks (random_fill) -> goalvllm4ks (goal_query: the vLLM Goal rewriter
+--goal-rewriter-engine vllm --goal-rewriter-guided-backend lm-format-enforcer --goal-rewriter-vllm-kv-gib 3
+--goal-rewriter-batch-invariant, plus --goal-overlap, --admission-overlap 16, no --goal-rewriter-batch).
+Subset: the first 32 SWE-bench Verified instances, 16 sessions (pool closes and refills), step limit 10, 4,096-token
+forwards (--max-num-batched-tokens 4096), 131,072 tokens, KV 25 GiB, 72-GiB arena; caps / minimums 1,500 / 950,
+1,600 / 1,000, 1,700 / 1,100 s.
+
+plan    async   --time    E (s)   GPU-h limit / expected   phrase
+smokea  on      02:33:00  ~5,200  2.55 / 1.44              AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY
+smoke   off     02:33:00  ~5,200  2.55 / 1.44              AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY
+GPU-h: one of the two, 2.55 at the limit, ~1.44 expected (ghx4 batch, 1x billing at --mem=113560M).
+Time (the harness's fit rule): 840 s job reserves + 3 x (600 start + 480 stop and checks) + 1,500 + 1,600 + 1,700 = 8,880 s,
++ 300 s for the vLLM child's start = 9,180 s (02:33:00); limit / expected 1.76 (release-smoke allows 2.25). The evidence
+push uses at most 120 s of the finish and stays 120 s clear of the Slurm limit (no plan time changed). smokea uses
+smoke's time (async is not modelled).
+GPU (goalvllm4ks, the tightest server): estimate 95,595 MiB, 2,276 MiB free of 97,871 (228 MiB above the 2,048 floor);
+measured-based 92,491 MiB (3462014's obs4k peak + the 3538523 child term; not audited). obs4ks / rfill4ks 90,163 (7,708 free). Host: 105.22 of 110.90 GiB, 5.68 GiB spare.
+(Every value as on 11-09: PLAN_FINGERPRINT SAME 13 against the b3ce5c3d record.)
+
+==== Local pre-check (no connection; Windows PowerShell 5.1, one command per line) ====
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1' -Plan smokea -SelfTest
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1' -Plan smokea -Authorize -Authorization 'AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY' -DryRun
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1' -Plan smokea -AfterJob 3560498 -Authorize -Authorization 'AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY' -DryRun
+(DryRun 2026-11-12 on payload e5c93e1e: smokea "servers=obs4ks:...:1500s:forward4096,rfill4ks:...:1600s:forward4096,goalvllm4ks:...:1700s:
+forward4096:vllm3gib:overlap time=02:33:00 expected_seconds=5200 gpu_hours_limit=2.55 gpu_hours_expected=1.44
+gpu_peak_mib=95595 gpu_free_mib=2276 ... after_job=3560498 ... async_scheduling=obs4ks:on,rfill4ks:on,goalvllm4ks:on
+tbench_push=/home/ubuntu/gswe32-verify:120s"; smoke the same without async_scheduling=; every SelfTest / DryRun exit 0:
+D:\Remote-RA-temp\scratch\gswe32-1112\selftest-dryrun.log. The entry's WARNING lines are the plans' 11-09 condition
+texts (g1g r3 for smokea; cg 3508345, met by cg r2 3538523, for smoke): unchanged, informational.)
+(2026-11-14 on payload aaa272a2: SelfTest + DryRun of smokea / smoke / smokehf with and without -AfterJob 3560498 all
+exit 0; the six DRY_RUN lines equal the 11-12 ones with stage, payload bytes and pin masked:
+D:\Remote-RA-temp\scratch\gswe32-resolve-1114\selftest-dryrun.log.)
+
+==== Submit (the user only; one visible SSH/Duo connection; ONE of the two lines) ====
+Add -AfterJob <job id> before -Authorize when another tbench job is queued or running (READ FIRST 2).
+If the g1g r3 partial pass is accepted (plan D as planned):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1' -Plan smokea -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_GSWE32_SMOKEA_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_ASYNC_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY'
+If it is not:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\run_one_connection.ps1' -Plan smoke -RunLabel r1 -Authorize -Authorization 'AUTHORIZE_GSWE32_SMOKE_GEMMA4_32TASKS_16SESSIONS_10STEPS_3SERVERS_FORWARD4096_VLLM_REWRITER_GOAL_OVERLAP_BATCH_REUSED_V9_ENV_ONE_GH200_153MIN_NO_RETRY'
+Eval: this job's own evaluation is 3 labels x 32 = 96 instance evaluations (~1,700 s): a tbench job submitted right after
+it needs an eval wait of about 1,800 s.
+
+==== After the END mail ====
+(obsolete: the job was cancelled) For smokea job 3586987 (payload e5c93e1e) every postrun command below runs from the FROZEN copy
+..\perf-gemma-swe32-e5c93e1e (replace '\perf-gemma-swe32\postrun\' by '\perf-gemma-swe32-e5c93e1e\postrun\'), never
+from this folder:
+   D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32-e5c93e1e\postrun\verify_on_tbench.py' --pull --job-id 3586987 --slurm-state <State> --slurm-exit-code <ExitCode>
+For a job of payload aaa272a2 (submitted from this folder after 2026-11-14) the lines below as written:
+1. Send the END mail's State and ExitCode (e.g. COMPLETED 0:0); Claude then pulls the verification done on tbench
+   (no archive download):
+   D:\Remote-RA-temp\venvs\remote-ra-tok\Scripts\python.exe -I -B 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\postrun\verify_on_tbench.py' --pull --job-id <J> --slurm-state <State> --slurm-exit-code <ExitCode>
+   (exit 3 with TBENCH_VERIFY_PENDING while the waiter still waits for the evaluation: run it again later; the END
+   mail's values are required, a different state than the job's own end record is refused).
+2. The check block below (your DeltaAI shell) for the GPU-side facts the verification does not print, and as the
+   fallback when fetch/tbench-push.json is not PUSH_OK: then copy the archives with
+   `postrun\verify_on_tbench.py --print-copy --stage <STAGE> --job-id <J>` (the user runs the printed line in the DeltaAI
+   shell) and verify on tbench with the phase-1 command, or fetch with fetch_run.ps1 as before.
+bash <<'EOF'
+S=/u/ycao11/gswe32-REPLACE_WITH_32_HEX; J=REPLACE_WITH_JOB_ID
+echo "== sacct"; sacct -j "$J" -P -n --format=JobID,State,ExitCode,Elapsed,Start,End,NodeList,ReqMem,MaxRSS 2>&1
+cd "$S" || exit 1
+echo "== result"
+if [ -f result.json ]; then /usr/bin/python3 -B - <<'PY'
+import glob, json
+r = json.load(open('result.json'))
+print(r['status'], r['plan'], r['run_id'], 'commit', r['commit'][:7], 'env', r['clean_env_unchanged'], 'wheel', r['official_wheel_verified'], 'release', r['release_verified'], 'known_hosts', r['known_hosts_unchanged'])
+for x in r['reasons']: print('  reason:', x)
+for x in r['findings']: print('  finding:', x)
+for s in r['servers']:
+    print('%-11s %-17s %-16s cap=%s rows=%s selective=%s lock=%s goal_text=%s failed=%s errors=%s' % (s['label'], s['policy'], s['status'], s.get('agent_timeout_seconds'), s.get('rows'), s.get('active_selection_turns'), (s.get('lock_wait') or {}).get('status'), (s.get('goal_text') or {}).get('status'), (s.get('failed') or [])[:6], [e[:160] for e in s.get('errors') or []][:3]))
+for path in sorted(glob.glob('job-output/*/ready.json')):
+    ready = json.load(open(path)); start = json.load(open(path.replace('ready.json', 'startup.json')))
+    eff = start.get('effective_server_config') or {}
+    print('ready', path.split('/')[1], 'profile', start.get('model_profile'), 'async', start.get('async_scheduling'), eff.get('async_scheduling'), 'forward', eff.get('max_num_batched_tokens'), 'goal_overlap', (start.get('admission') or {}).get('goal_overlap'), 'engine', (start.get('goal_rewriter_engine') or {}).get('engine'), 'release_idle_pages', start.get('release_idle_pages'), 'decode_fastpath2', ready.get('decode_fastpath2'), 'language_model_only', ready.get('language_model_only'), 'kv_layout', json.dumps(start.get('kv_layout'))[:200])
+for path in sorted(glob.glob('job-output/*/engine-cleanup.json')):
+    print('idle_release', path.split('/')[1], json.load(open(path)).get('idle_release'))
+for path in sorted(glob.glob('summary-*.json')):
+    summary = json.load(open(path)); res = summary.get('resources') or {}
+    checks = {c.get('check'): c.get('status') for c in summary.get('checks') or ()}
+    print('gpu', path, 'max_mib', res.get('gpu_memory_used_mib_max'), 'at_ready_mib', res.get('gpu_memory_used_mib_at_ready'), 'checks', {k: checks.get(k) for k in ('async-scheduling', 'goal-rewriter-engine', 'goal-overlap', 'cell-coverage', 'kernel-alignment', 'forward')})
+for name in ('archives.json', 'eval-launch.json', 'tbench-push.json'):
+    try:
+        v = json.load(open('fetch/' + name))
+    except OSError:
+        print(name, 'ABSENT'); continue
+    if name == 'tbench-push.json':
+        print(name, v.get('status'), v.get('reason'), {k: (x or {}).get('status') for k, x in (v.get('files') or {}).items()}, 'trigger', (v.get('trigger') or {}).get('status'), 'seconds', v.get('seconds'), 'allowed_s', v.get('allowed_s'))
+        continue
+    print(name, json.dumps({k: (x.get('bytes'), x.get('sha256')) if isinstance(x, dict) and 'sha256' in x else x for k, x in v.items() if k in ('core', 'bulk', 'status', 'labels', 'reason', 'elapsed_s')}))
+PY
+else echo RESULT_ABSENT; fi
+echo "== goal texts"; wc -l job-output/*/goals.jsonl 2>/dev/null || echo "no goals.jsonl"
+echo "== capacity events (evict / readmit)"; for f in job-output/*/capacity.jsonl; do [ -f "$f" ] && echo "$f evict=$(grep -c '"evict"' "$f") readmit=$(grep -c '"readmit"' "$f")"; done
+echo "== kernels and scheduling (main: TRITON_ATTN; smokea: Asynchronous scheduling enabled, smoke: disabled; the vLLM child on goalvllm4ks: FLASH_ATTN / FA3 and its own enabled lines)"; for f in server-*.log; do echo "$f $(grep -oE 'Using AttentionBackendEnum\.[A-Z_]+ backend|Using [A-Z_]+ attention backend|FlashAttention version [0-9]+|sampling disabled via VLLM_USE_FLASHINFER_SAMPLER=0|Asynchronous scheduling is [a-z]+' "$f" | sort | uniq -c | tr '\n' ';')"; done
+echo "== async fix (plan D: length finishes next to decoding requests; no LiveV2Error / EngineCore fatal)"; for d in job-output/*/; do echo "$d length_finish_max=$(grep -rhoE 'request_success_total\{[^}]*finished_reason="length"[^}]*\} [0-9.]+' "$d" 2>/dev/null | awk '{print $NF}' | sort -g | tail -1)"; done; grep -cE 'LiveV2Error|EngineDeadError|EngineCore encountered a fatal error' server-*.log
+echo "== window layout"; grep -hE 'Decoupled KV (layout|cache pools)' server-*.log | cut -c1-300
+echo "== tracebacks"; grep -c "Traceback (most recent call last)" server-*.log
+echo "== text-only (expect mm=0, text_only>=1)"; for f in server-*.log; do echo "$f mm=$(grep -cE 'Encoder cache will be initialized|Multi-modal warmup completed' "$f") text_only=$(grep -c 'text-only mode' "$f") encoder_backend=$(grep -c 'for MMEncoderAttention' "$f")"; done
+echo "== arena / OOM (expect 0)"; grep -cE 'DRAM_ARENA_EXHAUSTED|CUDA out of memory|OutOfMemoryError' server-*.log job-output/*/failures.jsonl 2>/dev/null
+echo "== host peak"; for f in host-samples-*.log; do /usr/bin/python3 -B -c "import json,sys; r=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]; print(sys.argv[1], 'rss_peak_gib=%.2f cgroup_peak_gib=%.2f' % (max(x.get('vmrss_kb') or 0 for x in r)/2**20, max(x.get('cgroup_current_bytes') or 0 for x in r)/2**30))" "$f"; done
+echo "== archives"; ls -l fetch/ 2>&1; sha256sum fetch/gswe32-core.tar.xz fetch/gswe32-bulk.tar.xz 2>&1
+echo "== slurm tail"; tail -n 15 "slurm-$J.out" 2>&1 | cut -c1-400
+EOF
+Send back the whole output.
+
+==== Fallback: fetch and verify locally (one command per job; the old path, unchanged) ====
+(Job 3586987: run the frozen copy's ...\perf-gemma-swe32-e5c93e1e\postrun\fetch_run.ps1 instead; 2026-11-14.) (obsolete: the job was cancelled)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'I:\onedrive\文档\Remote-RA\development\exp-decouple-pages\perf-gemma-swe32\postrun\fetch_run.ps1' -Stage '<STAGE>' -JobId '<J>' -CoreSha256 '<core sha256>' -BulkSha256 '<bulk sha256>' -SlurmState '<State>' -SlurmExitCode '<ExitCode>'
+Verdicts GSWE32_PASS_VERIFIED (0), GSWE32_PARTIAL_VERIFIED (3), GSWE32_REFUSED_VERIFIED (4),
+ARCHIVE_VERIFIED_SLURM_EXIT_UNCONFIRMED (2), CORE_VERIFIED_BULK_PENDING (5), GSWE32_FAIL_VERIFIED / NOT_VERIFIED (1); the
+three servers in one verification directory (Remote-RA\verification\gswe32-job<J>-<stamp>\); cell-coverage per server
+(COVERED, or the finding NOT_EXERCISED: that matrix cell needs a rerun).

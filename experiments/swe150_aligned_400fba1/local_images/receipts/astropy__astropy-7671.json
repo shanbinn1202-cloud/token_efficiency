@@ -1,0 +1,15 @@
+{
+  "instance_id": "astropy__astropy-7671",
+  "image": "/projects/bcjw/ssun4/token_efficiency/data/apptainer/native/astropy__astropy-7671.sif",
+  "base_commit": "a7141cd90019b62688d507ae056298507678c058",
+  "base_available": true,
+  "checkout": "90ba236c2a3181f67e77201da2a091ab895733c7",
+  "elf": "aarch64",
+  "python": "/opt/miniconda3/envs/testbed/bin/python",
+  "module": "/testbed/astropy/__init__.py",
+  "package_version": "3.1.dev1",
+  "image_bytes": 802328576,
+  "passed": true,
+  "private_base_reset_verified": true,
+  "entrypoint_checked": false
+}

@@ -1,0 +1,4 @@
+[
+  {"role": "system", "content": "Inspect the code and reply briefly."},
+  {"role": "user", "content": "Fix the incorrect array index while preserving the final element."}
+]

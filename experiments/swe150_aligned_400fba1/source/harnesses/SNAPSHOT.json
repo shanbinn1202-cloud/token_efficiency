@@ -1,0 +1,184 @@
+{
+ "about": "The state of each snapshot directory: written by sync_from_live.py, one entry per harness, rewritten when that harness is refreshed. listing_sha256 is the SHA-256 of the sha256sum-style listing (\"<sha256>  <path>\" per file, sorted by path). edited: the files changed by the local edit list (path -> edits); they no longer equal the live bytes, every other file does.",
+ "source_root": "I:\\onedrive\\文档\\Remote-RA\\development\\exp-decouple-pages",
+ "harnesses": {
+  "perf-gemma-swe32": {
+   "synced_utc": "2026-11-16T16:48:44Z",
+   "files": 109,
+   "bytes": 3021839,
+   "listing_sha256": "e348633c17bba1b084220d1441930f525ff8c83aef21e3890881e49a771c0b0e",
+   "newest_source_utc": "2026-11-16T16:45:17Z",
+   "pinned_runtime_commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+   "excluded": {
+    "agents' resumable working notes (in-flight state; STATUS.md and the READY files hold the result)": {
+     "files": 2,
+     "bytes": 12993
+    },
+    "build output (sealed payloads; build.py rebuilds them)": {
+     "files": 2,
+     "bytes": 17094981
+    },
+    "held back: job 3429830's first three calls with the model's replies and the prompt / reply token ids (a trajectory sample, against the counts-only rule for fixtures; test_real_tokenizer.GemmaJoinRender reads it)": {
+     "files": 1,
+     "bytes": 95191
+    },
+    "local validation logs (run outputs)": {
+     "files": 333,
+     "bytes": 3456462
+    },
+    "sealed Git bundle of the pinned runtime (build.py rebuilds it from the commit)": {
+     "files": 1,
+     "bytes": 11730032
+    }
+   },
+   "edited": {
+    "README.md": 2,
+    "SMOKEA_READY.txt": 1,
+    "SMOKE_READY.txt": 1,
+    "STATUS.md": 2,
+    "controller.py": 1,
+    "gswe32-config.json": 5,
+    "pins.json": 7,
+    "postrun/gswe32_tables.py": 3,
+    "postrun/join_gswe32.py": 2,
+    "run_one_connection.ps1": 1,
+    "run_one_connection.ps1.in": 1,
+    "tasks/gswe32-tasks.json": 3,
+    "test_gswe32.py": 1
+   },
+   "edited_tests": {
+    "test_gswe32.py": "snapshot-only edit (an assertion, docstring or path follows the edited text); the live test is unchanged"
+   },
+   "note": "2026-11-17: the live state (no edit in progress); docs reviewed (current state, dated sections, not-audited marks)"
+  },
+  "perf-mab": {
+   "synced_utc": "2026-11-16T16:48:44Z",
+   "files": 54,
+   "bytes": 1850523,
+   "listing_sha256": "bba570850520dcf2a0ea794ee8df057c0acac9de7644f749ac33e47f0fa24aef",
+   "newest_source_utc": "2026-11-16T16:43:56Z",
+   "pinned_runtime_commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+   "excluded": {
+    "agents' resumable working notes (in-flight state; STATUS.md and the READY files hold the result)": {
+     "files": 2,
+     "bytes": 8687
+    },
+    "build output (sealed payloads; build.py rebuilds them)": {
+     "files": 2,
+     "bytes": 16690967
+    },
+    "local validation logs (run outputs)": {
+     "files": 960,
+     "bytes": 3238473
+    },
+    "sealed Git bundle of the pinned runtime (build.py rebuilds it from the commit)": {
+     "files": 1,
+     "bytes": 11730035
+    }
+   },
+   "edited": {
+    "README.md": 11,
+    "STATUS.md": 6,
+    "build.py": 2,
+    "controller.py": 2,
+    "fake_server.py": 1,
+    "local_validation.ps1": 1,
+    "mab-config.json": 6,
+    "pins.json": 6,
+    "run_one_connection.ps1": 1,
+    "run_one_connection.ps1.in": 1,
+    "test_real_tokenizer.py": 1
+   },
+   "edited_tests": {
+    "test_real_tokenizer.py": "snapshot-only edit (an assertion, docstring or path follows the edited text); the live test is unchanged"
+   },
+   "note": "2026-11-17: the live state (no edit in progress); docs reviewed (current state, dated sections, not-audited marks)"
+  },
+  "perf-swe32": {
+   "synced_utc": "2026-11-17T11:40:10Z",
+   "files": 135,
+   "bytes": 4998680,
+   "listing_sha256": "2ad7341752893ce01a98487f67e0acb3f5d4d7428ce02e34f1c82bb035ffa7dc",
+   "newest_source_utc": "2026-11-17T11:34:12Z",
+   "pinned_runtime_commit": "2fb7f6241fe00517a472f8703125de153ec715d2",
+   "excluded": {
+    "agents' resumable working notes (in-flight state; STATUS.md and the READY files hold the result)": {
+     "files": 4,
+     "bytes": 13303
+    },
+    "build output (sealed payloads; build.py rebuilds them)": {
+     "files": 2,
+     "bytes": 20516180
+    },
+    "local validation logs (run outputs)": {
+     "files": 1698,
+     "bytes": 22805020
+    },
+    "sealed Git bundle of the pinned runtime (build.py rebuilds it from the commit)": {
+     "files": 1,
+     "bytes": 13351818
+    }
+   },
+   "edited": {
+    "INTEGRATE1112_READY.txt": 1,
+    "README.md": 5,
+    "RECENT_FILL_READY.txt": 2,
+    "SMOKE_READY.txt": 2,
+    "pins.json": 13,
+    "postrun/join_swe32.py": 2,
+    "postrun/swe32_tables.py": 3,
+    "run_one_connection.ps1": 1,
+    "run_one_connection.ps1.in": 1,
+    "swe32-config.json": 9,
+    "tasks/swe32-tasks.json": 3,
+    "tasks/swe64-tasks.json": 1,
+    "tasks/swe64h2-tasks.json": 1,
+    "test_swe32.py": 2
+   },
+   "edited_tests": {
+    "test_swe32.py": "snapshot-only edit (an assertion, docstring or path follows the edited text); the live test is unchanged"
+   },
+   "note": "2026-11-17 evening: pin integrate-1117 2fb7f62 (= main's runtime); the 150-instance K=24 plans full150k24 / stockkeep150k24 / ledger150k24 (queued: 3616690, 3616705, 3616729 on payload 269a00e6, frozen as perf-swe32-269a00e6); the idle-release check ordered by admission; gate 2 plan parity150 (payload f62064f1); the 150-run comparison tables (postrun/run150_tables.py)"
+  },
+  "perf-tb16-strip": {
+   "synced_utc": "2026-11-16T16:48:44Z",
+   "files": 96,
+   "bytes": 3428543,
+   "listing_sha256": "57dbd58ecd49957f12b4a11a7ca692b1c58b10f303739ffffdca08967b14dd4a",
+   "newest_source_utc": "2026-11-16T16:44:15Z",
+   "pinned_runtime_commit": "4ebff978661f4c5e2e06da0ee68a5217f92dfa82",
+   "excluded": {
+    "agents' resumable working notes (in-flight state; STATUS.md and the READY files hold the result)": {
+     "files": 3,
+     "bytes": 15123
+    },
+    "build output (sealed payloads; build.py rebuilds them)": {
+     "files": 2,
+     "bytes": 17470803
+    },
+    "local validation logs (run outputs)": {
+     "files": 548,
+     "bytes": 7498170
+    },
+    "sealed Git bundle of the pinned runtime (build.py rebuilds it from the commit)": {
+     "files": 1,
+     "bytes": 11601683
+    }
+   },
+   "edited": {
+    "GCTX25_READY.txt": 1,
+    "README.md": 7,
+    "READY_1112.txt": 1,
+    "SMOKE_READY.txt": 1,
+    "STATUS.md": 7,
+    "controller.py": 1,
+    "pins.json": 11,
+    "run_one_connection.ps1": 4,
+    "run_one_connection.ps1.in": 2,
+    "tb16-config.json": 11,
+    "tb_checks.py": 1
+   },
+   "note": "2026-11-17: the live state (no edit in progress); docs reviewed (current state, dated sections, not-audited marks)"
+  }
+ }
+}

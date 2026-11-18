@@ -1,0 +1,14 @@
+{
+  "instance_id": "django__django-11532",
+  "image": "/projects/bcjw/ssun4/swe64_standard_20261115/images/django__django-11532.sif",
+  "base_commit": "a5308514fb4bc5086c9a16a8a24a945eeebb073c",
+  "base_available": true,
+  "checkout": "a5308514fb4bc5086c9a16a8a24a945eeebb073c",
+  "elf": "aarch64",
+  "python": "/opt/miniconda3/envs/testbed/bin/python",
+  "module": "/testbed/django/__init__.py",
+  "package_version": "3.0.dev20190702105509",
+  "image_bytes": 911843328,
+  "passed": true,
+  "entrypoint_checked": false
+}
